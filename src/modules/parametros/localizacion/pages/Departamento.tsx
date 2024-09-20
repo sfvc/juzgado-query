@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import type { IProvincia } from '../interfaces/localizacion'
 import { DeleteModal, Loading, icons } from '../../../../shared'
-import { useProvincia } from '../hooks/useProvincia'
-import ProvinciaForm from '../forms/ProvinciaForm'
+import { useDepartamento } from '../hooks/useDepartamento'
+import DepartamentoForm from '../forms/DepartamentoForm'
+import { IDepartamento } from '../interfaces/localizacion'
 
 interface Column {
   key: string
@@ -16,24 +16,16 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' }
 ]
 
-export const Provincia = () => {
+export const Departamento = () => {
   const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [activeItem, setActiveItem] = useState<IProvincia | null>(null)
+  const [activeItem, setActiveItem] = useState<IDepartamento | null>(null)
 
-  const { 
-    provincias,
-    pagination,
-    isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
-    deleteProvincia 
-  } = useProvincia()
+  const { departamentos, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deleteDepartamento } = useDepartamento()
 
   /* Modal crear/editar */
-  const onOpenModal = (provincia: IProvincia) => {
-    setActiveItem(provincia)
+  const onOpenModal = (departamento: IDepartamento) => {
+    setActiveItem(departamento)
     setOpenModal(true)
   }
 
@@ -43,8 +35,8 @@ export const Provincia = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (provincia: IProvincia) => {
-    setActiveItem(provincia)
+  const openDelteModal = (departamento: IDepartamento) => {
+    setActiveItem(departamento)
     setOpenDeleteModal(true)
   }
 
@@ -55,7 +47,7 @@ export const Provincia = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterKey(e.target.value)
-    handlePageChange(1)
+    handlePageChange(1) // Restablecer a la primera página al buscar
   }
 
   if (isLoading) return <Loading />
@@ -63,7 +55,7 @@ export const Provincia = () => {
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Provincias</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Departamentos</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
@@ -98,20 +90,20 @@ export const Provincia = () => {
 
         <Table.Body className='divide-y'>
           {
-            (provincias.length > 0)
-              ? (provincias.map((provincia: IProvincia) => (
-                <Table.Row key={provincia.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{provincia.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{provincia.nombre}</Table.Cell>
+            (departamentos.length > 0)
+              ? (departamentos.map((departamento: IDepartamento) => (
+                <Table.Row key={departamento.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{departamento.id}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{departamento.nombre}</Table.Cell>
                   <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                     <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='success' onClick={() => onOpenModal(departamento)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Pencil />
                       </Button>
                     </Tooltip>
 
                     <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='failure' onClick={() => openDelteModal(departamento)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Trash />
                       </Button>
                     </Tooltip>
@@ -136,10 +128,10 @@ export const Provincia = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{activeItem ? 'Agregar Provincia' : 'Editar Provincia'}</Modal.Header>
+        <Modal.Header>{activeItem ? 'Agregar Departemento' : 'Editar Departemento'}</Modal.Header>
         <Modal.Body>
-          <ProvinciaForm 
-            provincia={activeItem} 
+          <DepartamentoForm 
+            departamento={activeItem} 
             onSucces={onCloseModal}
           />
         </Modal.Body>
@@ -151,11 +143,12 @@ export const Provincia = () => {
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
-          onDelete={(id) => deleteProvincia.mutateAsync(id)}
-          isLoading={deleteProvincia.isPending}
+          onDelete={(id) => deleteDepartamento.mutateAsync(id)}
+          isLoading={deleteDepartamento.isPending}
           onClose={closeDeleteModal}
         />
       }
     </React.Fragment>
   )
 }
+

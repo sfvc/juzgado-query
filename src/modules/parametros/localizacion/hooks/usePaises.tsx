@@ -1,22 +1,73 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { usePagination } from '../../../../shared/hooks/usePagination'
 import { paisActions } from '..'
+import type { IPais, FormPais } from '../interfaces/localizacion'
 
-interface Options {
-    filterKey?: string
-}
+export const usePaises = () => {
+  const queryClient = useQueryClient()
 
-export const usePaises = ({ filterKey }: Options) => {
-  const { isLoading,isError, error, data: paises, isFetching } = useQuery({
-    queryKey: ['paises', {filterKey}],
-    queryFn: () => paisActions.getPaises({ filterKey }),
-    staleTime: 1000 * 60 * 60
+  const [page, setPage] = useState<number>(1)
+  const [filterKey, setFilterKey] = useState<string>('')
+
+  const { data: paises, pagination,  handlePageChange, isLoading } = usePagination<IPais>({
+    queryKey: ['paises', { filterKey, page }],
+    fetchData: () => paisActions.getPaises(filterKey, page),
+    filterKey,
+    page,
+    setPage
+  })
+
+  /* Mutations */
+  const createPais = useMutation({
+    mutationFn: paisActions.createPais,
+    onSuccess: () => {
+      toast.success('Pais creado con exito')
+      // queryClient.invalidateQueries({ queryKey: ['paises', { filterKey, page }] })
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al crear el pais')
+      console.log(error)
+    }
+  })
+
+  const updatePais = useMutation({
+    mutationFn: ({ id, pais }: { id: number, pais: FormPais }) => paisActions.updatePais(id, pais),
+    onSuccess: () => {
+      toast.success('Pais creado con exito')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al crear el pais')
+      console.log(error)
+    }
+  })
+
+  const deletePais = useMutation({
+    mutationFn: (id: number) => paisActions.deletePais(id),
+    onSuccess: () => {
+      toast.success('Pais creado con exito')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al crear el pais')
+      console.log(error)
+    }
   })
 
   return {
-    error,
-    isError,
+    paises,
+    pagination,
     isLoading,
-    isFetching,
-    paises
+    filterKey,
+    setFilterKey,
+    handlePageChange,
+
+    // Mutations
+    createPais,
+    updatePais,
+    deletePais
   }
 }

@@ -1,12 +1,15 @@
-import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
 import DropdownHeader from './components/DropdownHeader'
 import logoJuzgado from '../assets/images/logo-juzgado.png'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Layout = () => {
   return (
-    <React.Fragment>
+    <div className='flex flex-col min-h-screen'>
+      <ToastContainer />
+
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
         <Link to='/' onClick={() => console.log('first')}>
           <img src={logoJuzgado} alt='Logo Juzgado' className='w-48 md:w-40 inline-block mx-auto pointer-events-none' />
@@ -119,7 +122,7 @@ const Layout = () => {
         </Navbar.Collapse>
       </Navbar>
       
-      <main className='h-96 w-10/12 m-auto'>
+      <main className='flex-grow w-10/12 m-auto'>
         <Outlet />
       </main>
 
@@ -130,7 +133,7 @@ const Layout = () => {
           year={(new Date().getFullYear())}
         />
       </Footer>
-    </React.Fragment>
+    </div>
   )
 }
 

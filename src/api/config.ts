@@ -5,5 +5,5 @@ const apiJuzgado = axios.create({
 })
 
 // apiJuzgado.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-apiJuzgado.defaults.headers.common['Authorization'] = 'Bearer 239|UUG1gC62FTlmoHLumKceE6F6mT3SsbL5KiJ8fNlzfa1d5cc2'
+apiJuzgado.defaults.headers.common['Authorization'] = 'Bearer 248|ThzpfkHGejeXNslZ0PqqoIF5L6nbheNshVF0pmk949a4393c'
 export {apiJuzgado}

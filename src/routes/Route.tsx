@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import Layout from '../layout/Layout'
-import Pais from '../modules/parametros/localizacion/pages/Pais'
-import Provincia from '../modules/parametros/localizacion/pages/Provincia'
+import { Departamento, Pais, Provincia } from '../modules/parametros/localizacion/pages'
+
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,11 @@ const router = createBrowserRouter([
       {
         path: '/provincias',
         element: <Provincia />
+      },
+
+      {
+        path: '/departamentos',
+        element: <Departamento />
       },
     ]
   },
