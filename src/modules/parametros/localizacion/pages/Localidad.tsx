@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
 import { DeleteModal, Loading, icons } from '../../../../shared'
-import { useDepartamento } from '../hooks/useDepartamento'
-import DepartamentoForm from '../forms/DepartamentoForm'
-import { IDepartamento } from '../interfaces/localizacion'
+import { ILocalidad } from '../interfaces/localizacion'
+import { useLocalidad } from '../hooks/useLocalidad'
+import LocalidadForm from '../forms/LocalidadForm'
 
 interface Column {
   key: string
@@ -16,16 +16,16 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' }
 ]
 
-export const Departamento = () => {
+export const Localidad = () => {
   const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [activeItem, setActiveItem] = useState<IDepartamento | null>(null)
+  const [activeItem, setActiveItem] = useState<ILocalidad | null>(null)
 
-  const { departamentos, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deleteDepartamento } = useDepartamento()
+  const { localidades, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deleteLocalidad } = useLocalidad()
 
   /* Modal crear/editar */
-  const onOpenModal = (departamento: IDepartamento) => {
-    setActiveItem(departamento)
+  const onOpenModal = (localidad: ILocalidad) => {
+    setActiveItem(localidad)
     setOpenModal(true)
   }
 
@@ -35,8 +35,8 @@ export const Departamento = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (departamento: IDepartamento) => {
-    setActiveItem(departamento)
+  const openDelteModal = (localidad: ILocalidad) => {
+    setActiveItem(localidad)
     setOpenDeleteModal(true)
   }
 
@@ -55,7 +55,7 @@ export const Departamento = () => {
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Departamentos</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Localidades</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
@@ -90,20 +90,20 @@ export const Departamento = () => {
 
         <Table.Body className='divide-y'>
           {
-            (departamentos.length > 0)
-              ? (departamentos.map((departamento: IDepartamento) => (
-                <Table.Row key={departamento.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{departamento.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{departamento.nombre}</Table.Cell>
+            (localidades.length > 0)
+              ? (localidades.map((localidad: ILocalidad) => (
+                <Table.Row key={localidad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{localidad.id}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{localidad.nombre}</Table.Cell>
                   <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                     <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(departamento)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='success' onClick={() => onOpenModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Pencil />
                       </Button>
                     </Tooltip>
 
                     <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(departamento)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='failure' onClick={() => openDelteModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Trash />
                       </Button>
                     </Tooltip>
@@ -130,8 +130,8 @@ export const Departamento = () => {
       <Modal show={openModal} onClose={onCloseModal}>
         <Modal.Header>{!activeItem ? 'Agregar Departemento' : 'Editar Departemento'}</Modal.Header>
         <Modal.Body>
-          <DepartamentoForm 
-            departamento={activeItem} 
+          <LocalidadForm 
+            localidad={activeItem} 
             onSucces={onCloseModal}
           />
         </Modal.Body>
@@ -143,8 +143,8 @@ export const Departamento = () => {
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
-          onDelete={(id) => deleteDepartamento.mutateAsync(id)}
-          isLoading={deleteDepartamento.isPending}
+          onDelete={(id) => deleteLocalidad.mutateAsync(id)}
+          isLoading={deleteLocalidad.isPending}
           onClose={closeDeleteModal}
         />
       }

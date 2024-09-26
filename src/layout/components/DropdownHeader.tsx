@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { DarkThemeToggle, Dropdown, Flowbite, Tooltip } from 'flowbite-react'
+import { AuthContext } from '../../context/AuthContext'
+import { icons } from '../../shared'
 
 function DropdownHeader () {
+  const { user, logoutUser } = useContext(AuthContext)
+
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('darkMode')
     return savedDarkMode ? JSON.parse(savedDarkMode) : false
@@ -37,16 +41,11 @@ function DropdownHeader () {
         )}
       >
         <Dropdown.Header>
-          <span className='block text-sm'>Usuario actual</span>
-          <span className='block truncate text-sm font-medium'>Admin</span>
+          <span className='block text-sm'>Usuario</span>
+          <span className='block truncate text-sm font-medium'>{user?.nombre}</span>
         </Dropdown.Header>
-        <Dropdown.Item onClick={() => console.log('first')}>
-          <svg xmlns='http://www.w3.org/2000/svg' className='icon icon-tabler icon-tabler-logout dark:stroke-white mr-2' width='16' height='16' viewBox='0 0 24 24' strokeWidth='1.5' stroke='#000000' fill='none' strokeLinecap='round' strokeLinejoin='round'>
-            <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-            <path d='M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2' />
-            <path d='M9 12h12l-3 -3' />
-            <path d='M18 15l3 -3' />
-          </svg>
+        <Dropdown.Item onClick={logoutUser}>
+          <icons.Logout />
           Cerrar Sesión
         </Dropdown.Item>
       </Dropdown>

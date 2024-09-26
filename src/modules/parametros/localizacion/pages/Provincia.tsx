@@ -136,7 +136,7 @@ export const Provincia = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{activeItem ? 'Agregar Provincia' : 'Editar Provincia'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Provincia' : 'Editar Provincia'}</Modal.Header>
         <Modal.Body>
           <ProvinciaForm 
             provincia={activeItem} 

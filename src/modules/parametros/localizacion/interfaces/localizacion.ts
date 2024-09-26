@@ -28,3 +28,28 @@ export interface FormDepartamento {
   nombre: string
   provincia_id: string
 }
+
+export interface ILocalidad {
+  id: number
+  nombre: string
+  codigo_postal: string
+  departamento_id?: number | null
+  provincia_id?: number | null
+  departamento: IDepartamento | null
+}
+
+export interface FormLocalidad {
+  nombre: string
+  departamento_id: string
+}
+
+export interface IBarrio {
+  id: number
+  nombre: string
+  localidad: ILocalidad | null
+}
+
+export interface FormBarrio {
+  nombre: string
+  localidad_id: string
+}

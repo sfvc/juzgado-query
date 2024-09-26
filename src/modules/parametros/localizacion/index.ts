@@ -1,5 +1,3 @@
-/* interfaces */
-// export type { Pais, Provincia } from './interfaces/localizacion'
 
 /* hooks */
 export { usePaises } from './hooks/usePaises'
@@ -8,3 +6,5 @@ export { usePaises } from './hooks/usePaises'
 export * as paisActions from './services/pais-actions'
 export * as provinciaActions from './services/provincia-actions'
 export * as departamentoActions from './services/departamento-actions'
+export * as localidadActions from './services/localidad-actions'
+export * as barrioActions from './services/barrio-actions'

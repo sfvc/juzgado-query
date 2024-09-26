@@ -3,26 +3,26 @@ import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import type { IDepartamento, FormDepartamento, IProvincia } from '../interfaces/localizacion'
-import { provinciaActions } from '..'
-import { useDepartamento } from '../hooks/useDepartamento'
+import type { FormLocalidad, IDepartamento, ILocalidad } from '../interfaces/localizacion'
+import { departamentoActions } from '..'
+import { useLocalidad } from '../hooks/useLocalidad'
 
 const validationSchema = yup.object().shape({
-  nombre: yup.string().required('El departamento es requerido'),
-  provincia_id: yup.string().required('Debe seleccionar una provincia')
+  nombre: yup.string().required('La localidad es requerida'),
+  departamento_id: yup.string().required('Debe seleccionar un departamento')
 })
 
 interface Props {
-    departamento: IDepartamento | null
+  localidad: ILocalidad | null
     onSucces: () => void
   }
   
-const DepartamentoForm = ({ departamento, onSucces }: Props) => {
-  const { createDepartamento, updateDepartamento } = useDepartamento()
+const LocalidadForm = ({ localidad, onSucces }: Props) => {
+  const { createLocalidad, updateLocalidad } = useLocalidad()
 
-  const { data: provincias, isLoading } = useQuery({
-    queryKey: ['provincias', 'all'], 
-    queryFn: provinciaActions.getAllProvincias,  
+  const { data: departamentos, isLoading } = useQuery({
+    queryKey: ['departamentos', 'all'], 
+    queryFn: departamentoActions.getAllDepartamentos,  
     staleTime: 1000 * 60 * 5, 
   })
 
@@ -32,15 +32,15 @@ const DepartamentoForm = ({ departamento, onSucces }: Props) => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      nombre: departamento?.nombre || '',
-      provincia_id: departamento?.provincia?.id?.toString() || ''
+      nombre: localidad?.nombre || '',
+      departamento_id: localidad?.departamento?.id?.toString() || ''
     },
     resolver: yupResolver(validationSchema)
   })
 
-  const onSubmit: SubmitHandler<FormDepartamento> = async (data: FormDepartamento) => {
-    if (departamento) await updateDepartamento.mutateAsync({ id: departamento.id, departamento: data })
-    else await createDepartamento.mutateAsync(data)
+  const onSubmit: SubmitHandler<FormLocalidad> = async (data: FormLocalidad) => {
+    if (localidad) await updateLocalidad.mutateAsync({ id: localidad.id, localidad: data })
+    else await createLocalidad.mutateAsync(data)
   
     onSucces()
   }
@@ -69,20 +69,20 @@ const DepartamentoForm = ({ departamento, onSucces }: Props) => {
       <div className='mb-4'>
         <div className='mb-2 block'>
           <Label
-            htmlFor='provincia_id'
-            value='Provincia'
+            htmlFor='departamento_id'
+            value='Departamento'
           />
           <strong className='obligatorio'>(*)</strong>
         </div>
 
-        <Select {...register('provincia_id')} 
-          helperText={errors?.provincia_id && errors?.provincia_id?.message} 
-          color={errors?.provincia_id && 'failure'}
+        <Select {...register('departamento_id')} 
+          helperText={errors?.departamento_id && errors?.departamento_id?.message} 
+          color={errors?.departamento_id && 'failure'}
         >
-          <option value='' hidden>Seleccione una provincia</option>
+          <option value='' hidden>Seleccione un departamento</option>
           {
-            provincias?.map((provincia: IProvincia) => (
-              <option key={provincia.id} value={provincia.id}>{provincia.nombre}</option>
+            departamentos?.map((departamento: IDepartamento) => (
+              <option key={departamento.id} value={departamento.id}>{departamento.nombre}</option>
             ))
           }
 
@@ -105,4 +105,4 @@ const DepartamentoForm = ({ departamento, onSucces }: Props) => {
   )
 }
 
-export default DepartamentoForm
+export default LocalidadForm

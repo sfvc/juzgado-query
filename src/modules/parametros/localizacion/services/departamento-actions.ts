@@ -34,3 +34,9 @@ export const deleteDepartamento = async (id: number) => {
   const { data: departamento } = response.data
   return departamento
 }
+
+export const getAllDepartamentos = async () => {
+  const response = await apiJuzgado.get('departamentos/select')
+  const { data: departamentos } = response.data
+  return departamentos
+}

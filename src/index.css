@@ -1,3 +1,157 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.titulos {
+    background-color: #0e7490;
+}
+  
+.obligatorio {
+    color: #f53333;
+    user-select: none;
+    margin-left: 0.1em;
+}
+  
+.botonDesactivado {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+  
+.rainbow-text {
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+  
+.readonly-input {
+    border-color: #e4e4e4;
+    background-color: #f9f9f9;
+    color: #555;
+    cursor: not-allowed;
+}
+  
+textarea {
+    field-sizing: content;
+}
+  
+/* Estilos del Login */
+
+/* Estilos generales para el wrapper y columnas */
+.loginwrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    overflow: hidden;
+    min-height: 100vh;
+    height: 100vh;
+    flex-basis: 100%;
+}
+  
+.loginwrapper .lg-inner-column {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+  
+.loginwrapper .left-column {
+    color: #1e2938;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+  
+.loginwrapper .left-column h4 {
+    font-size: 40px;
+    line-height: 48px;
+    color: #1e2938;
+}
+
+.loginwrapper .right-column {
+    flex: 1;
+}
+
+.auth-box {
+    max-width: 524px;
+    padding: 7px;
+    margin: 0 auto;
+    width: 100%;
+}
+  
+.auth-box h4 {
+    font-size: 2xl;
+    color: #374151;
+    margin-bottom: 3px;
+}
+  
+.auth-footer {
+    font-size: small;
+    font-weight: normal;
+    color: #718096;
+    bottom: 0;
+    z-index: 999;
+    padding-bottom: 15px;
+}
+  
+/* Media query para ocultar elementos en dispositivos móviles */
+@media (max-width: 1400px) {
+    .loginwrapper .left-column {
+        display: none;
+}
+
+.loginwrapper .right-column {
+        width: 100%; /* Asegúrate de que el formulario ocupe todo el ancho */
+    }
+}
+  
+.btn {
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.25rem;
+    text-transform: capitalize;
+    transition: all 0.15s ease-in-out;
+    white-space: normal;
+    position: relative;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: rgba(59, 130, 246, 0.7);
+    ring-color: #3b82f6;
+    ring-offset: 1px;
+}
+  
+h4 {
+    font-size: 1.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+  
+@media (prefers-color-scheme: dark) {
+    h4 {
+        color: #d1d5db;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+  
+/* Define scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background-color: #0e7490;
+    border-radius: 6px; 
+}
+
+/* Define scrollbar track */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
