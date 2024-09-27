@@ -1,6 +1,7 @@
-import { Barrio, Departamento, Localidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
-import Layout from '../layout/Layout'
 import { Navigate } from 'react-router-dom'
+import Layout from '../layout/Layout'
+import { Barrio, Departamento, Localidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
+import { Articulo } from '../modules/parametros/actas'
 
 export const PrivateRoute = [
   {
@@ -34,6 +35,11 @@ export const PrivateRoute = [
       {
         path: '/barrios',
         element: <Barrio />
+      },
+
+      {
+        path: '/articulos',
+        element: <Articulo />
       },
     ]
   }
