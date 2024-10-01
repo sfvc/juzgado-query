@@ -15,23 +15,22 @@ interface Pagination {
   lastPage: number
 }
 
-interface Page { 
-  page: number
-}
 
-interface Options<T, K extends Page> {
+interface Options<T> {
   queryKey: QueryKey
-  fetchData: (filterParams: K) => Promise<Response<T>>,
-  filterParams: K
+  fetchData: (filter: string, page: number) => Promise<Response<T>>,
+  filterKey: string
+  page: number,
+  setPage: (page: number) => void
 }
 
-export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterParams }: Options<T, K>) => {
+export const usePagination = <T>({ queryKey, fetchData, filterKey, page, setPage }: Options<T>) => {
   const queryClient = useQueryClient()
 
   // Hook para obtener los datos paginados
   const { data: response, isLoading } = useQuery({
     queryKey: [...queryKey], 
-    queryFn: () => fetchData(filterParams),  
+    queryFn: () => fetchData(filterKey, page),  
     staleTime: 1000 * 60 * 5,
     placeholderData: (previousData) => {
       if (!previousData) return
@@ -41,12 +40,17 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
         ...previousData,
         meta: {
           ...previousData.meta,
-          current_page: filterParams.page
+          current_page: page
         }
       }
     },
   })
 
+  // Manejar cambio de página
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+ 
   // Función para refrescar la data
   const refetchData = () => {
     queryClient.invalidateQueries({ queryKey: [...queryKey] })
@@ -63,6 +67,7 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     data,
     pagination,
     isLoading,
+    handlePageChange,
     refetchData
   }
 }

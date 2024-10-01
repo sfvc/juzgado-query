@@ -21,7 +21,7 @@ export const Pais = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [activeItem, setActiveItem] = useState<IPais | null>(null)
 
-  const { paises, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deletePais } = usePaises()
+  const { paises, pagination, isLoading, filterParams, updateFilter, deletePais } = usePaises()
 
   /* Modal crear/editar */
   const onOpenModal = (pais: IPais) => {
@@ -45,11 +45,6 @@ export const Pais = () => {
     setOpenDeleteModal(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterKey(e.target.value)
-    handlePageChange(1) // Restablecer a la primera página al buscar
-  }
-
   if (isLoading) return <Loading />
 
   return (
@@ -60,10 +55,10 @@ export const Pais = () => {
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
               <TextInput
-                name='search'
+                name='query'
                 placeholder='Buscar'
-                value={filterKey}
-                onChange={handleSearch}
+                value={filterParams.query}
+                onChange={(e) => updateFilter('query', e.target.value)}
               />
               <icons.Search />
             </div>
@@ -119,7 +114,7 @@ export const Pais = () => {
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.lastPage}
-          onPageChange={handlePageChange}
+          onPageChange={(page: number) => updateFilter('page', page)}
           previousLabel='Anterior'
           nextLabel='Siguiente'
           showIcons

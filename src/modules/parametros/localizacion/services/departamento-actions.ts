@@ -1,10 +1,9 @@
 import { apiJuzgado } from '../../../../api/config'
+import { setUrlParams } from '../../../../shared/helpers/setUrlParams'
 import { FormDepartamento } from '../interfaces/localizacion'
 
-export const getDepartamentos = async (filterKey: string, page: number = 1) => {
-  const params = new URLSearchParams()
-  if (filterKey !== '') params.append('query', filterKey)
-  if (page) params.append('page', page.toString())
+export const getDepartamentos = async (filters: object) => {
+  const params = setUrlParams(filters)
 
   const response = await apiJuzgado.get('/departamentos', { params })
   const { data, meta } = response.data

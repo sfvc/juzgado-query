@@ -4,19 +4,26 @@ import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { provinciaActions } from '..'
 import type { IProvincia, FormProvincia } from '../interfaces/localizacion'
+import { useFilter } from '../../../../shared/hooks/useFilter'
+
+interface FilterParams {
+  query: string, 
+  page: number
+}
+
+const initialValues = {
+  query: '', 
+  page: 1
+}
 
 export const useProvincia = () => {
   const queryClient = useQueryClient()
+  const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const [page, setPage] = useState<number>(1)
-  const [filterKey, setFilterKey] = useState<string>('')
-
-  const { data: provincias, pagination,  handlePageChange, isLoading } = usePagination<IProvincia>({
-    queryKey: ['provincias', { filterKey, page }],
-    fetchData: () => provinciaActions.getProvincias(filterKey, page),
-    filterKey,
-    page,
-    setPage
+  const { data: provincias, pagination, isLoading } = usePagination<IProvincia, FilterParams>({
+    queryKey: ['provincias', filterParams],
+    fetchData: () => provinciaActions.getProvincias(filterParams),
+    filterParams
   })
 
   /* Mutations */
@@ -60,9 +67,8 @@ export const useProvincia = () => {
     provincias,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
+    filterParams,
+    updateFilter,
 
     // Mutations
     createProvincia,

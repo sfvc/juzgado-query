@@ -1,22 +1,28 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { IDepartamento, FormDepartamento } from '../interfaces/localizacion'
 import { departamentoActions } from '..'
+import { useFilter } from '../../../../shared/hooks/useFilter'
+
+interface FilterParams {
+  query: string, 
+  page: number
+}
+
+const initialValues = {
+  query: '', 
+  page: 1
+}
 
 export const useDepartamento = () => {
   const queryClient = useQueryClient()
+  const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const [page, setPage] = useState<number>(1)
-  const [filterKey, setFilterKey] = useState<string>('')
-
-  const { data: departamentos, pagination,  handlePageChange, isLoading } = usePagination<IDepartamento>({
-    queryKey: ['departamentos', { filterKey, page }],
-    fetchData: () => departamentoActions.getDepartamentos(filterKey, page),
-    filterKey,
-    page,
-    setPage
+  const { data: departamentos, pagination, isLoading } = usePagination<IDepartamento, FilterParams>({
+    queryKey: ['departamentos', filterParams],
+    fetchData: () => departamentoActions.getDepartamentos(filterParams),
+    filterParams
   })
 
   /* Mutations */
@@ -60,9 +66,8 @@ export const useDepartamento = () => {
     departamentos,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
+    filterParams,
+    updateFilter,
 
     // Mutations
     createDepartamento,

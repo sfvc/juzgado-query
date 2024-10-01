@@ -21,15 +21,7 @@ export const Provincia = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [activeItem, setActiveItem] = useState<IProvincia | null>(null)
 
-  const { 
-    provincias,
-    pagination,
-    isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
-    deleteProvincia 
-  } = useProvincia()
+  const { provincias, pagination, isLoading, filterParams, updateFilter, deleteProvincia } = useProvincia()
 
   /* Modal crear/editar */
   const onOpenModal = (provincia: IProvincia) => {
@@ -53,11 +45,6 @@ export const Provincia = () => {
     setOpenDeleteModal(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterKey(e.target.value)
-    handlePageChange(1)
-  }
-
   if (isLoading) return <Loading />
 
   return (
@@ -68,10 +55,10 @@ export const Provincia = () => {
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
               <TextInput
-                name='search'
+                name='query'
                 placeholder='Buscar'
-                value={filterKey}
-                onChange={handleSearch}
+                value={filterParams.query}
+                onChange={(e) => updateFilter('query', e.target.value)}
               />
               <icons.Search />
             </div>
@@ -127,7 +114,7 @@ export const Provincia = () => {
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.lastPage}
-          onPageChange={handlePageChange}
+          onPageChange={(page: number) => updateFilter('page', page)}
           previousLabel='Anterior'
           nextLabel='Siguiente'
           showIcons

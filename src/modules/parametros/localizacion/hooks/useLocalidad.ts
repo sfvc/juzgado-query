@@ -1,22 +1,28 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { ILocalidad, FormLocalidad } from '../interfaces/localizacion'
 import { localidadActions } from '..'
+import { useFilter } from '../../../../shared/hooks/useFilter'
+
+interface FilterParams {
+  query: string, 
+  page: number
+}
+
+const initialValues = {
+  query: '', 
+  page: 1
+}
 
 export const useLocalidad = () => {
   const queryClient = useQueryClient()
+  const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const [page, setPage] = useState<number>(1)
-  const [filterKey, setFilterKey] = useState<string>('')
-
-  const { data: localidades, pagination,  handlePageChange, isLoading } = usePagination<ILocalidad>({
-    queryKey: ['localidades', { filterKey, page }],
-    fetchData: () => localidadActions.getLocalidades(filterKey, page),
-    filterKey,
-    page,
-    setPage
+  const { data: localidades, pagination, isLoading } = usePagination<ILocalidad, FilterParams>({
+    queryKey: ['localidades', filterParams],
+    fetchData: () => localidadActions.getLocalidades(filterParams),
+    filterParams
   })
 
   /* Mutations */
@@ -60,9 +66,8 @@ export const useLocalidad = () => {
     localidades,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
+    filterParams,
+    updateFilter,
 
     // Mutations
     createLocalidad,

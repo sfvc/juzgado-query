@@ -21,7 +21,7 @@ export const Departamento = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [activeItem, setActiveItem] = useState<IDepartamento | null>(null)
 
-  const { departamentos, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deleteDepartamento } = useDepartamento()
+  const { departamentos, pagination, isLoading, filterParams, updateFilter, deleteDepartamento } = useDepartamento()
 
   /* Modal crear/editar */
   const onOpenModal = (departamento: IDepartamento) => {
@@ -45,11 +45,6 @@ export const Departamento = () => {
     setOpenDeleteModal(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterKey(e.target.value)
-    handlePageChange(1)
-  }
-
   if (isLoading) return <Loading />
 
   return (
@@ -60,10 +55,10 @@ export const Departamento = () => {
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
               <TextInput
-                name='search'
+                name='query'
                 placeholder='Buscar'
-                value={filterKey}
-                onChange={handleSearch}
+                value={filterParams.query}
+                onChange={(e) => updateFilter('query', e.target.value)}
               />
               <icons.Search />
             </div>
@@ -119,7 +114,7 @@ export const Departamento = () => {
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.lastPage}
-          onPageChange={handlePageChange}
+          onPageChange={(page: number) => updateFilter('page', page)}
           previousLabel='Anterior'
           nextLabel='Siguiente'
           showIcons

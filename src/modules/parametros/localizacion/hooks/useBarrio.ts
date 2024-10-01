@@ -1,22 +1,28 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { FormBarrio, IBarrio } from '../interfaces/localizacion'
 import { barrioActions } from '..'
+import { useFilter } from '../../../../shared/hooks/useFilter'
+
+interface FilterParams {
+  query: string, 
+  page: number
+}
+
+const initialValues = {
+  query: '', 
+  page: 1
+}
 
 export const useBarrio = () => {
   const queryClient = useQueryClient()
+  const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const [page, setPage] = useState<number>(1)
-  const [filterKey, setFilterKey] = useState<string>('')
-
-  const { data: barrios, pagination,  handlePageChange, isLoading } = usePagination<IBarrio>({
-    queryKey: ['barrios', { filterKey, page }],
-    fetchData: () => barrioActions.getBarrios(filterKey, page),
-    filterKey,
-    page,
-    setPage
+  const { data: barrios, pagination, isLoading } = usePagination<IBarrio, FilterParams>({
+    queryKey: ['barrios', filterParams],
+    fetchData: () => barrioActions.getBarrios(filterParams),
+    filterParams
   })
 
   /* Mutations */
@@ -60,9 +66,8 @@ export const useBarrio = () => {
     barrios,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
+    filterParams,
+    updateFilter,
 
     // Mutations
     createBarrio,

@@ -1,11 +1,10 @@
 import { apiJuzgado } from '../../../../api/config'
+import { setUrlParams } from '../../../../shared/helpers/setUrlParams'
 import { FormLocalidad } from '../interfaces/localizacion'
 
-export const getLocalidades = async (filterKey: string, page: number = 1) => {
-  const params = new URLSearchParams()
-  if (filterKey !== '') params.append('query', filterKey)
-  if (page) params.append('page', page.toString())
-
+export const getLocalidades = async (filters: object) => {
+  const params = setUrlParams(filters)
+  
   const response = await apiJuzgado.get('/localidades', { params })
   const { data, meta } = response.data
   return { data, meta }

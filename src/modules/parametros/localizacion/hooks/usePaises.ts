@@ -1,22 +1,28 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { paisActions } from '..'
 import type { IPais, FormPais } from '../interfaces/localizacion'
+import { useFilter } from '../../../../shared/hooks/useFilter'
+
+interface FilterParams {
+  query: string, 
+  page: number
+}
+
+const initialValues = {
+  query: '', 
+  page: 1
+}
 
 export const usePaises = () => {
   const queryClient = useQueryClient()
+  const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const [page, setPage] = useState<number>(1)
-  const [filterKey, setFilterKey] = useState<string>('')
-
-  const { data: paises, pagination,  handlePageChange, isLoading } = usePagination<IPais>({
-    queryKey: ['paises', { filterKey, page }],
-    fetchData: () => paisActions.getPaises(filterKey, page),
-    filterKey,
-    page,
-    setPage
+  const { data: paises, pagination, isLoading } = usePagination<IPais, FilterParams>({
+    queryKey: ['paises', filterParams],
+    fetchData: () => paisActions.getPaises(filterParams),
+    filterParams
   })
 
   /* Mutations */
@@ -61,9 +67,8 @@ export const usePaises = () => {
     paises,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    handlePageChange,
+    filterParams,
+    updateFilter,
 
     // Mutations
     createPais,

@@ -21,7 +21,7 @@ export const Localidad = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [activeItem, setActiveItem] = useState<ILocalidad | null>(null)
 
-  const { localidades, pagination, isLoading, filterKey, setFilterKey, handlePageChange, deleteLocalidad } = useLocalidad()
+  const { localidades, pagination, isLoading, filterParams, updateFilter, deleteLocalidad } = useLocalidad()
 
   /* Modal crear/editar */
   const onOpenModal = (localidad: ILocalidad) => {
@@ -45,11 +45,6 @@ export const Localidad = () => {
     setOpenDeleteModal(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterKey(e.target.value)
-    handlePageChange(1)
-  }
-
   if (isLoading) return <Loading />
 
   return (
@@ -60,10 +55,10 @@ export const Localidad = () => {
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
               <TextInput
-                name='search'
+                name='query'
                 placeholder='Buscar'
-                value={filterKey}
-                onChange={handleSearch}
+                value={filterParams.query}
+                onChange={(e) => updateFilter('query', e.target.value)}
               />
               <icons.Search />
             </div>
@@ -94,7 +89,7 @@ export const Localidad = () => {
               ? (localidades.map((localidad: ILocalidad) => (
                 <Table.Row key={localidad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{localidad.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{localidad.nombre}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{localidad.nombre || '-'}</Table.Cell>
                   <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                     <Tooltip content='Editar'>
                       <Button color='success' onClick={() => onOpenModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
@@ -119,7 +114,7 @@ export const Localidad = () => {
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.lastPage}
-          onPageChange={handlePageChange}
+          onPageChange={(page: number) => updateFilter('page', page)}
           previousLabel='Anterior'
           nextLabel='Siguiente'
           showIcons

@@ -30,7 +30,6 @@ export const Articulo = () => {
   const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [activeItem, setActiveItem] = useState<IArticulo | null>(null)
-  // const [selectedItem, setSelectedItem] = useState<number | null>(null)
 
   const { data: tipoActas } = useQuery({
     queryKey: ['tipo-actas'], 
@@ -42,11 +41,8 @@ export const Articulo = () => {
     articulos,
     pagination,
     isLoading,
-    filterKey,
-    setFilterKey,
-    type,
-    setType,
-    handlePageChange,
+    filterParams,
+    updateFilter,
     deleteArticulo 
   } = useArticulo()
 
@@ -72,11 +68,6 @@ export const Articulo = () => {
     setOpenDeleteModal(false)
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterKey(e.target.value)
-    handlePageChange(1)
-  }
-
   if (isLoading) return <Loading />
 
   return (
@@ -85,7 +76,7 @@ export const Articulo = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Articulos</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <Select onChange={(e) => setType(e.target.value)} value={type}>
+            <Select onChange={(e) => updateFilter('filter', e.target.value)} value={filterParams.filter}>
               <option value='' hidden>Seleccionar tipo</option>
               <option value=''>TODAS</option>
               {
@@ -98,8 +89,8 @@ export const Articulo = () => {
               <TextInput
                 name='search'
                 placeholder='Buscar'
-                value={filterKey}
-                onChange={handleSearch}
+                value={filterParams.search}
+                onChange={(e) => updateFilter('search', e.target.value)}
               />
               <icons.Search />
             </div>
@@ -163,7 +154,7 @@ export const Articulo = () => {
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.lastPage}
-          onPageChange={handlePageChange}
+          onPageChange={(page: number) => updateFilter('page', page)}
           previousLabel='Anterior'
           nextLabel='Siguiente'
           showIcons
