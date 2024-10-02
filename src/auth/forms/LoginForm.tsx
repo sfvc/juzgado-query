@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { TextInput, Button } from 'flowbite-react'
+import { TextInput, Button, Spinner } from 'flowbite-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { AuthContext } from '../../context/AuthContext'
 import { icons } from '../../shared'
 import { AuthForm } from '../interfaces/auth'
-import { AuthContext } from '../../context/AuthContext'
 
 const schema = yup
   .object({
@@ -70,7 +70,7 @@ export const LoginForm = () => {
         color="blue"
         disabled={isSubmitting}
       >
-        Iniciar Sesión
+        {isSubmitting ? <Spinner /> : 'Iniciar Sesión'}
       </Button>
     </form>
   )

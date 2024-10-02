@@ -162,7 +162,7 @@ export const Articulo = () => {
       </div>
 
       {/* Modal crear/editar */} 
-      <Modal show={openModal} onClose={onCloseModal}>
+      <Modal show={openModal} onClose={onCloseModal} size='4xl'>
         <Modal.Header>{!activeItem ? 'Agregar Articulo' : 'Editar Articulo'}</Modal.Header>
         <Modal.Body>
           <ArticuloForm 

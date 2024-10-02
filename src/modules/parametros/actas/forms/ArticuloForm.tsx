@@ -6,9 +6,10 @@ import * as yup from 'yup'
 import { FormArticulo, IArticulo } from '../interfaces'
 import { useArticulo } from '../hooks/useArticulo'
 import { articuloActions } from '..'
+import { useEffect } from 'react'
 
 const validationSchema = yup.object().shape({
-  numero: yup.number(),
+  numero: yup.string(),
   detalle: yup.string().required('El detalle es requerido'),
   inciso: yup.string(),
   tipo_acta: yup.string(),
@@ -27,14 +28,13 @@ interface Props {
 const initLoading = async () => {
   const tipoActas = await articuloActions.getAllTipoActas()
   const tipoInfracciones = await articuloActions.getAllTipoInfracciones()
-
   return { tipoActas, tipoInfracciones }
 }
   
 const ArticuloForm = ({ articulo, onSucces }: Props) => {
-  // const { createArticulo, updateArticulo } = useArticulo()
+  const { createArticulo, updateArticulo } = useArticulo()
 
-  const { data: { tipoActas, tipoInfracciones }, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['init-articulos'], 
     queryFn: initLoading,  
     staleTime: 1000 * 60 * 5, 
@@ -46,19 +46,27 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
+      numero: articulo?.numero.toString() || '',
       detalle: articulo?.detalle || '',
+      inciso: articulo?.inciso || '',
+      tipo_acta: articulo?.tipo_acta || '',
+      tipo_infraccion: articulo?.tipo_infraccion || '',
+      norma_legal: articulo?.norma_legal || '',
+      descuento: articulo?.descuento || 0,
+      valor_desde: articulo?.valor_desde || 0,
+      valor_hasta: articulo?.valor_hasta || 0
     },
     resolver: yupResolver(validationSchema)
   })
 
-  const onSubmit: SubmitHandler<FormArticulo> = async (data: FormArticulo) => {
-    console.log(data)
-    /* if (articulo) await updateArticulo.mutateAsync({ id: articulo.id, articulo: data })
-    else await createArticulo.mutateAsync(data)
+  const onSubmit: SubmitHandler<FormArticulo> = async (form: FormArticulo) => {
+    console.log(form)
+    if (articulo) await updateArticulo.mutateAsync({ id: articulo.id, articulo: form })
+    else await createArticulo.mutateAsync(form)
   
-    onSucces() */
+    onSucces()
   }
-
+  
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
   return (
@@ -70,7 +78,7 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
         <TextInput
           {...register('numero')}
           placeholder='Numero de Articulo'
-          type='number'
+          type='text'
           helperText={errors?.numero && errors.numero.message}
           color={errors?.numero && 'failure'}
         />
@@ -78,8 +86,7 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
 
       <div className='mb-4'>
         <div className='mb-2 block'>
-          <Label htmlFor='detalle' value='Detalle' />
-          <strong className='obligatorio'>*</strong>
+          <Label htmlFor='detalle' value='Detalle' /><strong className='obligatorio'>(*)</strong>
         </div>
         <Textarea
           {...register('detalle')}
@@ -103,9 +110,9 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
           >
             <option value='' hidden>Seleccione el tipo</option>
             {
-              (tipoInfracciones.length > 0) && tipoInfracciones.map((infraccion: string, i: number) => (
-                <option key={i} value={infraccion}>
-                  {infraccion}
+              data?.tipoActas.map((acta: string, i: number) => (
+                <option key={i} value={acta}>
+                  {acta}
                 </option>
               ))
             }
@@ -125,12 +132,11 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
             color={errors?.tipo_infraccion && 'failure'}
           >
             <option value='' hidden>Seleccione el tipo de infraccion</option>
-            {tipoActas.length > 0 &&
-              tipoActas.map((acta: string, i: number) => (
-                <option key={i} value={acta}>
-                  {acta}
-                </option>
-              ))}
+            {data?.tipoInfracciones.map((infraccion: string, i: number) => (
+              <option key={i} value={infraccion}>
+                {infraccion}
+              </option>
+            ))}
           </Select>
         </div>
 

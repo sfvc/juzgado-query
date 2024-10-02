@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 import Layout from '../layout/Layout'
 import { Barrio, Departamento, Localidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
-import { Articulo } from '../modules/parametros/actas'
+import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
 
 export const PrivateRoute = [
   {
@@ -40,6 +40,21 @@ export const PrivateRoute = [
       {
         path: '/articulos',
         element: <Articulo />
+      },
+
+      {
+        path: '/propiedades',
+        element: <Propiedad />
+      },
+
+      {
+        path: '/rubros',
+        element: <Rubro />
+      },
+
+      {
+        path: '/estados',
+        element: <Estado />
       },
     ]
   }
