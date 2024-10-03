@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, Loading, icons } from '../../../../shared'
 import { IJuzgado } from '../interfaces'
 import { useJuzgado } from '../hooks/useJuzgado'
 import JuzgadoForm from '../forms/JuzgadoForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },

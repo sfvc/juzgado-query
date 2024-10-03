@@ -39,11 +39,11 @@ export const useJuzgado = () => {
   const updateJuzgado = useMutation({
     mutationFn: ({ id, juzgado }: { id: number, juzgado: FormJuzgado }) => juzgadoActions.updateJuzgado(id, juzgado),
     onSuccess: () => {
-      toast.success('Juzgado creado con exito')
+      toast.success('Juzgado actualizado con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el juzgado')
+      toast.error('Error al actualizar el juzgado')
       console.log(error)
     }
   })

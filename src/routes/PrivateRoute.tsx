@@ -3,6 +3,7 @@ import Layout from '../layout/Layout'
 import { Barrio, Departamento, Localidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
 import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
 import { Juzgado, Usuario } from '../modules/parametros/globales'
+import { Vehiculo } from '../modules/vehiculos'
 
 export const PrivateRoute = [
   {
@@ -66,6 +67,11 @@ export const PrivateRoute = [
       {
         path: '/usuarios',
         element: <Usuario />
+      },
+
+      {
+        path: '/vehiculos',
+        element: <Vehiculo />
       },
     ]
   }

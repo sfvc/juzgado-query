@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
 import { IUsuario } from '../interfaces'
 import UsuarioForm from '../forms/UsuarioForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },

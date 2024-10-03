@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { useDepartamento } from '../hooks/useDepartamento'
 import DepartamentoForm from '../forms/DepartamentoForm'
 import { IDepartamento } from '../interfaces/localizacion'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

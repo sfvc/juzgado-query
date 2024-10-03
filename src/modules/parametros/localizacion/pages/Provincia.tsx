@@ -4,11 +4,7 @@ import type { IProvincia } from '../interfaces/localizacion'
 import { DeleteModal, Loading, icons } from '../../../../shared'
 import { useProvincia } from '../hooks/useProvincia'
 import ProvinciaForm from '../forms/ProvinciaForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { IEstado } from '../interfaces'
 import { useEstado } from '../hooks/useEstado'
 import EstadoForm from '../forms/EstadoForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

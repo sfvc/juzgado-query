@@ -1,5 +1,6 @@
 /* Hooks */
 export { usePagination } from './hooks/usePagination' 
+export { useFilter } from './hooks/useFilter' 
 
 /* Components */
 export { DeleteModal } from './components/DeleteModal' 

@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { usePropiedad } from '../hooks/usePropiedad'
 import { IPropiedad } from '../interfaces'
 import PropiedadForm from '../forms/PropiedadForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

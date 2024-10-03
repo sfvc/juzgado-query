@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { ILocalidad } from '../interfaces/localizacion'
 import { useLocalidad } from '../hooks/useLocalidad'
 import LocalidadForm from '../forms/LocalidadForm'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

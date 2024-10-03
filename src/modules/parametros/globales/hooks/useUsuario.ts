@@ -41,11 +41,11 @@ export const useUsuario = () => {
   const updateUsuario = useMutation({
     mutationFn: ({ id, usuario }: { id: number, usuario: FormUsuario }) => usuarioActions.updateUsuario(id, usuario),
     onSuccess: () => {
-      toast.success('Usuario creado con exito')
+      toast.success('Usuario actualizado con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el usuario')
+      toast.error('Error al actualizar el usuario')
       console.log(error)
     }
   })

@@ -6,11 +6,7 @@ import { IArticulo } from '../interfaces'
 import ArticuloForm from '../forms/ArticuloForm'
 import { useQuery } from '@tanstack/react-query'
 import { articuloActions } from '..'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },

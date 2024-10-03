@@ -4,11 +4,7 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import RubroForm from '../forms/RubroForm'
 import { IRubro } from '../interfaces'
 import { useRubro } from '../hooks/useRubro'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

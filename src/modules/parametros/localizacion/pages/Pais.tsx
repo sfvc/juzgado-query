@@ -4,11 +4,7 @@ import type { IPais } from '../interfaces/localizacion'
 import { usePaises } from '../index'
 import PaisForm from '../forms/PaisForm'
 import { DeleteModal, Loading, icons } from '../../../../shared'
-
-interface Column {
-  key: string
-  label: string
-}
+import { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },

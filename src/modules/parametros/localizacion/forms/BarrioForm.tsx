@@ -21,13 +21,9 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
   const { createBarrio, updateBarrio } = useBarrio()
 
   // Buscardor de localidades
-  const handleSearch = async (query: string) => {
-    return localidadActions.getLocalidadesByFilter(query)
-  }
+  const handleSearch = async (query: string) => localidadActions.getLocalidadesByFilter(query)
 
-  const handleSelect = (localidad: ILocalidad) => {
-    setValue('localidad_id', localidad.id.toString())
-  }
+  const handleSelect = (localidad: ILocalidad) => setValue('localidad_id', localidad.id.toString())
 
   const {
     register,
@@ -74,9 +70,7 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
         onSearch={handleSearch}
         onSelect={handleSelect}
         renderItem={(item) => (
-          <>
-            <strong>{item.nombre}</strong> - CP. {item.codigo_postal}
-          </>
+          <div><strong>{item.nombre}</strong> - CP. {item.codigo_postal}</div>
         )}
         renderInput={(item) => { return `${item.nombre} - CP. ${item.codigo_postal}`} }
       />

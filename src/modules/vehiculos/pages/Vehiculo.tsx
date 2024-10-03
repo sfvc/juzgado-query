@@ -1,27 +1,40 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
-import { IBarrio } from '../interfaces/localizacion'
-import { useBarrio } from '../hooks/useBarrio'
-import BarrioForm from '../forms/BarrioForm'
-import { Column } from '../../../../shared/interfaces'
+import { IVehiculo } from '../interfaces'
+import { useVehiculo } from '../hooks/useVehiculo'
+import { Column } from '../../../shared/interfaces'
+import { DeleteModal, Loading } from '../../../shared'
+import { icons } from '../../../shared'
+import VehiculoForm from '../forms/VehiculoForm'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
-  { key: 'nombre', label: 'Nombre' },
-  { key: 'acciones', label: 'Acciones' }
+  { key: 'dominio', label: 'Dominio' },
+  { key: 'titular', label: 'Titular' },
+  { key: 'marca', label: 'Marca' },
+  { key: 'modelo', label: 'Modelo' },
+  { key: 'tipo', label: 'Tipo' },
+  { key: 'color', label: 'Color' },
+  { key: 'acciones', label: 'Acciones' },
 ]
 
-export const Barrio = () => {
+export const Vehiculo = () => {
   const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [activeItem, setActiveItem] = useState<IBarrio | null>(null)
+  const [activeItem, setActiveItem] = useState<IVehiculo | null>(null)
 
-  const { barrios, pagination, isLoading, filterParams, updateFilter, deleteBarrio } = useBarrio()
+  const { 
+    vehiculos,
+    pagination,
+    isLoading,
+    filterParams,
+    updateFilter,
+    deleteVehiculo 
+  } = useVehiculo()
 
   /* Modal crear/editar */
-  const onOpenModal = (barrio: IBarrio) => {
-    setActiveItem(barrio)
+  const onOpenModal = (vehiculo: IVehiculo) => {
+    setActiveItem(vehiculo)
     setOpenModal(true)
   }
 
@@ -31,8 +44,8 @@ export const Barrio = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (barrio: IBarrio) => {
-    setActiveItem(barrio)
+  const openDelteModal = (vehiculo: IVehiculo) => {
+    setActiveItem(vehiculo)
     setOpenDeleteModal(true)
   }
 
@@ -46,7 +59,7 @@ export const Barrio = () => {
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Barrios</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Vehiculos</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <div className='relative'>
@@ -58,7 +71,7 @@ export const Barrio = () => {
               />
               <icons.Search />
             </div>
-
+            
             <Button 
               type='submit' 
               color="gray"
@@ -81,20 +94,25 @@ export const Barrio = () => {
 
         <Table.Body className='divide-y'>
           {
-            (barrios.length > 0)
-              ? (barrios.map((barrio: IBarrio) => (
-                <Table.Row key={barrio.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{barrio.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{barrio.nombre}</Table.Cell>
+            (vehiculos.length > 0)
+              ? (vehiculos.map((vehiculo: IVehiculo) => (
+                <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.titular?.apellido || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.marca.nombre}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo.nombre}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.color.nombre}</Table.Cell>
                   <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                     <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(barrio)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Pencil />
                       </Button>
                     </Tooltip>
 
                     <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(barrio)} className='w-8 h-8 flex items-center justify-center'>
+                      <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Trash />
                       </Button>
                     </Tooltip>
@@ -118,11 +136,11 @@ export const Barrio = () => {
       </div>
 
       {/* Modal crear/editar */} 
-      <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Barrio' : 'Editar Barrio'}</Modal.Header>
+      <Modal show={openModal} onClose={onCloseModal} size='4xl'>
+        <Modal.Header>{!activeItem ? 'Agregar Vehiculo' : 'Editar Vehiculo'}</Modal.Header>
         <Modal.Body>
-          <BarrioForm 
-            barrio={activeItem} 
+          <VehiculoForm 
+            vehiculo={activeItem} 
             onSucces={onCloseModal}
           />
         </Modal.Body>
@@ -134,12 +152,11 @@ export const Barrio = () => {
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
-          onDelete={(id) => deleteBarrio.mutateAsync(id)}
-          isLoading={deleteBarrio.isPending}
+          onDelete={(id) => deleteVehiculo.mutateAsync(id)}
+          isLoading={deleteVehiculo.isPending}
           onClose={closeDeleteModal}
         />
       }
     </React.Fragment>
   )
 }
-
