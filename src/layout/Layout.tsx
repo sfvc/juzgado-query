@@ -1,11 +1,11 @@
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
-import DropdownHeader from './components/DropdownHeader'
+import { DropdownHeader } from './'
 import logoJuzgado from '../assets/images/logo-juzgado.png'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-const Layout = () => {
+export const Layout = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <ToastContainer />
@@ -136,5 +136,3 @@ const Layout = () => {
     </div>
   )
 }
-
-export default Layout

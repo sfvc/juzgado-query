@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useRoutes } from 'react-router-dom'
 import { AuthContext, Status } from '../context/AuthContext'
 import { PrivateRoute, PublicRoute} from '.'
-import { LoadingOverlay } from '../layout/components/LoadingOverlayer'
+import { LoadingOverlay } from '../layout'
 
 export const Routes = () => {
   const { isAuthenticated } = useContext(AuthContext)

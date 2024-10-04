@@ -1,0 +1,1 @@
+export const TIPO_PLANTILLAS: string[] = ['DECRETO', 'SENTENCIA', 'OFICIO', 'NOTIFICACION']

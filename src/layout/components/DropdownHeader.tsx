@@ -3,7 +3,7 @@ import { DarkThemeToggle, Dropdown, Flowbite, Tooltip } from 'flowbite-react'
 import { AuthContext } from '../../context/AuthContext'
 import { icons } from '../../shared'
 
-function DropdownHeader () {
+export const DropdownHeader = () => {
   const { user, logoutUser } = useContext(AuthContext)
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -52,5 +52,3 @@ function DropdownHeader () {
     </div>
   )
 }
-
-export default DropdownHeader

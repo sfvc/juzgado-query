@@ -53,11 +53,11 @@ export const useUsuario = () => {
   const deleteUsuario = useMutation({
     mutationFn: (id: number) => usuarioActions.deleteUsuario(id),
     onSuccess: () => {
-      toast.success('Usuario creado con exito')
+      toast.success('Usuario eliminado con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el usuario')
+      toast.error('Error al eliminar el usuario')
       console.log(error)
     }
   })

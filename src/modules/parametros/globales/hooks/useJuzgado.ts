@@ -51,11 +51,11 @@ export const useJuzgado = () => {
   const deleteJuzgado = useMutation({
     mutationFn: (id: number) => juzgadoActions.deleteJuzgado(id),
     onSuccess: () => {
-      toast.success('Juzgado creado con exito')
+      toast.success('Juzgado eliminado con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el juzgado')
+      toast.error('Error al eliminar el juzgado')
       console.log(error)
     }
   })

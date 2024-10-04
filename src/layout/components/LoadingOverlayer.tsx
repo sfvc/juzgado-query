@@ -1,14 +1,6 @@
 import React from 'react'
 import logoJuzgado from '../../assets/images/logo-juzgado.png'
 
-export const LoadingOverlay = () => {
-  return (
-    <div style={overlayStyles}>
-      <img src={logoJuzgado} alt="Loading..." style={imageStyles} />
-    </div>
-  )
-}
-
 const overlayStyles: React.CSSProperties = {
   position: 'fixed',
   top: 0,
@@ -37,3 +29,10 @@ styles.innerHTML = `
 `
 document.getElementsByTagName('head')[0].appendChild(styles)
 
+export const LoadingOverlay = () => {
+  return (
+    <div style={overlayStyles}>
+      <img src={logoJuzgado} alt="Loading..." style={imageStyles} />
+    </div>
+  )
+}
