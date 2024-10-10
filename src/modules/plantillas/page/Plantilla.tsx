@@ -18,8 +18,8 @@ const colums: Column[] = [
 ]
 
 export const Plantilla = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPlantilla | null>(null)
   const useAction = useLoading()
 

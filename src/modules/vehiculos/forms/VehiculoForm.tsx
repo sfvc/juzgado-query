@@ -28,6 +28,7 @@ interface Props {
 const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
   const { createVehiculo, updateVehiculo } = useVehiculo()
+  
   const { data, isLoading } = useQuery({
     queryKey: ['vehiculos-data'],
     queryFn: vehiculoActions.getDataVehiculo,

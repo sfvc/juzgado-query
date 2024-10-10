@@ -13,8 +13,8 @@ const colums: Column[] = [
 ]
 
 export const Pais = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPais | null>(null)
 
   const { paises, pagination, isLoading, filterParams, updateFilter, deletePais } = usePaises()

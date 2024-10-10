@@ -16,8 +16,8 @@ const colums: Column[] = [
 ]
 
 export const Usuario = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IUsuario | null>(null)
 
   const { 

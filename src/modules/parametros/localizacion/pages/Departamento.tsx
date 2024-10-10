@@ -13,8 +13,8 @@ const colums: Column[] = [
 ]
 
 export const Departamento = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IDepartamento | null>(null)
 
   const { departamentos, pagination, isLoading, filterParams, updateFilter, deleteDepartamento } = useDepartamento()

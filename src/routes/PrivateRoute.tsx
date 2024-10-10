@@ -5,6 +5,7 @@ import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
 import { Juzgado, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
+import { Persona } from '../modules/personas'
 
 export const PrivateRoute = [
   {
@@ -78,6 +79,11 @@ export const PrivateRoute = [
       {
         path: '/plantillas',
         element: <Plantilla />
+      },
+
+      {
+        path: '/personas',
+        element: <Persona />
       },
     ]
   }

@@ -13,8 +13,8 @@ const colums: Column[] = [
 ]
 
 export const Provincia = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IProvincia | null>(null)
 
   const { provincias, pagination, isLoading, filterParams, updateFilter, deleteProvincia } = useProvincia()

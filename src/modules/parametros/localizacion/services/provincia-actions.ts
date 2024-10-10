@@ -39,3 +39,13 @@ export const getAllProvincias = async () => {
   const { data: provincias } = response.data
   return provincias
 }
+
+export const getProvinciasByPais = async (id: number) => {
+  try {
+    const response = await apiJuzgado.get(`/paises/${id}/provincias`)
+    const { data: { provincias } } = response.data
+    return provincias
+  } catch (error) {
+    console.log(error)
+  }
+}

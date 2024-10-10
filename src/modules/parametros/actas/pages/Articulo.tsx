@@ -23,8 +23,8 @@ const colums: Column[] = [
 ]
 
 export const Articulo = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IArticulo | null>(null)
 
   const { data: tipoActas } = useQuery({

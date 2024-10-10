@@ -13,8 +13,8 @@ const colums: Column[] = [
 ]
 
 export const Localidad = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<ILocalidad | null>(null)
 
   const { localidades, pagination, isLoading, filterParams, updateFilter, deleteLocalidad } = useLocalidad()

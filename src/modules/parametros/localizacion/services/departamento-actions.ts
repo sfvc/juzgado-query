@@ -39,3 +39,13 @@ export const getAllDepartamentos = async () => {
   const { data: departamentos } = response.data
   return departamentos
 }
+
+export const getDepartamentosByProvincia = async (id: number) => {
+  try {
+    const response = await apiJuzgado.get(`/provincias/${id}/departamentos`)
+    const { data: { departamentos } } = response.data
+    return departamentos
+  } catch (error) {
+    console.log(error)
+  }
+}

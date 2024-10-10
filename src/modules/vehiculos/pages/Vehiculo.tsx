@@ -19,8 +19,8 @@ const colums: Column[] = [
 ]
 
 export const Vehiculo = () => {
-  const [openModal, setOpenModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IVehiculo | null>(null)
 
   const { 
