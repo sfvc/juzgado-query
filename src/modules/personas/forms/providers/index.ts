@@ -1,0 +1,1 @@
+export { FisicaProvider } from './FisicaProvider'

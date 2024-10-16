@@ -1,51 +1,43 @@
-import { useQuery } from '@tanstack/react-query'
+ 
+import { useEffect } from 'react'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
-import { useEffect, useState } from 'react'
-import { departamentoActions, localidadActions, paisActions, provinciaActions } from '../../parametros/localizacion'
-import { UseFormRegister, FieldErrors } from 'react-hook-form'
-import { IDomicilio, PersonaHumana } from '../interfaces'
-import { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../parametros/localizacion/interfaces/localizacion'
-import { SearchInput } from '../../../shared/components/SearchInput'
+import { Domicilio, IDomicilio } from '../../interfaces'
+import { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
+import { useDomicilio } from '../../hooks/useDomicilio'
+import { SearchInput } from '../../../../shared/components/SearchInput'
+import { useFormContext } from 'react-hook-form'
 
 export interface Props {
-    register: UseFormRegister<PersonaHumana>
-    errors: FieldErrors<PersonaHumana>
-    showDomicilio: boolean
-    setShowDomicilio: (show: boolean) => void
-    selectLocalidad: (localidad: ILocalidad) => void
-    domicilio: IDomicilio | null
+  showDomicilio: boolean
+  setShowDomicilio: (show: boolean) => void
+  domicilio: IDomicilio | null
+}
+
+export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Props) => {
+  const { register, setValue, formState: { errors } } = useFormContext<Domicilio>()
+
+  const selectLocalidad = (localidad: ILocalidad) => setValue('localidad_id', localidad.id)
+
+  const { 
+    paises,
+    provincias,
+    departamentos,
+    barrios,
+    handleSearch,
+    getProvinciasByPais,
+    getDepartamentosByProvincia,
+    getBarriosByDepartamento
+  } = useDomicilio({ selectLocalidad })
+
+  const initLoading = async () => {
+    if(!domicilio) return
+    await getProvinciasByPais(domicilio?.pais_id)
+    await getDepartamentosByProvincia(domicilio?.provincia_id)
+    await getBarriosByDepartamento(domicilio?.localidad)
   }
-
-export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicilio, selectLocalidad, domicilio }: Props) => {
-  const [provincias, setProvincias] = useState<IProvincia[]>([])
-  const [departamentos, setDepartamentos] = useState<IDepartamento[]>([])
-  const [barrios, setBarrios] = useState<IBarrio[]>([])
-
-  const { data: paises } = useQuery({
-    queryKey: ['paises', 'all'], 
-    queryFn: paisActions.getAllPaises,  
-    staleTime: 1000 * 60 * 5, 
-  })
-
-  const getProvinciasByPais = async (id: number) => {
-    if (!id) return 
-    const data: IProvincia[] = await provinciaActions.getProvinciasByPais(id)
-    setProvincias(data)
-  }
-
-  const getDepartamentosByProvincia = async (id: number) => {
-    if(!id) return 
-    const data: IDepartamento[] = await departamentoActions.getDepartamentosByProvincia(id)
-    setDepartamentos(data)
-  }
-
-  // Buscardor de localidades
-  const handleSearch = async (query: string) => localidadActions.getLocalidadesByFilter(query)
 
   useEffect(() => {
-    if(domicilio) {
-      getDepartamentosByProvincia(domicilio.provincia_id!)
-    }
+    initLoading()
   }, [])
   
   return (
@@ -68,9 +60,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                   </div>
 
                   <Select 
-                    {...register('domicilio.pais_id')}
-                    helperText={errors?.domicilio?.pais_id && errors?.domicilio?.pais_id?.message} 
-                    color={errors?.domicilio?.pais_id && 'failure'}
+                    {...register('pais_id')}
+                    helperText={errors?.pais_id && errors?.pais_id?.message} 
+                    color={errors?.pais_id && 'failure'}
                     onChange={(e) => getProvinciasByPais(+e.target.value)}
                   >
                     <option value=''>Seleccione un país</option>
@@ -88,9 +80,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                   </div>
 
                   <Select 
-                    {...register('domicilio.provincia_id')}
-                    helperText={errors?.domicilio?.provincia_id && errors?.domicilio?.provincia_id?.message} 
-                    color={errors?.domicilio?.provincia_id && 'failure'}
+                    {...register('provincia_id')}
+                    helperText={errors?.provincia_id && errors?.provincia_id?.message} 
+                    color={errors?.provincia_id && 'failure'}
                     onChange={(e) => getDepartamentosByProvincia(+e.target.value)}
                     disabled={provincias.length === 0}
                   >
@@ -109,9 +101,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                   </div>
 
                   <Select 
-                    {...register('domicilio.departamento_id')}
-                    helperText={errors?.domicilio?.departamento_id && errors?.domicilio?.departamento_id?.message} 
-                    color={errors?.domicilio?.departamento_id && 'failure'}
+                    {...register('departamento_id')}
+                    helperText={errors?.departamento_id && errors?.departamento_id?.message} 
+                    color={errors?.departamento_id && 'failure'}
                     disabled={departamentos.length === 0}
                   >
                     <option value=''>Seleccione un departamento</option>
@@ -127,7 +119,7 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                   label="Localidad"
                   placeholder="Buscar localidad"
                   onSearch={handleSearch}
-                  onSelect={selectLocalidad}
+                  onSelect={(item: ILocalidad) => getBarriosByDepartamento(item)}
                   renderItem={(item) => (
                     <div><strong>{item.nombre}</strong> - CP. {item.codigo_postal}</div>
                   )}
@@ -140,9 +132,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                   </div>
 
                   <Select 
-                    {...register('domicilio.barrio_id')}
-                    helperText={errors?.domicilio?.barrio_id && errors?.domicilio?.barrio_id?.message} 
-                    color={errors?.domicilio?.barrio_id && 'failure'}
+                    {...register('barrio_id')}
+                    helperText={errors?.barrio_id && errors?.barrio_id?.message} 
+                    color={errors?.barrio_id && 'failure'}
                   >
                     <option value=''>Seleccione un barrio</option>
                     {barrios?.map((barrio: IBarrio) => (
@@ -158,9 +150,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                     <Label color='gray' htmlFor='calle' value='Calle' /><strong className='obligatorio'>(*)</strong>
                   </div>
                   <TextInput
-                    {...register('domicilio.calle')}
-                    helperText={errors?.domicilio?.calle && errors?.domicilio?.calle?.message} 
-                    color={errors?.domicilio?.calle && 'failure'}
+                    {...register('calle')}
+                    helperText={errors?.calle && errors?.calle?.message} 
+                    color={errors?.calle && 'failure'}
                     placeholder='Calle'
                   />
                 </div>
@@ -170,9 +162,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                     <Label htmlFor='numero' value='Número' />
                   </div>
                   <TextInput
-                    {...register('domicilio.numero')}
-                    helperText={errors?.domicilio?.numero && errors?.domicilio?.numero?.message} 
-                    color={errors?.domicilio?.numero && 'failure'}
+                    {...register('numero')}
+                    helperText={errors?.numero && errors?.numero?.message} 
+                    color={errors?.numero && 'failure'}
                     type='number'
                     placeholder='Numero'
                   />
@@ -183,9 +175,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                     <Label htmlFor='lote_dpto' value='Lote/Departamento' />
                   </div>
                   <TextInput
-                    {...register('domicilio.lote_dpto')}
-                    helperText={errors?.domicilio?.lote_dpto && errors?.domicilio?.lote_dpto?.message} 
-                    color={errors?.domicilio?.lote_dpto && 'failure'}
+                    {...register('lote_dpto')}
+                    helperText={errors?.lote_dpto && errors?.lote_dpto?.message} 
+                    color={errors?.lote_dpto && 'failure'}
                     placeholder='Departamento'
                   />
                 </div>
@@ -195,9 +187,9 @@ export const DomicilioForm = ({ register, errors, showDomicilio, setShowDomicili
                     <Label htmlFor='manzana_piso' value='Manzana' />
                   </div>
                   <TextInput
-                    {...register('domicilio.manzana_piso')}
-                    helperText={errors?.domicilio?.manzana_piso && errors?.domicilio?.manzana_piso?.message} 
-                    color={errors?.domicilio?.manzana_piso && 'failure'}
+                    {...register('manzana_piso')}
+                    helperText={errors?.manzana_piso && errors?.manzana_piso?.message} 
+                    color={errors?.manzana_piso && 'failure'}
                     placeholder='Manzana'
                   />
                 </div>

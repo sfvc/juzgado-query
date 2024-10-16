@@ -1,3 +1,5 @@
+import { ILocalidad } from '../../parametros/localizacion/interfaces/localizacion'
+
 export interface INacionalidad {
     id: number
     nombre: string
@@ -13,14 +15,15 @@ export interface ITipoSociedad {
 export interface IDomicilio {
     id: number
     calle: string
-    numero?: number | null
-    manzana_piso?: number | null
-    lote_dpto?: number | null
-    barrio_id?: number | null
-    pais_id?: number | null
-    provincia_id?: number | null
-    departamento_id?: number | null
-    localidad_id?: number | null
+    numero: number | null
+    manzana_piso: string | null
+    lote_dpto: string | null
+    barrio_id: number | null
+    pais_id: number | null
+    provincia_id: number | null
+    departamento_id: number | null
+    localidad_id: number | null
+    localidad: ILocalidad | null
     deleted_at?: string | null
 }
  
@@ -45,33 +48,6 @@ export interface IPersona {
     nacionalidad: INacionalidad | null
 }
 
-export interface PersonaHumana {
-    apellido: string
-    nombre: string
-    tipo_documento: string
-    numero_documento: string
-    estado_civil?: string
-    fecha_nacimiento?: string
-    cuil: string
-    sexo: string
-    email?: string
-    nacionalidad_id: number | null
-    tipo_persona: string
-
-    domicilio?: IDomicilio
-}
-
-export interface PersonaJuridica {
-    razon_social: string
-    nombre: string
-    cuit: string
-    tipo_documento: string
-    email?: string
-    numero_inscripcion?: string
-    tipo_sociedad_id?: number | null
-    tipo_persona: string
-}
-
 export interface DataPersona {
     estadoCivil: string[]
     nacionalidades: INacionalidad[]
@@ -79,3 +55,42 @@ export interface DataPersona {
     sexo: string[]
     tipoSociedad: ITipoSociedad[]
 }
+
+// types.ts
+export interface PersonaFisica {
+    apellido: string
+    numero_documento: string
+    estado_civil?: string
+    fecha_nacimiento?: string
+    cuil: string
+    sexo: string
+    nacionalidad_id: number | null
+}
+  
+export interface PersonaJuridica {
+    razon_social: string
+    cuit: string
+    numero_inscripcion?: string
+    tipo_sociedad_id?: number | null
+}
+  
+export interface Domicilio {
+    calle: string
+    numero: number | null
+    manzana_piso: string | null
+    lote_dpto: string | null
+    barrio_id: number | null
+    pais_id: number | null
+    provincia_id: number | null
+    departamento_id: number | null
+    localidad_id: number | null
+}
+  
+export type FormValues = {
+    tipo_persona: string
+    nombre: string
+    tipo_documento: string
+    email?: string
+} & (PersonaFisica | PersonaJuridica) & Domicilio
+
+   

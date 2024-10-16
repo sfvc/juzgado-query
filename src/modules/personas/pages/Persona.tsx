@@ -137,7 +137,7 @@ export const Persona = () => {
       <Modal show={openModal} onClose={onCloseModal} size='5xl'>
         <Modal.Header>{!activeItem ? 'Agregar Persona' : 'Editar Persona'}</Modal.Header>
         <Modal.Body>
-          <PersonaForm 
+          <PersonaForm
             persona={activeItem} 
             onSucces={onCloseModal}
           />

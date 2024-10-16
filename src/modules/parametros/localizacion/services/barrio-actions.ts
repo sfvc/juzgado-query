@@ -34,9 +34,8 @@ export const deleteBarrio = async (id: number) => {
   return barrio
 }
 
-/* export const getBarriosByLocalidades = async (id: number) => {
+export const getBarriosByLocalidades = async (id: number) => {
   const response = await apiJuzgado.get(`/localidades/${id}/barrios`)
-  const { data: barrios } = response.data
-  console.log(barrios)
+  const { data: { barrios } } = response.data
   return barrios
-} */
+}
