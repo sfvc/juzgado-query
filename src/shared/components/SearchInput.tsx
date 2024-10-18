@@ -4,7 +4,7 @@ import { icons } from '..'
 
 interface SearchItem {
   id: string | number
-  nombre: string
+  nombre?: string
 }
 
 interface SearchInputProps<T extends SearchItem> {
@@ -39,7 +39,6 @@ export function SearchInput<T extends SearchItem>({
       }
 
       setIsLoading(true)
-
       try {
         const results = await onSearch(query)
         setData(results)
@@ -62,7 +61,6 @@ export function SearchInput<T extends SearchItem>({
 
   const handleSelect = (item: T) => {
     onSelect(item)
-    // setSearch(`${item.nombre}`)
     setSearch( renderInput(item) )
     setShowResults(false)
   }
@@ -81,8 +79,8 @@ export function SearchInput<T extends SearchItem>({
           placeholder={placeholder}
           className="w-full"
         />
-        <div className="absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none">
-          { isLoading 
+        <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
+          { isLoading
             ? <Spinner size="sm" />
             : <icons.Search />
           }
@@ -98,7 +96,7 @@ export function SearchInput<T extends SearchItem>({
                   className="w-full text-start py-2 px-4"
                   onClick={() => handleSelect(item)}
                 >
-                  {renderItem ? renderItem(item) : item.nombre}
+                  {renderItem ? renderItem(item) : item?.nombre}
                 </button>
               </li>
             ))

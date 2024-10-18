@@ -4,7 +4,7 @@ import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { Domicilio, IDomicilio } from '../../interfaces'
 import { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
 import { useDomicilio } from '../../hooks/useDomicilio'
-import { SearchInput } from '../../../../shared/components/SearchInput'
+import { SearchInput } from '../../../../shared'
 import { useFormContext } from 'react-hook-form'
 
 export interface Props {

@@ -39,6 +39,7 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     email: persona?.email || '',
     tipo_persona: persona?.tipo_persona || tipoPersona,
 
+    // Domicilio
     pais_id: persona?.domicilio?.pais_id || null,
     provincia_id: persona?.domicilio?.provincia_id || null,
     departamento_id: persona?.domicilio?.departamento_id || null,
@@ -59,7 +60,6 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
       cuil: persona?.cuil || '',
       sexo: persona?.sexo || '',
       nacionalidad_id: persona?.nacionalidad?.id || null,
-      
     }
   } else {
     defaultValues = {

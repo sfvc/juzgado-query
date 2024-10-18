@@ -39,9 +39,9 @@ export const getDataVehiculo = async () => {
   return response.data
 }
 
-export const getTitularesByFilter = async (query: string) => {
-  const response = await apiJuzgado.get(`/personas/buscar/${query}`)
-  const { data: personas } = response.data
-  return personas
+export const getVehiculosByFilter = async (query: string) => {
+  const response = await apiJuzgado.get(`/vehiculos/buscar/${query}`)
+  const { data: vehiculos } = response.data
+  return vehiculos
 }
   

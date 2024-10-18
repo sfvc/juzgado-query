@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import type { IBarrio, FormBarrio, ILocalidad } from '../interfaces/localizacion'
 import { localidadActions } from '..'
 import { useBarrio } from '../hooks/useBarrio'
-import { SearchInput } from '../../../../shared/components/SearchInput'
+import { SearchInput } from '../../../../shared'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('El departamento es requerido'),

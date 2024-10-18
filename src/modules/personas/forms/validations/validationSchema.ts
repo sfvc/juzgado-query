@@ -29,7 +29,6 @@ export const personaJuridicaSchema = yup.object().shape({
   tipo_persona: yup.string().required('El tipo de persona es requerido'),
 })
 
-
 export const domicilioSchema = yup.object({
   pais_id: yup.string()
     .when('$showDomicilio', {

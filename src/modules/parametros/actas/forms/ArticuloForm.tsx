@@ -6,7 +6,8 @@ import * as yup from 'yup'
 import { FormArticulo, IArticulo } from '../interfaces'
 import { useArticulo } from '../hooks/useArticulo'
 import { articuloActions } from '..'
-import { useEffect } from 'react'
+import { TIPO_ACTAS } from '../../../../shared/constants'
+import { actaActions } from '../../../actas'
 
 const validationSchema = yup.object().shape({
   numero: yup.string(),
@@ -24,19 +25,13 @@ interface Props {
     articulo: IArticulo | null
     onSucces: () => void
 }
-
-const initLoading = async () => {
-  const tipoActas = await articuloActions.getAllTipoActas()
-  const tipoInfracciones = await articuloActions.getAllTipoInfracciones()
-  return { tipoActas, tipoInfracciones }
-}
   
 const ArticuloForm = ({ articulo, onSucces }: Props) => {
   const { createArticulo, updateArticulo } = useArticulo()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['init-articulos'], 
-    queryFn: initLoading,  
+    queryKey: ['articulos-data'], 
+    queryFn: actaActions.getAllTipoInfracciones,  
     staleTime: 1000 * 60 * 5, 
   })
 
@@ -110,10 +105,8 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
           >
             <option value='' hidden>Seleccione el tipo</option>
             {
-              data?.tipoActas.map((acta: string, i: number) => (
-                <option key={i} value={acta}>
-                  {acta}
-                </option>
+              TIPO_ACTAS?.map((tipo: string, i: number) => (
+                <option key={i} value={tipo}>{tipo}</option>
               ))
             }
           </Select>
@@ -132,7 +125,7 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
             color={errors?.tipo_infraccion && 'failure'}
           >
             <option value='' hidden>Seleccione el tipo de infraccion</option>
-            {data?.tipoInfracciones.map((infraccion: string, i: number) => (
+            {data?.map((infraccion: string, i: number) => (
               <option key={i} value={infraccion}>
                 {infraccion}
               </option>

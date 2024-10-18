@@ -1,1 +1,3 @@
 export const TIPO_PLANTILLAS: string[] = ['DECRETO', 'SENTENCIA', 'OFICIO', 'NOTIFICACION']
+
+export const TIPO_ACTAS: string[] = ['TRANSITO', 'INSPECCION', 'BROMATOLOGIA', 'OBRAS PUBLICAS']

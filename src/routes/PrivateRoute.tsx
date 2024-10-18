@@ -6,6 +6,7 @@ import { Juzgado, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
+import { Acta } from '../modules/actas'
 
 export const PrivateRoute = [
   {
@@ -14,7 +15,7 @@ export const PrivateRoute = [
     children: [
       {
         path: '/',
-        element: <Navigate to='/paises' />
+        element: <Navigate to='/actas' />
       },
       {
         path: '/paises',
@@ -84,6 +85,11 @@ export const PrivateRoute = [
       {
         path: '/personas',
         element: <Persona />
+      },
+
+      {
+        path: '/actas',
+        element: <Acta />
       },
     ]
   }

@@ -7,7 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Color, FormVehiculo, IVehiculo, Marca, Tipo, Titular } from '../interfaces'
 import { useVehiculo } from '../hooks/useVehiculo'
 import { vehiculoActions } from '..'
-import { SearchInput } from '../../../shared/components/SearchInput'
+import { SearchInput } from '../../../shared'
+import { personaActions } from '../../personas'
 
 const validationSchema = yup.object().shape({
   dominio: yup.string().required('El dominio es requerido'),
@@ -36,8 +37,7 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
   })
 
   // Buscardor de titulares
-  const handleSearch = async (query: string) => vehiculoActions.getTitularesByFilter(query)
-
+  const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
   const handleSelect = (titular: Titular) => setValue('titular_id', titular.id)
 
   const {

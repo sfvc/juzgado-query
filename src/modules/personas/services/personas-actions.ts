@@ -1,6 +1,6 @@
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared/helpers/setUrlParams'
-import { PersonaHumana, PersonaJuridica } from '../interfaces'
+import { PersonaFisica, PersonaJuridica } from '../interfaces'
 
 export const getPersonas = async (filters: object) => {
   const params = setUrlParams(filters)
@@ -16,13 +16,13 @@ export const getPersonaById = async (id: number) => {
   return data
 }
   
-export const createPersona = async (data: PersonaHumana | PersonaJuridica) => {
+export const createPersona = async (data: PersonaFisica | PersonaJuridica) => {
   const response = await apiJuzgado.post('/personas', data)
   const { data: persona } = response.data
   return persona
 }
   
-export const updatePersona = async (id: number, data: PersonaHumana | PersonaJuridica) => {
+export const updatePersona = async (id: number, data: PersonaFisica | PersonaJuridica) => {
   const response = await apiJuzgado.put(`/personas/${id}`, data)
   const { data: persona } = response.data
   return persona
@@ -32,6 +32,12 @@ export const deletePersona = async (id: number) => {
   const response = await apiJuzgado.delete(`/personas/${id}`)
   const { data: persona } = response.data
   return persona
+}
+
+export const getPersonasByFilter = async (query: string) => {
+  const response = await apiJuzgado.get(`/personas/buscar/${query}`)
+  const { data: personas } = response.data
+  return personas
 }
 
 export const getDataPersona = async () => {

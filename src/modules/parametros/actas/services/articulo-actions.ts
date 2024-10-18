@@ -34,21 +34,8 @@ export const deleteArticulo = async (id: number) => {
   return articulos
 }
 
-/* export const getAllArticulos = async () => {
-  const response = await apiJuzgado.get('articulos/select')
+export const getArticulosByFilter = async (query: string) => {
+  const response = await apiJuzgado.get(`/articulos/buscar/${query}`)
   const { data: articulos } = response.data
   return articulos
-} */
-
-//TODO: Crear estos actions en un servicio global para reutilizarlos
-export const getAllTipoActas = async () => {
-  const response = await apiJuzgado.get('tipoacta')
-  const tipoActas = response.data
-  return tipoActas
-}
-
-export const getAllTipoInfracciones = async () => {
-  const response = await apiJuzgado.get('tipoinfraccion')
-  const tipoInfracciones = response.data
-  return tipoInfracciones
 }

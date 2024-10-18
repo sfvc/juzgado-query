@@ -1,5 +1,7 @@
 import { useQuery, useQueryClient, QueryKey } from '@tanstack/react-query'
+import { Pagination } from '../interfaces'
 
+// TODO: Crear interfaces globales 
 interface Meta {
   current_page: number
   last_page: number
@@ -8,11 +10,6 @@ interface Meta {
 interface Response<T> {
   data: T[]
   meta: Meta
-}
-
-interface Pagination {
-  currentPage: number
-  lastPage: number
 }
 
 interface Page { 

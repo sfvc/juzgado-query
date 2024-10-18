@@ -4,9 +4,8 @@ import { DeleteModal, Loading, icons } from '../../../../shared'
 import { useArticulo } from '../hooks/useArticulo'
 import { IArticulo } from '../interfaces'
 import ArticuloForm from '../forms/ArticuloForm'
-import { useQuery } from '@tanstack/react-query'
-import { articuloActions } from '..'
 import { Column } from '../../../../shared/interfaces'
+import { TIPO_ACTAS } from '../../../../shared/constants'
 
 const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },
@@ -26,12 +25,6 @@ export const Articulo = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IArticulo | null>(null)
-
-  const { data: tipoActas } = useQuery({
-    queryKey: ['tipo-actas'], 
-    queryFn: articuloActions.getAllTipoActas,  
-    staleTime: 1000 * 60 * 5, 
-  })
 
   const { 
     articulos,
@@ -76,7 +69,7 @@ export const Articulo = () => {
               <option value='' hidden>Seleccionar tipo</option>
               <option value=''>TODAS</option>
               {
-                tipoActas?.map((tipoActa: string) => (
+                TIPO_ACTAS?.map((tipoActa: string) => (
                   <option key={tipoActa} value={tipoActa}>{tipoActa}</option>
                 ))
               }
