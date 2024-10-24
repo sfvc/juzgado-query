@@ -1,8 +1,8 @@
 import { IPropiedad } from '../../parametros/actas/interfaces'
-import { IPersona } from '../../personas/interfaces'
 import { IPlantilla } from '../../plantillas/interfaces'
+import { IVehiculo, Titular } from '../../vehiculos/interfaces'
 
-// Interfaces de filtro
+//** Interfaces de filtro */ 
 export interface ActaFilterForm {
     infractor_id?: string
     numero_acta?: string
@@ -34,7 +34,7 @@ export interface DataFilters {
     tiposActa: string[]
 }
 
-// Interfaces de acta
+//** Interfaces de acta */
 export interface IActa {
     id:                     number
     numero_acta:            string
@@ -46,13 +46,15 @@ export interface IActa {
     estado_acta_id:         number
     retencion_vehiculo:     number
     retencion_licencia:     number
+    notificado:             number
     notificacion:           Notificacion[]
-    infractores:            Infractor[]
+    infractores:            InfractorActa[]
     calle:                  string
     observaciones:          string
-    infracciones_cometidas: InfraccionesCometida[]
-    prioridad:              Prioridad
-    vehiculo:               Vehiculo
+    infracciones_cometidas: InfraccionActa[]
+    prioridad?:              Prioridad
+    prioridad_id:           number
+    vehiculo:               IVehiculo
     comercio:               null
     propiedades:            IPropiedad[]
     preventiva:             string
@@ -86,21 +88,21 @@ export interface EstadoPivot {
     created_at:      null
 }
 
-export interface InfraccionesCometida {
+export interface InfraccionActa {
     id:              number
     numero:          string
     detalle:         string
-    inciso:          null
-    norma_legal:     string
-    tipo_acta:       string
-    tipo_infraccion: string
-    descuento:       number
+    inciso?:          null
+    norma_legal?:     string
+    tipo_acta?:       string
+    tipo_infraccion?: string
+    descuento?:       number
     valor_desde:     number
-    valor_hasta:     number
-    created_at:      null
-    updated_at:      null
-    deleted_at:      null
-    pivot:           InfraccionesCometidaPivot
+    valor_hasta?:     number
+    created_at?:      null
+    updated_at?:      null
+    deleted_at?:      null
+    pivot?:           InfraccionesCometidaPivot
 }
 
 export interface InfraccionesCometidaPivot {
@@ -108,12 +110,12 @@ export interface InfraccionesCometidaPivot {
     articulo_id: number
 }
 
-export interface Infractor {
+export interface InfractorActa {
     id:           number
     nombre:       string
     apellido:     string
-    documento:    number
-    cuit:         null
+    documento:    string
+    cuit:         string
     responsable:  number
     antecedentes: number
 }
@@ -123,12 +125,15 @@ export interface Prioridad {
     nombre: string
 }
 
-export interface Vehiculo {
+export interface VehiculoActa {
     id:      number
     dominio: string
     modelo:  string
     marca:   string
     tipo:    string
     color:   string
-    titular: IPersona | null
+    titular: Titular | null
+    numero_chasis: string;
+    numero_motor: string;
+    numero_taxi_remis: string;
 }

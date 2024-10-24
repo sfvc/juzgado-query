@@ -3,6 +3,7 @@ import { Button, Pagination, Spinner, Table, Tooltip } from 'flowbite-react'
 import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
 import { icons } from '../../../shared'
 import { ActaFilterForm, IActa } from '../interfaces'
+import { useNavigate } from 'react-router-dom'
 
 const colums: Column[] = [
   { key: 'numero_acta', label: 'Nro. Acta' },
@@ -24,6 +25,11 @@ interface Props {
 }
 
 export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) => {
+  const navigate = useNavigate()
+
+  const handleEditActa = (id: number) => {
+    navigate(`/actas/transito/editar/${id}`)
+  }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='xl'/></div>
   
@@ -67,7 +73,7 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
 
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => console.log('first')} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='success' onClick={() => handleEditActa(acta.id)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
                         </Button>
                       </Tooltip>

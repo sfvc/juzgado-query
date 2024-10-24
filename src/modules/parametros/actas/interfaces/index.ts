@@ -1,6 +1,6 @@
 export interface IArticulo {
     id: number
-    numero: number
+    numero: string
     detalle: string
     inciso: string | null
     tipo_acta: string

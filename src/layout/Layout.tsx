@@ -11,7 +11,7 @@ export const Layout = () => {
       <ToastContainer />
 
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
-        <Link to='/' onClick={() => console.log('first')}>
+        <Link to='/'>
           <img src={logoJuzgado} alt='Logo Juzgado' className='w-48 md:w-40 inline-block mx-auto pointer-events-none' />
         </Link>
 

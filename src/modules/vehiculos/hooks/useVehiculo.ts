@@ -32,7 +32,7 @@ export const useVehiculo = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el Vehiculo')
+      toast.error('Error al crear el vehiculo')
       console.log(error)
     }
   })
@@ -52,11 +52,11 @@ export const useVehiculo = () => {
   const deleteVehiculo = useMutation({
     mutationFn: (id: number) => vehiculoActions.deleteVehiculo(id),
     onSuccess: () => {
-      toast.success('Vehiculo creado con exito')
+      toast.success('Vehiculo eliminado con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el vehiculo')
+      toast.error('Error al eliminar el vehiculo')
       console.log(error)
     }
   })

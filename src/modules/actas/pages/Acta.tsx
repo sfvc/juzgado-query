@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Label, Select } from 'flowbite-react'
 import { TIPO_ACTAS } from '../../../shared/constants'
 import { ActaFilter } from '../components/ActaFilter'
 
 export const Acta = () => {
+  const navigate = useNavigate()
+  const [tipoActa, setTipoActa] = useState<string>('')
+
+  const handleRedirect = () => navigate(`/actas/${tipoActa}/crear`)
+
   return (
     <React.Fragment>
       <div>
@@ -22,7 +28,9 @@ export const Acta = () => {
             </div>
 
             <div className='flex justify-between gap-2'>
-              <Select className='flex-1' name='create_acta' onChange={(e) => console.log(e.target.value)}>
+              <Select className='flex-1' name='create_acta' 
+                onChange={(e) => setTipoActa((e.target.value).toLocaleLowerCase().replace(/\s+/g, ''))}
+              >
                 <option value='' hidden>Seleccione el tipo de acta</option>
                 {
                   TIPO_ACTAS.map((tipo: string, index: number) => (
@@ -31,7 +39,7 @@ export const Acta = () => {
                 }
               </Select>
 
-              <Button type='button' className='px-2 titulos' onClick={() => console.log('first')}>
+              <Button type='button' className='px-2 titulos' onClick={handleRedirect}>
                 Nueva
               </Button>
             </div>

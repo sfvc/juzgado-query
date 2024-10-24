@@ -1,0 +1,5 @@
+export { ActaData } from './ActaData'
+export { InfractorData } from './InfractorData'
+export { InfraccionData } from './InfraccionData'
+export { ArticuloData } from './ArticuloData'
+export { VehiculoData } from './VehiculoData'

@@ -6,7 +6,7 @@ import { Juzgado, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
-import { Acta } from '../modules/actas'
+import { Acta, ActaBromatologia, ActaInspeccion, ActaObrasParticulares, ActaTransito } from '../modules/actas'
 
 export const PrivateRoute = [
   {
@@ -87,9 +87,35 @@ export const PrivateRoute = [
         element: <Persona />
       },
 
+      // Actas
       {
         path: '/actas',
         element: <Acta />
+      },
+
+      {
+        path: '/actas/transito/crear',
+        element: <ActaTransito />
+      },
+
+      {
+        path: '/actas/transito/editar/:id',
+        element: <ActaTransito />
+      },
+
+      {
+        path: '/actas/inspeccion',
+        element: <ActaInspeccion />
+      },
+
+      {
+        path: '/actas/bromatologia',
+        element: <ActaBromatologia />
+      },
+
+      {
+        path: '/actas/obrasparticulares',
+        element: <ActaObrasParticulares />
       },
     ]
   }
