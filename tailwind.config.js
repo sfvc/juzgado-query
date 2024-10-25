@@ -8,7 +8,12 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'dark': '#1e293b'
+      }
+    },
+
   },
   plugins: [
     flowbite.plugin(),

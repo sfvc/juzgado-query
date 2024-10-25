@@ -18,7 +18,7 @@ export const Login = () => {
               />
             </div>
           </div>
-          <div className='right-column relative bg-gray-100'>
+          <div className='right-column relative bg-gray-100 dark:bg-dark'>
             <div className='inner-content h-full flex flex-col'>
               <div className='auth-box h-full flex flex-col justify-center'>
                 <img src={logoJuzgado} 
@@ -26,8 +26,8 @@ export const Login = () => {
                   className='w-48 md:w-64 pb-6 inline-block mx-auto pointer-events-none' 
                 />
                 <div className='text-center 2xl:mb-10 mb-4'>
-                  <h4 className='font-bold'>Iniciar Sesión</h4>
-                  <div className='text-slate-500 text-base'>
+                  <h4 className='font-bold dark:text-white'>Iniciar Sesión</h4>
+                  <div className='text-slate-500 text-base dark:text-white/50'>
                     Completa los datos para ingresar al sistema
                   </div>
                 </div>

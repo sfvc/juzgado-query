@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className='flex flex-col min-h-screen dark:bg-dark'>
       <ToastContainer />
 
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
@@ -122,7 +122,7 @@ export const Layout = () => {
         </Navbar.Collapse>
       </Navbar>
       
-      <main className='flex-grow w-10/12 m-auto'>
+      <main className='flex-grow w-10/12 m-auto dark:bg-dark'>
         <Outlet />
       </main>
 
