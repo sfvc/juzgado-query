@@ -6,9 +6,6 @@ export const transitoSchema = yup.object().shape({
   fecha: yup.string().required('La fecha de infracción es requerida'),
   fecha_prescripcion: yup.string().required(),
   hora: yup.string().required('La hora de la infracción es requerida'),
-  prioridad_id: yup.number()
-    .transform(value => isNaN(value) ? null : value)
-    .required('La prioridad es requerida'),
   retencion_vehiculo: yup.number()
     .transform(value => isNaN(value) ? null : value)
     .required(),
@@ -18,7 +15,11 @@ export const transitoSchema = yup.object().shape({
   notificado: yup.number()
     .transform(value => isNaN(value) ? null : value)
     .required(),
+  prioridad_id: yup.number()
+    .transform(value => isNaN(value) ? null : value)
+    .required('La prioridad es requerida'),
   tipo_acta: yup.string().required(),
+  // preventiva (definido pero sin validación)
 
   // Infractor data
   infractores: yup.array(
@@ -54,4 +55,6 @@ export const transitoSchema = yup.object().shape({
   ).required(),
 
   // Vehículo data (definido pero sin validación)
+
+  // Propiedades data (definido pero sin validación)
 })

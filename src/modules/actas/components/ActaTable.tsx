@@ -27,8 +27,9 @@ interface Props {
 export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) => {
   const navigate = useNavigate()
 
-  const handleEditActa = (id: number) => {
-    navigate(`/actas/transito/editar/${id}`)
+  const handleEditActa = (id: number, tipo: string) => {
+    const tipoActa = tipo.toLocaleLowerCase().replace(/\s+/g, '')
+    navigate(`/actas/${tipoActa}/editar/${id}`)
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='xl'/></div>
@@ -73,7 +74,7 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
 
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => handleEditActa(acta.id)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
                         </Button>
                       </Tooltip>

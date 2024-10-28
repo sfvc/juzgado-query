@@ -104,18 +104,33 @@ export const PrivateRoute = [
       },
 
       {
-        path: '/actas/inspeccion',
+        path: '/actas/inspeccion/crear',
         element: <ActaInspeccion />
       },
 
       {
-        path: '/actas/bromatologia',
+        path: '/actas/inspeccion/editar/:id',
+        element: <ActaInspeccion />
+      },
+
+      {
+        path: '/actas/bromatologia/crear',
         element: <ActaBromatologia />
       },
 
       {
-        path: '/actas/obrasparticulares',
+        path: '/actas/bromatologia/editar/:id',
+        element: <ActaBromatologia />
+      },
+
+      {
+        path: '/actas/obrasparticulares/crear',
         element: <ActaObrasParticulares />
+      },
+
+      {
+        path: '/actas/obrasparticulares/editar/:id',
+        element: <ActaBromatologia />
       },
     ]
   }
