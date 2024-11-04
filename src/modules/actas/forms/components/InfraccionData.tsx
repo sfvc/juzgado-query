@@ -1,10 +1,10 @@
 import React from 'react'
 import { Label, Textarea, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
-import { ITransitoForm } from '../../interfaces/form-interfaces'
+import type { IActaForm } from '../../interfaces/form-interfaces'
 
 export const InfraccionData = () => {
-  const { register, formState: { errors } } = useFormContext<ITransitoForm>()
+  const { register, formState: { errors } } = useFormContext<IActaForm>()
   
   return (
     <React.Fragment>

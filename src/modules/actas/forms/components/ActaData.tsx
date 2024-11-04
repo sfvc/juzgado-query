@@ -5,14 +5,14 @@ import { Label, Select, TextInput } from 'flowbite-react'
 import { CustomSelect } from './CustomSelect'
 import { formatDate } from '../../helpers/formatDate'
 import { actaActions } from '../..'
-import { Prioridad } from '../../interfaces'
-import { ITransitoForm } from '../../interfaces/form-interfaces'
-import { INSPECCION_PREVENTIVAS, PRIORIDAD_URGENTE } from '../../../../shared/constants'
+import type { Prioridad } from '../../interfaces'
+import type { IActaForm } from '../../interfaces/form-interfaces'
+import { ACTAS, PRIORIDAD_URGENTE } from '../../../../shared/constants'
+import { PreventivaData } from './PreventivaData'
 
-export const ActaData = () => {
-  const { register, formState: { errors }, setValue } = useFormContext<ITransitoForm>()
-  const [preventiva, setPreventiva] = useState<boolean>(false)
-  //TODO: Agregar preventiva de acuerdo al tipo de acta
+export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
+  const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
+  const [showPreventiva, setShowPreventiva] = useState<boolean>(false)
 
   const { data: prioridades , isLoading } = useQuery({
     queryKey: ['prioridades'],
@@ -96,14 +96,18 @@ export const ActaData = () => {
           />
         </div>
 
-        <div className='grid grid-cols-3 gap-8'>
-          <CustomSelect label='¿Se retuvo el vehículo?' register={register('retencion_vehiculo')} />
-          <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} />
+        <div className='flex justify-between gap-8'>
+          {
+            tipoActa === ACTAS.TRANSITO &&
+            <div>
+              <CustomSelect label='¿Se retuvo el vehículo?' register={register('retencion_vehiculo')} />
+              <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} />
+            </div>
+          }
           <CustomSelect label='¿Fue notificado?' register={register('notificado')} />
         </div>
 
-        {/* Medidas Preventivas */}
-        <div className={`grid gap-4 ${preventiva ? 'md:grid-cols-2' : 'grid-cols-1'} `}>
+        {/* <div className={`grid gap-4 ${showPreventiva ? 'md:grid-cols-2' : 'grid-cols-1'} `}>
           <div>
             <div className='mb-2 block'>
               <Label
@@ -119,9 +123,9 @@ export const ActaData = () => {
               disabled={isLoading}
               onChange={(e) => {
                 if (e.target.value === PRIORIDAD_URGENTE)
-                  setPreventiva(true)
+                  setShowPreventiva(true)
                 else 
-                  setPreventiva(false)
+                  setShowPreventiva(false)
               }}
             >
               <option value='' hidden>Seleccione una prioridad</option>
@@ -133,35 +137,10 @@ export const ActaData = () => {
             </Select>
           </div>
 
-          {
-            // preventiva && tipo_acta === 'INSPECCION' || tipo_acta === 'OBRAS_PARTICULARES'
-            preventiva &&
-            <div>
-              <div className='mb-2 block'>
-                <Label
-                  htmlFor='preventiva'
-                  value='Preventiva'
-                />
-                <strong className='obligatorio'>(*)</strong>
-              </div>
-              <Select
-                {...register('preventiva')}
-                helperText={errors?.preventiva?.message}
-                color={errors?.preventiva && 'failure'}
-                disabled={isLoading}
-              >
-                <option value='' hidden>Seleccione una prioridad</option>
-                {
-                  INSPECCION_PREVENTIVAS.map((preventiva, index: number) => (
-                    <option key={index} value={preventiva.value}>{preventiva.label}</option>
-                  ))
-                }
-              </Select>
-            </div>
-          }
-        </div>
+        </div> */}
+        {/* Medidas Preventivas */}
+        <PreventivaData tipoActa={tipoActa} prioridades={prioridades}/>
       </div>
     </React.Fragment>
-
   )
 }

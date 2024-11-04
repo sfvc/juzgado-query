@@ -1,4 +1,4 @@
-import { IPropiedad } from '../../parametros/actas/interfaces'
+import { IPropiedad, IRubro } from '../../parametros/actas/interfaces'
 import { IPlantilla } from '../../plantillas/interfaces'
 import { IVehiculo, Titular } from '../../vehiculos/interfaces'
 
@@ -55,10 +55,16 @@ export interface IActa {
     prioridad?:              Prioridad
     prioridad_id:           number
     vehiculo:               IVehiculo
-    comercio:               null
+    comercio:               Comercio
     propiedades:            IPropiedad[]
     preventiva:             string
     estados:                Estado[]
+}
+
+export interface Comercio {
+    id:                  number
+    nombre_fantasia:     string
+    rubros:              IRubro[]
 }
 
 export interface Notificacion {

@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
-import { Button, Table, Tooltip } from 'flowbite-react'
+import { Button, Label, Table, TextInput, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { IPropiedad } from '../../../parametros/actas/interfaces'
 import { propiedadActions } from '../../../parametros/actas'
 import { icons } from '../../../../shared'
+import { IActaForm } from '../../interfaces/form-interfaces'
 
 interface Props {
   data: IPropiedad[] | undefined
 }
 
 export const PropiedadData = ({ data }: Props) => {
-  const { setValue } = useFormContext() 
+  const { setValue } = useFormContext<IActaForm>() 
   const [propiedades, setPropiedades] = useState<IPropiedad[]>(data || [])
   
   // Agregar propiedad al listado de propiedades
@@ -51,6 +52,35 @@ export const PropiedadData = ({ data }: Props) => {
           )}
           renderInput={(item) => { return `${item.matricula_catastral} - ${item.propietario || 'SIN PROPIETARIO'}`} }
         />
+
+        {/* // TODO: Verificar que funcione buscador de propiedades  */}
+        {/* <div className='mb-4'>
+          <div className='mb-2 block'>
+            <Label
+              htmlFor='dirección'
+              value='Dirección'
+            />
+          </div>
+          <TextInput
+            {...register('dirección')}
+            id='dirección'
+            placeholder='Dirección'
+          />
+        </div>
+
+        <div className='mb-4'>
+          <div className='mb-2 block'>
+            <Label
+              htmlFor='propietario'
+              value='Nombre del propietario'
+            />
+          </div>
+          <TextInput
+            {...register('propietario')}
+            id='propietario'
+            placeholder='Nombre del propietario'
+          />
+        </div> */}
       </div>
 
       {/* Tabla de propiedades */}

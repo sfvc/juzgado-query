@@ -1,7 +1,7 @@
 import { UseFormSetValue } from 'react-hook-form'
-import { ITransitoForm } from '../interfaces/form-interfaces'
+import { IActaForm } from '../interfaces/form-interfaces'
 
-export const formatDate = (value: string, setValue: UseFormSetValue<ITransitoForm>) => {
+export const formatDate = (value: string, setValue: UseFormSetValue<IActaForm>) => {
   const date = new Date(value)
 
   const prescripcionDate = new Date(date)

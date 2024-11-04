@@ -2,17 +2,18 @@ import React, { useState } from 'react'
 import { Button, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
-import { IArticulo } from '../../../parametros/actas/interfaces'
 import { articuloActions } from '../../../parametros/actas'
 import { icons } from '../../../../shared'
-import { InfraccionActa } from '../../interfaces'
+import type { InfraccionActa } from '../../interfaces'
+import type { IArticulo } from '../../../parametros/actas/interfaces'
+import type { IActaForm } from '../../interfaces/form-interfaces'
 
 interface Props {
   data: InfraccionActa[] | undefined
 }
 
 export const ArticuloData = ({ data }: Props) => {
-  const { setValue, getValues } = useFormContext() 
+  const { setValue, getValues } = useFormContext<IActaForm>() 
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
   
   // Agregar articulo al listado de infracciones

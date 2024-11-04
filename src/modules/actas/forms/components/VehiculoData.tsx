@@ -7,13 +7,14 @@ import { vehiculoActions } from '../../../vehiculos'
 import type { IVehiculo } from '../../../vehiculos/interfaces'
 import type { VehiculoActa } from '../../interfaces'
 import { formatVehiculo } from '../../helpers/formatVehiculo'
+import { IActaForm } from '../../interfaces/form-interfaces'
 
 interface Props {
   data: VehiculoActa | null
 }
 
 export const VehiculoData = ({ data }: Props) => {
-  const { setValue } = useFormContext() 
+  const { setValue } = useFormContext<IActaForm>() 
   const [vehiculo, setVehiculo] = useState<VehiculoActa | null>(data)
   
   // Agregar vehiculo al listado de vehiculos

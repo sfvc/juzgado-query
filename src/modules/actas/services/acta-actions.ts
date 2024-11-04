@@ -1,7 +1,7 @@
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
 import { IActa } from '../interfaces'
-import { ITransitoForm } from '../interfaces/form-interfaces'
+import { IActaForm } from '../interfaces/form-interfaces'
 
 export const getDataFilter = async () => {
   const response = await apiJuzgado.get('actas-data')
@@ -27,12 +27,12 @@ export const getActaById = async (id: string): Promise<IActa> => {
   return data
 }
 
-export const createActa = async (form: ITransitoForm) => {  
+export const createActa = async (form: IActaForm) => {  
   const response = await apiJuzgado.post('/actas', form)
   console.log(response)
 }
 
-export const updateActa = async (id: number, form: ITransitoForm) => {  
+export const updateActa = async (id: number, form: IActaForm) => {  
   const response = await apiJuzgado.put(`/actas/${id}`, form)
   console.log(response)
 }

@@ -3,19 +3,17 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
 import { transitoSchema } from './validations/validationSchema'
-import { ActaData, ArticuloData, InfraccionData, InfractorData, VehiculoData } from './components'
+import { ActaData, ArticuloData, InfraccionData, InfractorData, PropiedadData } from './components'
 import { IActaForm } from '../interfaces/form-interfaces'
 import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutation'
 import { IActa } from '../interfaces'
-import { formatVehiculo } from '../helpers/formatVehiculo'
-import { DevTool } from '@hookform/devtools'
 
 interface Props {
   acta: IActa | null | undefined
 }
 
-export const TransitoForm = ({ acta }: Props) => {
+export const ObrasParticularesForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
 
   const methods = useForm<IActaForm>({
@@ -31,11 +29,11 @@ export const TransitoForm = ({ acta }: Props) => {
       notificado: acta?.notificado || 0,
       calle: acta?.calle || '',
       observaciones: acta?.observaciones || '',
-      tipo_acta: ACTAS.TRANSITO,
+      tipo_acta: ACTAS.OBRAS_PARTICULARES,
 
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
-      vehiculo_id: acta?.vehiculo?.id
+      propiedades: acta?.propiedades || [],
     },
     resolver: yupResolver(transitoSchema),
   })
@@ -49,26 +47,21 @@ export const TransitoForm = ({ acta }: Props) => {
 
   return (
     <React.Fragment>
-      <h1 className='font-semibold text-3xl mb-4 text-center dark:text-white'>Acta de Transito</h1>
+      <h1 className='font-semibold text-3xl mb-4 text-center dark:text-white'>Acta de Obras Particulares</h1>
 
       <FormProvider {...methods}>
         <form className='flex flex-col gap-4 w-full' onSubmit={methods.handleSubmit(onSubmit)}>
-          <ActaData tipoActa={ACTAS.TRANSITO}/>
+          <ActaData tipoActa={ACTAS.OBRAS_PARTICULARES}/>
           <InfractorData data={acta?.infractores} />
+          <PropiedadData data={acta?.propiedades} />
           <InfraccionData />
           <ArticuloData data={acta?.infracciones_cometidas} />
-          <VehiculoData data={formatVehiculo(acta?.vehiculo)} />
 
           <div className='flex justify-end'>
-            <Button
-              type='submit'
-              className='px-8 titulos'
-            >
+            <Button type='submit' className='px-8 titulos'>
               Finalizar
             </Button>
           </div>
-
-          <DevTool control={methods.control}/> {/* set up the dev tool */}
         </form>
       </FormProvider>
     </React.Fragment>

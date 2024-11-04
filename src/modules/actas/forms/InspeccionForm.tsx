@@ -4,11 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
 import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData, PropiedadData } from './components'
-import { ITransitoForm } from '../interfaces/form-interfaces'
+import { IActaForm } from '../interfaces/form-interfaces'
 import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutation'
 import { IActa } from '../interfaces'
-import { DevTool } from '@hookform/devtools'
 
 interface Props {
   acta: IActa | null | undefined
@@ -17,7 +16,7 @@ interface Props {
 export const InspeccionForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
 
-  const methods = useForm<ITransitoForm>({
+  const methods = useForm<IActaForm>({
     defaultValues: {
       numero_acta: acta?.numero_acta || '',
       numero_causa: acta?.numero_causa || '',
@@ -39,7 +38,7 @@ export const InspeccionForm = ({ acta }: Props) => {
     resolver: yupResolver(transitoSchema),
   })
 
-  const onSubmit: SubmitHandler<ITransitoForm> = async (form: ITransitoForm) => {
+  const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
     console.log(form)
 
     if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
@@ -52,7 +51,7 @@ export const InspeccionForm = ({ acta }: Props) => {
 
       <FormProvider {...methods}>
         <form className='flex flex-col gap-4 w-full' onSubmit={methods.handleSubmit(onSubmit)}>
-          <ActaData />
+          <ActaData tipoActa={ACTAS.INSPECCION}/>
           <InfractorData data={acta?.infractores} />
           <PropiedadData data={acta?.propiedades} />
           <InfraccionData />
@@ -66,8 +65,6 @@ export const InspeccionForm = ({ acta }: Props) => {
               Finalizar
             </Button>
           </div>
-
-          <DevTool control={methods.control}/> {/* set up the dev tool */}
         </form>
       </FormProvider>
     </React.Fragment>

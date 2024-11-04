@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { actaActions } from '..'
-import { ITransitoForm } from '../interfaces/form-interfaces'
+import { IActaForm } from '../interfaces/form-interfaces'
 import { useNavigate } from 'react-router-dom'
 
 export const useMutationActa = () => {
@@ -22,7 +22,7 @@ export const useMutationActa = () => {
   })
 
   const updateActa = useMutation({
-    mutationFn: ({ id, acta }: { id: number, acta: ITransitoForm }) => actaActions.updateActa(id, acta),
+    mutationFn: ({ id, acta }: { id: number, acta: IActaForm }) => actaActions.updateActa(id, acta),
     onSuccess: () => {
       navigate('/')
       toast.success('Acta actualizada con exito')

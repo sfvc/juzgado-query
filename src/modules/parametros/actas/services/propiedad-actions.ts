@@ -37,6 +37,5 @@ export const deletePropiedad = async (id: number) => {
 export const getPropiedadByFilter = async (query: string) => {
   const response = await apiJuzgado.get(`/propiedades/buscar/${query}`)
   const { data: propiedades } = response.data
-  console.log(propiedades)
   return propiedades
 }

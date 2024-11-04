@@ -33,3 +33,9 @@ export const deleteRubro =  async (id: number) => {
   const { data: rubros } = response.data
   return rubros
 }
+
+export const getRubroByFilter = async (query: string) => {
+  const response = await apiJuzgado.get(`/tipo-rubros/buscar/${query}`)
+  const { data: rubros } = response.data
+  return rubros
+}

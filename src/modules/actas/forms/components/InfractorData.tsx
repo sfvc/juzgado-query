@@ -2,18 +2,18 @@ import { Button, Label, Select, Table, Tooltip } from 'flowbite-react'
 import React, { useState } from 'react'
 import { IPersona } from '../../../personas/interfaces'
 import { useFormContext } from 'react-hook-form'
-import { SearchInput } from '../../../../shared'
+import { SearchInput, icons } from '../../../../shared'
 import { personaActions } from '../../../personas'
-import { icons } from '../../../../shared'
-import { InfractorActa } from '../../interfaces'
 import { formatPersona } from '../../helpers/formatPersona'
+import type { InfractorActa } from '../../interfaces'
+import type { IActaForm } from '../../interfaces/form-interfaces'
 
 interface Props {
   data: InfractorActa[] | undefined
 }
 
 export const InfractorData = ({ data }: Props) => {
-  const { setValue, getValues } = useFormContext() 
+  const { setValue, getValues } = useFormContext<IActaForm>() 
 
   const [infractores, setInfractores] = useState<InfractorActa[]>(data || [])
   const [responsable, setResponsable] = useState<number>(0)
@@ -76,7 +76,7 @@ export const InfractorData = ({ data }: Props) => {
 
           <div className='flex items-start mt-8 gap-4'>
             <Button type='button' color='success' className='h-10' onClick={addInfractor}>Agregar</Button>
-            {/* TODO: Crear Persona */}
+            {/* // TODO: Crear Persona */}
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ export const InfractorData = ({ data }: Props) => {
                     {infractor.nombre}
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.documento || infractor.cuit}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{infractor?.responsable}
+                  <Table.Cell className='text-center dark:text-white'>{infractor?.responsable ? 'Si' : 'No' }
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white p-0 m-0'>
                     <div className='flex items-center justify-center '>
