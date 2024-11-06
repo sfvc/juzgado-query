@@ -7,6 +7,7 @@ import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
 import { Acta, ActaBromatologia, ActaInspeccion, ActaObrasParticulares, ActaTransito } from '../modules/actas'
+import { EstadoActa } from '../modules/estados'
 
 export const PrivateRoute = [
   {
@@ -94,43 +95,48 @@ export const PrivateRoute = [
       },
 
       {
-        path: '/actas/transito/crear',
+        path: '/acta/transito/crear',
         element: <ActaTransito />
       },
 
       {
-        path: '/actas/transito/editar/:id',
+        path: '/acta/transito/editar/:id',
         element: <ActaTransito />
       },
 
       {
-        path: '/actas/inspeccion/crear',
+        path: '/acta/inspeccion/crear',
         element: <ActaInspeccion />
       },
 
       {
-        path: '/actas/inspeccion/editar/:id',
+        path: '/acta/inspeccion/editar/:id',
         element: <ActaInspeccion />
       },
 
       {
-        path: '/actas/bromatologia/crear',
+        path: '/acta/bromatologia/crear',
         element: <ActaBromatologia />
       },
 
       {
-        path: '/actas/bromatologia/editar/:id',
+        path: '/acta/bromatologia/editar/:id',
         element: <ActaBromatologia />
       },
 
       {
-        path: '/actas/obrasparticulares/crear',
+        path: '/acta/obrasparticulares/crear',
         element: <ActaObrasParticulares />
       },
 
       {
-        path: '/actas/obrasparticulares/editar/:id',
+        path: '/acta/obrasparticulares/editar/:id',
         element: <ActaBromatologia />
+      },
+
+      {
+        path: '/acta/:id/estados',
+        element: <EstadoActa />
       },
     ]
   }

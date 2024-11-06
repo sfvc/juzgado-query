@@ -33,3 +33,9 @@ export const deleteEstado =  async (id: number) => {
   const { data: estados } = response.data
   return estados
 }
+
+export const getAllEstadosActa = async () => {
+  const response = await apiJuzgado.get('/estados-actas-select')
+  const { data: estado } = response.data
+  return estado
+}

@@ -8,7 +8,7 @@ export const Acta = () => {
   const navigate = useNavigate()
   const [tipoActa, setTipoActa] = useState<string>('')
 
-  const handleRedirect = () => navigate(`/actas/${tipoActa}/crear`)
+  const handleRedirect = () => navigate(`/acta/${tipoActa}/crear`)
 
   return (
     <React.Fragment>

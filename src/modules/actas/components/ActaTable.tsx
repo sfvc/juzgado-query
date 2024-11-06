@@ -29,7 +29,11 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
 
   const handleEditActa = (id: number, tipo: string) => {
     const tipoActa = tipo.toLocaleLowerCase().replace(/\s+/g, '')
-    navigate(`/actas/${tipoActa}/editar/${id}`)
+    navigate(`/acta/${tipoActa}/editar/${id}`)
+  }
+
+  const handleChangeStatus = (id: number) => {
+    navigate(`/acta/${id}/estados`)
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='xl'/></div>
@@ -76,6 +80,12 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
                       <Tooltip content='Editar'>
                         <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip content='Estados'>
+                        <Button color='warning' onClick={() => handleChangeStatus(acta.id)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Status />
                         </Button>
                       </Tooltip>
 
