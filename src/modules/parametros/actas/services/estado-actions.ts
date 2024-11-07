@@ -34,6 +34,7 @@ export const deleteEstado =  async (id: number) => {
   return estados
 }
 
+// Listado de estados en los que se puede encontrar un acta 
 export const getAllEstadosActa = async () => {
   const response = await apiJuzgado.get('/estados-actas-select')
   const { data: estado } = response.data

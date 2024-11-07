@@ -1,4 +1,4 @@
-export const dataDictionary = () => {
+export const dictionary = () => {
   const data = {
     // Fecha actual
     fecha: '{fechaActual}',

@@ -8,8 +8,7 @@ import { IPlantilla, FormPlantilla } from '../interfaces'
 import { usePlantilla } from '../hooks/usePlantilla'
 import { useJuzgado } from '../../parametros/globales/hooks/useJuzgado'
 import { IJuzgado } from '../../parametros/globales/interfaces'
-import { carboneActions } from '..'
-
+import { carboneActions } from '../../carbone'
 import { TIPO_PLANTILLAS } from '../../../shared/constants'
 
 const validationSchema = yup.object().shape({

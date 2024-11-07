@@ -4,6 +4,7 @@ import type { Column, Pagination as IPagination } from '../../../shared/interfac
 import { icons } from '../../../shared'
 import { ActaFilterForm, IActa } from '../interfaces'
 import { useNavigate } from 'react-router-dom'
+import { DEFAULT_COLOR } from '../../../shared/constants'
 
 const colums: Column[] = [
   { key: 'numero_acta', label: 'Nro. Acta' },
@@ -36,6 +37,10 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
     navigate(`/acta/${id}/estados`)
   }
 
+  const handleNotification = (id: number) => {
+    navigate(`/acta/${id}/notificaciones`)
+  }
+
   if (isLoading) return <div className='flex justify-center'><Spinner size='xl'/></div>
   
   return (
@@ -64,8 +69,8 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
                     <Table.Cell className='text-center dark:text-white'>{acta.fecha}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
                     <Table.Cell className='text-center text-white dark:text-white'>
-                      <span className='px-2 py-1 border-none rounded-lg inline-block' style={{ backgroundColor: acta?.estados[0]?.color }}>
-                        {acta.estados[0]?.nombre || '-'}
+                      <span className='max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block' style={{ backgroundColor: acta?.estados[0]?.color || DEFAULT_COLOR }}>
+                        {acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'}
                       </span>
                     </Table.Cell>
                     <Table.Cell className='text-center'>
@@ -86,6 +91,21 @@ export const ActaTable = ({ actas, isLoading, pagination, formFilter }: Props) =
                       <Tooltip content='Estados'>
                         <Button color='warning' onClick={() => handleChangeStatus(acta.id)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Status />
+                        </Button>
+                      </Tooltip>
+
+                      {
+                        (acta?.notificacion && !!acta.notificacion.length) &&
+                        <Tooltip content='Notificaciones'>
+                          <Button color='blue' onClick={() => handleNotification(acta.id)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Notification />
+                          </Button>
+                        </Tooltip>
+                      }
+
+                      <Tooltip content='Actuaciones'>
+                        <Button color='purple' onClick={() => console.log('first')} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Actuacion />
                         </Button>
                       </Tooltip>
 

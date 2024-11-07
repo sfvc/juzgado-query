@@ -1,0 +1,71 @@
+export interface NotificationActa {
+    id:                 number;
+    numero_acta:        string;
+    tipo_acta:          string;
+    numero_causa:       string;
+    hora:               string;
+    fecha:              string;
+    fecha_prescripcion: string;
+    calle:              string;
+    inspector:          null;
+    estados:            Estado[];
+    infractores:        Infractor[];
+    notificaciones:     Notificacion[];
+}
+
+export interface Estado {
+    id:         number;
+    nombre:     string;
+    color:      string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: null;
+    pivot:      Pivot;
+}
+
+export interface Pivot {
+    acta_id:         number;
+    estado_actas_id: number;
+    fecha_desde:     Date;
+    fecha_hasta:     null;
+    observaciones:   string;
+    user_id:         number;
+    created_at:      Date;
+}
+
+export interface Infractor {
+    id:           number;
+    nombre:       string;
+    apellido:     string;
+    documento:    number;
+    cuit:         null;
+    responsable:  number;
+    antecedentes: number;
+}
+
+export interface Notificacion {
+    id:             number;
+    tipo_actuacion: string;
+    created_at:     string;
+    plantilla:      Plantilla | null;
+}
+
+export interface Plantilla {
+    id:             number;
+    denominacion:   string;
+    path:           string;
+    tipo_actuacion: string;
+    juzgado:        Juzgado;
+}
+
+export interface Juzgado {
+    id:         number;
+    nombre:     string;
+    juez:       string;
+    secretario: string;
+    direccion:  string;
+    telefono:   string;
+    created_at: null;
+    updated_at: null;
+    deleted_at: null;
+}

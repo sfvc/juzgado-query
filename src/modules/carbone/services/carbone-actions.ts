@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { dataDictionary } from '../helpers'
+import { dictionary } from '../helpers/dictionary'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
 const CARBONE_URL = `${import.meta.env.VITE_CARBONE_URL}`
@@ -54,7 +54,7 @@ export const downloadPlantilla = async (path: string): Promise<void> => {
   
 export const showPlantilla = async (path: string): Promise<void> => {
   try {
-    const diccionario = dataDictionary() // Obtener los datos para visualizar plantillas
+    const diccionario = dictionary() // Obtener los datos para visualizar plantillas
   
     const data = {
       convertTo: 'pdf',

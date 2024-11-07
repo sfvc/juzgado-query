@@ -6,8 +6,15 @@ import { Juzgado, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
-import { Acta, ActaBromatologia, ActaInspeccion, ActaObrasParticulares, ActaTransito } from '../modules/actas'
 import { EstadoActa } from '../modules/estados'
+import { NotificacionActa } from '../modules/notificaciones'
+import { 
+  Acta, 
+  ActaBromatologia, 
+  ActaInspeccion,
+  ActaObrasParticulares, 
+  ActaTransito 
+} from '../modules/actas'
 
 export const PrivateRoute = [
   {
@@ -18,6 +25,8 @@ export const PrivateRoute = [
         path: '/',
         element: <Navigate to='/actas' />
       },
+
+      // Parametros
       {
         path: '/paises',
         element: <Pais />
@@ -134,9 +143,16 @@ export const PrivateRoute = [
         element: <ActaBromatologia />
       },
 
+      // Estados
       {
         path: '/acta/:id/estados',
         element: <EstadoActa />
+      },
+
+      // Notificaciones
+      {
+        path: '/acta/:id/notificaciones',
+        element: <NotificacionActa />
       },
     ]
   }

@@ -6,8 +6,8 @@ import { icons } from '../../../shared'
 import { usePlantilla } from '../hooks/usePlantilla'
 import { IPlantilla } from '../interfaces'
 import PlantillaForm from '../forms/PlantillaForm'
-import { carboneActions } from '..'
 import { LoadingOverlay } from '../../../layout'
+import { carboneActions } from '../../carbone'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
