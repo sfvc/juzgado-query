@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useRoutes } from 'react-router-dom'
-import { AuthContext, Status } from '../context/AuthContext'
+import { AuthContext, Status } from '../context/Auth/AuthContext'
 import { PrivateRoute, PublicRoute} from '.'
 import { LoadingOverlay } from '../layout'
 

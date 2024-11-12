@@ -76,7 +76,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
       </div>
 
       <div className='mb-4'>
-        <div className='mb-2 block'>
+        <div className='mb-2 block dark:text-white'>
           <Label color='gray' htmlFor='juzgado_id' value='Juzgado' /><strong className='obligatorio'>(*)</strong>
         </div>
         <Select
@@ -94,7 +94,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
       </div>
 
       <div className='mb-4'>
-        <div className='mb-2 block'>
+        <div className='mb-2 block dark:text-white'>
           <Label color='gray' htmlFor='tipo_actuacion' value='Tipo de Plantilla' /><strong className='obligatorio'>(*)</strong>
         </div>
         <Select

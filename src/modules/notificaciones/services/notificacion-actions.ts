@@ -15,3 +15,16 @@ export const getNotificationsByActa = async (id: number) => {
   return data
 }
   
+export const createNotification = async (selectedActas: number[], plantillaId: number | null) => {
+  if (selectedActas.length === 0 || !plantillaId) throw new Error('No hay actas o plantilla seleccionada')
+
+  const notificationsPromise = selectedActas.map((actaId: number) => {
+    return apiJuzgado.post('/notificaciones', {
+      acta_id: actaId,
+      plantilla_id: plantillaId,
+      tipo_actuacion: 'NOTIFICACION'
+    })
+  })
+
+  await Promise.all(notificationsPromise)
+}

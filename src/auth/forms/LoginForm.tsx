@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { TextInput, Button, Spinner } from 'flowbite-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth/AuthContext'
 import { icons } from '../../shared'
 import { AuthForm } from '../interfaces/auth'
 

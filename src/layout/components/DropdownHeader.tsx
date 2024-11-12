@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { DarkThemeToggle, Dropdown, Flowbite, Tooltip } from 'flowbite-react'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../context/Auth/AuthContext'
 import { icons } from '../../shared'
 
 export const DropdownHeader = () => {

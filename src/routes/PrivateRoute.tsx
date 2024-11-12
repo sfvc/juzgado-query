@@ -7,7 +7,7 @@ import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
 import { EstadoActa } from '../modules/estados'
-import { NotificacionActa } from '../modules/notificaciones'
+import { Notificacion, NotificacionActa } from '../modules/notificaciones'
 import { 
   Acta, 
   ActaBromatologia, 
@@ -153,6 +153,11 @@ export const PrivateRoute = [
       {
         path: '/acta/:id/notificaciones',
         element: <NotificacionActa />
+      },
+
+      {
+        path: '/notificaciones',
+        element: <Notificacion />
       },
     ]
   }

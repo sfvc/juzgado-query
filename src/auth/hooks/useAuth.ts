@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { AuthForm, User } from '../interfaces/auth'
 import { apiJuzgado } from '../../api/config'
-import { Status } from '../../context/AuthContext'
+import { Status } from '../../context/Auth/AuthContext'
 
 export const useAuth = () => {
   const navigate = useNavigate()

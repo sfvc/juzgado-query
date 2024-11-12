@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useLocation } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { AdvanceFilter } from './AdvanceFilter'
@@ -9,12 +10,14 @@ import { SearchInput } from '../../../shared'
 import { personaActions } from '../../personas'
 import { vehiculoActions } from '../../vehiculos'
 import { useActa } from '../hooks/useActa'
+import { NotificacionConfig } from '../../notificaciones/components/NotificacionConfig'
+import { initialValues, PATH } from '../constants'
 import type { IVehiculo } from '../../vehiculos/interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
-import { initialValues } from '../constants'
 
 export const ActaFilter = () => {
+  const { pathname } = useLocation()
   const { actas, pagination, isLoading, formFilter, resetFilter } = useActa()
 
   const { data }  = useQuery<DataFilters>({
@@ -188,6 +191,9 @@ export const ActaFilter = () => {
           </Button>
         </div>
       </form>
+
+      {/* Configuracion de notificaciones */}
+      {pathname === PATH.NOTIFICATION && <NotificacionConfig />}
 
       {/* Tabla de actas filtradas */}
       <ActaTable actas={actas} isLoading={isLoading} pagination={pagination} formFilter={formFilter}/>

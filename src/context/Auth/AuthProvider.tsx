@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useAuth } from '../auth'
+import { useAuth } from '../../auth'
 import { AuthContext } from './AuthContext'
 
 interface Props {
