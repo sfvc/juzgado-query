@@ -1,10 +1,10 @@
 import { ActaFilter } from '../../actas/components/ActaFilter'
-import { ActaProvider } from '../../../context/Acta/ActaProvider'
+import { ActuacionProvider } from '../../../context/Actuacion/ActuacionProvider'
 
 export const Notificacion = () => {
   return (
-    <ActaProvider>
+    <ActuacionProvider>
       <ActaFilter />
-    </ActaProvider>
+    </ActuacionProvider>
   )
 }

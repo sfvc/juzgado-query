@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { AuthForm, User } from '../auth/interfaces/auth'
+import { AuthForm, User } from '../../auth/interfaces/auth'
 
 export enum Status {
     CHECKING = 'CHECKING',
@@ -7,7 +7,7 @@ export enum Status {
     NOT_AUTHENTICATED = 'NOT_AUTHENTICATED'
 }
 
-interface UserContext {
+export interface UserContext {
     user: User | null,
     isAuthenticated: Status,
     loginUser: (user: AuthForm) => Promise<void>,

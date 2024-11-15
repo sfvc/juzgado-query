@@ -1,8 +1,9 @@
 import { Label, TextInput, Tooltip } from 'flowbite-react'
-import { icons } from '../../../shared'
-import { NotificationActa } from '../interfaces'
+import { icons } from '..'
+import { NotificationActa } from '../../modules/notificaciones/interfaces'
+import { ActuacionActa } from '../../modules/actuaciones/interfaces'
 
-export const DetalleActa = ({ acta }: { acta: NotificationActa }) => {
+export const DetalleActa = ({ acta }: { acta: NotificationActa | ActuacionActa }) => {
   return (
     <div>
       <div className='flex justify-between mb-4'>
@@ -91,7 +92,7 @@ export const DetalleActa = ({ acta }: { acta: NotificationActa }) => {
                 name='infractor'
                 type='text'
                 placeholder='Infractor'
-                value={!acta?.infractores?.length ? `${ acta.infractores[0]?.apellido }` : '-'}
+                value={acta?.infractores?.length ? `${ acta.infractores[0]?.apellido }` : '-'}
                 disabled
               />
             </div>

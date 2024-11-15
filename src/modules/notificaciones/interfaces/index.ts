@@ -17,8 +17,8 @@ export interface Estado {
     id:         number;
     nombre:     string;
     color:      string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     deleted_at: null;
     pivot:      Pivot;
 }
@@ -26,11 +26,11 @@ export interface Estado {
 export interface Pivot {
     acta_id:         number;
     estado_actas_id: number;
-    fecha_desde:     Date;
+    fecha_desde:     string;
     fecha_hasta:     null;
     observaciones:   string;
     user_id:         number;
-    created_at:      Date;
+    created_at:      string;
 }
 
 export interface Infractor {

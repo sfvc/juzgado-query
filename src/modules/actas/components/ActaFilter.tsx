@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { AdvanceFilter } from './AdvanceFilter'
@@ -17,8 +17,11 @@ import type { IPersona } from '../../personas/interfaces'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
 
 export const ActaFilter = () => {
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { actas, pagination, isLoading, formFilter, resetFilter } = useActa()
+
+  const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa()
 
   const { data }  = useQuery<DataFilters>({
     queryKey: ['actas-data'],
@@ -48,11 +51,33 @@ export const ActaFilter = () => {
   const resetFilters = () => {
     reset()
     resetFilter()
+
+    //** Corregir esto **/
+    const params = Object.fromEntries(searchParams.entries())
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') return
+      searchParams.delete(key, value.toString())  
+    })
   }
 
-  const submit: SubmitHandler<ActaFilterForm> = async (data: ActaFilterForm) => {
-    formFilter(data)
-  }
+  const submit: SubmitHandler<ActaFilterForm> = async (data: ActaFilterForm) =>  formFilter(data)
+
+  // TODO: Agregar rellenado de campos al volver atras luego de filtrar
+  // TODO: Verificar que el resetFilter funcione correctamente
+  useEffect(() => {
+    if (filterParams) {
+      Object.entries(filterParams).forEach(([key, value]) => {
+        searchParams.set(key, value.toString())  
+      })
+
+      navigate({ search: searchParams.toString() })
+    }
+  }, [filterParams])
+
+  useEffect(() => {
+    const params = Object.fromEntries(searchParams.entries())
+    formFilter(params)
+  }, [])
 
   return (
     <React.Fragment>
@@ -196,7 +221,7 @@ export const ActaFilter = () => {
       {pathname === PATH.NOTIFICATION && <NotificacionConfig />}
 
       {/* Tabla de actas filtradas */}
-      <ActaTable actas={actas} isLoading={isLoading} pagination={pagination} formFilter={formFilter}/>
+      <ActaTable actas={actas} isFetching={isFetching} pagination={pagination} formFilter={formFilter}/>
     </React.Fragment>
   )
 }

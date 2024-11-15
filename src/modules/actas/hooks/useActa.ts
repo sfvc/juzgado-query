@@ -6,16 +6,16 @@ import { initialValues } from '../constants'
 export const useActa = () => {
   const { filterParams, formFilter, resetFilter } = useFilter<ActaFilterForm>(initialValues)
 
-  const { data: actas, pagination, isLoading } = usePagination<IActa, ActaFilterForm>({
+  const { data: actas, pagination, isFetching } = usePagination<IActa, ActaFilterForm>({
     queryKey: ['actas', filterParams],
-    fetchData: () => actaActions.getActas( filterParams ),
-    filterParams
+    fetchData: () => actaActions.getActasFilter( filterParams ),
+    filterParams,    
   })
 
   return {
     actas,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     formFilter,
     resetFilter

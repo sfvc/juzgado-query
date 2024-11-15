@@ -26,7 +26,7 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
   const queryClient = useQueryClient()
 
   // Hook para obtener los datos paginados
-  const { data: response, isLoading } = useQuery({
+  const { data: response, isLoading, isFetching } = useQuery({
     queryKey: [...queryKey], 
     queryFn: () => fetchData(filterParams),  
     staleTime: 1000 * 60 * 5,
@@ -60,6 +60,7 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     data,
     pagination,
     isLoading,
+    isFetching,
     refetchData
   }
 }

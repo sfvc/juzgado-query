@@ -1,10 +1,10 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { DetalleActa, NotificacionTable } from '../components'
+import { NotificacionTable } from '../components'
 import { NotificationActa } from '../interfaces'
 import { notificacionActions } from '..'
-import { Loading } from '../../../shared'
+import { DetalleActa, Loading } from '../../../shared'
 
 export const NotificacionActa = () => {
   const navigate = useNavigate()

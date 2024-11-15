@@ -13,10 +13,18 @@ export const getAllTipoInfracciones = async () => {
   return response.data
 }
 
-export const getActas = async (filters: object) => {
+/* export const getActas = async (filters: object) => {
   const params = setUrlParams(filters)
   
   const response = await apiJuzgado.get('/actas', { params })
+  const { data, meta } = response.data
+  return { data, meta }
+} */
+
+export const getActasFilter = async (filters: object) => {
+  const params = setUrlParams(filters)
+  
+  const response = await apiJuzgado.get('/actas/filtrar', { params })
   const { data, meta } = response.data
   return { data, meta }
 }

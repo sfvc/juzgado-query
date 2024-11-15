@@ -9,7 +9,7 @@ import { usePlantilla } from '../hooks/usePlantilla'
 import { useJuzgado } from '../../parametros/globales/hooks/useJuzgado'
 import { IJuzgado } from '../../parametros/globales/interfaces'
 import { carboneActions } from '../../carbone'
-import { TIPO_PLANTILLAS } from '../../../shared/constants'
+import { TIPO_ACTUACION } from '../../../shared/constants'
 
 const validationSchema = yup.object().shape({
   denominacion: yup.string().required('La denominacion es requerida'),
@@ -102,9 +102,9 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
           helperText={errors?.tipo_actuacion && errors?.tipo_actuacion?.message}
           color={errors?.tipo_actuacion && 'failure'}
         >
-          <option value='' hidden>Seleccione el tipo de plantilla</option>
+          <option value='' hidden>Seleccione el tipo de actuación</option>
           {
-            TIPO_PLANTILLAS.map((tipo: string, i: number) => (
+            TIPO_ACTUACION.map((tipo: string, i: number) => (
               <option key={i} value={tipo}>{tipo}</option>
             ))
           }

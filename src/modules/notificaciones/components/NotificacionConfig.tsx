@@ -4,7 +4,7 @@ import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { apiJuzgado } from '../../../api/config'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 import { IPlantilla } from '../../plantillas/interfaces'
-import { ActaContext } from '../../../context/Acta/ActaContext'
+import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { useNotification } from '../hooks/useNotification'
 
 const handleTipoPlantillas = async (id: number) => {
@@ -15,7 +15,7 @@ const handleTipoPlantillas = async (id: number) => {
   
 export const NotificacionConfig = () => {
   const { user } = useContext(AuthContext)
-  const { selectedActas, plantillaId, setPlantillaId } = useContext(ActaContext)
+  const { selectedActas, plantillaId, setPlantillaId } = useContext(ActuacionContext)
   const { createNotification } = useNotification()
 
   const { data: plantillas, isLoading } = useQuery<IPlantilla[]>({

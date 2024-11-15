@@ -7,6 +7,9 @@ export { useLoading } from './hooks/useLoading'
 export { DeleteModal } from './components/DeleteModal' 
 export { SearchInput } from './components/SearchInput'
 export { Loading } from './components/Loading'
+export { DetalleActa } from './components/DetalleActa'
+
+/* Icons */
 export * as icons from './icons/Icons'
 
 /* Helpers */
