@@ -1,9 +1,8 @@
 import { useFilter, usePagination } from '../../../shared'
 import { actaActions } from '..'
 import { ActaFilterForm, IActa } from '../interfaces'
-import { initialValues } from '../constants'
 
-export const useActa = () => {
+export const useActa = (initialValues: ActaFilterForm) => {
   const { filterParams, formFilter, resetFilter } = useFilter<ActaFilterForm>(initialValues)
 
   const { data: actas, pagination, isFetching } = usePagination<IActa, ActaFilterForm>({

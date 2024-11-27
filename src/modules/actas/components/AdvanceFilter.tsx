@@ -1,4 +1,4 @@
-import { Accordion, Label, Select } from 'flowbite-react'
+import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, Prioridad } from '../interfaces'
 import { SearchInput } from '../../../shared'
@@ -15,7 +15,10 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
 
   // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
-  const selectArticulo = (articulo: IArticulo) => setValue('infraccion_id', articulo.id.toString())
+  const selectArticulo = (articulo: IArticulo) => {
+    setValue('infraccion_id', articulo.id.toString())
+    localStorage.setItem('infraccion', `${articulo.numero} - ${articulo?.detalle || 'SIN DETALLE'}`)
+  }
 
   return (
     <Accordion className='my-4' collapseAll>
@@ -41,16 +44,34 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
             </div>
 
             {/* Buscar por codigo de articulo  */}
-            <SearchInput<IArticulo>
-              label="Articulo"
-              placeholder="Buscar articulo"
-              onSearch={searchArticulo}
-              onSelect={selectArticulo}
-              renderItem={(item) => (
-                <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
-              )}
-              renderInput={(item) => { return `${item.numero} - ${item?.detalle || 'SIN DETALLE'}`} }
-            />
+            {
+              localStorage.getItem('infraccion') 
+                ? 
+                <div className='mb-4'>
+                  <div className='mb-2 block'>
+                    <Label
+                      htmlFor='infraccion'
+                      value='Articulo'
+                    />
+                  </div>
+                  <TextInput
+                    id='infraccion'
+                    value={localStorage.getItem('infraccion') || ''}
+                    readOnly
+                  />
+                </div> 
+                : 
+                <SearchInput<IArticulo>
+                  label="Articulo"
+                  placeholder="Buscar articulo"
+                  onSearch={searchArticulo}
+                  onSelect={selectArticulo}
+                  renderItem={(item) => (
+                    <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
+                  )}
+                  renderInput={(item) => { return `${item.numero} - ${item?.detalle || 'SIN DETALLE'}`} }
+                />
+            }
           </div>
         </Accordion.Content>
       </Accordion.Panel>

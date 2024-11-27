@@ -1,4 +1,5 @@
 import { apiJuzgado } from '../../../api/config'
+import { ISentenciaForm } from '../interfaces/sentencia'
 
 export const getActuacionesByActa = async (id: number) => {
   const response = await apiJuzgado.get(`/actas/${id}/actuacion`)
@@ -43,4 +44,8 @@ export const createActuacion = async (selectedActas: number[], plantillaId: numb
     tipo_actuacion: tipoActuacion
   })
   console.log(response)
+}
+
+export const createSentencia = async (form: ISentenciaForm) => {
+  const response = await apiJuzgado.post('/actuaciones', form)
 }

@@ -1,11 +1,26 @@
 import { Column } from '../../../shared/interfaces'
+import { ActaFilterForm } from '../interfaces'
 
 export enum PATH {
   ACTA = '/actas',
   NOTIFICATION = '/notificaciones',
 }
 
-export const initialValues = { page: 1 }
+// export const initialValues = { page: 1 }
+
+export const defaultValues: ActaFilterForm = {
+  infractor_id: '',
+  numero_acta: '',
+  fecha_desde: '',
+  fecha_hasta: '',
+  estado_id: '',
+  tipo_acta_id: '',
+  numero_causa: '',
+  prioridad_id: '',
+  vehiculo_id: '',
+  infraccion_id: '',
+  page: 1
+}
 
 export const ActaColums: Column[] = [
   { key: 'numero_acta', label: 'Nro. Acta' },

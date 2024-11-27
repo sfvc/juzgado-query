@@ -7,7 +7,8 @@ export interface IActuacionContext {
     setTipoActuacion: (tipoActuacion: string) => void
     setPlantillaId: (plantillaId: number) => void
     checkingActa: (event: React.ChangeEvent<HTMLInputElement>, actaId: number) => void
-    resetProvider: () => void
+    resetProvider: () => void,
+    setDefalutSeleted: (actaId: number) => void
 }
 
 const initialState: IActuacionContext = {
@@ -17,7 +18,8 @@ const initialState: IActuacionContext = {
   tipoActuacion: '',
   setTipoActuacion: () => {},
   checkingActa: () => {},
-  resetProvider: () => {}
+  resetProvider: () => {},
+  setDefalutSeleted: () => {}
 }
 
 export const ActuacionContext = createContext<IActuacionContext>(initialState)

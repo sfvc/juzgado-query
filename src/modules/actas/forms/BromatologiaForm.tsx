@@ -6,7 +6,7 @@ import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData } from './components'
 import { IActaForm } from '../interfaces/form-interfaces'
 import { ACTAS } from '../../../shared/constants'
-import { useMutationActa } from '../hooks/useMutation'
+import { useMutationActa } from '../hooks/useMutationActa'
 import { IActa } from '../interfaces'
 import { ComercioData } from './components/ComercioData'
 

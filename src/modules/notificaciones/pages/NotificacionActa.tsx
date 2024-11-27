@@ -23,7 +23,7 @@ export const NotificacionActa = () => {
 
   return (
     <React.Fragment>
-      <DetalleActa acta={ acta! } />
+      <DetalleActa acta={ acta! } title='Listado de Notificaciones'/>
       <NotificacionTable acta={ acta! }/>
     </React.Fragment>
   )

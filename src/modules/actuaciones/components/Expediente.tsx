@@ -16,7 +16,7 @@ const colums: Column[] = [
 
 export const Expediente = ({acta}: {acta: ActuacionActa}) => {
   const { deleteActuacion } = useActuacion()
-  const [actuaciones, setActuaciones] = useState<Actuacion[]>(acta.actuaciones)
+  const [actuaciones, setActuaciones] = useState<Actuacion[]>(acta.actuaciones || [])
 
   const handleDeleteActuacion = async (actuacionId: number) => {
     const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId })
@@ -42,7 +42,7 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
           </Table.Head>
           <Table.Body className='divide-y'>
             {
-              actuaciones.length
+              actuaciones?.length
                 ? actuaciones.map((actuacion, index) => (
                   <Table.Row key={index} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>

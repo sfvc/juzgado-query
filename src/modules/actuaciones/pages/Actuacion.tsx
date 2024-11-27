@@ -8,7 +8,6 @@ import { RelatedActas } from '../components/RelatedActas'
 import { ActuacionProvider } from '../../../context/Actuacion/ActuacionProvider'
 import { GenerateActuacion } from '../components/GenerateActuacion'
 
-
 export const Actuacion = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -20,18 +19,15 @@ export const Actuacion = () => {
     staleTime: 1000 * 60 * 5
   })
 
-  
   if (isLoading) return <Loading />
 
   if (!isLoading && isError) navigate('/')
 
-
-
   return (
     <ActuacionProvider>
-      <DetalleActa acta={ acta! }/>
+      <DetalleActa acta={ acta! } title='Listado de Actuaciones'/>
 
-      <GenerateActuacion />
+      <GenerateActuacion acta={ acta! } />
 
       <Expediente acta={ acta! } />
       

@@ -3,11 +3,15 @@ import { icons } from '..'
 import { NotificationActa } from '../../modules/notificaciones/interfaces'
 import { ActuacionActa } from '../../modules/actuaciones/interfaces'
 
-export const DetalleActa = ({ acta }: { acta: NotificationActa | ActuacionActa }) => {
+interface Props {
+  acta: NotificationActa | ActuacionActa
+  title: string
+}
+export const DetalleActa = ({ acta, title }: Props) => {
   return (
     <div>
       <div className='flex justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white'>Listado de Notificaciones</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white'>{title}</h1>
       </div>
 
       <div className='titulos rounded-md py-2 text-center mb-6'>

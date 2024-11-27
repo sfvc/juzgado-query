@@ -63,7 +63,6 @@ export const NotificacionConfig = () => {
               }
             </Select>
           </div>
-
         </div>
 
         <div className='flex justify-end gap-4 mb-4'>

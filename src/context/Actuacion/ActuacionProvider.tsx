@@ -17,17 +17,19 @@ export const ActuacionProvider = ({children}: Props) => {
     const existe = selectedActas.find((acta) => acta === actaId)
     if (checked && !existe) setSelectedActas((prev) => [...prev, actaId])
     else setSelectedActas((prev) => prev.filter((acta) => acta !== actaId))
+  }
 
-    console.log(selectedActas)
+  const setDefalutSeleted = (actaId: number) => {
+    setSelectedActas([actaId])
   }
 
   const resetProvider = () => {
-    setSelectedActas([])
+    setSelectedActas((prev) => [ prev[0] ]) // Al resetear dejamos solo la primera que es el acta por default
     setPlantillaId(null)
   }
     
   return (
-    <ActuacionContext.Provider value={{ selectedActas, checkingActa, resetProvider, plantillaId, setPlantillaId, tipoActuacion, setTipoActuacion }}>
+    <ActuacionContext.Provider value={{ selectedActas, checkingActa, resetProvider, plantillaId, setPlantillaId, tipoActuacion, setTipoActuacion, setDefalutSeleted }}>
       {children}
     </ActuacionContext.Provider>
   )

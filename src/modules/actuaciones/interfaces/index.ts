@@ -97,10 +97,12 @@ export interface InfraccionesCometida {
     descuento:       number;
     valor_desde:     number;
     valor_hasta:     number;
-    created_at:      null;
-    updated_at:      null;
-    deleted_at:      null;
-    pivot:           InfraccionesCometidaPivot;
+    importe?:         number
+    unidad?:          number
+    created_at?:      null;
+    updated_at?:      null;
+    deleted_at?:      null;
+    pivot?:           InfraccionesCometidaPivot;
 }
 
 export interface InfraccionesCometidaPivot {

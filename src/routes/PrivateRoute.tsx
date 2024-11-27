@@ -8,7 +8,7 @@ import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
 import { EstadoActa } from '../modules/estados'
 import { Notificacion, NotificacionActa } from '../modules/notificaciones'
-import { Actuacion } from '../modules/actuaciones'
+import { Actuacion, Sentencia } from '../modules/actuaciones'
 import { 
   Acta, 
   ActaBromatologia, 
@@ -167,10 +167,10 @@ export const PrivateRoute = [
         element: <Actuacion />
       },
 
-      // Resolucion
+      // Sentencia
       {
-        path: '/acta/:id/resolucion',
-        element: <div>Resolución</div>
+        path: '/acta/:id/actuaciones/sentencia',
+        element: <Sentencia />
       }
     ]
   }

@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
+  
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
       <ToastContainer />

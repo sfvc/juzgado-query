@@ -9,6 +9,13 @@ export enum ACTAS {
     OBRAS_PARTICULARES = 'OBRAS PARTICULARES'
 }
 
+export enum ACTUACION {
+  DECRETO = 'DECRETO', 
+  SENTENCIA = 'SENTENCIA', 
+  OFICIO = 'OFICIO', 
+  NOTIFICACION = 'NOTIFICACION'
+}
+
 // Medidas preventivas
 export const PRIORIDAD_URGENTE = '1'
 

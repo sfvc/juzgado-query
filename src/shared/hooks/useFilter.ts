@@ -32,7 +32,9 @@ export const useFilter =  <T>(initialValues: T) => {
     })
   }
 
-  const resetFilter = () => setFilterParams(initialValues)
+  const resetFilter = (params: T) => {
+    setFilterParams(params)
+  }
 
   return {
     filterParams,

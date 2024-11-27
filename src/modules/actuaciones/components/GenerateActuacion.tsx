@@ -1,27 +1,39 @@
-import { Button, Label, Select, Tooltip } from 'flowbite-react'
 import React, { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Label, Select, Tooltip } from 'flowbite-react'
 import { actuacionActions } from '..'
 import { AuthContext, UserContext } from '../../../context/Auth/AuthContext'
 import { ActuacionContext, IActuacionContext } from '../../../context/Actuacion/ActuacionContext'
-import { IPlantilla } from '../../plantillas/interfaces'
-import { TIPO_ACTUACION } from '../../../shared/constants'
+import { ACTUACION, TIPO_ACTUACION } from '../../../shared/constants'
 import { icons } from '../../../shared'
+import type { IPlantilla } from '../../plantillas/interfaces'
+import type { ActuacionActa } from '../interfaces'
 
 const ACTUACIONES = TIPO_ACTUACION.filter((tipo: string) => tipo !== 'NOTIFICACION')
 
-export const GenerateActuacion = () => {
+export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
+  const navigate = useNavigate()
   const { user } = useContext<UserContext>(AuthContext)
-  const { selectedActas, tipoActuacion, setTipoActuacion, resetProvider } = useContext<IActuacionContext>(ActuacionContext)
+  const { selectedActas, tipoActuacion, setTipoActuacion } = useContext<IActuacionContext>(ActuacionContext)
 
   const [plantillas, setPlantillas] = useState<IPlantilla[]>([])
   const [selectedPlantilla, setSelectedPlantilla] = useState<number | null>(null)
 
-  const handlePlantillas = async (tipo: string) => {
-    if(tipo === 'SENTENCIA') resetProvider()
-
+  const handlePlantillas = async (tipo: string) => {      
+    setTipoActuacion(tipo)
     const plantillas = await actuacionActions.getPlantillasByActuacion(tipo, user!.juzgado.id)
+    
     setPlantillas(plantillas)
     setTipoActuacion(tipo)
+  }
+
+  const handleActuacion = async () => {
+    if(tipoActuacion === ACTUACION.SENTENCIA) {
+      navigate('sentencia', { state: { acta, plantillaId: selectedPlantilla } })
+      return
+    }
+
+    await actuacionActions.createActuacion(selectedActas, selectedPlantilla ,tipoActuacion)
   }
       
   return (
@@ -59,8 +71,8 @@ export const GenerateActuacion = () => {
       <div className='flex justify-end mb-4'>
         <Tooltip content='Generar actuación'>
           <Button 
-            /* Parmas (Lista de actas seleccionas, Id de plantilla, Tipo de Actuación) */
-            onClick={() => actuacionActions.createActuacion(selectedActas, selectedPlantilla ,tipoActuacion)} 
+            //** Params (Lista de actas seleccionas, Id de plantilla, Tipo de Actuación) */
+            onClick={handleActuacion} 
           > 
             <icons.FilePlus />  Nuevo
           </Button>
