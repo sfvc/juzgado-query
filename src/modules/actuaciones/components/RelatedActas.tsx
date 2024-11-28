@@ -43,18 +43,6 @@ export const RelatedActas = ({acta}: {acta: ActuacionActa}) => {
               actasRelacionadas.length
                 ? actasRelacionadas.map((acta, index) => (
                   <Table.Row key={index} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    {/* <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                      <Checkbox
-                        id={`${acta.id}`}
-                        name='acta'
-                        value={acta.id}
-                        onChange={(e) => checkingActa(e, acta.id)}
-                        className='h-5 w-5 rounded border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 
-                        dark:focus:ring-blue-400 text-blue-600 dark:checked:bg-blue-600 dark:checked:border-blue-600 dark:hover:border-blue-400 
-                        hover:border-blue-500 transition-colors duration-200 disabled:bg-slate-400/40 disabled:dark:bg-white/40 disabled:cursor-not-allowed'
-                        disabled={tipoActuacion === 'SENTENCIA'}
-                      />
-                    </Table.Cell> */}
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.fecha}</Table.Cell>

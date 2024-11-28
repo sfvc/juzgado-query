@@ -6,7 +6,6 @@ import { Column } from '../../../shared/interfaces'
 import { articuloActions } from '../../parametros/actas'
 import { UnidadForm } from '../forms/UnidadForm'
 import { TotalForm } from '../forms/TotalForm'
-import type { IArticulo } from '../../parametros/actas/interfaces'
 import type { InfraccionesCometida } from '../interfaces'
 import type { IUnidadMulta } from '../interfaces/sentencia'
 
@@ -99,7 +98,7 @@ export const Sentencia = () => {
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2 mb-4 '>
         {/* Resultados de busqueda de articulos */}
-        <SearchInput<IArticulo>
+        <SearchInput<InfraccionesCometida> // IArticulo
           label="Articulo"
           placeholder="Buscar articulo"
           onSearch={searchArticulo}
@@ -161,7 +160,7 @@ export const Sentencia = () => {
       </div>
 
       {/* Sección de importe total */}
-      <TotalForm infracciones={infracciones} plantillaId={plantillaId} />
+      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[{ id: acta.id }]}/>
 
       {/* Modal para editar unidad tributaria de articulo */}
       <Modal show={openModal.create} onClose={() => onCloseModal('create')}>
@@ -188,12 +187,7 @@ export const Sentencia = () => {
           
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => onCloseModal('delete')}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={handleDelete}
-                >
-                  Sí, eliminar
-                </Button>
+                <Button color="failure" onClick={handleDelete}> Sí, eliminar</Button>
               </div>
             </div>
           </Modal.Body>

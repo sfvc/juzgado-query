@@ -169,3 +169,9 @@ export interface Titular {
     deleted_at:         null;
     telefono:           string;
 }
+
+export interface IActuacionForm {
+    actas: [{ id: number }],
+    plantilla_id: number | null,
+    tipo_actuacion: string
+}

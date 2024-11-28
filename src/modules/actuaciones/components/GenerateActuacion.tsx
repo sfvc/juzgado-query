@@ -7,14 +7,16 @@ import { ActuacionContext, IActuacionContext } from '../../../context/Actuacion/
 import { ACTUACION, TIPO_ACTUACION } from '../../../shared/constants'
 import { icons } from '../../../shared'
 import type { IPlantilla } from '../../plantillas/interfaces'
-import type { ActuacionActa } from '../interfaces'
+import type { ActuacionActa, IActuacionForm } from '../interfaces'
+import { useActuacion } from '../hooks/useActuacion'
 
 const ACTUACIONES = TIPO_ACTUACION.filter((tipo: string) => tipo !== 'NOTIFICACION')
 
 export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
+  const { createActuacion } = useActuacion()
   const navigate = useNavigate()
   const { user } = useContext<UserContext>(AuthContext)
-  const { selectedActas, tipoActuacion, setTipoActuacion } = useContext<IActuacionContext>(ActuacionContext)
+  const { tipoActuacion, setTipoActuacion } = useContext<IActuacionContext>(ActuacionContext)
 
   const [plantillas, setPlantillas] = useState<IPlantilla[]>([])
   const [selectedPlantilla, setSelectedPlantilla] = useState<number | null>(null)
@@ -28,12 +30,18 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
   }
 
   const handleActuacion = async () => {
-    if(tipoActuacion === ACTUACION.SENTENCIA) {
+    if (tipoActuacion === ACTUACION.SENTENCIA) {
       navigate('sentencia', { state: { acta, plantillaId: selectedPlantilla } })
       return
     }
 
-    await actuacionActions.createActuacion(selectedActas, selectedPlantilla ,tipoActuacion)
+    const form: IActuacionForm = {
+      actas: [{ id: acta.id }],
+      plantilla_id: selectedPlantilla,
+      tipo_actuacion: tipoActuacion
+    }
+
+    await createActuacion.mutateAsync(form)
   }
       
   return (
@@ -72,7 +80,9 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
         <Tooltip content='Generar actuación'>
           <Button 
             //** Params (Lista de actas seleccionas, Id de plantilla, Tipo de Actuación) */
-            onClick={handleActuacion} 
+            onClick={handleActuacion}
+            isProcessing={createActuacion.isPending} 
+            disabled={createActuacion.isPending}
           > 
             <icons.FilePlus />  Nuevo
           </Button>

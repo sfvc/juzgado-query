@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Label, Radio, Textarea, TextInput } from 'flowbite-react'
+import { useSentencia } from '../hooks/useSentencia'
 import { Surcharge } from '../components/sentencia/Surcharge'
 import { Discount } from '../components/sentencia/Discount'
 import { ACTIONS } from '../constants'
@@ -21,11 +22,13 @@ const initialValues = {
 }
 
 interface Props {
-  plantillaId: number
+  plantillaId: number,
+  actas: [{ id: number }]
   infracciones: InfraccionesCometida[]
 }
 
-export const TotalForm = ({ infracciones, plantillaId }: Props) => {
+export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
+  const { createSentencia } = useSentencia()
   const [action, setAction] = useState<string>('NINGUNA')
   const [formState, setFormState] = useState<ITotal>(initialValues)
   const { sub_total, total, descuento, recargo, observaciones } = formState
@@ -79,21 +82,20 @@ export const TotalForm = ({ infracciones, plantillaId }: Props) => {
     })
   }
 
-  const createSentencia = () => {
-    const sentencia: ISentenciaForm = {
+  const onSubmit = async () => {
+    const form: ISentenciaForm = {
       sub_total,
       total,
       descuento,
       recargo,
       observaciones,
-      actas: [{id: 1, numero_acta: '123456'}],
+      actas,
       plantilla_id: plantillaId,
       tipo_actuacion: ACTUACION.SENTENCIA,
       infracciones,
     }
 
-    // TODO: Agragar endpoit para generar sentencia
-    console.log(sentencia)
+    await createSentencia.mutateAsync(form)
   }
   
   useEffect(() => {
@@ -112,7 +114,7 @@ export const TotalForm = ({ infracciones, plantillaId }: Props) => {
           </div>
           <div className='flex justify-start gap-8'>
             <div className='flex items-center gap-2'>
-              <Radio id='descuento' name='acciones' value={ACTIONS.NINGUNA} checked={action === ACTIONS.NINGUNA} onChange={(e) => handleAction(e.target.value)} defaultChecked/>
+              <Radio id='descuento' name='acciones' value={ACTIONS.NINGUNA} checked={action === ACTIONS.NINGUNA} onChange={(e) => handleAction(e.target.value)} />
               <Label htmlFor='descuento'>Ninguna</Label>
             </div>
 
@@ -178,7 +180,15 @@ export const TotalForm = ({ infracciones, plantillaId }: Props) => {
         <Link to={ -1 as unknown as string }>
           <Button type='button' color='failure' className='w-auto h-auto'>Cancelar</Button>
         </Link>
-        <Button type='button' className='w-auto h-auto ml-4' onClick={createSentencia}>Finalizar</Button>
+        <Button 
+          type='button' 
+          className='w-auto h-auto ml-4' 
+          onClick={onSubmit} 
+          isProcessing={createSentencia.isPending}
+          disabled={createSentencia.isPending}
+        >
+          Finalizar
+        </Button>
       </div>
     </React.Fragment>
   )

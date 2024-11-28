@@ -10,9 +10,9 @@ export const useSentencia = () => {
   const createSentencia = useMutation({
     mutationFn: actuacionActions.createSentencia,
     onSuccess: () => {
-      navigate(-1)
       toast.success('Sentencia creada con exito')
       queryClient.clear()
+      navigate(-1)
     },
     onError: (error) => {
       toast.error('Error al crear la sentencia')

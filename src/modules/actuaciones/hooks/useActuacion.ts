@@ -9,6 +9,19 @@ export const useActuacion= () => {
   const queryClient = useQueryClient()
 
   /* Mutations */
+  const createActuacion = useMutation({
+    mutationFn: actuacionActions.createActuacion,
+    onSuccess: () => {
+      toast.success('Actuación creada exitosamente')
+      queryClient.clear()
+      resetProvider()
+    },
+    onError: (error) => {
+      toast.error('Error crear actuación')
+      console.log(error)
+    }
+  })
+
   const deleteActuacion = useMutation({
     mutationFn: ({ actaId, actuacionId }: { actaId: number, actuacionId: number }) => actuacionActions.deleteActuacion(actaId, actuacionId),
     onSuccess: () => {
@@ -20,23 +33,9 @@ export const useActuacion= () => {
       console.log(error)
     }
   })
-
-  const createActuacion = useMutation({
-    mutationFn: ({ selectedActas, plantillaId, tipoActuacion }: { selectedActas: number[], plantillaId: number | null, tipoActuacion: string }) => 
-      actuacionActions.createActuacion(selectedActas, plantillaId, tipoActuacion),
-    onSuccess: () => {
-      toast.success('Notificación creada exitosamente')
-      queryClient.clear()
-      resetProvider()
-    },
-    onError: (error) => {
-      toast.error('Error crear la notificación')
-      console.log(error)
-    }
-  })
   
   return { 
-    deleteActuacion, 
-    createActuacion 
+    createActuacion,
+    deleteActuacion 
   }
 }

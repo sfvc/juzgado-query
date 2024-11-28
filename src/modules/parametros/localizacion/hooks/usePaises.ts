@@ -30,7 +30,6 @@ export const usePaises = () => {
     mutationFn: paisActions.createPais,
     onSuccess: () => {
       toast.success('Pais creado con exito')
-      // queryClient.invalidateQueries({ queryKey: ['paises', { filterKey, page }] })
       queryClient.clear()
     },
     onError: (error) => {

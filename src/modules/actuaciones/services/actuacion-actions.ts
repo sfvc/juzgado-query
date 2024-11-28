@@ -1,4 +1,5 @@
 import { apiJuzgado } from '../../../api/config'
+import { IActuacionForm } from '../interfaces'
 import { ISentenciaForm } from '../interfaces/sentencia'
 
 export const getActuacionesByActa = async (id: number) => {
@@ -20,32 +21,14 @@ export const deleteActuacion = async (actaId: number, actuacionId: number) => {
 }
 
 // Crear multiples actuaciones (Decretos u Oficios) a la vez
-export const createActuacion = async (selectedActas: number[], plantillaId: number | null, tipoActuacion: string) => {
-  if (selectedActas.length === 0 || !plantillaId || !tipoActuacion) throw new Error('No hay actas o plantilla seleccionada')
-
-  // const notificationsPromise = selectedActas.map((actaId: number) => {
-  //   return apiJuzgado.post('/actuaciones', {
-  //     actas: [actaId],
-  //     plantilla_id: plantillaId,
-  //     tipo_actuacion: tipoActuacion
-  //   })
-  // })
-
-  // await Promise.all(notificationsPromise)
-
-  // TODO: Terminar la funcionalidad
-
-  const actas = selectedActas.map((actaId) => actaId.toString())
-  console.log(actas)
-
-  const response = await apiJuzgado.post('/actuaciones', {
-    actas: actas,
-    plantilla_id: plantillaId,
-    tipo_actuacion: tipoActuacion
-  })
+export const createActuacion = async (form: IActuacionForm) => {
+  console.log(form)
+  const response = await apiJuzgado.post('/actuaciones', form)
   console.log(response)
 }
 
 export const createSentencia = async (form: ISentenciaForm) => {
+  console.log(form)
   const response = await apiJuzgado.post('/actuaciones', form)
+  console.log(response)
 }
