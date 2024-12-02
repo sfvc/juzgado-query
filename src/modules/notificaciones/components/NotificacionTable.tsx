@@ -3,6 +3,8 @@ import { Button, Table, Tooltip } from 'flowbite-react'
 import { Notificacion, NotificationActa } from '../interfaces'
 import { icons } from '../../../shared'
 import { Column } from '../../../shared/interfaces'
+import { LoadingOverlay } from '../../../layout'
+import { usePdf } from '../../carbone'
 
 const colums: Column[] = [
   { key: 'tipo', label: 'Tipo' },
@@ -13,8 +15,9 @@ const colums: Column[] = [
 ]
 
 export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
+  const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
   const notificaciones: Notificacion[] = acta.notificaciones
-    
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center mb-6'>
@@ -41,10 +44,26 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                     <Table.Cell className='text-center dark:text-white'>{notificacion.plantilla?.denominacion || '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Ver notificación'>
-                        <Button color='warning' onClick={() => console.log(acta.id)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Print />
+                        <Button color='warning' 
+                          className='w-8 h-8 flex items-center justify-center'
+                          onClick={() => {
+                            if(notificacion?.url)
+                              showPDFGotenberg(notificacion.url)
+                            else 
+                              showPDFCarbone(notificacion?.plantilla?.path, notificacion.id)
+                          }} 
+                          disabled={!notificacion?.url && !notificacion?.plantilla?.path}
+                        >
+                          <icons.Print /> 
                         </Button>
                       </Tooltip>
+
+                      <Tooltip content='Ver notificación'>
+                        <Button color='success' className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
+
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -53,6 +72,8 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
           </Table.Body>
         </Table>
       </div>
+
+      { useAction.loading && <LoadingOverlay /> }
     </React.Fragment>
   )
 }

@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
-import { Button, Checkbox, Pagination, Table, Tooltip } from 'flowbite-react'
-import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
-import { icons } from '../../../shared'
-import { ActaFilterForm, IActa } from '../interfaces'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { Checkbox, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DEFAULT_COLOR } from '../../../shared/constants'
 import { ActaColums, NotificacionColums, PATH } from '../constants'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
+import type { ActaFilterForm, IActa } from '../interfaces'
+import { ActionButtons } from './ActionButtons'
+
 
 interface Props {
   actas: IActa[]
@@ -19,28 +20,8 @@ interface Props {
 export const ActaTable = ({ actas, isFetching, pagination, formFilter }: Props) => {
   const { checkingActa } = useContext(ActuacionContext)
 
-  const navigate = useNavigate()
   const { pathname } = useLocation()
   const colums = pathname === PATH.ACTA ? ActaColums : NotificacionColums
-
-  const handleEditActa = (id: number, tipo: string) => {
-    const tipoActa = tipo.toLocaleLowerCase().replace(/\s+/g, '')
-    navigate(`/acta/${tipoActa}/editar/${id}`)
-  }
-
-  const handleChangeStatus = (id: number) => {
-    navigate(`/acta/${id}/estados`)
-  }
-
-  const handleNotification = (id: number) => {
-    navigate(`/acta/${id}/notificaciones`)
-  }
-
-  const handleActuacion = (id: number) => {
-    navigate(`/acta/${id}/actuaciones`)
-  }
-
-  // if (isLoading) return <div className='flex justify-center'><Spinner size='xl'/></div>
   
   return (
     <React.Fragment>
@@ -114,39 +95,8 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter }: Props) 
                             }
                           </Table.Cell>
                           :
-                          <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                            <Tooltip content='Editar'>
-                              <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
-                                <icons.Pencil />
-                              </Button>
-                            </Tooltip>
-
-                            <Tooltip content='Estados'>
-                              <Button color='warning' onClick={() => handleChangeStatus(acta.id)} className='w-8 h-8 flex items-center justify-center'>
-                                <icons.Status />
-                              </Button>
-                            </Tooltip>
-
-                            {
-                              (acta?.notificacion && !!acta.notificacion.length) &&
-                          <Tooltip content='Notificaciones'>
-                            <Button color='blue' onClick={() => handleNotification(acta.id)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Notification />
-                            </Button>
-                          </Tooltip>
-                            }
-
-                            <Tooltip content='Actuaciones'>
-                              <Button color='purple' onClick={() => handleActuacion(acta.id)} className='w-8 h-8 flex items-center justify-center'>
-                                <icons.Actuacion />
-                              </Button>
-                            </Tooltip>
-
-                            <Tooltip content='Eliminar'>
-                              <Button color='failure' onClick={() => console.log('first')} className='w-8 h-8 flex items-center justify-center'>
-                                <icons.Trash />
-                              </Button>
-                            </Tooltip>
+                          <Table.Cell className='text-center dark:text-white'>
+                            <ActionButtons acta={acta}/>
                           </Table.Cell>
                       }
                     </Table.Row>

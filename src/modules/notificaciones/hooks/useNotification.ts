@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { notificacionActions } from '..'
@@ -8,7 +7,6 @@ import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 export const useNotification = () => {
   const { resetProvider } = useContext(ActuacionContext)
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   /* Mutations */
   const createNotification = useMutation({
@@ -18,7 +16,6 @@ export const useNotification = () => {
       toast.success('Notificación creada exitosamente')
       queryClient.clear()
       resetProvider()
-      navigate('/actas')
     },
     onError: (error) => {
       toast.error('Error crear la notificación')

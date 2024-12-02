@@ -48,6 +48,7 @@ export interface Notificacion {
     tipo_actuacion: string;
     created_at:     string;
     plantilla:      Plantilla | null;
+    url: string | null;
 }
 
 export interface Plantilla {

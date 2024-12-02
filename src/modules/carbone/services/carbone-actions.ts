@@ -76,4 +76,16 @@ export const showPlantilla = async (path: string): Promise<void> => {
     console.error('Error al mostrar el PDF:', error)
   }
 }
+
+export const showFilePDF = async (data: any) => {
+  const response = await axios.post(CARBONE_URL, data, {
+    responseType: 'blob'
+  })
+
+  const fileBlob = response.data
+  const file = new Blob([fileBlob], { type: 'application/pdf' })
+  const fileURL = URL.createObjectURL(file)
+
+  window.open(fileURL, '_blank')
+}
     

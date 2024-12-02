@@ -1,9 +1,11 @@
-import { Button, Table, Tooltip } from 'flowbite-react'
+import { useState } from 'react'
+import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { Column } from '../../../shared/interfaces'
 import { Actuacion, ActuacionActa } from '../interfaces'
 import { icons } from '../../../shared'
 import { useActuacion } from '../hooks/useActuacion'
-import { useState } from 'react'
+import { usePdf } from '../../carbone'
+import { LoadingOverlay } from '../../../layout'
 
 const colums: Column[] = [
   { key: 'tipo', label: 'Tipo' },
@@ -15,18 +17,34 @@ const colums: Column[] = [
 ]
 
 export const Expediente = ({acta}: {acta: ActuacionActa}) => {
+  const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
   const { deleteActuacion } = useActuacion()
   const [actuaciones, setActuaciones] = useState<Actuacion[]>(acta.actuaciones || [])
 
-  const handleDeleteActuacion = async (actuacionId: number) => {
-    const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId })
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
+
+  const onOpenModal = async (actuacion: Actuacion) => {
+    setActiveItem(actuacion)
+    setOpenDeleteModal(true)
+  }
+
+  const onCloseModal = () => {
+    setOpenDeleteModal(false)
+    setActiveItem(null)
+  }
+
+  const handleDeleteActuacion = async () => {
+    if(!activeItem) return
+    const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId: activeItem.id })
     
     if(!response) return
-    setActuaciones((prevState) => prevState.filter(prev => prev.id !== actuacionId))
+    setActuaciones((prevState) => prevState.filter(prev => prev.id !== activeItem.id))
+    onCloseModal()
   }
-    
+
   return (
-    <div>
+    <>
       <div className='titulos rounded-md py-2 text-center mb-6'>
         <h3 className='text-xl font-semibold text-white'>Expedientes</h3>
       </div>
@@ -51,8 +69,21 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{actuacion?.monto ? `$ ${actuacion.monto}` : '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Button color='warning' 
+                        className='w-8 h-8 flex items-center justify-center'
+                        onClick={() => {
+                          if(actuacion?.url)
+                            showPDFGotenberg(actuacion.url)
+                          else 
+                            showPDFCarbone(actuacion?.plantilla?.path, actuacion.id)
+                        }} 
+                        disabled={!actuacion?.url && !actuacion?.plantilla?.path}
+                      >
+                        <icons.Print /> 
+                      </Button>
+                      
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => handleDeleteActuacion(actuacion.id)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => onOpenModal(actuacion)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>
@@ -64,6 +95,35 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
           </Table.Body>
         </Table>
       </div>
-    </div>
+
+      { useAction.loading && <LoadingOverlay /> }
+
+      {/* Modal para eliminar actuación de listado */}
+      { activeItem && 
+        <Modal show={openDeleteModal} onClose={onCloseModal}>
+          <Modal.Header>Eliminar actuación</Modal.Header>
+          <Modal.Body>
+            <div className="text-center">
+              <icons.Warning />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                ¿Estás seguro de que deseas eliminar la actuación del listado?
+              </h3>
+          
+              <div className="flex justify-center gap-4">
+                <Button color="gray" onClick={onCloseModal}>Cancelar</Button>
+                <Button 
+                  color="failure" 
+                  onClick={handleDeleteActuacion} 
+                  isProcessing={deleteActuacion.isPending}
+                  disabled={deleteActuacion.isPending}
+                > 
+                  Sí, eliminar
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      }
+    </>
   )
 }

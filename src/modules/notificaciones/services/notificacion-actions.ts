@@ -1,5 +1,8 @@
+import axios from 'axios'
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
+
+const CARBONE_URL = import.meta.env.VITE_CARBONE_URL
 
 export const getNotifications = async (filters: object) => {
   const params = setUrlParams(filters)
@@ -24,6 +27,8 @@ export const createNotification = async (selectedActas: number[], plantillaId: n
       plantilla_id: plantillaId,
       tipo_actuacion: 'NOTIFICACION'
     })
+
+    // Subir el archivo a s3
   })
 
   await Promise.all(notificationsPromise)
