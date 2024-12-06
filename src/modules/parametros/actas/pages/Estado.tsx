@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import { IEstado } from '../interfaces'
 import { useEstado } from '../hooks/useEstado'
 import EstadoForm from '../forms/EstadoForm'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -21,7 +22,7 @@ export const Estado = () => {
   const { 
     estados,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
     deleteEstado 
@@ -48,8 +49,6 @@ export const Estado = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -89,30 +88,32 @@ export const Estado = () => {
 
         <Table.Body className='divide-y'>
           {
-            (estados.length > 0)
-              ? (estados.map((estado: IEstado) => (
-                <Table.Row key={estado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='text-center dark:text-white'>{estado.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{estado.nombre}</Table.Cell>
-                  <Table.Cell className='text-center'>
-                    <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color }} />
-                  </Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(estado)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (estados.length > 0)
+                ? (estados.map((estado: IEstado) => (
+                  <Table.Row key={estado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{estado.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{estado.nombre}</Table.Cell>
+                    <Table.Cell className='text-center'>
+                      <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color }} />
+                    </Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(estado)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(estado)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(estado)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

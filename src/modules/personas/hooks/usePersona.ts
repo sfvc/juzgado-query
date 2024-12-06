@@ -18,7 +18,7 @@ export const usePersona = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: personas, pagination, isLoading } = usePagination<IPersona, FilterParams>({
+  const { data: personas, pagination, isFetching } = usePagination<IPersona, FilterParams>({
     queryKey: ['personas', filterParams],
     fetchData: () => personaActions.getPersonas(filterParams),
     filterParams
@@ -64,7 +64,7 @@ export const usePersona = () => {
   return {
     personas,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

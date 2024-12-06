@@ -19,7 +19,7 @@ export const useLocalidad = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: localidades, pagination, isLoading } = usePagination<ILocalidad, FilterParams>({
+  const { data: localidades, pagination, isFetching } = usePagination<ILocalidad, FilterParams>({
     queryKey: ['localidades', filterParams],
     fetchData: () => localidadActions.getLocalidades(filterParams),
     filterParams
@@ -65,7 +65,7 @@ export const useLocalidad = () => {
   return {
     localidades,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

@@ -19,7 +19,7 @@ export const useBarrio = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: barrios, pagination, isLoading } = usePagination<IBarrio, FilterParams>({
+  const { data: barrios, pagination, isFetching } = usePagination<IBarrio, FilterParams>({
     queryKey: ['barrios', filterParams],
     fetchData: () => barrioActions.getBarrios(filterParams),
     filterParams
@@ -65,7 +65,7 @@ export const useBarrio = () => {
   return {
     barrios,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

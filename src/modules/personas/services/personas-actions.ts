@@ -44,4 +44,12 @@ export const getDataPersona = async () => {
   const response = await apiJuzgado.get('personas-data')
   return response.data
 }
+
+export const getAntecedentesByPersona = async (id: number) => {
+  if (!id) return []
+  
+  const response = await apiJuzgado.get(`actas/filtrar?persona_id=${id}`)
+  const { data: antecedentes } = response.data
+  return antecedentes
+}
   

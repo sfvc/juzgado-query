@@ -20,7 +20,7 @@ export const useRubro = () => {
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: rubros, pagination, isLoading } = usePagination<IRubro, FilterParams>({
+  const { data: rubros, pagination, isFetching } = usePagination<IRubro, FilterParams>({
     queryKey: ['rubros', filterParams],
     fetchData: () => rubroActions.getRubros(filterParams),
     filterParams
@@ -66,7 +66,7 @@ export const useRubro = () => {
   return {
     rubros,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

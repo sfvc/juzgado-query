@@ -20,7 +20,7 @@ export const useProvincia = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: provincias, pagination, isLoading } = usePagination<IProvincia, FilterParams>({
+  const { data: provincias, pagination, isFetching } = usePagination<IProvincia, FilterParams>({
     queryKey: ['provincias', filterParams],
     fetchData: () => provinciaActions.getProvincias(filterParams),
     filterParams
@@ -66,7 +66,7 @@ export const useProvincia = () => {
   return {
     provincias,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

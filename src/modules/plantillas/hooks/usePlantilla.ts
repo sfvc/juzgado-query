@@ -18,7 +18,7 @@ export const usePlantilla = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: plantillas, pagination, isLoading } = usePagination<IPlantilla, FilterParams>({
+  const { data: plantillas, pagination, isFetching } = usePagination<IPlantilla, FilterParams>({
     queryKey: ['plantillas', filterParams],
     fetchData: () => plantillaActions.getPlantillas(filterParams),
     filterParams
@@ -64,7 +64,7 @@ export const usePlantilla = () => {
   return {
     plantillas,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

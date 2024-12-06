@@ -3,6 +3,7 @@ import { Button, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
+import { CreateArticulo } from '../integrations/CreateArticulo'
 import { icons } from '../../../../shared'
 import type { InfraccionActa } from '../../interfaces'
 import type { IArticulo } from '../../../parametros/actas/interfaces'
@@ -59,6 +60,8 @@ export const ArticuloData = ({ data }: Props) => {
           )}
           renderInput={(item) => { return `${item.numero} - ${item.detalle || 'SIN DETALLE'}`} }
         />
+
+        <div className='flex items-end mb-4'><CreateArticulo /></div>
       </div>
 
       {/* Tabla de infracciones */}

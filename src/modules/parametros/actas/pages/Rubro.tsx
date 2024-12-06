@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import RubroForm from '../forms/RubroForm'
 import { IRubro } from '../interfaces'
 import { useRubro } from '../hooks/useRubro'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -20,7 +21,7 @@ export const Rubro = () => {
   const { 
     rubros,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
     deleteRubro 
@@ -47,8 +48,6 @@ export const Rubro = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -88,27 +87,29 @@ export const Rubro = () => {
 
         <Table.Body className='divide-y'>
           {
-            (rubros.length > 0)
-              ? (rubros.map((rubro: IRubro) => (
-                <Table.Row key={rubro.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='text-center dark:text-white'>{rubro.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{rubro.nombre}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(rubro)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (rubros.length > 0)
+                ? (rubros.map((rubro: IRubro) => (
+                  <Table.Row key={rubro.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{rubro.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{rubro.nombre}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(rubro)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(rubro)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(rubro)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

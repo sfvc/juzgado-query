@@ -4,10 +4,25 @@ import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { icons } from '../../../../shared'
 import { vehiculoActions } from '../../../vehiculos'
-import type { IVehiculo } from '../../../vehiculos/interfaces'
-import type { VehiculoActa } from '../../interfaces'
 import { formatVehiculo } from '../../helpers/formatVehiculo'
-import { IActaForm } from '../../interfaces/form-interfaces'
+import { CreateVehiculo } from '../integrations/CreateVehiculo'
+import type { IActaForm } from '../../interfaces/form-interfaces'
+import type { VehiculoActa } from '../../interfaces'
+import type { IVehiculo } from '../../../vehiculos/interfaces'
+import type { Column } from '../../../../shared/interfaces'
+
+const columns: Column[] = [
+  { key: 'titular', label: 'Titular' },
+  { key: 'dominio', label: 'Dominio' },
+  { key: 'marca', label: 'Marca' },
+  { key: 'modelo', label: 'Modelo' },
+  { key: 'tipo', label: 'Tipo' },
+  { key: 'color', label: 'Color' },
+  { key: 'numero_chasis', label: 'Numero de Chasis' },
+  { key: 'numero_motor', label: 'Numero de Motor' },
+  { key: 'numero_taxi', label: 'Numero de Taxi' },
+  { key: 'acciones', label: 'Acciones' }
+]
 
 interface Props {
   data: VehiculoActa | null
@@ -52,6 +67,8 @@ export const VehiculoData = ({ data }: Props) => {
           )}
           renderInput={(item) => { return `${item.dominio} - ${item.titular?.apellido || 'SIN TITULAR'}`} }
         />
+
+        <div className='flex items-end mb-4'><CreateVehiculo /></div>
       </div>
 
       {/* Tabla de vehiculo */}
@@ -59,16 +76,9 @@ export const VehiculoData = ({ data }: Props) => {
         <div className='overflow-x-auto'>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell className='text-center bg-gray-300'>Titular</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Dominio</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Marca</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Modelo</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Tipo</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Color</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Numero de Chasis</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Numero de Motor</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Numero de Taxi</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Acciones</Table.HeadCell>
+              {columns.map((colum: Column) => (
+                <Table.HeadCell key={colum.key} className='text-center bg-gray-300'>{colum.label}</Table.HeadCell>
+              ))}
             </Table.Head>
             <Table.Body className='divide-y'>
               {

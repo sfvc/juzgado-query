@@ -20,7 +20,7 @@ export const usePropiedad = () => {
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: propiedades, pagination, isLoading } = usePagination<IPropiedad, FilterParams>({
+  const { data: propiedades, pagination, isFetching } = usePagination<IPropiedad, FilterParams>({
     queryKey: ['propiedades', filterParams],
     fetchData: () => propiedadActions.getPropiedades(filterParams),
     filterParams
@@ -66,7 +66,7 @@ export const usePropiedad = () => {
   return {
     propiedades,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

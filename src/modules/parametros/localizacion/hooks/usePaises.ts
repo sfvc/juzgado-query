@@ -19,7 +19,7 @@ export const usePaises = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: paises, pagination, isLoading } = usePagination<IPais, FilterParams>({
+  const { data: paises, pagination, isFetching } = usePagination<IPais, FilterParams>({
     queryKey: ['paises', filterParams],
     fetchData: () => paisActions.getPaises(filterParams),
     filterParams
@@ -65,7 +65,7 @@ export const usePaises = () => {
   return {
     paises,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

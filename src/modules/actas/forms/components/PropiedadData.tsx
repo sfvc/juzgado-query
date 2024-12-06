@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
-import { Button, Label, Table, TextInput, Tooltip } from 'flowbite-react'
+import { Button, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
-import { IPropiedad } from '../../../parametros/actas/interfaces'
 import { propiedadActions } from '../../../parametros/actas'
 import { icons } from '../../../../shared'
-import { IActaForm } from '../../interfaces/form-interfaces'
+import type { IPropiedad } from '../../../parametros/actas/interfaces'
+import type { IActaForm } from '../../interfaces/form-interfaces'
+import type { Column } from '../../../../shared/interfaces'
+import { CreatePropiedad } from '../integrations/CreatePropiedad'
+
+const colums: Column[] = [
+  { key: 'matricula_catastral', label: 'Matricula Catastral' },
+  { key: 'direccion', label: 'Dirección' },
+  { key: 'propietario', label: 'Propietario' },
+  { key: 'acciones', label: 'Acciones' }
+]
 
 interface Props {
   data: IPropiedad[] | undefined
@@ -53,67 +62,37 @@ export const PropiedadData = ({ data }: Props) => {
           renderInput={(item) => { return `${item.matricula_catastral} - ${item.propietario || 'SIN PROPIETARIO'}`} }
         />
 
-        {/* // TODO: Verificar que funcione buscador de propiedades  */}
-        {/* <div className='mb-4'>
-          <div className='mb-2 block'>
-            <Label
-              htmlFor='dirección'
-              value='Dirección'
-            />
-          </div>
-          <TextInput
-            {...register('dirección')}
-            id='dirección'
-            placeholder='Dirección'
-          />
-        </div>
-
-        <div className='mb-4'>
-          <div className='mb-2 block'>
-            <Label
-              htmlFor='propietario'
-              value='Nombre del propietario'
-            />
-          </div>
-          <TextInput
-            {...register('propietario')}
-            id='propietario'
-            placeholder='Nombre del propietario'
-          />
-        </div> */}
+        <div className='flex items-end mb-4'><CreatePropiedad /></div>
       </div>
 
       {/* Tabla de propiedades */}
-      {!!propiedades.length && (
-        <div className='overflow-x-auto'>
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell className='text-center bg-gray-300'>Matricula Catastral</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Dirección</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Propietario</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Acciones</Table.HeadCell>
-            </Table.Head>
-            <Table.Body className='divide-y'>
-              {
-                propiedades.map((propiedad: IPropiedad) => (
-                  <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800 max-h-5'>
-                    <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell> 
-                    <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell> 
-                    <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell> 
-                    <Table.Cell className='text-center flex items-center justify-center'>
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => removePropiedad(propiedad.id)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-              }
-            </Table.Body>
-          </Table>
-        </div>
-      )}
+      {(propiedades?.length > 0) &&
+        <Table hoverable>
+          <Table.Head>
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
+          </Table.Head>
+          <Table.Body className='divide-y'>
+            {
+              propiedades.map((propiedad: IPropiedad) => (
+                <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800 max-h-5'>
+                  <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell> 
+                  <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell> 
+                  <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell> 
+                  <Table.Cell className='text-center flex items-center justify-center'>
+                    <Tooltip content='Eliminar'>
+                      <Button color='failure' onClick={() => removePropiedad(propiedad.id)} className='w-8 h-8 flex items-center justify-center'>
+                        <icons.Trash />
+                      </Button>
+                    </Tooltip>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            }
+          </Table.Body>
+        </Table>
+      }
     </React.Fragment>
   )
 }

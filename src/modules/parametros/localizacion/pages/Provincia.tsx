@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
 import type { IProvincia } from '../interfaces/localizacion'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import { useProvincia } from '../hooks/useProvincia'
 import ProvinciaForm from '../forms/ProvinciaForm'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -17,7 +18,7 @@ export const Provincia = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IProvincia | null>(null)
 
-  const { provincias, pagination, isLoading, filterParams, updateFilter, deleteProvincia } = useProvincia()
+  const { provincias, pagination, isFetching, filterParams, updateFilter, deleteProvincia } = useProvincia()
 
   /* Modal crear/editar */
   const onOpenModal = (provincia: IProvincia) => {
@@ -40,8 +41,6 @@ export const Provincia = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -81,27 +80,29 @@ export const Provincia = () => {
 
         <Table.Body className='divide-y'>
           {
-            (provincias.length > 0)
-              ? (provincias.map((provincia: IProvincia) => (
-                <Table.Row key={provincia.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{provincia.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{provincia.nombre}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (provincias.length > 0)
+                ? (provincias.map((provincia: IProvincia) => (
+                  <Table.Row key={provincia.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{provincia.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{provincia.nombre}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(provincia)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

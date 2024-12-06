@@ -5,8 +5,20 @@ import { useFormContext } from 'react-hook-form'
 import { SearchInput, icons } from '../../../../shared'
 import { personaActions } from '../../../personas'
 import { formatPersona } from '../../helpers/formatPersona'
+import { CreatePersona } from '../integrations/CreatePersona'
 import type { InfractorActa } from '../../interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
+import type { Column } from '../../../../shared/interfaces'
+import { AntecedentesList } from '../integrations/AntecedentesList'
+import { RESPONSABLE } from '../../../../shared/constants'
+
+const columns: Column[] = [
+  { key: 'nombre', label: 'Nombre' },
+  { key: 'numero_documento', label: 'Documento' },
+  { key: 'responsable', label: 'Responsable' },
+  { key: 'antecedentes', label: 'Antecedentes' },
+  { key: 'actions', label: 'Acciones' }
+]
 
 interface Props {
   data: InfractorActa[] | undefined
@@ -16,8 +28,20 @@ export const InfractorData = ({ data }: Props) => {
   const { setValue, getValues } = useFormContext<IActaForm>() 
 
   const [infractores, setInfractores] = useState<InfractorActa[]>(data || [])
-  const [responsable, setResponsable] = useState<number>(0)
+  const [responsable, setResponsable] = useState<number>(RESPONSABLE.SI)
   const [persona, setPersonaSelected] = useState<IPersona | null>(null) // Item seleccionado de la busqueda
+
+  // Modal de antecedentes
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<number | null>(null) 
+
+  const toggleModal = (id?: number) => {
+    setIsOpen(!isOpen)
+
+    if (id) setActiveItem(id)
+    else setActiveItem(null)
+
+  }
   
   // Agregar persona al listado de infractores
   const addInfractor = () => {
@@ -67,16 +91,17 @@ export const InfractorData = ({ data }: Props) => {
               <div className='mb-2'>
                 <Label color='gray' htmlFor='responsable'>Responsable</Label>
               </div>
-              <Select id='responsable' name='responsable' onChange={(e) => setResponsable(+e.target.value)}>
-                <option value={1}>Sí</option>
-                <option value={0}>No</option>
+              <Select id='responsable' name='responsable' onChange={(e) => setResponsable(+e.target.value)} >
+                <option value={RESPONSABLE.SI}>Sí</option>
+                <option value={RESPONSABLE.NO}>No</option>
               </Select>
             </div>
           </div>
 
           <div className='flex items-start mt-8 gap-4'>
             <Button type='button' color='success' className='h-10' onClick={addInfractor}>Agregar</Button>
-            {/* // TODO: Crear Persona */}
+
+            <CreatePersona />
           </div>
         </div>
       </div>
@@ -86,11 +111,9 @@ export const InfractorData = ({ data }: Props) => {
         <div className='overflow-x-auto'>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell className='text-center bg-gray-300'>Nombre</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Documento</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Responsable</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Antecedentes</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Acciones</Table.HeadCell>
+              {columns.map((column: Column ) => (
+                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+              ))}
             </Table.Head>
             <Table.Body className='divide-y'>
               {infractores.map((infractor: InfractorActa) => (
@@ -105,7 +128,11 @@ export const InfractorData = ({ data }: Props) => {
                     <div className='flex items-center justify-center '>
                       <div className='flex justify-center items-center'>
                         <Tooltip content='Ver Antecedentes'>
-                          <button type='button' className='rounded-md border border-gray-300 w-8 h-8 hover:bg-gray-200 hover:border-gray-200 dark:hover:bg-gray-500'>
+                          <button 
+                            type='button' 
+                            className='rounded-md border border-gray-300 w-8 h-8 hover:bg-gray-200 hover:border-gray-200 dark:hover:bg-gray-500'
+                            onClick={() => toggleModal(infractor.id)}
+                          >
                             <icons.Antecedente />
                           </button>
                         </Tooltip>
@@ -125,6 +152,12 @@ export const InfractorData = ({ data }: Props) => {
           </Table>
         </div>
       )}
+
+      <AntecedentesList 
+        id={activeItem}
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+      />
     </React.Fragment>
   )
 }

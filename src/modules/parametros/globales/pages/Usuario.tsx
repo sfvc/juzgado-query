@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
 import { IUsuario } from '../interfaces'
 import UsuarioForm from '../forms/UsuarioForm'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -23,7 +24,7 @@ export const Usuario = () => {
   const { 
     usuarios,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
     deleteUsuario 
@@ -50,8 +51,6 @@ export const Usuario = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -91,30 +90,32 @@ export const Usuario = () => {
 
         <Table.Body className='divide-y'>
           {
-            (usuarios.length > 0)
-              ? (usuarios.map((usuario: IUsuario) => (
-                <Table.Row key={usuario.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='text-center dark:text-white'>{usuario.nombre}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{usuario.role.nombre}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length}/>
+              : (usuarios.length > 0)
+                ? (usuarios.map((usuario: IUsuario) => (
+                  <Table.Row key={usuario.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.nombre}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.role.nombre}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

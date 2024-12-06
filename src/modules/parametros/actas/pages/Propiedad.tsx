@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import { usePropiedad } from '../hooks/usePropiedad'
 import { IPropiedad } from '../interfaces'
 import PropiedadForm from '../forms/PropiedadForm'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -22,7 +23,7 @@ export const Propiedad = () => {
   const { 
     propiedades,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
     deletePropiedad 
@@ -49,8 +50,6 @@ export const Propiedad = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -90,29 +89,31 @@ export const Propiedad = () => {
 
         <Table.Body className='divide-y'>
           {
-            (propiedades.length > 0)
-              ? (propiedades.map((propiedad: IPropiedad) => (
-                <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (propiedades.length > 0)
+                ? (propiedades.map((propiedad: IPropiedad) => (
+                  <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{propiedad.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

@@ -22,7 +22,7 @@ export const useArticulo = () => {
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: articulos, pagination, isLoading } = usePagination<IArticulo, FilterParams>({
+  const { data: articulos, pagination, isFetching } = usePagination<IArticulo, FilterParams>({
     queryKey: ['articulos', filterParams],
     fetchData: () => articuloActions.getArticulos(filterParams),
     filterParams
@@ -68,7 +68,7 @@ export const useArticulo = () => {
   return {
     articulos,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

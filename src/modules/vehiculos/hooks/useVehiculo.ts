@@ -18,7 +18,7 @@ export const useVehiculo = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: vehiculos, pagination, isLoading } = usePagination<IVehiculo, FilterParams>({
+  const { data: vehiculos, pagination, isFetching } = usePagination<IVehiculo, FilterParams>({
     queryKey: ['vehiculos', filterParams],
     fetchData: () => vehiculoActions.getVehiculos(filterParams),
     filterParams
@@ -64,7 +64,7 @@ export const useVehiculo = () => {
   return {
     vehiculos,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

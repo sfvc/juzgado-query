@@ -3,6 +3,7 @@ import { Button, Label, Table, TextInput, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { rubroActions } from '../../../parametros/actas'
+import { CreateRubro } from '../integrations/CreateRubro'
 import { icons } from '../../../../shared'
 import type { IRubro } from '../../../parametros/actas/interfaces'
 import type { Comercio } from '../../interfaces'
@@ -54,16 +55,21 @@ export const ComercioData = ({ data }: Props) => {
           />
         </div>
         
-        <SearchInput<IRubro>
-          label="Rubro Comercia"
-          placeholder="Buscar por tipo de rubro"
-          onSearch={handleSearch}
-          onSelect={handleSelect}
-          renderItem={(item) => (
-            <div><strong>{item.id}</strong> - {item.nombre}</div>
-          )}
-          renderInput={(item) => { return `${item.id} - ${item.nombre}`} }
-        />
+        <div className='flex gap-2'>
+          <SearchInput<IRubro>
+            label="Rubro Comercial"
+            placeholder="Buscar por tipo de rubro"
+            onSearch={handleSearch}
+            onSelect={handleSelect}
+            renderItem={(item) => (
+              <div><strong>{item.id}</strong> - {item.nombre}</div>
+            )}
+            renderInput={(item) => { return `${item.id} - ${item.nombre}`} }
+          />
+
+
+          <div className='flex items-end mb-4'><CreateRubro /></div>
+        </div>
       </div>
 
       {/* Tabla de rubros */}

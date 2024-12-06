@@ -19,7 +19,7 @@ export const useDepartamento = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: departamentos, pagination, isLoading } = usePagination<IDepartamento, FilterParams>({
+  const { data: departamentos, pagination, isFetching } = usePagination<IDepartamento, FilterParams>({
     queryKey: ['departamentos', filterParams],
     fetchData: () => departamentoActions.getDepartamentos(filterParams),
     filterParams
@@ -65,7 +65,7 @@ export const useDepartamento = () => {
   return {
     departamentos,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

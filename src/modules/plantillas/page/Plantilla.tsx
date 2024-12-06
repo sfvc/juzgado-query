@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
 import { Column } from '../../../shared/interfaces'
-import { DeleteModal, Loading, useLoading } from '../../../shared'
+import { DeleteModal, useLoading } from '../../../shared'
 import { icons } from '../../../shared'
 import { usePlantilla } from '../hooks/usePlantilla'
 import { IPlantilla } from '../interfaces'
 import PlantillaForm from '../forms/PlantillaForm'
 import { LoadingOverlay } from '../../../layout'
 import { carboneActions } from '../../carbone'
+import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -26,7 +27,7 @@ export const Plantilla = () => {
   const { 
     plantillas,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
     deletePlantilla 
@@ -62,8 +63,6 @@ export const Plantilla = () => {
     })
   }
 
-  if (isLoading) return <Loading />
-
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
@@ -93,44 +92,44 @@ export const Plantilla = () => {
 
       <Table>
         <Table.Head>
-          {
-            colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
+          {colums.map((column: Column) => (
+            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+          ))}
         </Table.Head>
 
         <Table.Body className='divide-y'>
           {
-            (plantillas.length > 0)
-              ? (plantillas.map((plantilla: IPlantilla) => (
-                <Table.Row key={plantilla.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='text-center dark:text-white'>{plantilla.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{plantilla.denominacion}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{plantilla.juzgado.nombre}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{plantilla.tipo_actuacion}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Descargar'>
-                      <Button color='warning' onClick={() => dowloadPlantilla(plantilla.path)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Dowloand />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (plantillas.length > 0)
+                ? (plantillas.map((plantilla: IPlantilla) => (
+                  <Table.Row key={plantilla.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{plantilla.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{plantilla.denominacion}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{plantilla.juzgado.nombre}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{plantilla.tipo_actuacion}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Descargar'>
+                        <Button color='warning' onClick={() => dowloadPlantilla(plantilla.path)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Dowloand />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Ver'>
-                      <Button color='blue' onClick={() => showPlantilla(plantilla.path)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Show />
-                      </Button>
-                    </Tooltip>
+                      <Tooltip content='Ver'>
+                        <Button color='blue' onClick={() => showPlantilla(plantilla.path)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Show />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

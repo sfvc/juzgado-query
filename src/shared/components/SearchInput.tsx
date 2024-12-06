@@ -66,7 +66,7 @@ export function SearchInput<T extends SearchItem>({
   }
 
   return (
-    <div className="mb-4 relative">
+    <div className="mb-4 relative w-full">
       <div className="mb-2 block dark:text-white">
         <Label color="gray" htmlFor="search" value={label} />
       </div>

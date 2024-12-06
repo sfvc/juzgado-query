@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
+import { DeleteModal, icons } from '../../../../shared'
 import { ILocalidad } from '../interfaces/localizacion'
 import { useLocalidad } from '../hooks/useLocalidad'
 import LocalidadForm from '../forms/LocalidadForm'
 import { Column } from '../../../../shared/interfaces'
+import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -17,7 +18,7 @@ export const Localidad = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<ILocalidad | null>(null)
 
-  const { localidades, pagination, isLoading, filterParams, updateFilter, deleteLocalidad } = useLocalidad()
+  const { localidades, pagination, isFetching, filterParams, updateFilter, deleteLocalidad } = useLocalidad()
 
   /* Modal crear/editar */
   const onOpenModal = (localidad: ILocalidad) => {
@@ -40,8 +41,6 @@ export const Localidad = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <React.Fragment>
@@ -81,27 +80,29 @@ export const Localidad = () => {
 
         <Table.Body className='divide-y'>
           {
-            (localidades.length > 0)
-              ? (localidades.map((localidad: ILocalidad) => (
-                <Table.Row key={localidad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{localidad.id}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{localidad.nombre || '-'}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Editar'>
-                      <Button color='success' onClick={() => onOpenModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Pencil />
-                      </Button>
-                    </Tooltip>
+            isFetching
+              ? <TableSkeleton colums={colums.length} />
+              : (localidades.length > 0)
+                ? (localidades.map((localidad: ILocalidad) => (
+                  <Table.Row key={localidad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{localidad.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{localidad.nombre || '-'}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onOpenModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
 
-                    <Tooltip content='Eliminar'>
-                      <Button color='failure' onClick={() => openDelteModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Trash />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
-                </Table.Row>
-              )))
-              : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDelteModal(localidad)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
+                  </Table.Row>
+                )))
+                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
           }
         </Table.Body>
       </Table>

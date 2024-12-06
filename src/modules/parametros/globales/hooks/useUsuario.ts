@@ -19,7 +19,7 @@ export const useUsuario = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: usuarios, pagination, isLoading } = usePagination<IUsuario, FilterParams>({
+  const { data: usuarios, pagination, isFetching } = usePagination<IUsuario, FilterParams>({
     queryKey: ['usuarios', filterParams],
     fetchData: () => usuarioActions.getUsuarios(filterParams),
     filterParams
@@ -65,7 +65,7 @@ export const useUsuario = () => {
   return {
     usuarios,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 

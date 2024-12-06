@@ -17,7 +17,7 @@ export const useJuzgado = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: juzgados, pagination, isLoading } = usePagination<IJuzgado, FilterParams>({
+  const { data: juzgados, pagination, isFetching } = usePagination<IJuzgado, FilterParams>({
     queryKey: ['juzgados', filterParams],
     fetchData: () => juzgadoActions.getJuzgados(filterParams),
     filterParams
@@ -63,7 +63,7 @@ export const useJuzgado = () => {
   return {
     juzgados,
     pagination,
-    isLoading,
+    isFetching,
     filterParams,
     updateFilter,
 
