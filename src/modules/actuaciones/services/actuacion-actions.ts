@@ -32,3 +32,16 @@ export const createSentencia = async (form: ISentenciaForm) => {
   const response = await apiJuzgado.post('/actuaciones', form)
   console.log(response)
 }
+
+// Trae el historial de una actuacion
+export const getHistoryByActuacion = async (actuacionId: number) => {
+  const response = await apiJuzgado.get(`actuacion-detalle/${actuacionId}`) 
+  const { data } = response.data
+  return data
+}
+
+// Eliminar actuacion del historial 
+export const deleteActuacionHistory = async (actuacionId: number) => {
+  const response = await apiJuzgado.delete(`actuacion-detalle/${actuacionId}`) 
+  return response
+}

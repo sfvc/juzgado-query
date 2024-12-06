@@ -33,9 +33,23 @@ export const useActuacion= () => {
       console.log(error)
     }
   })
+
+  // Elimnar notificación del historial de notificaciones
+  const deleteActuacionHistory = useMutation({
+    mutationFn: (id: number) => actuacionActions.deleteActuacionHistory(id),
+    onSuccess: () => {
+      toast.success('Actuación eliminada exitosamente')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al eliminar la Actuación')
+      console.log(error)
+    }
+  }) 
   
   return { 
     createActuacion,
-    deleteActuacion 
+    deleteActuacion,
+    deleteActuacionHistory
   }
 }

@@ -1,5 +1,9 @@
-export const SkeletonFilter = () => {
-  const array = Array.from({ length: 8 })
+interface Props {
+  quantity: number,
+  advanceFilter?: boolean
+}
+export const SkeletonFilter = ({quantity, advanceFilter = false}: Props) => {
+  const array = Array.from({ length: quantity })
 
   return (
     <>
@@ -15,10 +19,13 @@ export const SkeletonFilter = () => {
         }
       </div>
 
-      <div className='grid md:grid-cols-2 gap-4 grid-cols-1 my-6 py-4 px-4 border rounded-lg '>
-        <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-10 my-2'></div>
-        <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-10 my-2'></div>
-      </div>
+      {
+        advanceFilter && 
+        <div className='grid md:grid-cols-2 gap-4 grid-cols-1 my-6 py-4 px-4 border rounded-lg '>
+          <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-10 my-2'></div>
+          <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-10 my-2'></div>
+        </div>
+      }
     </>
   )
 }

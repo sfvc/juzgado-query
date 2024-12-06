@@ -129,7 +129,7 @@ export const Layout = () => {
 
       <Footer container className='rounded-none shadow-none w-10/12 m-auto sm:px-0'>
         <Footer.Copyright
-          by='Municipalidad de la Ciudad de San Fernando Del Valle de Catamarca.'
+          by='Municipalidad de la Ciudad de San Fernando Del Valle de Catamarca'
           href='https://www.catamarcaciudad.gob.ar'
           year={(new Date().getFullYear())}
         />

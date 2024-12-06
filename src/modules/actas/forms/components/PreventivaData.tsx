@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { Label, Select } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
-import { useState } from 'react'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { Prioridad } from '../../interfaces'
 import { 
@@ -25,11 +25,7 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
     <div className={`grid gap-4 ${showPreventiva ? 'md:grid-cols-2' : 'grid-cols-1'} `}>
       <div>
         <div className='mb-2 block'>
-          <Label
-            htmlFor='prioridad_id'
-            value='Prioridad'
-          />
-          <strong className='obligatorio'>(*)</strong>
+          <Label htmlFor='prioridad_id' value='Prioridad' /><strong className='obligatorio'>(*)</strong>
         </div>
         <Select
           {...register('prioridad_id', { valueAsNumber: true })}
@@ -42,9 +38,9 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
               setShowPreventiva(false)
           }}
         >
-          <option value='' hidden>Seleccione una prioridad</option>
+          <option value={0} hidden>Seleccione una prioridad</option>
           {
-            (prioridades?.length > 0) && prioridades.map((prioridad: Prioridad) => (
+            prioridades?.length && prioridades.map((prioridad: Prioridad) => (
               <option key={prioridad.id} value={prioridad.id}>{prioridad.nombre}</option>
             ))
           }
@@ -53,23 +49,19 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
 
       {
         showPreventiva &&
-            <div>
-              <div className='mb-2 block'>
-                <Label
-                  htmlFor='preventiva'
-                  value='Preventiva'
-                />
-                <strong className='obligatorio'>(*)</strong>
-              </div>
-              <Select {...register('preventiva')}>
-                <option value='' hidden>Seleccione una medida</option>
-                {
-                  preventivas.map((preventiva, index: number) => (
-                    <option key={index} value={preventiva.value}>{preventiva.label}</option>
-                  ))
-                }
-              </Select>
+          <div>
+            <div className='mb-2 block'>
+              <Label htmlFor='preventiva' value='Preventiva' /><strong className='obligatorio'>(*)</strong>
             </div>
+            <Select {...register('preventiva')}>
+              <option value='' hidden>Seleccione una medida</option>
+              {
+                preventivas.map((preventiva, index: number) => (
+                  <option key={index} value={preventiva.value}>{preventiva.label}</option>
+                ))
+              }
+            </Select>
+          </div>
       }
     </div>
   )

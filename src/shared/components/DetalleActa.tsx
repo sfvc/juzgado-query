@@ -15,7 +15,7 @@ export const DetalleActa = ({ acta, title }: Props) => {
       </div>
 
       <div className='titulos rounded-md py-2 text-center mb-6'>
-        <h3 className='text-xl font-semibold text-white'> Datos del Acta</h3>
+        <h3 className='text-xl font-semibold text-white'>Datos del Acta</h3>
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2'>

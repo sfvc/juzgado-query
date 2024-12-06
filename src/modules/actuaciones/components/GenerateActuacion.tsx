@@ -36,7 +36,7 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
     }
 
     const form: IActuacionForm = {
-      actas: [{ id: acta.id }],
+      actas: [ acta.id ],
       plantilla_id: selectedPlantilla,
       tipo_actuacion: tipoActuacion
     }

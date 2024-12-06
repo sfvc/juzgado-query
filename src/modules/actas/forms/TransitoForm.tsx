@@ -9,7 +9,6 @@ import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
 import { IActa } from '../interfaces'
 import { formatVehiculo } from '../helpers/formatVehiculo'
-import { DevTool } from '@hookform/devtools'
 
 interface Props {
   acta: IActa | null | undefined
@@ -67,8 +66,6 @@ export const TransitoForm = ({ acta }: Props) => {
               Finalizar
             </Button>
           </div>
-
-          <DevTool control={methods.control}/> {/* set up the dev tool */}
         </form>
       </FormProvider>
     </React.Fragment>

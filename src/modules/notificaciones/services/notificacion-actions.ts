@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
+import { formatData } from '../../carbone/helpers/formatData'
 
 const CARBONE_URL = import.meta.env.VITE_CARBONE_URL
 
@@ -32,4 +33,17 @@ export const createNotification = async (selectedActas: number[], plantillaId: n
   })
 
   await Promise.all(notificationsPromise)
+}
+
+// Trae el historial de una notificación
+export const getHistoryByNotificacion = async (notificacionId: number) => {
+  const response = await apiJuzgado.get(`notificacion-detalle/${notificacionId}`) 
+  const { data } = response.data
+  return data
+}
+
+// Eliminar notificacion del historial 
+export const deleteNotificationHistory = async (notificacionId: number) => {
+  const response = await apiJuzgado.delete(`notificacion-detalle/${notificacionId}`) 
+  return response
 }

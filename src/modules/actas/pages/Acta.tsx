@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Label, Select } from 'flowbite-react'
-import { TIPO_ACTAS } from '../../../shared/constants'
 import { ActaFilter } from '../components/ActaFilter'
+import { TIPO_ACTAS } from '../../../shared/constants'
 
 export const Acta = () => {
   const navigate = useNavigate()

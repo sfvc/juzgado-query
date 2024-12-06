@@ -1,22 +1,22 @@
 export const dictionary = () => {
   const data = {
     // Fecha actual
-    fecha: '{fechaActual}',
+    fecha: '{d.fechaActual}',
   
     // Juzgado
-    juzgadoNombre: '{juzgadoNombre}',
-    juzgadoDomicilio: '{juzgadoDomicilio}',
-    juzgadoTelefono: '{juzgadoTelefono}',
+    juzgadoNombre: '{d.juzgadoNombre}',
+    juzgadoDomicilio: '{d.juzgadoDomicilio}',
+    juzgadoTelefono: '{d.juzgadoTelefono}',
   
     // Acta
-    causa: '{causa}',
-    acta: '{acta}',
-    infractorNombreApellido: '{infractorNombreApellido}',
-    infractorDocumento: '{infractorDocumento}',
-    fechaActa: '{fechaActa}',
-    actaHs: '{actaHs}',
-    actaObservaciones: '{actaObservaciones}',
-    lugar: '{lugar}'
+    causa: '{d.causa}',
+    acta: '{d.acta}',
+    infractorNombreApellido: '{d.infractorNombreApellido}',
+    infractorDocumento: '{d.infractorDocumento}',
+    fechaActa: '{d.fechaActa}',
+    actaHs: '{d.actaHs}',
+    actaObservaciones: '{d.actaObservaciones}',
+    lugar: '{d.lugar}'
   }
   
   return data

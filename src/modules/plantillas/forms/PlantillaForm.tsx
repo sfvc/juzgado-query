@@ -10,6 +10,7 @@ import { useJuzgado } from '../../parametros/globales/hooks/useJuzgado'
 import { IJuzgado } from '../../parametros/globales/interfaces'
 import { carboneActions } from '../../carbone'
 import { TIPO_ACTUACION } from '../../../shared/constants'
+import { getFileExtension } from '../../carbone/helpers/getFileExtension'
 
 const validationSchema = yup.object().shape({
   denominacion: yup.string().required('La denominacion es requerida'),
@@ -26,7 +27,9 @@ interface Props {
 const PlantillaForm = ({ plantilla, onSucces }: Props) => {
   const { createPlantilla } = usePlantilla()
   const { juzgados, isLoading } = useJuzgado()
+
   const [file, setFile] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const {
     register,
@@ -44,18 +47,24 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormPlantilla> = async (form: FormPlantilla) => {
-    if (!file) return toast.error('Seleccione un archivo')
+    if (!file) return setErrorMessage('Debe seleccionar un archivo')
     
-    const nameFile = await carboneActions.uploadFilePlantilla(file)
-    if (!nameFile) return toast.error('Error al subir el archivo')
+    const path = await carboneActions.uploadFilePlantilla(file)
+    if (!path) return toast.error('Error al subir el archivo')
     
-    setValue('path', nameFile)
+    setValue('path', path)
     await createPlantilla.mutateAsync(form)
     onSucces()
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setFile(e.target.files[0])
+    setErrorMessage('')
+    if (!e?.target?.files) return
+    const file = e.target.files[0]
+
+    if (getFileExtension(file.name) !== 'docx') return setErrorMessage('El archivo debe ser de tipo .docx')
+
+    setFile(file)
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
@@ -115,7 +124,13 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
         <div className='mb-2 block'>
           <Label htmlFor='file-upload' value='Seleccionar Plantilla' />
         </div>
-        <FileInput id='file-upload' className='mb-4' onChange={handleFileChange} accept='.doc,.docx' />
+        <FileInput 
+          id='file-upload'  
+          onChange={handleFileChange} 
+          accept='.docx' 
+          helperText={errorMessage && errorMessage}
+          color={errorMessage && 'failure'}
+        />
       </div>
 
       {/* Buttons */}

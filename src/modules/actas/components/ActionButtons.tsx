@@ -42,48 +42,40 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
   return (
     <React.Fragment>
       <Dropdown label={icons.EllipsisVertical()} arrowIcon={false} inline>
-        <Dropdown.Item className='justify-center'>
+        <div className='flex flex-col justify-center items-center gap-2 m-2'>
           <Tooltip content='Editar' placement="right">
             <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Pencil />
             </Button>
           </Tooltip>
-        </Dropdown.Item>
 
-        <Dropdown.Item className='justify-center'>
           <Tooltip content='Estados' placement="right">
             <Button color='warning' onClick={() => handleChangeStatus(acta.id)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Status />
             </Button>
           </Tooltip>
-        </Dropdown.Item>
-       
-        {
-          (acta?.notificacion && !!acta.notificacion.length) &&
-            <Dropdown.Item className='justify-center'>
+
+          {
+            (acta?.notificacion && !!acta.notificacion.length) &&
               <Tooltip content='Notificaciones' placement="right">
                 <Button color='blue' onClick={() => handleNotification(acta.id)} className='w-8 h-8 flex items-center justify-center'>
                   <icons.Notification />
                 </Button>
               </Tooltip>
-            </Dropdown.Item>
-        }
+          }
 
-        <Dropdown.Item className='justify-center'>
           <Tooltip content='Actuaciones' placement="right">
             <Button color='purple' onClick={() => handleActuacion(acta.id)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Actuacion />
             </Button>
           </Tooltip>
-        </Dropdown.Item>
 
-        <Dropdown.Item className='justify-center'>
           <Tooltip content='Eliminar' placement="right">
             <Button color='failure' onClick={() => onOpenModal(acta)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Trash />
             </Button>
           </Tooltip> 
-        </Dropdown.Item>
+        </div>
       </Dropdown>
 
       {/* Modal para eliminar acta de listado */}

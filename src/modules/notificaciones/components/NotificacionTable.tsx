@@ -1,10 +1,11 @@
-import React from 'react'
-import { Button, Table, Tooltip } from 'flowbite-react'
-import { Notificacion, NotificationActa } from '../interfaces'
+import React, { useState } from 'react'
+import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { icons } from '../../../shared'
-import { Column } from '../../../shared/interfaces'
 import { LoadingOverlay } from '../../../layout'
 import { usePdf } from '../../carbone'
+import { NotificationHistory } from './NotificationHistory'
+import type { Notificacion, NotificationActa } from '../interfaces'
+import type { Column } from '../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'tipo', label: 'Tipo' },
@@ -17,6 +18,19 @@ const colums: Column[] = [
 export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
   const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
   const notificaciones: Notificacion[] = acta.notificaciones
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<Notificacion | null>(null)
+
+  const onEditNotificacion = async (notificacion: Notificacion) => {
+    setActiveItem(notificacion)
+    setIsOpen(true)
+  }
+
+  const onCloseModal = async () => {
+    setActiveItem(null)
+    setIsOpen(false)
+  }
 
   return (
     <React.Fragment>
@@ -59,11 +73,10 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                       </Tooltip>
 
                       <Tooltip content='Ver notificación'>
-                        <Button color='success' className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='success' onClick={() => onEditNotificacion(notificacion)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
                         </Button>
                       </Tooltip>
-
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -72,6 +85,14 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
           </Table.Body>
         </Table>
       </div>
+
+      {/* Modal para actualizar notificacion */}
+      <Modal size='4xl' show={isOpen} onClose={onCloseModal}>
+        <Modal.Header>Editar Notificación</Modal.Header>
+        <Modal.Body>
+          { activeItem && <NotificationHistory acta={acta} notificacion={activeItem} onCloseModal={onCloseModal} /> }
+        </Modal.Body>
+      </Modal>
 
       { useAction.loading && <LoadingOverlay /> }
     </React.Fragment>

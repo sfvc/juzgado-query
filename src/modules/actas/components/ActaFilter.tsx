@@ -81,7 +81,7 @@ export const ActaFilter = () => {
       <form onSubmit={ handleSubmit(submit) }>
         {
           !isSuccess
-            ? <SkeletonFilter />
+            ? <SkeletonFilter quantity={8} advanceFilter />
             :
             <div>
               {/* Filtros */}

@@ -6,6 +6,7 @@ import { icons } from '../../../shared'
 import { useActuacion } from '../hooks/useActuacion'
 import { usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
+import { ActuacionHistory } from './ActuacionHistory'
 
 const colums: Column[] = [
   { key: 'tipo', label: 'Tipo' },
@@ -21,18 +22,28 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
   const { deleteActuacion } = useActuacion()
   const [actuaciones, setActuaciones] = useState<Actuacion[]>(acta.actuaciones || [])
 
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
 
-  const onOpenModal = async (actuacion: Actuacion) => {
-    setActiveItem(actuacion)
-    setOpenDeleteModal(true)
+  const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
+    if (actuacion) {
+      setActiveItem(actuacion)
+      setModal((prevState) => ({ ...prevState, [action]: value }))
+    } else {
+      setActiveItem(null)
+      setModal((prevState) => ({ ...prevState, [action]: value  }))
+    }
   }
 
-  const onCloseModal = () => {
-    setOpenDeleteModal(false)
-    setActiveItem(null)
-  }
+  // const onOpenModal = (actuacion: Actuacion) => {
+  //   setActiveItem(actuacion)
+  //   setOpenDeleteModal(true)
+  // }
+
+  // const onCloseModal = () => {
+  //   setOpenDeleteModal(false)
+  //   setActiveItem(null)
+  // }
 
   const handleDeleteActuacion = async () => {
     if(!activeItem) return
@@ -40,7 +51,8 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
     
     if(!response) return
     setActuaciones((prevState) => prevState.filter(prev => prev.id !== activeItem.id))
-    onCloseModal()
+    toggleModal('delete', false)
+    // onCloseModal()
   }
 
   return (
@@ -61,29 +73,37 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
           <Table.Body className='divide-y'>
             {
               actuaciones?.length
-                ? actuaciones.map((actuacion, index) => (
-                  <Table.Row key={index} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                ? actuaciones.map((actuacion: Actuacion) => (
+                  <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{actuacion?.monto ? `$ ${actuacion.monto}` : '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Button color='warning' 
-                        className='w-8 h-8 flex items-center justify-center'
-                        onClick={() => {
-                          if(actuacion?.url)
-                            showPDFGotenberg(actuacion.url)
-                          else 
-                            showPDFCarbone(actuacion?.plantilla?.path, actuacion.id)
-                        }} 
-                        disabled={!actuacion?.url && !actuacion?.plantilla?.path}
-                      >
-                        <icons.Print /> 
-                      </Button>
+                      <Tooltip content='Ver'>
+                        <Button color='warning' 
+                          className='w-8 h-8 flex items-center justify-center'
+                          onClick={() => {
+                            if(actuacion?.url)
+                              showPDFGotenberg(actuacion.url)
+                            else 
+                              showPDFCarbone(actuacion?.plantilla?.path, actuacion.id)
+                          }} 
+                          disabled={!actuacion?.url && !actuacion?.plantilla?.path}
+                        >
+                          <icons.Print /> 
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => toggleModal('history', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
                       
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => onOpenModal(actuacion)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => toggleModal('delete', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>
@@ -98,9 +118,17 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
 
       { useAction.loading && <LoadingOverlay /> }
 
+      {/* Modal para actualizar actuación */}
+      <Modal size='4xl' show={modal.history} onClose={() => toggleModal('history', false)}>
+        <Modal.Header>Editar Actuacion</Modal.Header>
+        <Modal.Body>
+          { activeItem && <ActuacionHistory acta={acta} actuacion={activeItem} onCloseModal={() => toggleModal('history', false)} /> }
+        </Modal.Body>
+      </Modal>
+
       {/* Modal para eliminar actuación de listado */}
       { activeItem && 
-        <Modal show={openDeleteModal} onClose={onCloseModal}>
+        <Modal show={modal.delete} onClose={() => toggleModal('delete', false)}>
           <Modal.Header>Eliminar actuación</Modal.Header>
           <Modal.Body>
             <div className="text-center">
@@ -110,7 +138,7 @@ export const Expediente = ({acta}: {acta: ActuacionActa}) => {
               </h3>
           
               <div className="flex justify-center gap-4">
-                <Button color="gray" onClick={onCloseModal}>Cancelar</Button>
+                <Button color="gray" onClick={() => toggleModal('delete', false)}>Cancelar</Button>
                 <Button 
                   color="failure" 
                   onClick={handleDeleteActuacion} 

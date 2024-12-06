@@ -172,7 +172,7 @@ export interface Titular {
 }
 
 export interface IActuacionForm {
-    actas: [{ id: number }]
+    actas: number[]
     plantilla_id: number | null
     tipo_actuacion: string
 }

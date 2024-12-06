@@ -15,7 +15,7 @@ const overlayStyles: React.CSSProperties = {
 }
   
 const imageStyles: React.CSSProperties = {
-  width: '12rem',
+  width: '10rem',
   animation: 'float 3s ease-in-out infinite',
 }
 

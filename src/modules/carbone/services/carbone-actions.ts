@@ -1,38 +1,49 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
 import { dictionary } from '../helpers/dictionary'
+import { apiJuzgado } from '../../../api/config'
+import { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
+import { User } from '../../../auth/interfaces/auth'
+import { formatData } from '../helpers/formatData'
+import { cleanFileName } from '../helpers/cleanFileName'
+import { getFileExtension } from '../helpers/getFileExtension'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
 const CARBONE_URL = `${import.meta.env.VITE_CARBONE_URL}`
 
+const NOTIFICACION_URL = 'notificacion-detalle'
+const ACTUACION_URL = 'actuacion-detalle'
+
+// Sube una nueva plantilla a carbone
 export const uploadFilePlantilla = async (file: File):  Promise<string | undefined> => {
   try {
-    // Agrego el archivo al form
+    // Limpia el nombre del archivo
+    const cleanName = cleanFileName(file.name)
+    const path = `${cleanName}.${getFileExtension(file.name)}`
+
+    // Crea un nuevo archivo con el nombre limpio
+    const renamedFile = new File([file], path, {
+      type: file.type,
+    })
+
+    // Agrego el archivo al formData
     const formData = new FormData()
-    formData.append('file', file)
-      
-    // Obtengo el archivo del formData
-    const formFile = formData.get('file')
-      
-    if (formFile instanceof File) {
-      // Obtengo el nombre del archivo con su extensión
-      const name = formFile.name 
+    formData.append('file', renamedFile)
         
-      // Subo el archivo al servidor de carbone
-      const response = await axios.post(TEMPLATE_URL, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+    // Subo el archivo al servidor de carbone
+    const response = await axios.post(TEMPLATE_URL, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
         
-      if (response?.data.message === 'File uploaded successfully') return name
-      else throw new Error('Error al subir el archivo')
+    if (response?.data.message === 'File uploaded successfully') return path
+    else throw new Error('Error al subir el archivo')
   
-    } else {
-      throw new Error('No valid file')
-    }
   } catch (error) {
     console.error(error)
   }
 }
   
+// Descarga la plantilla original con las variables
 export const downloadPlantilla = async (path: string): Promise<void> => {
   try {
     const response = await axios.get(`${TEMPLATE_URL}/download?fileName=${path}`, {
@@ -52,6 +63,7 @@ export const downloadPlantilla = async (path: string): Promise<void> => {
   }
 }
   
+// Renderiza la plantilla original con las variables en el navegador
 export const showPlantilla = async (path: string): Promise<void> => {
   try {
     const diccionario = dictionary() // Obtener los datos para visualizar plantillas
@@ -77,15 +89,80 @@ export const showPlantilla = async (path: string): Promise<void> => {
   }
 }
 
+// Renderiza el pdf en el navegador con los datos enviados a carbone
 export const showFilePDF = async (data: any) => {
-  const response = await axios.post(CARBONE_URL, data, {
-    responseType: 'blob'
-  })
-
-  const fileBlob = response.data
-  const file = new Blob([fileBlob], { type: 'application/pdf' })
-  const fileURL = URL.createObjectURL(file)
-
-  window.open(fileURL, '_blank')
+  try {
+    const response = await axios.post(CARBONE_URL, data, {
+      responseType: 'blob'
+    })
+  
+    const fileBlob = response.data
+    const file = new Blob([fileBlob], { type: 'application/pdf' })
+    const fileURL = URL.createObjectURL(file)
+  
+    window.open(fileURL, '_blank')
+    
+  } catch (error) {
+    console.log(error)
+  }
 }
     
+// Descarga el word con los datos inyectados
+export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, user: User) => { 
+  const path = item?.plantilla?.path
+  const itemId = item?.id
+
+  try {
+    const actaFormated = await formatData(acta, user, itemId)
+
+    const data = {
+      convertTo: 'docx',
+      data: actaFormated,
+      template: `${path}`
+    }
+
+    const response = await axios.post(CARBONE_URL, data, {
+      responseType: 'blob'
+    })
+
+    const fileBlob = response.data
+    const file = new Blob([fileBlob], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    const fileURL = URL.createObjectURL(file)
+
+    // Crear un enlace temporal
+    const a = document.createElement('a')
+    a.href = fileURL
+
+    // Especificar el nombre con el que se descargará el archivo
+    a.download = `${itemId} - ${path}`
+
+    // Simular el clic en el enlace
+    document.body.appendChild(a)
+    a.click()
+
+    // Limpiar el DOM
+    document.body.removeChild(a)
+    URL.revokeObjectURL(fileURL)
+  } catch (error) {
+    console.error('Error al descardar el Word:', error)
+  }
+}
+
+// Subir nuevo archivo editado (word) para que el back lo convierta en PDF y almacene en la DB
+// Se utiliza el mis endpoint para subir la notificacion y la actuacion. Por lo tanto pasar la property correspondiente
+export const uploadFilePDF = async (file: File, item: any, property: string) => { // property: notificacion_id | actuacion_id
+  const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
+  const date = new Date().getTime().toString().split('').slice(4, 12).join('')
+
+  const name = cleanFileName(file.name)
+
+  const data = {
+    file,
+    nombre: name.concat(`-${date}`),
+    [property]: item.id 
+  }
+
+  await apiJuzgado.post(url, data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
