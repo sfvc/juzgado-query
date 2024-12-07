@@ -110,11 +110,11 @@ export const Persona = () => {
                         </Button>
                       </Tooltip>
 
-                      <Tooltip content='Eliminar'>
+                      {/* <Tooltip content='Eliminar'>
                         <Button color='failure' onClick={() => openDelteModal(persona)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
-                      </Tooltip>
+                      </Tooltip> */}
                     </Table.Cell>
                   </Table.Row>
                 )))

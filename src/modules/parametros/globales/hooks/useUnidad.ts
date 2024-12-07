@@ -20,7 +20,7 @@ export const useUnidad = () => {
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: unidades, pagination, isFetching } = usePagination<IUnidad, FilterParams>({
-    queryKey: ['usuarios', filterParams],
+    queryKey: ['unidades', filterParams],
     fetchData: () => unidadActions.getUnidades(filterParams),
     filterParams
   })

@@ -99,7 +99,7 @@ export const Usuario = () => {
                     <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.role?.name}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.role.name}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
                         <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>

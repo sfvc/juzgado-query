@@ -66,12 +66,14 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter }: Props) 
                       <Table.Cell className='text-center dark:text-white'>{acta.fecha}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
                       <Table.Cell className='text-center text-white dark:text-white'>
-                        <span 
-                          className='max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block' 
-                          style={{ backgroundColor: acta?.estados[0]?.color || DEFAULT_COLOR }}
-                        >
-                          {acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'}
-                        </span>
+                        <Tooltip content={acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'} className='max-w-80'>
+                          <span 
+                            className='max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block' 
+                            style={{ backgroundColor: acta?.estados[0]?.color || DEFAULT_COLOR }}
+                          >
+                            {acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'}
+                          </span>
+                        </Tooltip>
                       </Table.Cell>
                       <Table.Cell className='text-center'>
                         <span className={`dark:text-white ${acta.prioridad?.nombre === 'URGENTE' && 'bg-red-600 text-white px-2 py-1 border-none rounded-lg inline-block'}`}>
