@@ -2,6 +2,8 @@ import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
 import { DropdownHeader } from './'
 import logoJuzgado from '../assets/images/logo-juzgado.png'
+// import logoCapitalDark from '../assets/images/logo-capital-dark.png'
+// import logoCapitalLight from '../assets/images/logo-capital-light.png'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -12,8 +14,12 @@ export const Layout = () => {
       <ToastContainer />
 
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
+
         <Link to='/'>
-          <img src={logoJuzgado} alt='Logo Juzgado' className='w-48 md:w-40 inline-block mx-auto pointer-events-none' />
+          <img src={logoJuzgado} 
+            alt='Logo Juzgado' 
+            className='w-48 md:w-40 inline-block mx-auto pointer-events-none' 
+          />
         </Link>
 
         <div className='flex md:order-2'>
@@ -33,10 +39,6 @@ export const Layout = () => {
 
           <Link to='/personas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
                 Personas
-          </Link>
-
-          <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-                Plantillas
           </Link>
 
           <Link to='/notificaciones' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
@@ -61,6 +63,10 @@ export const Layout = () => {
 
                   <Link to='/rubros'>
                     <Dropdown.Item>Rubros</Dropdown.Item>
+                  </Link>
+
+                  <Link to='/plantillas'>
+                    <Dropdown.Item>Plantillas</Dropdown.Item>
                   </Link>
                 </Dropdown>
               </div>
@@ -98,6 +104,12 @@ export const Layout = () => {
                     <Dropdown.Item>Barrios</Dropdown.Item>
                   </Link>
 
+                  <Dropdown.Divider />
+
+                  <Link to='/nacionalidades'>
+                    <Dropdown.Item>Nacionalidades</Dropdown.Item>
+                  </Link>
+
                 </Dropdown>
               </div>
 
@@ -117,6 +129,12 @@ export const Layout = () => {
 
               <Link to='/usuarios'>
                 <Dropdown.Item>Usuarios</Dropdown.Item>
+              </Link>
+
+              <Dropdown.Divider />
+
+              <Link to='/unidades'>
+                <Dropdown.Item>Ud. de Multa</Dropdown.Item>
               </Link>
             </Dropdown>
           </div>

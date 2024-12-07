@@ -17,7 +17,7 @@ export interface FormJuzgado {
 
 export interface Role {
     id: number
-    nombre: string
+    name: string
 }
 
 export interface IUsuario {
@@ -35,5 +35,18 @@ export interface FormUsuario {
     username: string
     password: string
     juzgado_id: string
-    rol_id: string
+    role: string
+}
+
+export interface IUnidad {
+    id: number
+    valor: string
+    fecha_desde: string
+    fecha_hasta: string
+}
+
+export interface FormUnidad {
+    valor: string
+    fecha_desde: string
+    fecha_hasta: string
 }

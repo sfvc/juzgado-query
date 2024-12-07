@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom'
 import { Layout } from '../layout'
-import { Barrio, Departamento, Localidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
+import { Barrio, Departamento, Localidad, Nacionalidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
 import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
-import { Juzgado, Usuario } from '../modules/parametros/globales'
+import { Juzgado, Unidad, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
@@ -54,6 +54,11 @@ export const PrivateRoute = [
       },
 
       {
+        path: '/nacionalidades',
+        element: <Nacionalidad />
+      },
+
+      {
         path: '/articulos',
         element: <Articulo />
       },
@@ -96,6 +101,11 @@ export const PrivateRoute = [
       {
         path: '/personas',
         element: <Persona />
+      },
+
+      {
+        path: '/unidades',
+        element: <Unidad />
       },
 
       // Actas

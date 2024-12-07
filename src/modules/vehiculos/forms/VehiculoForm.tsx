@@ -4,11 +4,10 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Color, FormVehiculo, IVehiculo, Marca, Tipo, Titular } from '../interfaces'
+import { Color, FormVehiculo, IVehiculo, Marca, Tipo } from '../interfaces'
 import { useVehiculo } from '../hooks/useVehiculo'
 import { vehiculoActions } from '..'
-import { SearchInput } from '../../../shared'
-import { personaActions } from '../../personas'
+import { TitularInput } from '../components/TitularInput'
 
 const validationSchema = yup.object().shape({
   dominio: yup.string().required('El dominio es requerido'),
@@ -36,16 +35,12 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
     staleTime: 1000 * 60 * 5
   })
 
-  // Buscardor de titulares
-  const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
-  const handleSelect = (titular: Titular) => setValue('titular_id', titular.id)
-
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<FormVehiculo>({
     defaultValues: { 
       dominio: vehiculo?.dominio || '',
       titular_id: vehiculo?.titular?.id || null,
@@ -66,53 +61,12 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
     onSucces()
   }
 
-  const TitularInput = () => {
-    return ( vehiculo && !editTitular )
-      ? (
-        <div className='mb-4'>
-          <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='titular_id' value='Titular' />
-          </div>
-
-          <div className='flex justify-between gap-x-2'>
-            <TextInput
-              type='text'
-              className='flex-1'
-              name='titular'
-              value={
-                vehiculo?.titular
-                  ? `${vehiculo.titular.apellido}`
-                  : 'SIN TITULAR'
-              }
-              readOnly
-            />
-
-            <div className='flex items-end'>
-              <Button onClick={() => setEditTitular(!editTitular)} color='blue'>Editar</Button>
-            </div>
-          </div>
-        </div>
-      )
-      : (
-        <SearchInput<Titular>
-          label="Titular"
-          placeholder="Buscar Titular"
-          onSearch={handleSearch}
-          onSelect={handleSelect}
-          renderItem={(item) => (
-            <div><strong>{item.apellido}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
-          )}
-          renderInput={(item) => { return `${item.apellido} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
-        />
-      )
-  }
-
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} >
       <div className='grid grid-cols-2 gap-4'>
-        <TitularInput />
+        <TitularInput vehiculo={vehiculo} editTitular={editTitular} setEditTitular={setEditTitular} setValue={setValue} />
       
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
@@ -129,10 +83,7 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
 
         <div className='mb-4'>
           <div className='mb-2 block'>
-            <Label
-              htmlFor='tipo_infraccion'
-              value='Tipo de infraccion'
-            />
+            <Label htmlFor='tipo_infraccion' value='Tipo de infraccion' />
           </div>
           <Select
             {...register('marca_id', { valueAsNumber: true })}

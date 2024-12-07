@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
-import { paisActions } from '..'
-import type { IPais, FormPais } from '../interfaces/localizacion'
+import { nacionalidadActions } from '..'
 import { useFilter } from '../../../../shared/hooks/useFilter'
+import type { FormNacionalidad, INacionalidad } from '../interfaces/localizacion'
 
 interface FilterParams {
   query: string, 
@@ -15,19 +15,19 @@ const initialValues = {
   page: 1
 }
 
-export const usePaises = () => {
+export const useNacionalidad = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const { data: paises, pagination, isFetching } = usePagination<IPais, FilterParams>({
-    queryKey: ['paises', filterParams],
-    fetchData: () => paisActions.getPaises(filterParams),
+  const { data: nacionalidades, pagination, isFetching } = usePagination<INacionalidad, FilterParams>({
+    queryKey: ['nacionalidades', filterParams],
+    fetchData: () => nacionalidadActions.getNacionalidades(filterParams),
     filterParams
   })
 
   /* Mutations */
-  const createPais = useMutation({
-    mutationFn: paisActions.createPais,
+  const createNacionalidad = useMutation({
+    mutationFn: nacionalidadActions.createNacionalidad,
     onSuccess: () => {
       toast.success('Pais creado con exito')
       queryClient.clear()
@@ -38,8 +38,8 @@ export const usePaises = () => {
     }
   })
 
-  const updatePais = useMutation({
-    mutationFn: ({ id, pais }: { id: number, pais: FormPais }) => paisActions.updatePais(id, pais),
+  const updateNacionalidad = useMutation({
+    mutationFn: ({ id, nacionalidad }: { id: number, nacionalidad: FormNacionalidad }) => nacionalidadActions.updateNacionalidad(id, nacionalidad),
     onSuccess: () => {
       toast.success('Pais editado con exito')
       queryClient.clear()
@@ -50,8 +50,8 @@ export const usePaises = () => {
     }
   })
 
-  const deletePais = useMutation({
-    mutationFn: (id: number) => paisActions.deletePais(id),
+  const deleteNacionalidad = useMutation({
+    mutationFn: (id: number) => nacionalidadActions.deleteNacionalidad(id),
     onSuccess: () => {
       toast.success('Pais eliminado con exito')
       queryClient.clear()
@@ -63,15 +63,15 @@ export const usePaises = () => {
   })
 
   return {
-    paises,
+    nacionalidades,
     pagination,
     isFetching,
     filterParams,
     updateFilter,
 
     // Mutations
-    createPais,
-    updatePais,
-    deletePais
+    createNacionalidad,
+    updateNacionalidad,
+    deleteNacionalidad
   }
 }

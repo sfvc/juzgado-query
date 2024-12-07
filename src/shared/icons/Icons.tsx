@@ -47,9 +47,9 @@ export const Show = () => {
   )
 }
 
-export const Search = () => {
+export const Search = ({hidden = ''}: {hidden: string}) => {
   return (
-    <div className='absolute top-3 right-2'>
+    <div className={`absolute top-3 right-2 ${hidden && 'hidden'}`}>
       <svg xmlns='http://www.w3.org/2000/svg' className='icon icon-tabler icon-tabler-search dark:stroke-white' width='16' height='16' viewBox='0 0 24 24' strokeWidth='1.5' stroke='#000000' fill='none' strokeLinecap='round' strokeLinejoin='round'>
         <path stroke='none' d='M0 0h24v24H0z' fill='none' />
         <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
@@ -173,7 +173,7 @@ export const Print = () => {
 
 export const FilePlus = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-plus-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-plus-2 mr-2">
       <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/>
       <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
       <path d="M3 15h6"/>
@@ -206,10 +206,30 @@ export const Pdf = () => {
 
 export const Plus = () => {
   return (
-    <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+    <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-plus">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M12 5l0 14" />
       <path d="M5 12l14 0" />
+    </svg>
+  )
+}
+
+
+export const Filter = () => {
+  return (
+    <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-filter mr-1">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z" />
+    </svg>
+  )
+}
+
+export const Eraser = () => {
+  return (
+    <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-eraser mr-1">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
+      <path d="M18 13.3l-6.3 -6.3" />
     </svg>
   )
 }

@@ -33,3 +33,15 @@ export const deleteUsuario =  async (id: number) => {
   const { data: usuario } = response.data
   return usuario
 }
+
+export const getRoles = async () => {
+  const response = await apiJuzgado.get('/roles')
+  const { data } = response.data
+  return data
+}
+
+export const getJuzgados = async () => {
+  const response = await apiJuzgado.get('/juzgados')
+  const { data } = response.data
+  return data
+}

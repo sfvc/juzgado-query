@@ -67,7 +67,7 @@ export const Persona = () => {
                 value={filterParams.query}
                 onChange={(e) => updateFilter('query', e.target.value)}
               />
-              <icons.Search />
+              <icons.Search hidden={filterParams.query}/>
             </div>
             
             <Button 

@@ -1,4 +1,4 @@
-import { Modal, Spinner, Table } from 'flowbite-react'
+import { Button, Modal, Spinner, Table } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
 import { personaActions } from '../../../personas'
 import type { Column } from '../../../../shared/interfaces'
@@ -61,6 +61,10 @@ export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
               </Table.Body>
             </Table> 
         }
+
+        <div className='flex justify-end mt-4'>
+          <Button onClick={() => toggleModal()} className='px-2' color='gray'>Cerrar</Button>
+        </div>
       </Modal.Body>
     </Modal>
 

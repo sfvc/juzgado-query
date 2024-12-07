@@ -82,7 +82,7 @@ export function SearchInput<T extends SearchItem>({
         <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
           { isLoading
             ? <Spinner size="sm" />
-            : <icons.Search />
+            : <icons.Search hidden={search}/>
           }
         </div>
       </div>

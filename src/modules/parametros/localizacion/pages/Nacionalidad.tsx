@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
 import { DeleteModal, icons } from '../../../../shared'
-import { IBarrio } from '../interfaces/localizacion'
-import { useBarrio } from '../hooks/useBarrio'
-import BarrioForm from '../forms/BarrioForm'
 import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import { useNacionalidad } from '../hooks/useNacionalidad'
+import { INacionalidad } from '../interfaces/localizacion'
+import NacionalidadForm from '../forms/NacionalidadForm'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -13,16 +13,16 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' }
 ]
 
-export const Barrio = () => {
+export const Nacionalidad = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [activeItem, setActiveItem] = useState<IBarrio | null>(null)
+  const [activeItem, setActiveItem] = useState<INacionalidad | null>(null)
 
-  const { barrios, pagination, isFetching, filterParams, updateFilter, deleteBarrio } = useBarrio()
+  const { nacionalidades, pagination,isFetching, filterParams, updateFilter, deleteNacionalidad } = useNacionalidad()
 
   /* Modal crear/editar */
-  const onOpenModal = (barrio: IBarrio) => {
-    setActiveItem(barrio)
+  const onOpenModal = (nacionalidad: INacionalidad) => {
+    setActiveItem(nacionalidad)
     setOpenModal(true)
   }
 
@@ -32,8 +32,8 @@ export const Barrio = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (barrio: IBarrio) => {
-    setActiveItem(barrio)
+  const openDelteModal = (nacionalidad: INacionalidad) => {
+    setActiveItem(nacionalidad)
     setOpenDeleteModal(true)
   }
 
@@ -45,18 +45,18 @@ export const Barrio = () => {
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Barrios</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Nacionalidades</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
+            {/* <div className='relative'>
               <TextInput
                 name='query'
                 placeholder='Buscar'
                 value={filterParams.query}
                 onChange={(e) => updateFilter('query', e.target.value)}
               />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+              <icons.Search />
+            </div> */}
 
             <Button 
               type='submit' 
@@ -82,20 +82,20 @@ export const Barrio = () => {
           {
             isFetching
               ? <TableSkeleton colums={colums.length} />
-              : (barrios.length > 0)
-                ? (barrios.map((barrio: IBarrio) => (
-                  <Table.Row key={barrio.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{barrio.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{barrio.nombre}</Table.Cell>
+              : (nacionalidades.length > 0)
+                ? (nacionalidades.map((nacionalidad: INacionalidad) => (
+                  <Table.Row key={nacionalidad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{nacionalidad.id}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{nacionalidad.nombre}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(barrio)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='success' onClick={() => onOpenModal(nacionalidad)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
                         </Button>
                       </Tooltip>
 
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(barrio)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => openDelteModal(nacionalidad)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>
@@ -120,10 +120,10 @@ export const Barrio = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Barrio' : 'Editar Barrio'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Pais' : 'Editar Pais'}</Modal.Header>
         <Modal.Body>
-          <BarrioForm 
-            barrio={activeItem} 
+          <NacionalidadForm 
+            nacionalidad={activeItem} 
             onSucces={onCloseModal}
           />
         </Modal.Body>
@@ -135,12 +135,11 @@ export const Barrio = () => {
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
-          onDelete={(id) => deleteBarrio.mutateAsync(id)}
-          isLoading={deleteBarrio.isPending}
+          onDelete={(id) => deleteNacionalidad.mutateAsync(id)}
+          isLoading={deleteNacionalidad.isPending}
           onClose={closeDeleteModal}
         />
       }
     </React.Fragment>
   )
 }
-

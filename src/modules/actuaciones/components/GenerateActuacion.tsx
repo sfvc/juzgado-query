@@ -27,6 +27,7 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
     
     setPlantillas(plantillas)
     setTipoActuacion(tipo)
+    setSelectedPlantilla(null)
   }
 
   const handleActuacion = async () => {
@@ -79,12 +80,11 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
       <div className='flex justify-end mb-4'>
         <Tooltip content='Generar actuación'>
           <Button 
-            //** Params (Lista de actas seleccionas, Id de plantilla, Tipo de Actuación) */
             onClick={handleActuacion}
             isProcessing={createActuacion.isPending} 
-            disabled={createActuacion.isPending}
+            disabled={!selectedPlantilla || createActuacion.isPending}
           > 
-            <icons.FilePlus />  Nuevo
+            <icons.FilePlus /> Nuevo
           </Button>
         </Tooltip>
       </div>

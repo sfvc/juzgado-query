@@ -12,6 +12,7 @@ import { SkeletonFilter } from './SkeletonFilter'
 import { PATH } from '../constants'
 import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 import { FormFilter } from './FormFilter'
+import { icons } from '../../../shared'
 
 export const ActaFilter = () => {
   const [searchParams] = useSearchParams()
@@ -94,10 +95,12 @@ export const ActaFilter = () => {
 
         <div className='flex justify-end gap-4 mb-4'>
           <Button type='button' color='gray' className='px-6' onClick={() => clearFilters()}>
+            <icons.Eraser />
             Limpiar Filtros
           </Button>
 
           <Button type='submit' className='px-6' disabled={isFetching}>
+            <icons.Filter />
             Consultar
           </Button>
         </div>

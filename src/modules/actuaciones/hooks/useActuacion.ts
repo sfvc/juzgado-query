@@ -17,7 +17,7 @@ export const useActuacion= () => {
       resetProvider()
     },
     onError: (error) => {
-      toast.error('Error crear actuación')
+      toast.error('Error al crear actuación')
       console.log(error)
     }
   })

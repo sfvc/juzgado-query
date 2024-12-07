@@ -2,12 +2,26 @@ import { Label, TextInput, Tooltip } from 'flowbite-react'
 import { icons } from '..'
 import { NotificationActa } from '../../modules/notificaciones/interfaces'
 import { ActuacionActa } from '../../modules/actuaciones/interfaces'
+import { AntecedentesList } from '../../modules/actas/forms/integrations/AntecedentesList'
+import { useState } from 'react'
 
 interface Props {
   acta: NotificationActa | ActuacionActa
   title: string
 }
 export const DetalleActa = ({ acta, title }: Props) => {
+
+  // Modal de antecedentes
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<number | null>(null)
+
+  const toggleModal = (id?: number) => {
+    setIsOpen(!isOpen)
+
+    if (id) setActiveItem(id)
+    else setActiveItem(null)
+  }
+
   return (
     <div>
       <div className='flex justify-between mb-4'>
@@ -123,6 +137,7 @@ export const DetalleActa = ({ acta, title }: Props) => {
             <Tooltip content='Ver antecedentes'>
               <button 
                 type='button' 
+                onClick={() => toggleModal(acta?.infractores[0]?.id)}
                 className='flex items-center rounded-md border border-gray-300 h-9 w-9 hover:bg-gray-200 
                 hover:border-gray-200 dark:hover:bg-gray-500'
               >
@@ -132,6 +147,12 @@ export const DetalleActa = ({ acta, title }: Props) => {
           </div>
         </div>
       </div>
+
+      <AntecedentesList
+        id={activeItem}
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+      />
     </div>
   )
 }

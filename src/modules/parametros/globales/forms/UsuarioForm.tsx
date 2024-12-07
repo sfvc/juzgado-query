@@ -1,9 +1,10 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Label, TextInput } from 'flowbite-react'
+import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import { useUsuario } from '../hooks/useUsuario'
 import { FormUsuario, IUsuario } from '../interfaces'
+import { useUsuarioParams } from '../hooks/useUsuarioParams'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('El pais es requerido'),
@@ -11,7 +12,7 @@ const validationSchema = yup.object().shape({
   username: yup.string().required('El usuario es requerido'),
   password: yup.string().required('La contraseña es requerida'),
   juzgado_id: yup.string().required('El juzgado es requerido'),
-  rol_id: yup.string().required('El rol es requerido'),
+  role: yup.string().required('El rol es requerido'),
 })
 
 interface Props {
@@ -21,6 +22,7 @@ interface Props {
   
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
+  const { data, isLoading } = useUsuarioParams()
 
   const {
     register,
@@ -31,8 +33,9 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
+      password: usuario?.username || '',
       juzgado_id: usuario?.juzgado?.id.toString() || '',
-      rol_id: usuario?.role.id.toString() || '',
+      role: usuario?.role?.id.toString() || '',
     },
     resolver: yupResolver(validationSchema)
   })
@@ -43,56 +46,96 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
   
     onSucces()
   }
+
+  if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className='mb-4'>
-        <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='nombre' value='Pais' /><strong className='obligatorio'>(*)</strong>
+      <div className='grid grid-cols-2 gap-4'>
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='nombre' value='Nombre' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('nombre')}
+            placeholder='Nombre'
+            helperText={errors?.nombre && errors?.nombre?.message} 
+            color={errors?.nombre && 'failure'}
+          />
         </div>
-        <TextInput
-          {...register('nombre')}
-          placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
-          color={errors?.nombre && 'failure'}
-        />
-      </div>
 
-      <div className='mb-4'>
-        <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='dni' value='Dni' /><strong className='obligatorio'>(*)</strong>
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='dni' value='Dni' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('dni')}
+            placeholder='Dni'
+            helperText={errors?.dni && errors?.dni?.message} 
+            color={errors?.dni && 'failure'}
+          />
         </div>
-        <TextInput
-          {...register('dni')}
-          placeholder='Dni'
-          helperText={errors?.dni && errors?.dni?.message} 
-          color={errors?.dni && 'failure'}
-        />
-      </div>
 
-      <div className='mb-4'>
-        <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='username' value='Username' /><strong className='obligatorio'>(*)</strong>
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='username' value='Usuario' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('username')}
+            placeholder='Usuario'
+            helperText={errors?.username && errors?.username?.message} 
+            color={errors?.username && 'failure'}
+          />
         </div>
-        <TextInput
-          {...register('username')}
-          placeholder='Username'
-          helperText={errors?.username && errors?.username?.message} 
-          color={errors?.username && 'failure'}
-        />
-      </div>
 
-      <div className='mb-4'>
-        <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='password' value='Password' /><strong className='obligatorio'>(*)</strong>
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='password' value='Contraseña' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('password')}
+            type='password'
+            placeholder='Contraseña'
+            helperText={errors?.password && errors?.password?.message} 
+            color={errors?.password && 'failure'}
+          />
         </div>
-        <TextInput
-          {...register('password')}
-          type='password'
-          placeholder='Password'
-          helperText={errors?.password && errors?.password?.message} 
-          color={errors?.password && 'failure'}
-        />
+
+        <div className='mb-4'>
+          <div className='mb-2 block'>
+            <Label htmlFor='juzgado_id' value='Juzgado' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <Select
+            {...register('juzgado_id')}
+            helperText={errors?.juzgado_id && errors.juzgado_id.message}
+            color={errors?.juzgado_id && 'failure'}
+          >
+            <option value='' hidden>Seleccione el juzgado</option>
+            {data?.juzgados.map((juzgado: any) => (
+              <option key={juzgado.id} value={juzgado.id}>
+                {juzgado.nombre}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div className='mb-4'>
+          <div className='mb-2 block'>
+            <Label htmlFor='role' value='Rol' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <Select
+            {...register('role')}
+            helperText={errors?.role && errors.role.message}
+            color={errors?.role && 'failure'}
+          >
+            <option value='' hidden>Seleccione el rol</option>
+            {data?.roles.map((rol: any) => (
+              <option key={rol.id} value={rol.id}>
+                {rol.nombre}
+              </option>
+            ))}
+          </Select>
+        </div>
       </div>
 
       <div className='flex justify-end gap-2'>

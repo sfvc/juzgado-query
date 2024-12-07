@@ -45,7 +45,7 @@ const RubroForm = ({ rubro, onSucces }: Props) => {
         </div>
         <TextInput
           {...register('nombre')}
-          placeholder='Matricula'
+          placeholder='Rubro'
           type='text'
           helperText={errors?.nombre && errors.nombre.message}
           color={errors?.nombre && 'failure'}

@@ -53,3 +53,12 @@ export interface FormBarrio {
   nombre: string
   localidad_id: string
 }
+
+export interface INacionalidad {
+  id: number
+  nombre: string
+}
+
+export interface FormNacionalidad {
+  nombre: string
+}

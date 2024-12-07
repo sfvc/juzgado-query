@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
 import { DeleteModal, icons } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
-import { IUsuario } from '../interfaces'
 import UsuarioForm from '../forms/UsuarioForm'
-import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import type { Column } from '../../../../shared/interfaces'
+import type { IUsuario } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -65,7 +65,7 @@ export const Usuario = () => {
                 value={filterParams.search}
                 onChange={(e) => updateFilter('search', e.target.value)}
               />
-              <icons.Search />
+              <icons.Search hidden={filterParams.search}/>
             </div>
             
             <Button 
@@ -99,7 +99,7 @@ export const Usuario = () => {
                     <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.role.nombre}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{usuario.role?.name}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
                         <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
