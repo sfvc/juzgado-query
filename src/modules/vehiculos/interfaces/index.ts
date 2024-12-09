@@ -60,12 +60,13 @@ export interface IVehiculo {
 }
 
 export interface FormVehiculo {
-    titular_id?: number | null,
-    color_id?: number | null,
-    marca_id?: number | null,
-    tipo_id?: number | null,
+    titular_id?: number | null;
+    marca_id?: number | null;
+    tipo_id?: number | null;
+    color_id?: number | null;
+    dominio: string;
     modelo?: string,
-    dominio: string,
     numero_motor?: string,
     numero_chasis?: string,
+    numero_taxi_remis?: string
 }

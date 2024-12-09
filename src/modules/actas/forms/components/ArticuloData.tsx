@@ -58,7 +58,7 @@ export const ArticuloData = ({ data }: Props) => {
           renderItem={(item) => (
             <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
           )}
-          renderInput={(item) => { return `${item.numero} - ${item.detalle || 'SIN DETALLE'}`} }
+          renderInput={(item) => { return `${item.numero}`} }
         />
 
         <div className='flex items-end mb-4'><CreateArticulo /></div>

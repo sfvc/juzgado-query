@@ -1,4 +1,4 @@
-import { Button, Label, Select, TextInput } from 'flowbite-react'
+import { Button, Label, TextInput } from 'flowbite-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,9 +7,7 @@ import { useUnidad } from '../hooks/useUnidad'
 
 
 const validationSchema = yup.object().shape({
-  valor: yup.number()
-    .transform((valor) => isNaN(valor) ? null : valor)
-    .required('El valor es requerido'),
+  valor: yup.string().required('El valor de la unidad es requerido'),
   fecha_desde: yup.string().required('La fecha desde es requerida'),
   fecha_hasta: yup.string().required('La fecha hasta es requerida'),
 })

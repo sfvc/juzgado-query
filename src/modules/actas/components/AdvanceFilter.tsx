@@ -17,7 +17,7 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: IArticulo) => {
     setValue('infraccion_id', articulo.id.toString())
-    localStorage.setItem('infraccion', `${articulo.numero} - ${articulo?.detalle || 'SIN DETALLE'}`)
+    localStorage.setItem('infraccion', `${articulo.numero}`)
   }
 
   return (
@@ -69,7 +69,7 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
                   renderItem={(item) => (
                     <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
                   )}
-                  renderInput={(item) => { return `${item.numero} - ${item?.detalle || 'SIN DETALLE'}`} }
+                  renderInput={(item) => { return `${item.numero}`} }
                 />
             }
           </div>

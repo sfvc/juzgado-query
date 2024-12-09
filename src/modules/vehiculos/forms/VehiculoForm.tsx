@@ -9,15 +9,18 @@ import { useVehiculo } from '../hooks/useVehiculo'
 import { vehiculoActions } from '..'
 import { TitularInput } from '../components/TitularInput'
 
-const validationSchema = yup.object().shape({
-  dominio: yup.string().required('El dominio es requerido'),
+const SERVICIO_PUBLICO_ID = 50067
+
+const validationSchema = yup.object({
+  dominio: yup.string().required('El dominio es obligatorio'),
   titular_id: yup.number().nullable(),
   marca_id: yup.number().nullable(),
   tipo_id: yup.number().nullable(),
   color_id: yup.number().nullable(),
   modelo: yup.string(),
-  numero_chasis: yup.string(),
   numero_motor: yup.string(),
+  numero_chasis:yup.string(),
+  numero_taxi_remis: yup.string(),
 })
 
 interface Props {
@@ -28,6 +31,7 @@ interface Props {
 const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
   const { createVehiculo, updateVehiculo } = useVehiculo()
+  const [showInputTaxi, setShowInputTaxi] = useState<boolean>(false)
   
   const { data, isLoading } = useQuery({
     queryKey: ['vehiculos-data'],
@@ -44,15 +48,29 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
     defaultValues: { 
       dominio: vehiculo?.dominio || '',
       titular_id: vehiculo?.titular?.id || null,
-      marca_id: vehiculo?.marca?.id  || null,
-      tipo_id: vehiculo?.tipo?.id  || null,
-      color_id: vehiculo?.color?.id  || null,
+      marca_id: vehiculo?.marca?.id || null,
+      tipo_id: vehiculo?.tipo?.id || null,
+      color_id: vehiculo?.color?.id || null,
       modelo: vehiculo?.modelo || '',
       numero_chasis: vehiculo?.numero_chasis || '',
       numero_motor: vehiculo?.numero_motor || '',
+      numero_taxi_remis: vehiculo?.numero_taxi_remis || ''
     },
     resolver: yupResolver(validationSchema)
   })
+
+  const onChangeTipoVehiculo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = +e.target.value
+
+    if (value === SERVICIO_PUBLICO_ID)
+      setShowInputTaxi(true)
+    else {
+      setShowInputTaxi(false)
+      setValue('numero_taxi_remis', '')
+    }
+
+    setValue(e.target.name as keyof FormVehiculo , value)
+  }
 
   const onSubmit: SubmitHandler<FormVehiculo> = async (form: FormVehiculo) => {
     if (vehiculo) await updateVehiculo.mutateAsync({id: vehiculo.id, vehiculo: form})
@@ -83,7 +101,7 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
 
         <div className='mb-4'>
           <div className='mb-2 block'>
-            <Label htmlFor='tipo_infraccion' value='Tipo de infraccion' />
+            <Label htmlFor='marca_id' value='Marca de Vehiculo' />
           </div>
           <Select
             {...register('marca_id', { valueAsNumber: true })}
@@ -120,6 +138,7 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
             {...register('tipo_id', { valueAsNumber: true })}
             helperText={errors?.tipo_id && errors.tipo_id.message}
             color={errors?.tipo_id && 'failure'}
+            onChange={(e) => onChangeTipoVehiculo(e)}
           >
             <option value='' hidden>Seleccione el tipo</option>
             {data?.tipo.map((tipo: Tipo) => (
@@ -173,6 +192,22 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
             color={errors?.numero_motor && 'failure'}
           />
         </div>
+
+        {
+          showInputTaxi && 
+          <div className='mb-4'>
+            <div className='mb-2 block dark:text-white'>
+              <Label color='gray' htmlFor='numero_taxi_remis' value='Numero de Taxi/Remis' />
+            </div>
+            <TextInput
+              {...register('numero_taxi_remis')}
+              type='text'
+              placeholder='Numero de Taxi'
+              helperText={errors?.numero_taxi_remis && errors?.numero_taxi_remis?.message} 
+              color={errors?.numero_taxi_remis && 'failure'}
+            />
+          </div>
+        }
       </div>
 
       {/* Buttons */}
