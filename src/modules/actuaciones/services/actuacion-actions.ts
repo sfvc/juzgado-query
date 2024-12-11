@@ -22,13 +22,11 @@ export const deleteActuacion = async (actaId: number, actuacionId: number) => {
 
 // Crear multiples actuaciones (Decretos u Oficios) a la vez
 export const createActuacion = async (form: IActuacionForm) => {
-  console.log(form)
   const response = await apiJuzgado.post('/actuaciones', form)
   console.log(response)
 }
 
 export const createSentencia = async (form: ISentenciaForm) => {
-  console.log(form)
   const response = await apiJuzgado.post('/actuaciones', form)
   console.log(response)
 }

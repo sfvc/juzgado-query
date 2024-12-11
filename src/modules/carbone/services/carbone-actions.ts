@@ -150,7 +150,7 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
 
 // Subir nuevo archivo editado (word) para que el back lo convierta en PDF y almacene en la DB
 // Se utiliza el mis endpoint para subir la notificacion y la actuacion. Por lo tanto pasar la property correspondiente
-export const uploadFilePDF = async (file: File, item: any, property: string) => { // property: notificacion_id | actuacion_id
+export const uploadFilePDF = async (file: File, item: any, property: string, userId: number) => { // property: notificacion_id | actuacion_id
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')
 
@@ -159,7 +159,8 @@ export const uploadFilePDF = async (file: File, item: any, property: string) => 
   const data = {
     file,
     nombre: name.concat(`-${date}`),
-    [property]: item.id 
+    [property]: item.id,
+    user_id: userId
   }
 
   await apiJuzgado.post(url, data, {

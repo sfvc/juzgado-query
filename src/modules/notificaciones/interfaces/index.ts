@@ -46,9 +46,10 @@ export interface Infractor {
 export interface Notificacion {
     id:             number
     tipo_actuacion: string
-    created_at:     string
+    fecha:          string
     plantilla:      Plantilla | null
     url:            string | null
+    usuario:        string
 }
 
 export interface Plantilla {

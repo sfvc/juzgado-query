@@ -16,6 +16,7 @@ const colums: Column[] = [
   { key: 'icon', label: '' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
+  { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' }
 ]
 
@@ -95,11 +96,9 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
           : 
           <Table className='shadow-md'>
             <Table.Head>
-              {
-                colums.map((column: Column) => (
-                  <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-                ))
-              }
+              {colums.map((column: Column) => (
+                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+              ))}
             </Table.Head>
             <Table.Body className='divide-y'>
               {
@@ -112,7 +111,8 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                         </div>
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{actuacion.created_at}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Ver' placement='top'>
                           <Button color='warning' onClick={() => showPDFGotenberg(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>

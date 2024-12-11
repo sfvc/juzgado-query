@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { icons } from '../../../../shared'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
-import type { Column } from '../../../../shared/interfaces'
-import { IUnidad } from '../interfaces'
 import { useUnidad } from '../hooks/useUnidad'
 import UnidadForm from '../forms/UnidadForm'
+import type { IUnidad } from '../interfaces'
+import type { Column } from '../../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'valor', label: 'Valor' },
@@ -16,16 +16,13 @@ const colums: Column[] = [
 
 export const Unidad = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IUnidad | null>(null)
 
   const { 
     unidades,
     pagination,
     isFetching,
-    filterParams,
-    updateFilter,
-    deleteUnidad 
+    updateFilter 
   } = useUnidad()
 
   /* Modal crear/editar */
@@ -37,17 +34,6 @@ export const Unidad = () => {
   const onCloseModal = async () => {
     setActiveItem(null)
     setOpenModal(false)
-  }
-
-  /* Modal eliminar */
-  const openDelteModal = (unidad: IUnidad) => {
-    setActiveItem(unidad)
-    setOpenDeleteModal(true)
-  }
-
-  const closeDeleteModal = () => {
-    setActiveItem(null)
-    setOpenDeleteModal(false)
   }
 
   return (
@@ -119,18 +105,6 @@ export const Unidad = () => {
           />
         </Modal.Body>
       </Modal>
-
-      {/* Modal eliminar */} 
-      {
-        activeItem && 
-        <DeleteModal
-          item={activeItem.id}
-          openModal={openDeleteModal}
-          onDelete={(id) => deleteUnidad.mutateAsync(id)}
-          isLoading={deleteUnidad.isPending}
-          onClose={closeDeleteModal}
-        />
-      }
     </React.Fragment>
   )
 }

@@ -29,20 +29,24 @@ export const Layout = () => {
         <Navbar.Toggle />
 
         <Navbar.Collapse>
-          <Link to='/' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400' onClick={() => console.log('first')}>
-                Administrador de Actas
+          <Link to='/' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            Administrador de Actas
           </Link>
 
           <Link to='/vehiculos' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-                Vehículos
+            Vehículos
           </Link>
 
           <Link to='/personas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-                Personas
+            Personas
           </Link>
 
           <Link to='/notificaciones' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-                Notificaciones
+            Notificaciones
+          </Link>
+
+          <Link to='/inhabilitados' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            Inhabilitados
           </Link>
 
           <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
@@ -64,6 +68,8 @@ export const Layout = () => {
                   <Link to='/rubros'>
                     <Dropdown.Item>Rubros</Dropdown.Item>
                   </Link>
+
+                  <Dropdown.Divider />
 
                   <Link to='/plantillas'>
                     <Dropdown.Item>Plantillas</Dropdown.Item>

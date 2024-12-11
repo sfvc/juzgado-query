@@ -53,7 +53,8 @@ export interface Actuacion {
     monto:         null | string
     fecha:         string
     plantilla:     Plantilla | null
-    url: string | null
+    url:           string | null
+    usuario:       string
 }
 
 export interface Plantilla {
@@ -175,4 +176,5 @@ export interface IActuacionForm {
     actas: number[]
     plantilla_id: number | null
     tipo_actuacion: string
+    user_id: number
 }

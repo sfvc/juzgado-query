@@ -16,6 +16,7 @@ const colums: Column[] = [
   { key: 'icon', label: '' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
+  { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' }
 ]
 
@@ -112,7 +113,8 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
                         </div>
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{notificacion.created_at}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{notificacion.usuario}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Ver' placement='top'>
                           <Button color='warning' onClick={() => showPDFGotenberg(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>

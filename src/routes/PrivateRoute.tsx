@@ -9,6 +9,7 @@ import { Persona } from '../modules/personas'
 import { EstadoActa } from '../modules/estados'
 import { Notificacion, NotificacionActa } from '../modules/notificaciones'
 import { Actuacion, Sentencia } from '../modules/actuaciones'
+import { Inhabilitado } from '../modules/inhabilitados'
 import { 
   Acta, 
   ActaBromatologia, 
@@ -16,6 +17,7 @@ import {
   ActaObrasParticulares, 
   ActaTransito 
 } from '../modules/actas'
+
 
 export const PrivateRoute = [
   {
@@ -181,6 +183,12 @@ export const PrivateRoute = [
       {
         path: '/acta/:id/actuaciones/sentencia',
         element: <Sentencia />
+      },
+
+      // Inhabilitados
+      {
+        path: '/inhabilitados',
+        element: <Inhabilitado />
       }
     ]
   }

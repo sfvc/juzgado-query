@@ -44,10 +44,10 @@ export const Persona = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (persona: IPersona) => {
-    setActiveItem(persona)
-    setOpenDeleteModal(true)
-  }
+  // const openDelteModal = (persona: IPersona) => {
+  //   setActiveItem(persona)
+  //   setOpenDeleteModal(true)
+  // }
 
   const closeDeleteModal = () => {
     setActiveItem(null)

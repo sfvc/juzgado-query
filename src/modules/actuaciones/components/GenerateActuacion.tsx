@@ -39,7 +39,8 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
     const form: IActuacionForm = {
       actas: [ acta.id ],
       plantilla_id: selectedPlantilla,
-      tipo_actuacion: tipoActuacion
+      tipo_actuacion: tipoActuacion,
+      user_id: user!.id
     }
 
     await createActuacion.mutateAsync(form)

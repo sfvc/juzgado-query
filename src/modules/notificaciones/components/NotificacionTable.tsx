@@ -12,6 +12,7 @@ const colums: Column[] = [
   { key: 'tipo_acta', label: 'Tipo Acta' },
   { key: 'fecha', label: 'Fecha' },
   { key: 'plantilla', label: 'Plantilla' },
+  { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' },
 ]
 
@@ -54,8 +55,9 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                   <Table.Row key={notificacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{notificacion.tipo_actuacion}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{notificacion.created_at}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{notificacion.plantilla?.denominacion || '-'}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{notificacion.usuario}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Ver notificación'>
                         <Button color='warning' 

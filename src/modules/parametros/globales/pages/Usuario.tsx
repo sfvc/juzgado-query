@@ -42,7 +42,7 @@ export const Usuario = () => {
   }
 
   /* Modal eliminar */
-  const openDelteModal = (usuario: IUsuario) => {
+  const onOpenDeleteModal = (usuario: IUsuario) => {
     setActiveItem(usuario)
     setOpenDeleteModal(true)
   }
@@ -108,7 +108,7 @@ export const Usuario = () => {
                       </Tooltip>
 
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => onOpenDeleteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>
