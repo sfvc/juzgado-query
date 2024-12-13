@@ -6,6 +6,7 @@ import { DeleteModal, icons } from '../../../shared'
 import InhabilitadoForm from '../forms/InhabilitadoForm'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
+import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
 
 
 const colums: Column[] = [
@@ -21,6 +22,7 @@ const colums: Column[] = [
 export const Inhabilitado = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const [openHistoryModal, setOpenHistoryModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IInhabilitado | null>(null)
 
   const { 
@@ -44,9 +46,20 @@ export const Inhabilitado = () => {
     setOpenDeleteModal(true)
   }
 
-  const closeDeleteModal = () => {
+  const onCloseDeleteModal = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
+  }
+
+  /* Modal historial */
+  const onOpenHistoryModal = (inhabilitado: IInhabilitado) => {
+    setActiveItem(inhabilitado)
+    setOpenHistoryModal(true)
+  }
+
+  const onCloseHistoryModal = () => {
+    setActiveItem(null)
+    setOpenHistoryModal(false)
   }
 
   return (
@@ -98,6 +111,12 @@ export const Inhabilitado = () => {
                     <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
 
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Historial'>
+                        <Button onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.History />
+                        </Button>
+                      </Tooltip>
+                      
                       <Tooltip content='Eliminar'>
                         <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
@@ -138,9 +157,21 @@ export const Inhabilitado = () => {
           openModal={openDeleteModal}
           onDelete={(id) => deleteInhabilitado.mutateAsync(id)}
           isLoading={deleteInhabilitado.isPending}
-          onClose={closeDeleteModal}
+          onClose={onCloseDeleteModal}
         />
       }
+
+      {/* Modal de historial */} 
+      <Modal show={openHistoryModal} onClose={onCloseHistoryModal} size='5xl'>
+        <Modal.Header>Agregar Inhabilitado</Modal.Header>
+        <Modal.Body>
+          <InhabilitadoHistory 
+            dni={activeItem?.persona?.numero_documento} 
+            isOpen={openHistoryModal} 
+            closeModal={onCloseHistoryModal}
+          />
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   )
 }

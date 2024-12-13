@@ -53,15 +53,19 @@ export const ActaFilter = () => {
     formFilter({...data, page: 1 })
   }
 
-  // TODO: No busca por numero de causa debido a que se agregan caracteres en la url no deseados
   useEffect(() => {
     if (filterParams && !skipNavigate) {
+      // Crear una copia limpia de searchParams
+      const updatedSearchParams = new URLSearchParams()
+  
+      // Filtrar los parámetros no vacíos y actualizarlos
       Object.entries(filterParams).forEach(([key, value]) => {
-        searchParams.set(key, value.toString())
+        if (value) updatedSearchParams.set(key, value.toString())
       })
-
-      navigate({ pathname, search: searchParams.toString() })
-    } 
+  
+      // Actualizar la URL con los nuevos parámetros
+      navigate({ pathname, search: updatedSearchParams.toString() })
+    }
 
     Object.entries(filterParams).forEach(([key,value]) => {
       setValue(key as keyof ActaFilterForm, value)
@@ -78,7 +82,6 @@ export const ActaFilter = () => {
         <h3 className='text-xl font-semibold text-white'>Administración de Actas</h3>
       </div>
 
-      {/* // TODO: Sacar formulario afuera */ }
       <form onSubmit={ handleSubmit(submit) }>
         {
           !isSuccess
@@ -89,7 +92,7 @@ export const ActaFilter = () => {
               <FormFilter register={register} setValue={setValue} filterParams={filterParams} data={data} />
             
               {/* Filtros avanzados */}
-              <AdvanceFilter register={register} prioridades={data?.prioridades} setValue={setValue}/>
+              <AdvanceFilter register={register} prioridades={data?.prioridades} setValue={setValue} />
             </div>
         }
 
@@ -110,7 +113,7 @@ export const ActaFilter = () => {
       {pathname === PATH.NOTIFICATION && <NotificacionConfig />}
 
       {/* Tabla de actas filtradas */}
-      <ActaTable actas={actas} isFetching={isFetching} pagination={pagination} formFilter={formFilter}/>
+      <ActaTable actas={actas} isFetching={isFetching} pagination={pagination} formFilter={formFilter} filterParams={filterParams} />
     </React.Fragment>
   )
 }

@@ -15,9 +15,10 @@ interface Props {
   isFetching: boolean
   pagination: IPagination
   formFilter: (params: ActaFilterForm) => void
+  filterParams: ActaFilterForm
 }
 
-export const ActaTable = ({ actas, isFetching, pagination, formFilter }: Props) => {
+export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterParams }: Props) => {
   const { checkingActa } = useContext(ActuacionContext)
 
   const { pathname } = useLocation()
@@ -112,7 +113,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter }: Props) 
           <Pagination
             currentPage={pagination.currentPage}
             totalPages={pagination.lastPage}
-            onPageChange={(page: number) => formFilter({ page })}
+            onPageChange={(page: number) => formFilter({ ...filterParams, page })}
             previousLabel='Anterior'
             nextLabel='Siguiente'
             showIcons

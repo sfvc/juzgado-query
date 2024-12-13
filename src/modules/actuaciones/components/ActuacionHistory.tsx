@@ -21,9 +21,9 @@ const colums: Column[] = [
 ]
 
 interface Props {
-    acta: ActuacionActa,
-    actuacion: Actuacion,
-    onCloseModal: () => void
+  acta: ActuacionActa,
+  actuacion: Actuacion,
+  onCloseModal: () => void
 }
 
 export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
@@ -41,7 +41,6 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     queryKey: ['history', {id: actuacion.id}],
     queryFn: () => actuacionActions.getHistoryByActuacion(actuacion.id)
   })
-
 
   const onOpenModalHistory = (actuacion: IActuacionHistory) => {
     setActiveItem(actuacion)

@@ -2,6 +2,7 @@
 export { usePagination } from './hooks/usePagination' 
 export { useFilter } from './hooks/useFilter' 
 export { useLoading } from './hooks/useLoading' 
+export { useNavigateActa } from './hooks/useNavigateActa' 
 
 /* Components */
 export { DeleteModal } from './components/DeleteModal' 

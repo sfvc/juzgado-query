@@ -2,12 +2,13 @@ import React from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
-import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData, PropiedadData } from './components'
-import { IActaForm } from '../interfaces/form-interfaces'
-import { ACTAS } from '../../../shared/constants'
+import { transitoSchema } from './validations/validationSchema'
 import { useMutationActa } from '../hooks/useMutationActa'
-import { IActa } from '../interfaces'
+import { useNavigateActa } from '../../../shared'
+import { ACTAS } from '../../../shared/constants'
+import type { IActaForm } from '../interfaces/form-interfaces'
+import type { IActa } from '../interfaces'
 
 interface Props {
   acta: IActa | null | undefined
@@ -15,6 +16,7 @@ interface Props {
 
 export const ObrasParticularesForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
+  const { goBack } = useNavigateActa()
 
   const methods = useForm<IActaForm>({
     defaultValues: {
@@ -57,10 +59,9 @@ export const ObrasParticularesForm = ({ acta }: Props) => {
           <InfraccionData />
           <ArticuloData data={acta?.infracciones_cometidas} />
 
-          <div className='flex justify-end'>
-            <Button type='submit' className='px-8 titulos'>
-              Finalizar
-            </Button>
+          <div className='flex justify-end gap-4'>
+            <Button type='button' color='failure' className='px-8 titulos' onClick={goBack}>Cancelar</Button>
+            <Button type='submit' className='px-8 titulos'>Finalizar</Button>
           </div>
         </form>
       </FormProvider>

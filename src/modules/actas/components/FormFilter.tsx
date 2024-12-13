@@ -6,6 +6,7 @@ import { personaActions } from '../../personas'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
+import { useState } from 'react'
 
 interface Props {
     register: UseFormRegister<ActaFilterForm>,
@@ -15,6 +16,20 @@ interface Props {
 }
 
 export const FormFilter = ({ register, setValue, filterParams, data }: Props) => {
+  const [personaStorage, setPersonaStorage] = useState<string>(localStorage.getItem('infractor') || '')
+  const [vehiculoStorage, setVehiculoStorage] = useState<string>(localStorage.getItem('vehiculo') || '')
+
+  const onFocusPersonaInput = () => {
+    localStorage.removeItem('infractor')
+    setPersonaStorage('')
+    setValue('infractor_id', '')
+  }
+
+  const onFocusVehiculoInput = () => {
+    localStorage.removeItem('vehiculo')
+    setVehiculoStorage('')
+    setValue('vehiculo_id', '')
+  }
 
   // Buscardor de Personas
   const searchPersona = async (query: string) => personaActions.getPersonasByFilter(query)
@@ -33,13 +48,18 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
   return (
     <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2'>
       {
-        localStorage.getItem('infractor') 
+        personaStorage
           ? 
           <div className='mb-4'>
             <div className='mb-2 block'>
               <Label htmlFor='infractor' value='Infractor' />
             </div>
-            <TextInput id='infractor' readOnly value={localStorage.getItem('infractor') || ''} />
+            <TextInput 
+              id='infractor' 
+              readOnly 
+              value={personaStorage} 
+              onFocus={onFocusPersonaInput}
+            />
           </div> 
           : 
           <SearchInput<IPersona>
@@ -51,6 +71,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
               <div><strong>{item.apellido}</strong> - DNI. {item?.numero_documento || 'NO REGISTRADO'}</div>
             )}
             renderInput={(item) => { return `${item.apellido} - DNI. ${item?.numero_documento || 'NO REGISTRADO'}`} }
+            resetInput={onFocusPersonaInput}
           />
       }
 
@@ -77,7 +98,6 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
             ))
           }
         </Select>
-
       </div>
 
       <div className='mb-4'>
@@ -129,7 +149,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
       </div>
 
       {
-        localStorage.getItem('vehiculo') 
+        vehiculoStorage
           ? 
           <div className='mb-4'>
             <div className='mb-2 block'>
@@ -137,7 +157,8 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
             </div>
             <TextInput
               id='vehiculo'
-              value={localStorage.getItem('vehiculo') || ''}
+              value={vehiculoStorage}
+              onFocus={onFocusVehiculoInput}
               readOnly
             />
           </div> 
@@ -151,6 +172,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
               <div><strong>{item.dominio}</strong> - {item?.titular?.apellido || 'SIN TITULAR'}</div>
             )}
             renderInput={(item) => { return `${item.dominio} - ${item?.titular?.apellido || 'SIN TITULAR'}`} }
+            resetInput={onFocusVehiculoInput}
           />
       }
     </div>

@@ -15,7 +15,7 @@ export const getPlantillasByActuacion = async (tipo: string, juzgadoId: number) 
 }
 
 export const deleteActuacion = async (actaId: number, actuacionId: number) => {
-  const response = await apiJuzgado.delete(`/actuaciones/${actuacionId}/${actaId}`)
+  const response = await apiJuzgado.delete(`/actuaciones/${actaId}/${actuacionId}`)
   const { data } = response.data
   return data
 }

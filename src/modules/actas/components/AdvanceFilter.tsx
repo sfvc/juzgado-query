@@ -4,6 +4,7 @@ import { ActaFilterForm, Prioridad } from '../interfaces'
 import { SearchInput } from '../../../shared'
 import { IArticulo } from '../../parametros/actas/interfaces'
 import { articuloActions } from '../../parametros/actas'
+import { useState } from 'react'
 
 interface Props {
   register: UseFormRegister<ActaFilterForm>
@@ -12,6 +13,13 @@ interface Props {
 }
 
 export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
+  const [infraccionStorage, setInfraccionStorage] = useState<string>(localStorage.getItem('infraccion') || '')
+
+  const onFocusInfraccionInput = () => {
+    localStorage.removeItem('infraccion')
+    setInfraccionStorage('')
+    setValue('infraccion_id', '')
+  }
 
   // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
@@ -45,19 +53,17 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
 
             {/* Buscar por codigo de articulo  */}
             {
-              localStorage.getItem('infraccion') 
+              infraccionStorage 
                 ? 
                 <div className='mb-4'>
                   <div className='mb-2 block'>
-                    <Label
-                      htmlFor='infraccion'
-                      value='Articulo'
-                    />
+                    <Label htmlFor='infraccion' value='Articulo' />
                   </div>
                   <TextInput
                     id='infraccion'
-                    value={localStorage.getItem('infraccion') || ''}
+                    value={infraccionStorage}
                     readOnly
+                    onFocus={onFocusInfraccionInput}
                   />
                 </div> 
                 : 
@@ -70,6 +76,7 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
                     <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
                   )}
                   renderInput={(item) => { return `${item.numero}`} }
+                  resetInput={onFocusInfraccionInput}
                 />
             }
           </div>

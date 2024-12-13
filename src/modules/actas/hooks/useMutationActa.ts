@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import { actaActions } from '..'
 import { IActaForm } from '../interfaces/form-interfaces'
 import { useNavigate } from 'react-router-dom'
+import { IActa } from '../interfaces'
 
 export const useMutationActa = () => {
   const navigate = useNavigate()
@@ -10,8 +11,9 @@ export const useMutationActa = () => {
 
   const createActa = useMutation({
     mutationFn: actaActions.createActa,
-    onSuccess: () => {
-      navigate('/')
+    onSuccess: (data: IActa) => {
+      navigate(`/actas?numero_acta=${data.numero_acta}`)
+
       toast.success('Acta creada con exito')
       queryClient.clear()
     },
@@ -23,8 +25,9 @@ export const useMutationActa = () => {
 
   const updateActa = useMutation({
     mutationFn: ({ id, acta }: { id: number, acta: IActaForm }) => actaActions.updateActa(id, acta),
-    onSuccess: () => {
-      navigate('/')
+    onSuccess: (data: IActa) => {
+      navigate(`/actas?numero_acta=${data.numero_acta}`)
+
       toast.success('Acta actualizada con exito')
       queryClient.clear()
     },
