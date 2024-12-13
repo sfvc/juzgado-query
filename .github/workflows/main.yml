@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+jobs:
+  run_pull_dev:
+    name: Deploy Dev Branch
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote SSH commands for Dev
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_DEV_HOST }}
+          username: ${{ secrets.SSH_DEV_USER }}
+          password: ${{ secrets.SSH_DEV_PASSWORD }}
+          port: ${{ secrets.SSH_DEV_PORT }}
+          timeout: 1200s
+          script: |
+            cd ${{ secrets.DEV_WORK_DIR }} 
+            git fetch 
+            git checkout dev
+            git pull 
+            docker stop juzgado-front-dev || true
+            docker rm juzgado-front-dev || true
+            docker rmi municipalidad/juzgado-front-dev:lastest || true
+            docker build --no-cache --build-arg VITE_API_URL='https://api-test-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-front-dev:lastest .
+            docker run --restart=always --name juzgado-front-dev -d -p 0.0.0.0:5009:80 municipalidad/juzgado-front-dev:lastest
+            exit
