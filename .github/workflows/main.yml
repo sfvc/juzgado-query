@@ -28,4 +28,5 @@ jobs:
             docker rmi municipalidad/juzgado-front-dev:lastest || true
             docker build --no-cache --build-arg VITE_API_URL='https://api-test-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-front-dev:lastest .
             docker run --restart=always --name juzgado-front-dev -d -p 0.0.0.0:5009:80 municipalidad/juzgado-front-dev:lastest
+            docker builder prune || true
             exit
