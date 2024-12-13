@@ -21,7 +21,7 @@ jobs:
           script: |
             cd ${{ secrets.DEV_WORK_DIR }} 
             git fetch 
-            git checkout dev
+            git checkout development
             git pull 
             docker stop juzgado-front-dev || true
             docker rm juzgado-front-dev || true
