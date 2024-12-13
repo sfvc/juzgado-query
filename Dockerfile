@@ -15,9 +15,10 @@ ENV VITE_CARBONE_URL=$VITE_CARBONE_URL
 
 # Copiar archivos de configuración e instalación de dependencias
 # Copiar el resto del código
-COPY . .
-
+COPY package*.json ./
 RUN npm install
+RUN npm install -g typescript
+COPY . .
 
 # Construir la aplicación
 RUN npm run build
