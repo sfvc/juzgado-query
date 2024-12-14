@@ -6,6 +6,7 @@ import { IPropiedad } from '../interfaces'
 import PropiedadForm from '../forms/PropiedadForm'
 import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import { formatMatricula } from '../../../../shared/helpers/utilsMatricula'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -95,7 +96,7 @@ export const Propiedad = () => {
                 ? (propiedades.map((propiedad: IPropiedad) => (
                   <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='text-center dark:text-white'>{propiedad.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{formatMatricula(propiedad.matricula_catastral)}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>

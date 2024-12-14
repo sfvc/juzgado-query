@@ -9,6 +9,8 @@ export interface IInhabilitado {
     juzgado: IJuzgado
     instrumento: string
     causa: string
+    periodo_inhabilitacion_dias: number
+    tiempo_transcurrido_dias: number | null
 }
 
 export interface FormInhabilitado {
@@ -16,6 +18,7 @@ export interface FormInhabilitado {
     juzgado_id: number
     fecha_desde: string
     fecha_hasta: string
+    acta_id: number
     instrumento: string
     causa: string
 }

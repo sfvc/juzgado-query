@@ -33,11 +33,9 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
       <div>
         <Table>
           <Table.Head>
-            {
-              colums.map((column: Column) => (
-                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
           </Table.Head>
 
           <Table.Body className='divide-y'>

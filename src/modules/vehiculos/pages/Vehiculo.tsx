@@ -82,48 +82,48 @@ export const Vehiculo = () => {
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {
-            colums.map((column: Column) => (
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
               <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
-        </Table.Head>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length}/>
-              :(vehiculos.length > 0)
-                ? (vehiculos.map((vehiculo: IVehiculo) => (
-                  <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.titular?.apellido || '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.marca.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{vehiculo.color.nombre}</Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
-                      </Tooltip>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length}/>
+                :(vehiculos.length > 0)
+                  ? (vehiculos.map((vehiculo: IVehiculo) => (
+                    <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.titular?.apellido || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.marca.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo.color.nombre}</Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

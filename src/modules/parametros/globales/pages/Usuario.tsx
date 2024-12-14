@@ -19,6 +19,7 @@ const colums: Column[] = [
 export const Usuario = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const [openResetModal, setOpenResetModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IUsuario | null>(null)
 
   const { 
@@ -27,7 +28,8 @@ export const Usuario = () => {
     isFetching,
     filterParams,
     updateFilter,
-    deleteUsuario 
+    deleteUsuario,
+    resetPassword
   } = useUsuario()
 
   /* Modal crear/editar */
@@ -50,6 +52,17 @@ export const Usuario = () => {
   const closeDeleteModal = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
+  }
+
+  /* Modal resetear clave */
+  const onOpenResetModal = (usuario: IUsuario) => {
+    setActiveItem(usuario)
+    setOpenResetModal(true)
+  }
+
+  const onCloseResetModal = () => {
+    setActiveItem(null)
+    setOpenResetModal(false)
   }
 
   return (
@@ -112,6 +125,12 @@ export const Usuario = () => {
                           <icons.Trash />
                         </Button>
                       </Tooltip>
+
+                      <Tooltip content='Resetear clave'>
+                        <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Reset />
+                        </Button>
+                      </Tooltip>
                     </Table.Cell>
                   </Table.Row>
                 )))
@@ -153,6 +172,31 @@ export const Usuario = () => {
           onClose={closeDeleteModal}
         />
       }
+
+      {/* Modal resetear clave */} 
+      <Modal show={openResetModal} onClose={onCloseResetModal} size='3xl'>
+        <Modal.Header>Resetear contraseña</Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <icons.Warning />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                ¿Estás seguro de que deseas resetear la clave del usuario?
+            </h3>
+          
+            <div className="flex justify-center gap-4">
+              <Button color="gray" onClick={onCloseResetModal}>Cancelar</Button>
+              <Button 
+                color="failure" 
+                onClick={() => resetPassword.mutate(activeItem!.id)} 
+                isProcessing={resetPassword.isPending}
+                disabled={resetPassword.isPending}
+              > 
+                Sí, resetear
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   )
 }

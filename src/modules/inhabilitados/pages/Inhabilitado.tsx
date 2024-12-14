@@ -8,12 +8,13 @@ import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
 import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
 
-
 const colums: Column[] = [
-  { key: 'id', label: 'Id' },
-  { key: 'persona', label: 'Persona' },
+  { key: 'nombre', label: 'Nombre' },
+  { key: 'documento', label: 'Dni' },
   { key: 'fecha_inhabilitacion', label: 'Fecha de inhabilitación' },
   { key: 'fecha_vencimiento', label: 'Fecha de vencimiento' },
+  { key: 'periodo', label: 'Periodo inhabilitacion' },
+  { key: 'estado', label: 'Estado' },
   { key: 'causa', label: 'Causa' },
   { key: 'organismo', label: 'organismo' },
   { key: 'acciones', label: 'Acciones' },
@@ -89,46 +90,58 @@ export const Inhabilitado = () => {
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {colums.map((column: Column) => (
-            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-          ))}
-        </Table.Head>
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length}/>
-              : (inhabilitados.length > 0)
-                ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
-                  <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.apellido}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_desde}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_hasta}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.causa}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length}/>
+                : (inhabilitados.length > 0)
+                  ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
+                    <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.apellido}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_desde}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_hasta}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias} Días</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        <span 
+                          className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block 
+                          ${ inhabilitado.tiempo_transcurrido_dias ? 'bg-red-500' : 'bg-green-500' }
+                        `}
+                        >
+                          {inhabilitado.tiempo_transcurrido_dias ? 'INHABILITADO' : 'HABILITADO'}
+                        </span>
+                      </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado.causa}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
 
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Historial'>
-                        <Button onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.History />
-                        </Button>
-                      </Tooltip>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Historial'>
+                          <Button onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.History />
+                          </Button>
+                        </Tooltip>
                       
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

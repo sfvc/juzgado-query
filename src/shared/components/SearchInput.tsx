@@ -15,7 +15,7 @@ interface SearchInputProps<T extends SearchItem> {
   renderItem?: (item: T) => React.ReactNode
   debounceTime?: number
   renderInput: (item: T) => string
-  resetInput: () => void
+  resetInput?: () => void
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -65,11 +65,12 @@ export function SearchInput<T extends SearchItem>({
     onSelect(item)
     setSearch( renderInput(item) )
     setShowResults(false)
+    setData([]) // Se agrego al ultimo
   }
 
   const onFocusInput = () => {
     setSearch('')
-    resetInput()
+    if (resetInput) resetInput() // Se agrego al ultimo
   }
 
   return (
