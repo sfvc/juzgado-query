@@ -10,9 +10,9 @@ import { useActa } from '../hooks/useActa'
 import { NotificacionConfig } from '../../notificaciones/components/NotificacionConfig'
 import { SkeletonFilter } from './SkeletonFilter'
 import { PATH } from '../constants'
-import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 import { FormFilter } from './FormFilter'
 import { icons } from '../../../shared'
+import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 
 export const ActaFilter = () => {
   const [searchParams] = useSearchParams()

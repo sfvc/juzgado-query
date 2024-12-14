@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { usePropiedad } from '../hooks/usePropiedad'
-import { IPropiedad } from '../interfaces'
 import PropiedadForm from '../forms/PropiedadForm'
-import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
 import { formatMatricula } from '../../../../shared/helpers/utilsMatricula'
+import type { Column } from '../../../../shared/interfaces'
+import type { IPropiedad } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -25,7 +25,6 @@ export const Propiedad = () => {
     propiedades,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deletePropiedad 
   } = usePropiedad()
@@ -58,23 +57,9 @@ export const Propiedad = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Propiedades</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>

@@ -18,13 +18,13 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
   const onFocusInfraccionInput = () => {
     localStorage.removeItem('infraccion')
     setInfraccionStorage('')
-    setValue('infraccion_id', '')
+    setValue('articulo_id', '')
   }
 
   // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: IArticulo) => {
-    setValue('infraccion_id', articulo.id.toString())
+    setValue('articulo_id', articulo.id.toString())
     localStorage.setItem('infraccion', `${articulo.numero}`)
   }
 

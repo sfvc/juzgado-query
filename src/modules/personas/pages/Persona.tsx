@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { Column } from '../../../shared/interfaces'
-import { DeleteModal } from '../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import { usePersona } from '../hooks/usePersona'
-import { IPersona } from '../interfaces'
 import { PersonaForm } from '../forms/PersonaForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import type { Column } from '../../../shared/interfaces'
+import type { IPersona } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -27,7 +27,6 @@ export const Persona = () => {
     personas,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deletePersona 
   } = usePersona()
@@ -43,12 +42,6 @@ export const Persona = () => {
     setOpenModal(false)
   }
 
-  /* Modal eliminar */
-  // const openDelteModal = (persona: IPersona) => {
-  //   setActiveItem(persona)
-  //   setOpenDeleteModal(true)
-  // }
-
   const closeDeleteModal = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
@@ -60,23 +53,9 @@ export const Persona = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Personas</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>
@@ -108,12 +87,6 @@ export const Persona = () => {
                             <icons.Pencil />
                           </Button>
                         </Tooltip>
-
-                        {/* <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(persona)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip> */}
                       </Table.Cell>
                     </Table.Row>
                   )))

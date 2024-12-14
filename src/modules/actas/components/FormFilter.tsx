@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister } from 'react-hook-form'
 import { SearchInput } from '../../../shared'
@@ -6,7 +7,6 @@ import { personaActions } from '../../personas'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
-import { useState } from 'react'
 
 interface Props {
     register: UseFormRegister<ActaFilterForm>,
@@ -22,7 +22,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
   const onFocusPersonaInput = () => {
     localStorage.removeItem('infractor')
     setPersonaStorage('')
-    setValue('infractor_id', '')
+    setValue('persona_id', '')
   }
 
   const onFocusVehiculoInput = () => {
@@ -34,7 +34,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
   // Buscardor de Personas
   const searchPersona = async (query: string) => personaActions.getPersonasByFilter(query)
   const selectPersona = (persona: IPersona) => {
-    setValue('infractor_id', persona.id.toString())
+    setValue('persona_id', persona.id.toString())
     localStorage.setItem('infractor', `${persona.apellido} - DNI. ${persona?.numero_documento || 'NO REGISTRADO'}`)
   }
 
@@ -52,7 +52,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
           ? 
           <div className='mb-4'>
             <div className='mb-2 block'>
-              <Label htmlFor='infractor' value='Infractor' />
+              <Label htmlFor='infractor' value='Persona' />
             </div>
             <TextInput 
               id='infractor' 
@@ -63,7 +63,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
           </div> 
           : 
           <SearchInput<IPersona>
-            label="Infractor"
+            label="Persona"
             placeholder="Buscar persona"
             onSearch={searchPersona}
             onSelect={selectPersona}

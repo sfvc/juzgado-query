@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
-import { DeleteModal, Loading, icons } from '../../../../shared'
-import { IJuzgado } from '../interfaces'
+import { DeleteModal, icons } from '../../../../shared'
 import { useJuzgado } from '../hooks/useJuzgado'
 import JuzgadoForm from '../forms/JuzgadoForm'
-import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import type { Column } from '../../../../shared/interfaces'
+import type { IJuzgado } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -57,24 +57,16 @@ export const Juzgado = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Juzgados</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>
 
       <Table>
         <Table.Head>
-          {
-            colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
+          {colums.map((column: Column) => (
+            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+          ))}
         </Table.Head>
 
         <Table.Body className='divide-y'>

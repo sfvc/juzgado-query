@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Select, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Select, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { useArticulo } from '../hooks/useArticulo'
-import { IArticulo } from '../interfaces'
 import ArticuloForm from '../forms/ArticuloForm'
-import { Column } from '../../../../shared/interfaces'
-import { TIPO_ACTAS } from '../../../../shared/constants'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import { TIPO_ACTAS } from '../../../../shared/constants'
+import type { Column } from '../../../../shared/interfaces'
+import type { IArticulo } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },
@@ -67,40 +67,23 @@ export const Articulo = () => {
             <Select onChange={(e) => updateFilter('filter', e.target.value)} value={filterParams.filter}>
               <option value='' hidden>Seleccionar tipo</option>
               <option value=''>TODAS</option>
-              {
-                TIPO_ACTAS?.map((tipoActa: string) => (
-                  <option key={tipoActa} value={tipoActa}>{tipoActa}</option>
-                ))
-              }
+              {TIPO_ACTAS?.map((tipoActa: string) => (
+                <option key={tipoActa} value={tipoActa}>{tipoActa}</option>
+              ))}
             </Select>
-            <div className='relative'>
-              <TextInput
-                name='search'
-                placeholder='Buscar'
-                value={filterParams.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.search}/>
-            </div>
 
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <InputTable onSearch={(value: string) => updateFilter('search', value)} />
+
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>
 
       <Table>
         <Table.Head>
-          {
-            colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
+          {colums.map((column: Column) => (
+            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+          ))}
         </Table.Head>
 
         <Table.Body className='divide-y'>

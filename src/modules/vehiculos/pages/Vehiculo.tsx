@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { IVehiculo } from '../interfaces'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { useVehiculo } from '../hooks/useVehiculo'
-import { Column } from '../../../shared/interfaces'
-import { DeleteModal } from '../../../shared'
+import { DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import VehiculoForm from '../forms/VehiculoForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import type { Column } from '../../../shared/interfaces'
+import type { IVehiculo } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -28,7 +28,6 @@ export const Vehiculo = () => {
     vehiculos,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deleteVehiculo 
   } = useVehiculo()
@@ -61,23 +60,9 @@ export const Vehiculo = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Vehiculos</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>

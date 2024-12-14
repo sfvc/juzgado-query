@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import { LoginForm } from '../forms/LoginForm'
-import loginJuzgado from '../../assets/images/login-juzgado.jpeg'
-import logoJuzgado from '../../assets/images/logo-juzgado.png'
+import loginJuzgado from '../../assets/images/login-juzgado.webp'
+import logoJuzgado from '../../assets/images/logo-juzgado.webp'
 
 export const Login = () => {
   return (

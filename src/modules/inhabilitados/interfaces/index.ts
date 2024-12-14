@@ -11,6 +11,7 @@ export interface IInhabilitado {
     causa: string
     periodo_inhabilitacion_dias: number
     tiempo_transcurrido_dias: number | null
+    acta: Acta
 }
 
 export interface FormInhabilitado {
@@ -21,4 +22,10 @@ export interface FormInhabilitado {
     acta_id: number
     instrumento: string
     causa: string
+}
+
+interface Acta {
+    numero_acta: string
+    retencion_licencia: number
+    articulos: number[]
 }

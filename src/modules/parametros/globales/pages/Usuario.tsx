@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
 import UsuarioForm from '../forms/UsuarioForm'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
@@ -26,7 +26,6 @@ export const Usuario = () => {
     usuarios,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deleteUsuario,
     resetPassword
@@ -71,23 +70,9 @@ export const Usuario = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Usuarios</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='search'
-                placeholder='Buscar'
-                value={filterParams.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.search}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('search', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
           </div>
         </div>
       </div>
@@ -126,11 +111,11 @@ export const Usuario = () => {
                         </Button>
                       </Tooltip>
 
-                      <Tooltip content='Resetear clave'>
+                      {/* <Tooltip content='Resetear clave'>
                         <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Reset />
                         </Button>
-                      </Tooltip>
+                      </Tooltip> */}
                     </Table.Cell>
                   </Table.Row>
                 )))
