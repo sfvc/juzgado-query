@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, QueryClient } from '@tanstack/react-query'
 import { Button, FileInput, Label, Modal, Spinner, Table, Tooltip } from 'flowbite-react'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 import { icons } from '../../../shared'
@@ -27,6 +27,7 @@ interface Props {
 }
 
 export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
+  // const queryClient = useQueryClient()
   const { deleteActuacionHistory } = useActuacion()
   const { uploadFile, downloadWord } = useUploadFile()
   const { showPDFGotenberg } = usePdf()
@@ -39,7 +40,8 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   // Obtener el historial de cambios de la actuacion
   const { data: history = [], isLoading } = useQuery<IActuacionHistory[]>({
     queryKey: ['history', {id: actuacion.id}],
-    queryFn: () => actuacionActions.getHistoryByActuacion(actuacion.id)
+    queryFn: () => actuacionActions.getHistoryByActuacion(actuacion.id),
+    staleTime: 1000 * 60 * 5
   })
 
   const onOpenModalHistory = (actuacion: IActuacionHistory) => {
@@ -56,7 +58,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     const file = e.target.files![0]
     if (!file) return
 
-    uploadFile.mutate({ file, item: actuacion, property: 'actuacion_id' })
+    await uploadFile.mutateAsync({ file, item: actuacion, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
   }
 
   const onDownloadWord = async () => {
@@ -66,7 +68,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   const onDeleteNotificacion = async () => {
     if (!activeItem) return
     
-    const response = await deleteActuacionHistory.mutateAsync(activeItem.id)
+    const response = await deleteActuacionHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: actuacion.id}]})
     if (response.status === 200) onCloseModalHistory()
   }
     

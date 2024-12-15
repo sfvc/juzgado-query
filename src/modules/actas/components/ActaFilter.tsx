@@ -11,17 +11,18 @@ import { NotificacionConfig } from '../../notificaciones/components/Notificacion
 import { SkeletonFilter } from './SkeletonFilter'
 import { PATH } from '../constants'
 import { FormFilter } from './FormFilter'
-import { icons } from '../../../shared'
+import { icons, useQueryParams } from '../../../shared'
 import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 
 export const ActaFilter = () => {
-  const [searchParams] = useSearchParams()
+  const { filters } = useQueryParams()
   const [skipNavigate, setSkipNavigate] = useState<boolean>(false) 
   const { pathname } = useLocation()
   const navigate = useNavigate()
-
-  const params = Object.fromEntries(searchParams.entries())
-  const filters = {...params, page: +params?.page || 1}
+  
+  // const [searchParams] = useSearchParams()
+  // const params = Object.fromEntries(searchParams.entries())
+  // const filters = {...params, page: +params?.page || 1}
 
   const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa(filters)
 

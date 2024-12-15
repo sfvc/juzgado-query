@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { useVehiculo } from '../hooks/useVehiculo'
-import { DeleteModal, InputTable } from '../../../shared'
+import { clearNames, DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import VehiculoForm from '../forms/VehiculoForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
@@ -62,7 +62,7 @@ export const Vehiculo = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export const Vehiculo = () => {
                     <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.titular?.apellido || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre)}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{vehiculo.marca.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo.nombre}</Table.Cell>

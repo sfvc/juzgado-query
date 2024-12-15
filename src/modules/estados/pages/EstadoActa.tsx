@@ -36,7 +36,7 @@ export const EstadoActa = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white'>Administración de Estados</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

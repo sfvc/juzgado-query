@@ -19,7 +19,8 @@ export interface FormInhabilitado {
     juzgado_id: number
     fecha_desde: string
     fecha_hasta: string
-    acta_id: number
+    // acta_id: number
+    numero_acta: string
     instrumento: string
     causa: string
 }

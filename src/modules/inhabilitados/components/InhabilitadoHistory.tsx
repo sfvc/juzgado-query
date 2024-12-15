@@ -1,8 +1,8 @@
 import { Button, Modal, Spinner, Table } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
-import { Column } from '../../../shared/interfaces'
 import { inhabilitadoActions } from '..'
-import { icons } from '../../../shared'
+import { clearNames, icons } from '../../../shared'
+import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
 
 const colums: Column[] = [
@@ -50,7 +50,7 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
                     ? inhabilitaciones.map((inhabilitado: IInhabilitado) => (
                       <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado.id}</Table.Cell>
-                        <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.apellido}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_desde}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_hasta}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado.causa}</Table.Cell>
@@ -64,8 +64,8 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
         }
 
         <div className='flex justify-end gap-4 mt-4'>
-          <Button onClick={() => console.log('imprimir')} className='px-2' color='warning'><icons.Print/>&#160; Imprimir</Button>
-          <Button onClick={closeModal} className='px-2' color='gray'>Cerrar</Button>
+          {/* <Button onClick={() => console.log('imprimir')} color='warning'><icons.Print/>&#160; Imprimir</Button> */}
+          <Button onClick={closeModal} className='px-2' color='failure'>Cerrar</Button>
         </div>
       </Modal.Body>
     </Modal>

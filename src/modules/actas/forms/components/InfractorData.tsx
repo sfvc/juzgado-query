@@ -1,16 +1,17 @@
 import { Button, Label, Select, Table, Tooltip } from 'flowbite-react'
 import React, { useState } from 'react'
-import { IPersona } from '../../../personas/interfaces'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput, icons } from '../../../../shared'
 import { personaActions } from '../../../personas'
 import { formatPersona } from '../../helpers/formatPersona'
 import { CreatePersona } from '../integrations/CreatePersona'
+import { clearNames } from '../../../../shared'
+import { AntecedentesList } from '../integrations/AntecedentesList'
+import { RESPONSABLE } from '../../../../shared/constants'
+import type { IPersona } from '../../../personas/interfaces'
 import type { InfractorActa } from '../../interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { Column } from '../../../../shared/interfaces'
-import { AntecedentesList } from '../integrations/AntecedentesList'
-import { RESPONSABLE } from '../../../../shared/constants'
 
 const columns: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -80,9 +81,9 @@ export const InfractorData = ({ data }: Props) => {
           onSearch={handleSearch}
           onSelect={handleSelect}
           renderItem={(item) => (
-            <div><strong>{item.apellido}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
+            <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
           )}
-          renderInput={(item) => { return `${item.apellido} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
+          renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
         />
 
         <div className='grid sm:grid-cols-2 gap-4 grid-cols-1'>

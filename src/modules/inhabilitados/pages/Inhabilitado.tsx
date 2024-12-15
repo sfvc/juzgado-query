@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { useInhabilitado } from '../hooks/useInhabilitado'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
-import { DeleteModal, icons, InputTable } from '../../../shared'
+import { clearNames, DeleteModal, icons, InputTable } from '../../../shared'
 import InhabilitadoForm from '../forms/InhabilitadoForm'
 import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
 import { ShowInhabilitado } from '../components/ShowInhabilitado'
@@ -81,7 +81,7 @@ export const Inhabilitado = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />            
             
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@ export const Inhabilitado = () => {
                 : (inhabilitados.length > 0)
                   ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
                     <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.apellido}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias} Días</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.tiempo_transcurrido_dias || '-'}</Table.Cell>

@@ -1,9 +1,9 @@
+import { useState } from 'react'
 import { Label, TextInput, Tooltip } from 'flowbite-react'
-import { icons } from '..'
+import { clearNames, icons } from '..'
 import { NotificationActa } from '../../modules/notificaciones/interfaces'
 import { ActuacionActa } from '../../modules/actuaciones/interfaces'
 import { AntecedentesList } from '../../modules/actas/forms/integrations/AntecedentesList'
-import { useState } from 'react'
 
 interface Props {
   acta: NotificationActa | ActuacionActa
@@ -110,7 +110,7 @@ export const DetalleActa = ({ acta, title }: Props) => {
                 name='infractor'
                 type='text'
                 placeholder='Infractor'
-                value={acta?.infractores?.length ? `${ acta.infractores[0]?.apellido }` : '-'}
+                value={acta?.infractores?.length && `${ clearNames(acta.infractores[0]?.apellido, acta.infractores[0]?.nombre) }`}
                 disabled
               />
             </div>

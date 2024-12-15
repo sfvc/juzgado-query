@@ -9,7 +9,7 @@ export enum PATH {
 // export const initialValues = { page: 1 }
 
 export const defaultValues: ActaFilterForm = {
-  infractor_id: '',
+  persona_id: '',
   numero_acta: '',
   fecha_desde: '',
   fecha_hasta: '',
@@ -18,7 +18,7 @@ export const defaultValues: ActaFilterForm = {
   numero_causa: '',
   prioridad_id: '',
   vehiculo_id: '',
-  infraccion_id: '',
+  articulo_id: '',
   page: 1
 }
 

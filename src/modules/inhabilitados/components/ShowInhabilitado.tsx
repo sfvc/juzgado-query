@@ -1,6 +1,6 @@
 import { Button, Card } from 'flowbite-react'
-import { IInhabilitado } from '../interfaces'
-import { icons } from '../../../shared'
+import { clearNames, icons } from '../../../shared'
+import type { IInhabilitado } from '../interfaces'
 
 interface Props {
   inhabilitado: IInhabilitado
@@ -23,7 +23,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Nombre y apellido:</strong> {inhabilitado?.persona.apellido}
+              <strong>Nombre y apellido:</strong> {clearNames(inhabilitado?.persona.apellido, inhabilitado?.persona.nombre)}
             </span>
           </li>
 

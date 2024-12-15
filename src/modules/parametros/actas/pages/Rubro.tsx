@@ -56,7 +56,7 @@ export const Rubro = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

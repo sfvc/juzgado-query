@@ -5,17 +5,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useInhabilitado } from '../hooks/useInhabilitado'
 import { useJuzgado } from '../../parametros/globales/hooks/useJuzgado'
 import { PersonaInput } from '../components/PersonaInput'
+import { icons } from '../../../shared'
 import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado } from '../interfaces'
-import { icons } from '../../../shared'
 
 
 const validationSchema = yup.object().shape({
-  persona_id: yup.number().transform(value => isNaN(value) ? null : value).required('La persona es requerida.'),
+  persona_id: yup.number().transform(value => (isNaN(value) || !value) ? null : value).required('La persona es requerida.'),
   juzgado_id: yup.number().transform(value => isNaN(value) ? null : value).required('El juzgado es requerido'),
   fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
   fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
-  acta_id: yup.number().transform(value => isNaN(value) ? null : value).required('El id del acta es requerido'),
+  numero_acta: yup.string().required('El número del acta es requerido'),
   instrumento: yup.string().required('El instrumento es requerido'),
   causa: yup.string().required('La causa es requerida')
 })
@@ -47,8 +47,6 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-
-        {/* // TODO: Eliminar persona seleccionada */}
         <PersonaInput setValue={setValue} />
 
         <div className='mb-4'>
@@ -91,7 +89,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
           </Select>
         </div>
 
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
             <Label color='gray' htmlFor='acta_id' value='Acta ID' /><strong className='obligatorio'>(*)</strong>
           </div>
@@ -102,6 +100,19 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
             color={errors?.acta_id && 'failure'}
             placeholder='Acta ID'
           />
+        </div> */}
+
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='numero_acta' value='Nro. de Acta' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('numero_acta')}
+            type='number'
+            helperText={errors?.numero_acta && errors?.numero_acta?.message} 
+            color={errors?.numero_acta && 'failure'}
+            placeholder='Número de acta'
+          />
         </div>
 
         <div className='mb-4'>
@@ -111,7 +122,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
           <TextInput
             {...register('instrumento')}
             type='text'
-            placeholder='Instrumento legal'
+            placeholder='Instrumento'
             helperText={errors?.instrumento && errors?.instrumento?.message} 
             color={errors?.instrumento && 'failure'}
           />
@@ -123,7 +134,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
           </div>
           <Textarea
             {...register('causa')}
-            placeholder='Causa de inhabilitación'
+            placeholder='Ingrese la causa'
             helperText={errors?.causa && errors?.causa?.message} 
             color={errors?.causa && 'failure'}
           />

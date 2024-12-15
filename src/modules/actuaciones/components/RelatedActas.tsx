@@ -1,18 +1,17 @@
-import { Checkbox, Table } from 'flowbite-react'
+import { Table } from 'flowbite-react'
 import { ActasInfractor, ActuacionActa } from '../interfaces'
 import { Column } from '../../../shared/interfaces'
 import { useContext, useEffect } from 'react'
 import { ActuacionContext, IActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 
 const colums: Column[] = [
-  // { key: 'seleccionar', label: 'Seleccionar' },
   { key: 'numero_causa', label: 'Nro. Causa' },
   { key: 'numero_acta', label: 'Nro. de acta' },
   { key: 'fecha', label: 'Fecha' }
 ]
   
 export const RelatedActas = ({acta}: {acta: ActuacionActa}) => {
-  const { checkingActa, tipoActuacion, selectedActas, setDefalutSeleted } = useContext<IActuacionContext>(ActuacionContext)
+  const { selectedActas, setDefalutSeleted } = useContext<IActuacionContext>(ActuacionContext)
 
   const actasRelacionadas: ActasInfractor[] = acta.actas_infractores
     .filter((actaRelacionada: ActasInfractor) =>  acta.id !== actaRelacionada.id)

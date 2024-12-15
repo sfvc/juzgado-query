@@ -57,7 +57,7 @@ export const Estado = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

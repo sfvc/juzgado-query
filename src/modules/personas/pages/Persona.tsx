@@ -7,6 +7,7 @@ import { PersonaForm } from '../forms/PersonaForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import type { Column } from '../../../shared/interfaces'
 import type { IPersona } from '../interfaces'
+import { clearNames } from '../../../shared/helpers/clearNames'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -55,7 +56,7 @@ export const Persona = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Crear</Button>
+            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
@@ -76,7 +77,7 @@ export const Persona = () => {
                   ? (personas.map((persona: IPersona) => (
                     <Table.Row key={persona.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{persona.id}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{persona.apellido|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(persona.apellido, persona.nombre)}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.razon_social|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.numero_documento|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.email|| '-'}</Table.Cell>
