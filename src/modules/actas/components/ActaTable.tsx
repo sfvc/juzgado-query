@@ -5,9 +5,10 @@ import { DEFAULT_COLOR } from '../../../shared/constants'
 import { ActaColums, NotificacionColums, PATH } from '../constants'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import { ActionButtons } from './ActionButtons'
+import { clearNames } from '../../../shared'
 import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
 import type { ActaFilterForm, IActa } from '../interfaces'
-import { ActionButtons } from './ActionButtons'
 
 
 interface Props {
@@ -30,14 +31,12 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Actas</h1>
       </div>
 
-      <div>
+      <div className={`${pathname === PATH.NOTIFICATION && 'overflow-x-auto pb-4'}`}>
         <Table>
           <Table.Head>
-            {
-              colums.map((column: Column) => (
-                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
           </Table.Head>
 
           <Table.Body className='divide-y'>
@@ -81,27 +80,23 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                           {acta.prioridad?.nombre || '-'}
                         </span>
                       </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{acta?.infractores[0]?.apellido || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(acta?.infractores[0]?.apellido, acta?.infractores[0]?.nombre)}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{acta?.infractores[0]?.documento || '-'}</Table.Cell>
-
-                      {
-                        pathname === PATH.NOTIFICATION
-                          ?
-                          <Table.Cell className='dark:text-white items-center flex justify-center'>
-                            {
-                              acta?.notificacion?.length
-                                ? 
-                                <Tooltip content='Ver notificación'>
-                                  <Link to={`/acta/${acta.id}/notificaciones`} className='underline'>Si</Link>
-                                </Tooltip>
-                                : <span>No</span> 
-                            }
-                          </Table.Cell>
-                          :
-                          <Table.Cell className='text-center dark:text-white'>
-                            <ActionButtons acta={acta}/>
-                          </Table.Cell>
-                      }
+                      
+                      <Table.Cell className='text-center dark:text-white'>
+                        {
+                          pathname === PATH.NOTIFICATION
+                            ?
+                            <div>
+                              {
+                                acta?.notificacion?.length
+                                  ? <Link to={`/acta/${acta.id}/notificaciones`} className='underline'>Si</Link>
+                                  : <span>No</span> 
+                              }
+                            </div>
+                            : <ActionButtons acta={acta}/>
+                        }
+                      </Table.Cell>
                     </Table.Row>
                   )))
                   : <tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>

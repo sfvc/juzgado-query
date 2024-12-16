@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Label, TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
 
@@ -15,7 +15,8 @@ interface SearchInputProps<T extends SearchItem> {
   renderItem?: (item: T) => React.ReactNode
   debounceTime?: number
   renderInput: (item: T) => string
-  resetInput: () => void
+  resetInput?: () => void
+  resetForm?: boolean
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -26,7 +27,8 @@ export function SearchInput<T extends SearchItem>({
   renderItem,
   debounceTime = 300,
   renderInput,
-  resetInput
+  resetInput,
+  resetForm
 }: SearchInputProps<T>) {
   const [search, setSearch] = useState('')
   const [data, setData] = useState<T[]>([])
@@ -65,12 +67,17 @@ export function SearchInput<T extends SearchItem>({
     onSelect(item)
     setSearch( renderInput(item) )
     setShowResults(false)
+    setData([])
   }
 
   const onFocusInput = () => {
     setSearch('')
-    resetInput()
+    if (resetInput) resetInput()
   }
+
+  useEffect(() => {
+    if(resetForm) onFocusInput()
+  }, [resetForm])
 
   return (
     <div className="mb-4 relative w-full">

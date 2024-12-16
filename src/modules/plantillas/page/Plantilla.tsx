@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { Column } from '../../../shared/interfaces'
-import { DeleteModal, useLoading } from '../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, InputTable, useLoading } from '../../../shared'
 import { icons } from '../../../shared'
 import { usePlantilla } from '../hooks/usePlantilla'
-import { IPlantilla } from '../interfaces'
 import PlantillaForm from '../forms/PlantillaForm'
 import { LoadingOverlay } from '../../../layout'
 import { carboneActions } from '../../carbone'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import type { Column } from '../../../shared/interfaces'
+import type { IPlantilla } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -28,7 +28,6 @@ export const Plantilla = () => {
     plantillas,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deletePlantilla 
   } = usePlantilla()
@@ -69,23 +68,9 @@ export const Plantilla = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Plantillas</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

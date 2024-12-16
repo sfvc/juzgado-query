@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import type { IPais } from '../interfaces/localizacion'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { usePaises } from '../index'
 import PaisForm from '../forms/PaisForm'
-import { DeleteModal, icons } from '../../../../shared'
-import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
+import type { Column } from '../../../../shared/interfaces'
+import type { IPais } from '../interfaces/localizacion'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -18,7 +18,7 @@ export const Pais = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPais | null>(null)
 
-  const { paises, pagination,isFetching, filterParams, updateFilter, deletePais } = usePaises()
+  const { paises, pagination, isFetching, updateFilter, deletePais } = usePaises()
 
   /* Modal crear/editar */
   const onOpenModal = (pais: IPais) => {
@@ -48,23 +48,9 @@ export const Pais = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Países</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

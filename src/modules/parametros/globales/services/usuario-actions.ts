@@ -34,6 +34,12 @@ export const deleteUsuario =  async (id: number) => {
   return usuario
 }
 
+export const resetPassword =  async (id: number) => {
+  const response = await apiJuzgado.get(`/usuarios/reset/${id}`)
+  const { data: usuario } = response.data
+  return usuario
+}
+
 export const getRoles = async () => {
   const response = await apiJuzgado.get('/roles')
   const { data } = response.data

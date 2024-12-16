@@ -62,6 +62,18 @@ export const useUsuario = () => {
     }
   })
 
+  const resetPassword = useMutation({
+    mutationFn: (id: number) => usuarioActions.resetPassword(id),
+    onSuccess: () => {
+      toast.success('Contraseña reseteada con exito')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al resetear la contraseña')
+      console.log(error)
+    }
+  })
+
   return {
     usuarios,
     pagination,
@@ -72,6 +84,7 @@ export const useUsuario = () => {
     // Mutations
     createUsuario,
     updateUsuario,
-    deleteUsuario
+    deleteUsuario,
+    resetPassword
   }
 }

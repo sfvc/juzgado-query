@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { apiJuzgado } from '../../../api/config'
 import { User } from '../../../auth/interfaces/auth'
+import { clearNames } from '../../../shared'
 
 const getProvincia = async (provinciaId: number) => {
   if (!provinciaId) return
@@ -22,7 +25,7 @@ const getLocalidad = async (localidadId: number) => {
   return localidad?.nombre || ''
 }
   
-const matchMakeAndModel = (vehiculo) => {
+const matchMakeAndModel = (vehiculo: any) => {
   if (!vehiculo) return ''
 
   const marca = vehiculo?.marca || ''
@@ -31,7 +34,7 @@ const matchMakeAndModel = (vehiculo) => {
 }
 
 // Función para formatear el domicilio
-const formatDomicilio = async (domicilio) => {
+const formatDomicilio = async (domicilio: any) => {
   const provincia = await getProvincia(domicilio?.provincia_id)
   const departamento = await getDepartamento(domicilio?.departamento_id)
   const localidad = await getLocalidad(domicilio?.localidad_id)
@@ -69,17 +72,17 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     const domicilioFormatted = await formatDomicilio(infractor?.domicilio)
 
     if (i === 0) {
-      personas = infractor?.apellido || ''
+      personas = clearNames(infractor?.apellido, infractor?.nombre)
       documentos = infractor?.documento || ''
       domicilios.push(domicilioFormatted)
     } else {
-      personas += `, ${infractor?.apellido || ''}`
+      personas += `, ${clearNames(infractor?.apellido, infractor?.nombre)}`
       documentos += `, ${infractor?.documento || ''}`
       domicilios.push(domicilioFormatted)
     }
 
     if (acta?.notificaciones && acta?.notificaciones.length) {
-      fechaNotificacion = acta.notificaciones.map(notificacion => notificacion.created_at).join(', ')
+      fechaNotificacion = acta.notificaciones.map((notificacion: any) => notificacion.created_at).join(', ')
     }
   }
 
@@ -87,15 +90,14 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   const vehiculoFormatted = matchMakeAndModel(acta?.vehiculo)
 
   if (acta?.vehiculo?.titular) {
-    const apellido = acta?.vehiculo?.titular?.apellido || ''
-    // const nombre = acta?.vehiculo?.titular?.nombre || ''
+    const nombreApellido = clearNames(acta?.vehiculo?.titular?.apellido, acta?.vehiculo?.titular?.nombre)
     const numeroDocumento = acta?.vehiculo?.titular?.numero_documento || ''
 
-    titular = `${apellido} - ${numeroDocumento}`
+    titular = `${nombreApellido} - ${numeroDocumento}`
   }
 
   if (acta?.actuaciones) {
-    actuacionSeleccionada = acta.actuaciones.find(actuacion => actuacion.id === actuacionId)
+    actuacionSeleccionada = acta.actuaciones.find((actuacion: any) => actuacion.id === actuacionId)
     actuacionesFormatted = `
         Tipo: ${actuacionSeleccionada?.tipo || ''}, 
         Monto: $${actuacionSeleccionada?.monto || ''}, 
@@ -104,7 +106,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   }
 
   if (acta?.infracciones_cometidas) {
-    infraccionesFormatted = acta.infracciones_cometidas.map(infraccion => {
+    infraccionesFormatted = acta.infracciones_cometidas.map((infraccion: any) => {
       return `Artículo: ${infraccion?.numero || ''}, Detalle: ${infraccion?.detalle || ''}`
     }).join('; ')
   }

@@ -40,8 +40,7 @@ export const updateActa = async (id: number, form: IActaForm) => {
 }
 
 export const deleteActa = async (id: number) => {  
-  const response = await apiJuzgado.delete(`/actas/${id}`)
-  console.log(response)
+  await apiJuzgado.delete(`/actas/${id}`)
 }
 
 // Parametros de formularios de actas

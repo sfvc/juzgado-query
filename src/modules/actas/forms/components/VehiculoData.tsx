@@ -6,6 +6,7 @@ import { icons } from '../../../../shared'
 import { vehiculoActions } from '../../../vehiculos'
 import { formatVehiculo } from '../../helpers/formatVehiculo'
 import { CreateVehiculo } from '../integrations/CreateVehiculo'
+import { clearNames } from '../../../../shared'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { VehiculoActa } from '../../interfaces'
 import type { IVehiculo } from '../../../vehiculos/interfaces'
@@ -63,9 +64,9 @@ export const VehiculoData = ({ data }: Props) => {
           onSearch={handleSearch}
           onSelect={handleSelect}
           renderItem={(item) => (
-            <div><strong>{item.dominio}</strong> - {item.titular?.apellido || 'SIN TITULAR'}</div>
+            <div><strong>{item.dominio}</strong> - {clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}</div>
           )}
-          renderInput={(item) => { return `${item.dominio} - ${item.titular?.apellido || 'SIN TITULAR'}`} }
+          renderInput={(item) => { return `${item.dominio} - ${clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}`} }
         />
 
         <div className='flex items-end mb-4'><CreateVehiculo /></div>
@@ -83,7 +84,7 @@ export const VehiculoData = ({ data }: Props) => {
             <Table.Body className='divide-y'>
               {
                 <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800 max-h-5'>
-                  <Table.Cell className='text-center dark:text-white'>{vehiculo?.titular?.apellido || 'SIN TITULAR'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre) || 'SIN TITULAR'}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.marca}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>

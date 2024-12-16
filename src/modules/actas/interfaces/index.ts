@@ -4,7 +4,7 @@ import { IVehiculo, Titular } from '../../vehiculos/interfaces'
 
 //** Interfaces de filtro */ 
 export interface ActaFilterForm {
-    infractor_id?: string
+    persona_id?: string
     numero_acta?: string
     fecha_desde?: string
     fecha_hasta?: string
@@ -13,7 +13,7 @@ export interface ActaFilterForm {
     numero_causa?: string
     prioridad_id?: string
     vehiculo_id?: string
-    infraccion_id?: string
+    articulo_id?: string
     page: number
 }
 

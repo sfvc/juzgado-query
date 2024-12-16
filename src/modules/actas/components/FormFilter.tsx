@@ -1,28 +1,30 @@
+import { useEffect, useState } from 'react'
 import { Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister } from 'react-hook-form'
 import { SearchInput } from '../../../shared'
 import { vehiculoActions } from '../../vehiculos'
 import { personaActions } from '../../personas'
+import { clearNames } from '../../../shared'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
-import { useState } from 'react'
 
 interface Props {
     register: UseFormRegister<ActaFilterForm>,
     setValue: (key: keyof ActaFilterForm, value: string) => void ,
     filterParams: ActaFilterForm,
     data: DataFilters
+    resetForm: boolean
 }
 
-export const FormFilter = ({ register, setValue, filterParams, data }: Props) => {
+export const FormFilter = ({ register, setValue, filterParams, data, resetForm }: Props) => {
   const [personaStorage, setPersonaStorage] = useState<string>(localStorage.getItem('infractor') || '')
   const [vehiculoStorage, setVehiculoStorage] = useState<string>(localStorage.getItem('vehiculo') || '')
 
   const onFocusPersonaInput = () => {
     localStorage.removeItem('infractor')
     setPersonaStorage('')
-    setValue('infractor_id', '')
+    setValue('persona_id', '')
   }
 
   const onFocusVehiculoInput = () => {
@@ -31,18 +33,25 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
     setValue('vehiculo_id', '')
   }
 
+  useEffect(() => {
+    if(!resetForm) return
+    
+    onFocusPersonaInput()
+    onFocusVehiculoInput()
+  }, [resetForm])
+
   // Buscardor de Personas
   const searchPersona = async (query: string) => personaActions.getPersonasByFilter(query)
   const selectPersona = (persona: IPersona) => {
-    setValue('infractor_id', persona.id.toString())
-    localStorage.setItem('infractor', `${persona.apellido} - DNI. ${persona?.numero_documento || 'NO REGISTRADO'}`)
+    setValue('persona_id', persona.id.toString())
+    localStorage.setItem('infractor', `${clearNames(persona.apellido, persona.nombre)} - DNI. ${persona?.numero_documento || 'NO REGISTRADO'}`)
   }
 
   // Buscardor de Vehiculos
   const searchVehiculo = async (query: string) => vehiculoActions.getVehiculosByFilter(query)
   const selectVehiculo = (vehiculo: IVehiculo) => {
     setValue('vehiculo_id', vehiculo.id.toString())
-    localStorage.setItem('vehiculo', `${vehiculo.dominio} - ${vehiculo?.titular?.apellido || 'SIN TITULAR'}`)
+    localStorage.setItem('vehiculo', `${vehiculo.dominio} - ${clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre) || 'SIN TITULAR'}`)
   }
 
   return (
@@ -52,7 +61,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
           ? 
           <div className='mb-4'>
             <div className='mb-2 block'>
-              <Label htmlFor='infractor' value='Infractor' />
+              <Label htmlFor='infractor' value='Persona' />
             </div>
             <TextInput 
               id='infractor' 
@@ -63,15 +72,16 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
           </div> 
           : 
           <SearchInput<IPersona>
-            label="Infractor"
+            label="Persona"
             placeholder="Buscar persona"
             onSearch={searchPersona}
             onSelect={selectPersona}
             renderItem={(item) => (
-              <div><strong>{item.apellido}</strong> - DNI. {item?.numero_documento || 'NO REGISTRADO'}</div>
+              <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - DNI. {item?.numero_documento || 'NO REGISTRADO'}</div>
             )}
-            renderInput={(item) => { return `${item.apellido} - DNI. ${item?.numero_documento || 'NO REGISTRADO'}`} }
+            renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - DNI. ${item?.numero_documento || 'NO REGISTRADO'}`} }
             resetInput={onFocusPersonaInput}
+            resetForm={resetForm}
           />
       }
 
@@ -90,7 +100,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
         <div className='mb-2 block'>
           <Label htmlFor='estado_id' value='Estados' />
         </div>
-        <Select {...register('estado_id')} value={filterParams?.estado_id} >
+        <Select {...register('estado_id')}>
           <option value='' hidden>Filtrar por estado</option>
           {
             data?.estadosActa?.map((estado: EstadoActa) => (
@@ -169,10 +179,11 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
             onSearch={searchVehiculo}
             onSelect={selectVehiculo}
             renderItem={(item) => (
-              <div><strong>{item.dominio}</strong> - {item?.titular?.apellido || 'SIN TITULAR'}</div>
+              <div><strong>{item.dominio}</strong> - {clearNames(item?.titular?.apellido, item?.titular?.nombre) || 'SIN TITULAR'}</div>
             )}
-            renderInput={(item) => { return `${item.dominio} - ${item?.titular?.apellido || 'SIN TITULAR'}`} }
+            renderInput={(item) => { return `${item.dominio} - ${clearNames(item?.titular?.apellido, item?.titular?.nombre) || 'SIN TITULAR'}`} }
             resetInput={onFocusVehiculoInput}
+            resetForm={resetForm}
           />
       }
     </div>

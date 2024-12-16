@@ -216,10 +216,11 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
 
         <Button 
           size='md'
-          type='submit' 
+          type='button' 
           color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           {isSubmitting ? 'Guardando...' : 'Guardar'}
         </Button>

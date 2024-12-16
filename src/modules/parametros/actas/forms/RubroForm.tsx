@@ -29,7 +29,6 @@ const RubroForm = ({ rubro, onSucces }: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormRubro> = async (data: FormRubro) => {
-    console.log(data)
     if (rubro) await updateRubro.mutateAsync({ id: rubro.id, rubro: data })
     else await createRubro.mutateAsync(data)
   
@@ -53,11 +52,13 @@ const RubroForm = ({ rubro, onSucces }: Props) => {
       </div>
 
       <div className='flex justify-end'>
-        <Button
-          type='submit'
+        <Button 
           size='md'
+          type='button' 
+          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           Guardar
         </Button>

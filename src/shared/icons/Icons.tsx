@@ -257,3 +257,30 @@ export const History = () => {
     </div>
   )
 }
+
+export const Reset = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' className='icon icon-tabler icons-tabler-outline icon-tabler-refresh'>
+      <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+      <path d='M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4' />
+      <path d='M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4' />
+    </svg>
+  )
+}
+
+export const Check = () => {
+  return (
+    <svg
+      className="h-5 w-5 shrink-0 text-cyan-600 dark:text-cyan-500"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import logoJuzgado from '../../assets/images/logo-juzgado.png'
+import logoJuzgado from '../../assets/images/logo-juzgado.webp'
 
 const overlayStyles: React.CSSProperties = {
   position: 'fixed',

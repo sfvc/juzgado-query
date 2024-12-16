@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
-import { ILocalidad } from '../interfaces/localizacion'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { useLocalidad } from '../hooks/useLocalidad'
 import LocalidadForm from '../forms/LocalidadForm'
-import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import type { Column } from '../../../../shared/interfaces'
+import type { ILocalidad } from '../interfaces/localizacion'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -18,7 +18,7 @@ export const Localidad = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<ILocalidad | null>(null)
 
-  const { localidades, pagination, isFetching, filterParams, updateFilter, deleteLocalidad } = useLocalidad()
+  const { localidades, pagination, isFetching, updateFilter, deleteLocalidad } = useLocalidad()
 
   /* Modal crear/editar */
   const onOpenModal = (localidad: ILocalidad) => {
@@ -48,34 +48,18 @@ export const Localidad = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Localidades</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
 
       <Table>
         <Table.Head>
-          {
-            colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
+          {colums.map((column: Column) => (
+            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+          ))}
         </Table.Head>
 
         <Table.Body className='divide-y'>

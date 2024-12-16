@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { personaActions } from '../../../personas'
 import type { Column } from '../../../../shared/interfaces'
 import type { IActa } from '../../interfaces'
+import { clearNames } from '../../../../shared'
 
 const colums: Column[] = [
   { label: 'Nro. Acta', key: 'numero_acta' },
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
+  
   const { data: antecedentes, isLoading } = useQuery<IActa[]>({
     queryKey: ['antecedentes', {id}],
     queryFn: () => personaActions.getAntecedentesByPersona(id!),
@@ -52,7 +54,7 @@ export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
                         <Table.Cell className='text-center dark:text-white'>{antecedente.numero_causa}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.fecha}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.tipo_acta}</Table.Cell>
-                        <Table.Cell className='text-center dark:text-white'>{antecedente.infractores[0]?.apellido}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{clearNames(antecedente.infractores[0]?.apellido, antecedente.infractores[0]?.nombre)}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.estados[antecedente.estados.length - 1].nombre}</Table.Cell>
                       </Table.Row>
                     ))

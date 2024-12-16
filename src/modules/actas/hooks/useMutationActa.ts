@@ -4,10 +4,12 @@ import { actaActions } from '..'
 import { IActaForm } from '../interfaces/form-interfaces'
 import { useNavigate } from 'react-router-dom'
 import { IActa } from '../interfaces'
+import { useQueryParams } from '../../../shared'
 
 export const useMutationActa = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { filters } = useQueryParams()
 
   const createActa = useMutation({
     mutationFn: actaActions.createActa,
@@ -41,7 +43,7 @@ export const useMutationActa = () => {
     mutationFn: (id: number) => actaActions.deleteActa(id),
     onSuccess: () => {
       toast.success('Acta eliminada con exito')
-      queryClient.clear()
+      queryClient.invalidateQueries({ queryKey: ['actas', {...filters}] })
     },
     onError: (error) => {
       toast.error('Error al eliminar el acta')

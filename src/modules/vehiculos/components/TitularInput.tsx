@@ -1,5 +1,5 @@
 import { Button, Label, TextInput } from 'flowbite-react'
-import { SearchInput } from '../../../shared'
+import { clearNames, SearchInput } from '../../../shared'
 import { FormVehiculo, IVehiculo, Titular } from '../interfaces'
 import { personaActions } from '../../personas'
 import { UseFormSetValue } from 'react-hook-form'
@@ -36,7 +36,7 @@ export const TitularInput = ({vehiculo, editTitular, setEditTitular, setValue}: 
             name='titular'
             value={
               vehiculo?.titular
-                ? `${vehiculo.titular.apellido}`
+                ? `${clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre) }`
                 : 'SIN TITULAR'
             }
             readOnly
@@ -55,9 +55,9 @@ export const TitularInput = ({vehiculo, editTitular, setEditTitular, setValue}: 
         onSearch={handleSearch}
         onSelect={handleSelect}
         renderItem={(item) => (
-          <div><strong>{item.apellido}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
+          <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
         )}
-        renderInput={(item) => { return `${item.apellido} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
+        renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
       />
     )
 }

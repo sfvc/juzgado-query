@@ -12,6 +12,8 @@ export const useAuth = () => {
 
   // Manejar el login del usuario
   const loginUser = async (data: AuthForm) => {
+    localStorage.clear()
+
     try {
       const response = await apiJuzgado.post('/login', data)
       const { user, token } = response.data
@@ -44,10 +46,11 @@ export const useAuth = () => {
 
   // Cerrar sesión del usuario
   const logoutUser = () => {
-    localStorage.removeItem('token')
+    localStorage.clear()
+
     setUser(null)
     setIsAuthenticated(Status.NOT_AUTHENTICATED)
-    navigate('/')
+    navigate('/')   
   }
 
   return {

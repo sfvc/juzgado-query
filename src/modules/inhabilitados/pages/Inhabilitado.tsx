@@ -1,26 +1,27 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { useInhabilitado } from '../hooks/useInhabilitado'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
-import { DeleteModal, icons } from '../../../shared'
+import { clearNames, DeleteModal, icons, InputTable } from '../../../shared'
 import InhabilitadoForm from '../forms/InhabilitadoForm'
+import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
+import { ShowInhabilitado } from '../components/ShowInhabilitado'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
-import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
-
 
 const colums: Column[] = [
-  { key: 'id', label: 'Id' },
-  { key: 'persona', label: 'Persona' },
-  { key: 'fecha_inhabilitacion', label: 'Fecha de inhabilitación' },
-  { key: 'fecha_vencimiento', label: 'Fecha de vencimiento' },
-  { key: 'causa', label: 'Causa' },
-  { key: 'organismo', label: 'organismo' },
+  { key: 'nombre', label: 'Nombre' },
+  { key: 'documento', label: 'Dni' },
+  { key: 'periodo_inhabilitacion', label: 'Periodo de inhabilitación' },
+  { key: 'tiempo_tanscurrido', label: 'Tiempo transcurrido' },
+  { key: 'estado', label: 'Estado' },
+  { key: 'organismo', label: 'Organismo' },
   { key: 'acciones', label: 'Acciones' },
 ]
 
 export const Inhabilitado = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openShowModal, setOpenShowModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [openHistoryModal, setOpenHistoryModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IInhabilitado | null>(null)
@@ -29,7 +30,6 @@ export const Inhabilitado = () => {
     inhabilitados,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deleteInhabilitado 
   } = useInhabilitado()
@@ -38,6 +38,17 @@ export const Inhabilitado = () => {
   const onCloseModal = async () => {
     setActiveItem(null)
     setOpenModal(false)
+  }
+
+  /* Modal eliminar */
+  const onOpenShowModal = (inhabilitado: IInhabilitado) => {
+    setActiveItem(inhabilitado)
+    setOpenShowModal(true)
+  }
+
+  const onCloseShowModal = () => {
+    setActiveItem(null)
+    setOpenShowModal(false)
   }
 
   /* Modal eliminar */
@@ -68,67 +79,69 @@ export const Inhabilitado = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Inhabilitados</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>            
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />            
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {colums.map((column: Column) => (
-            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-          ))}
-        </Table.Head>
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length}/>
-              : (inhabilitados.length > 0)
-                ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
-                  <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.apellido}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_desde}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_hasta}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado.causa}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length}/>
+                : (inhabilitados.length > 0)
+                  ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
+                    <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias} Días</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.tiempo_transcurrido_dias || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        <span 
+                          className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white  
+                          ${ inhabilitado.tiempo_transcurrido_dias ? 'bg-green-500' : 'bg-red-500' }
+                        `}
+                        >
+                          {inhabilitado.tiempo_transcurrido_dias ? 'HABILITADO' : 'INHABILITADO'}
+                        </span>
+                      </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
 
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Historial'>
-                        <Button onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.History />
-                        </Button>
-                      </Tooltip>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Ver más'>
+                          <Button onClick={() => onOpenShowModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Show  />
+                          </Button>
+                        </Tooltip>
+                        
+                        <Tooltip content='Historial'>
+                          <Button color='purple' onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.History />
+                          </Button>
+                        </Tooltip>
                       
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination
@@ -146,6 +159,14 @@ export const Inhabilitado = () => {
         <Modal.Header>Agregar Inhabilitado</Modal.Header>
         <Modal.Body>
           <InhabilitadoForm onSucces={onCloseModal} />
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal ver más */} 
+      <Modal show={openShowModal} onClose={onCloseShowModal} size='5xl'>
+        <Modal.Header>Datos de inhabilitación</Modal.Header>
+        <Modal.Body>
+          <ShowInhabilitado inhabilitado={activeItem!} closeModal={onCloseShowModal} />
         </Modal.Body>
       </Modal>
 

@@ -1,32 +1,39 @@
+import { useEffect, useState } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, Prioridad } from '../interfaces'
 import { SearchInput } from '../../../shared'
 import { IArticulo } from '../../parametros/actas/interfaces'
 import { articuloActions } from '../../parametros/actas'
-import { useState } from 'react'
 
 interface Props {
   register: UseFormRegister<ActaFilterForm>
   prioridades: Prioridad[] | undefined
   setValue: UseFormSetValue<ActaFilterForm>
+  resetForm: boolean
 }
 
-export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
+export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Props) => {
   const [infraccionStorage, setInfraccionStorage] = useState<string>(localStorage.getItem('infraccion') || '')
 
   const onFocusInfraccionInput = () => {
     localStorage.removeItem('infraccion')
     setInfraccionStorage('')
-    setValue('infraccion_id', '')
+    setValue('articulo_id', '')
   }
 
   // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: IArticulo) => {
-    setValue('infraccion_id', articulo.id.toString())
+    setValue('articulo_id', articulo.id.toString())
     localStorage.setItem('infraccion', `${articulo.numero}`)
   }
+
+  useEffect(() => {
+    if(!resetForm) return
+      
+    onFocusInfraccionInput()
+  }, [resetForm])
 
   return (
     <Accordion className='my-4' collapseAll>
@@ -77,6 +84,7 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
                   )}
                   renderInput={(item) => { return `${item.numero}`} }
                   resetInput={onFocusInfraccionInput}
+                  resetForm={resetForm}
                 />
             }
           </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button} from 'flowbite-react'
 import { AdvanceFilter } from './AdvanceFilter'
@@ -10,18 +10,17 @@ import { useActa } from '../hooks/useActa'
 import { NotificacionConfig } from '../../notificaciones/components/NotificacionConfig'
 import { SkeletonFilter } from './SkeletonFilter'
 import { PATH } from '../constants'
-import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 import { FormFilter } from './FormFilter'
-import { icons } from '../../../shared'
+import { icons, useQueryParams } from '../../../shared'
+import type { ActaFilterForm, DataFilters,  } from '../interfaces'
 
 export const ActaFilter = () => {
-  const [searchParams] = useSearchParams()
-  const [skipNavigate, setSkipNavigate] = useState<boolean>(false) 
+  const { filters } = useQueryParams()
   const { pathname } = useLocation()
   const navigate = useNavigate()
-
-  const params = Object.fromEntries(searchParams.entries())
-  const filters = {...params, page: +params?.page || 1}
+  
+  const [skipNavigate, setSkipNavigate] = useState<boolean>(false) 
+  const [resetForm, setResetForm] = useState<boolean>(false) 
 
   const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa(filters)
 
@@ -44,13 +43,12 @@ export const ActaFilter = () => {
     setSkipNavigate(true) // Prevenir navegación en el useEffect
     navigate({ pathname, search: '',  }) // Limpiar la URL
 
-    localStorage.removeItem('infractor')
-    localStorage.removeItem('vehiculo')
-    localStorage.removeItem('infraccion')
+    setResetForm(true)
   }
 
   const submit: SubmitHandler<ActaFilterForm> = async (data: ActaFilterForm) =>  {
-    formFilter({...data, page: 1 })
+    formFilter({...data, page: 1})
+    setResetForm(false)
   }
 
   useEffect(() => {
@@ -89,10 +87,10 @@ export const ActaFilter = () => {
             :
             <div>
               {/* Filtros */}
-              <FormFilter register={register} setValue={setValue} filterParams={filterParams} data={data} />
+              <FormFilter register={register} setValue={setValue} filterParams={filterParams} data={data} resetForm={resetForm}/>
             
               {/* Filtros avanzados */}
-              <AdvanceFilter register={register} prioridades={data?.prioridades} setValue={setValue} />
+              <AdvanceFilter register={register} prioridades={data?.prioridades} setValue={setValue} resetForm={resetForm} />
             </div>
         }
 

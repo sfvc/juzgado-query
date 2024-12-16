@@ -23,15 +23,13 @@ export const Actuacion = () => {
 
   if (!isLoading && isError) navigate('/')
 
-  // TODO: Recargar datos al crear actuaciones
-
   return (
     <ActuacionProvider>
       <DetalleActa acta={ acta! } title='Listado de Actuaciones'/>
 
       <GenerateActuacion acta={ acta! } />
 
-      <Expediente acta={ acta! } />
+      <Expediente acta={ acta! } actuaciones={acta?.actuaciones || []}/>
       
       <RelatedActas acta={ acta! } />
     </ActuacionProvider>

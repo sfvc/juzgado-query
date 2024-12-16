@@ -43,8 +43,6 @@ export const BromatologiaForm = ({ acta }: Props) => {
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
-    console.log(form)
-
     if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
     else await createActa.mutateAsync(form)
   }
@@ -62,8 +60,8 @@ export const BromatologiaForm = ({ acta }: Props) => {
           <ArticuloData data={acta?.infracciones_cometidas} />
 
           <div className='flex justify-end gap-4'>
-            <Button type='button' color='failure' className='px-8 titulos' onClick={goBack}>Cancelar</Button>
-            <Button type='submit' className='px-8 titulos'>Finalizar</Button>
+            <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
+            <Button type='submit' className='px-4'>Finalizar</Button>
           </div>
         </form>
       </FormProvider>

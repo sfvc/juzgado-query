@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormUnidad, IUnidad } from '../interfaces'
 import { useUnidad } from '../hooks/useUnidad'
+import { formatDateInput } from '../../../../shared/helpers/formatDateInput'
 
 
 const validationSchema = yup.object().shape({
@@ -27,8 +28,8 @@ const UnidadForm = ({ unidad, onSucces }: Props) => {
   } = useForm({
     defaultValues: { 
       valor: unidad?.valor || '',
-      fecha_desde: unidad?.fecha_desde || '',
-      fecha_hasta: unidad?.fecha_hasta || '',
+      fecha_desde: formatDateInput(unidad?.fecha_desde),
+      fecha_hasta: formatDateInput(unidad?.fecha_hasta),
     },
     resolver: yupResolver(validationSchema)
   })

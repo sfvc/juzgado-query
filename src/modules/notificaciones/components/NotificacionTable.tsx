@@ -74,7 +74,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                         </Button>
                       </Tooltip>
 
-                      <Tooltip content='Ver notificación'>
+                      <Tooltip content='Editar'>
                         <Button color='success' onClick={() => onEditNotificacion(notificacion)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
                         </Button>

@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { FormPropiedad, IPropiedad } from '../interfaces'
 import { usePropiedad } from '../hooks/usePropiedad'
+import { cleanMatricula, formatMatricula } from '../../../../shared/helpers/utilsMatricula'
 
 const validationSchema = yup.object().shape({
   matricula_catastral: yup.string().required('La matricula es requerida'),
@@ -19,13 +20,20 @@ interface Props {
 const PropiedadForm = ({ propiedad, onSucces }: Props) => {
   const { createPropiedad, updatePropiedad } = usePropiedad()
 
+  const onChangeMatricula = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedMatricula = formatMatricula(e.target.value)
+
+    setValue(e.target.name as keyof FormPropiedad, formattedMatricula || '')
+  }
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      matricula_catastral: propiedad?.matricula_catastral || '',
+      matricula_catastral: formatMatricula(propiedad?.matricula_catastral || ''),
       domicilio: propiedad?.domicilio || '',
       propietario: propiedad?.propietario || '',
     },
@@ -33,13 +41,14 @@ const PropiedadForm = ({ propiedad, onSucces }: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormPropiedad> = async (data: FormPropiedad) => {
-    console.log(data)
-    if (propiedad) await updatePropiedad.mutateAsync({ id: propiedad.id, propiedad: data })
-    else await createPropiedad.mutateAsync(data)
+    const matricula = cleanMatricula(data.matricula_catastral)
+    const form = {...data, matricula_catastral: matricula}
+
+    if (propiedad) await updatePropiedad.mutateAsync({ id: propiedad.id, propiedad: form })
+    else await createPropiedad.mutateAsync(form)
   
     onSucces()
   }
-
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -53,6 +62,7 @@ const PropiedadForm = ({ propiedad, onSucces }: Props) => {
           type='text'
           helperText={errors?.matricula_catastral && errors.matricula_catastral.message}
           color={errors?.matricula_catastral && 'failure'}
+          onChange={(e) => onChangeMatricula(e)}
         />
       </div>
 
@@ -83,11 +93,13 @@ const PropiedadForm = ({ propiedad, onSucces }: Props) => {
       </div>
 
       <div className='flex justify-end'>
-        <Button
-          type='submit'
+        <Button 
           size='md'
+          type='button' 
+          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           Guardar
         </Button>
