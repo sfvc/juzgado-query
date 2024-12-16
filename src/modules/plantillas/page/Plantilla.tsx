@@ -18,6 +18,8 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' },
 ]
 
+const DICTIONARY_PATH = '/diccionario-juzgado-de-faltas.pdf'
+
 export const Plantilla = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
@@ -62,6 +64,11 @@ export const Plantilla = () => {
     })
   }
 
+  /* Mostrar diccionario de variables */
+  const renderDictionaryPDF = async () => {
+    window.open(DICTIONARY_PATH, '_blank')
+  }
+
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
@@ -70,6 +77,7 @@ export const Plantilla = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
+            <Button type='button' color="purple" onClick={renderDictionaryPDF} >Diccionario</Button>
             <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>

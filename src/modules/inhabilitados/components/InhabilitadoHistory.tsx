@@ -1,7 +1,8 @@
 import { Button, Modal, Spinner, Table } from 'flowbite-react'
-import { useQuery } from '@tanstack/react-query'
-import { inhabilitadoActions } from '..'
-import { clearNames, icons } from '../../../shared'
+import { clearNames, icons, useLoading } from '../../../shared'
+import { useHistoryInhabilitado } from '../hooks/useHistoryInhabilitado'
+import { carboneActions } from '../../carbone'
+import { formatReport } from '../helpers/formatReport'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
 
@@ -14,19 +15,30 @@ const colums: Column[] = [
   { key: 'organismo', label: 'organismo' }
 ]
 interface Props {
-  dni: string | undefined
+  dni: number | undefined
   isOpen: boolean
   closeModal: () => void
 }
 
-export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
+const INHABILITADO_TEMPLATE: string = 'ticket-oso.docx'
 
-  // Obtener el historial de inhabilitaciones de una persona
-  const { data: inhabilitaciones, isLoading } = useQuery<IInhabilitado[]>({
-    queryKey: ['inhabilitado-history', {dni}],
-    queryFn: () => inhabilitadoActions.getInhabilitadosHistory({dni}),
-    staleTime: 1000 * 60 * 5
-  })
+export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
+  const { inhabilitaciones, isLoading } = useHistoryInhabilitado(dni)
+  const useAction = useLoading()
+
+  const renderHistoryPDF = async () => {
+    useAction.actionFn(async () => {
+      const form = formatReport(inhabilitaciones)
+  
+      const data = {
+        convertTo: 'pdf',
+        data: form,
+        template: INHABILITADO_TEMPLATE
+      }
+  
+      await carboneActions.showFilePDF(data)
+    })
+  }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
 
@@ -64,7 +76,10 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
         }
 
         <div className='flex justify-end gap-4 mt-4'>
-          {/* <Button onClick={() => console.log('imprimir')} color='warning'><icons.Print/>&#160; Imprimir</Button> */}
+          {/* <Button color='warning' onClick={renderHistoryPDF} isProcessing={useAction.loading} disabled={useAction.loading}>
+            <icons.Print/>&#160; Imprimir
+          </Button> */}
+
           <Button onClick={closeModal} className='px-2' color='failure'>Cerrar</Button>
         </div>
       </Modal.Body>

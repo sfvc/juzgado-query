@@ -39,7 +39,7 @@ export const Acta = () => {
                 }
               </Select>
 
-              <Button type='button' className='px-2 titulos' onClick={handleRedirect}>
+              <Button type='button' className='px-2 titulos' onClick={handleRedirect} disabled={!tipoActa}>
                 Nueva
               </Button>
             </div>

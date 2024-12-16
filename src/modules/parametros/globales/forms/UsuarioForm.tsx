@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import { useUsuario } from '../hooks/useUsuario'
-import { FormUsuario, IUsuario } from '../interfaces'
+import { icons } from '../../../../shared'
 import { useUsuarioParams } from '../hooks/useUsuarioParams'
+import type { FormUsuario, IUsuario } from '../interfaces'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('El pais es requerido'),
@@ -23,6 +25,7 @@ interface Props {
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
   const { data, isLoading } = useUsuarioParams()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const {
     register,
@@ -88,18 +91,32 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           />
         </div>
 
-        <div className='mb-4'>
+        <div className='relative mb-4'>
           <div className='mb-2 block dark:text-white'>
             <Label color='gray' htmlFor='password' value='Contraseña' /><strong className='obligatorio'>(*)</strong>
           </div>
           <TextInput
-            {...register('password')}
-            type='password'
+            {...register('password')}            
+            type={showPassword ? 'text' : 'password'}
             placeholder='Contraseña'
             helperText={errors?.password && errors?.password?.message} 
             color={errors?.password && 'failure'}
           />
+          
+          <button
+            type='button'
+            className='absolute top-1/3 right-2 transform h-full'
+            title='Mostrar Contraseña'
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {
+              showPassword
+                ? <icons.Eye />
+                : <icons.EyeClose />
+            }
+          </button>
         </div>
+
 
         <div className='mb-4'>
           <div className='mb-2 block'>

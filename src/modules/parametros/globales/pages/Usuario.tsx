@@ -111,11 +111,11 @@ export const Usuario = () => {
                         </Button>
                       </Tooltip>
 
-                      {/* <Tooltip content='Resetear clave'>
+                      <Tooltip content='Resetear clave'>
                         <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Reset />
                         </Button>
-                      </Tooltip> */}
+                      </Tooltip>
                     </Table.Cell>
                   </Table.Row>
                 )))

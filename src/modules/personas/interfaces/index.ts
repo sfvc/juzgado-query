@@ -39,11 +39,11 @@ export interface IPersona {
     fecha_creacion: string | null
     fecha_nacimiento: string | null
     numero_inscripcion: string
-    cuit: string
+    cuit: number
     sexo: string
-    cuil: string
+    cuil: number
     estado_civil: string
-    numero_documento: string
+    numero_documento: number
     domicilio: IDomicilio | null
     nacionalidad: INacionalidad | null
 }
@@ -59,17 +59,17 @@ export interface DataPersona {
 // types.ts
 export interface PersonaFisica {
     apellido: string
-    numero_documento: string
+    numero_documento: number
     estado_civil?: string
     fecha_nacimiento?: string
-    cuil: string
+    cuil: number
     sexo: string
     nacionalidad_id: number | null
 }
   
 export interface PersonaJuridica {
     razon_social: string
-    cuit: string
+    cuit: number
     numero_inscripcion?: string
     tipo_sociedad_id?: number | null
 }

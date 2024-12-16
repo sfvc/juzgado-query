@@ -21,7 +21,7 @@ export const useEstado = () => {
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: estados, pagination, isFetching } = usePagination<IEstado, FilterParams>({
-    queryKey: ['rubros', filterParams],
+    queryKey: ['estados', filterParams],
     fetchData: () => estadoActions.getEstados(filterParams),
     filterParams
   })

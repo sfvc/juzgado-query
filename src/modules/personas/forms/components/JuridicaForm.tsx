@@ -62,7 +62,7 @@ export const JuridicaForm = ({ data }: Props) => {
         </div>
         <TextInput
           {...register('cuit')}
-          type='text'
+          type='number'
           placeholder='C.U.I.T'
           helperText={errors?.cuit && errors?.cuit?.message} 
           color={errors?.cuit && 'failure'}

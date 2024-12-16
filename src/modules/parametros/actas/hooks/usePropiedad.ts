@@ -30,11 +30,11 @@ export const usePropiedad = () => {
   const createPropiedad = useMutation({
     mutationFn: propiedadActions.createPropiedad,
     onSuccess: () => {
-      toast.success('Propiedad creado con exito')
+      toast.success('Propiedad creada con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el propiedad')
+      toast.error('Error al crear propiedad')
       console.log(error)
     }
   })
@@ -46,7 +46,7 @@ export const usePropiedad = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al actualizar el propiedad')
+      toast.error('Error al actualizar propiedad')
       console.log(error)
     }
   })
@@ -54,11 +54,11 @@ export const usePropiedad = () => {
   const deletePropiedad = useMutation({
     mutationFn: (id: number) => propiedadActions.deletePropiedad(id),
     onSuccess: () => {
-      toast.success('Propiedad eliminado con exito')
+      toast.success('Propiedad eliminada con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al eliminar el propiedad')
+      toast.error('Error al eliminar propiedad')
       console.log(error)
     }
   })
