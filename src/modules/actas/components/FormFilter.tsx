@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister } from 'react-hook-form'
 import { SearchInput } from '../../../shared'
@@ -14,9 +14,10 @@ interface Props {
     setValue: (key: keyof ActaFilterForm, value: string) => void ,
     filterParams: ActaFilterForm,
     data: DataFilters
+    resetForm: boolean
 }
 
-export const FormFilter = ({ register, setValue, filterParams, data }: Props) => {
+export const FormFilter = ({ register, setValue, filterParams, data, resetForm }: Props) => {
   const [personaStorage, setPersonaStorage] = useState<string>(localStorage.getItem('infractor') || '')
   const [vehiculoStorage, setVehiculoStorage] = useState<string>(localStorage.getItem('vehiculo') || '')
 
@@ -31,6 +32,13 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
     setVehiculoStorage('')
     setValue('vehiculo_id', '')
   }
+
+  useEffect(() => {
+    if(!resetForm) return
+    
+    onFocusPersonaInput()
+    onFocusVehiculoInput()
+  }, [resetForm])
 
   // Buscardor de Personas
   const searchPersona = async (query: string) => personaActions.getPersonasByFilter(query)
@@ -73,6 +81,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
             )}
             renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - DNI. ${item?.numero_documento || 'NO REGISTRADO'}`} }
             resetInput={onFocusPersonaInput}
+            resetForm={resetForm}
           />
       }
 
@@ -91,7 +100,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
         <div className='mb-2 block'>
           <Label htmlFor='estado_id' value='Estados' />
         </div>
-        <Select {...register('estado_id')} value={filterParams?.estado_id} >
+        <Select {...register('estado_id')}>
           <option value='' hidden>Filtrar por estado</option>
           {
             data?.estadosActa?.map((estado: EstadoActa) => (
@@ -174,6 +183,7 @@ export const FormFilter = ({ register, setValue, filterParams, data }: Props) =>
             )}
             renderInput={(item) => { return `${item.dominio} - ${clearNames(item?.titular?.apellido, item?.titular?.nombre) || 'SIN TITULAR'}`} }
             resetInput={onFocusVehiculoInput}
+            resetForm={resetForm}
           />
       }
     </div>
