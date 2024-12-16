@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Label, TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
 
@@ -13,8 +13,10 @@ interface SearchInputProps<T extends SearchItem> {
   onSearch: (query: string) => Promise<T[]>
   onSelect: (item: T) => void
   renderItem?: (item: T) => React.ReactNode
-  debounceTime?: number,
+  debounceTime?: number
   renderInput: (item: T) => string
+  resetInput?: () => void
+  resetForm?: boolean
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -24,7 +26,9 @@ export function SearchInput<T extends SearchItem>({
   onSelect,
   renderItem,
   debounceTime = 300,
-  renderInput
+  renderInput,
+  resetInput,
+  resetForm
 }: SearchInputProps<T>) {
   const [search, setSearch] = useState('')
   const [data, setData] = useState<T[]>([])
@@ -63,7 +67,17 @@ export function SearchInput<T extends SearchItem>({
     onSelect(item)
     setSearch( renderInput(item) )
     setShowResults(false)
+    setData([])
   }
+
+  const onFocusInput = () => {
+    setSearch('')
+    if (resetInput) resetInput()
+  }
+
+  useEffect(() => {
+    if(resetForm) onFocusInput()
+  }, [resetForm])
 
   return (
     <div className="mb-4 relative w-full">
@@ -78,6 +92,7 @@ export function SearchInput<T extends SearchItem>({
           value={search}
           placeholder={placeholder}
           className="w-full"
+          onFocus={onFocusInput}
         />
         <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
           { isLoading

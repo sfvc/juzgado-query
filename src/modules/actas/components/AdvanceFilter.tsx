@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, Prioridad } from '../interfaces'
@@ -9,16 +10,30 @@ interface Props {
   register: UseFormRegister<ActaFilterForm>
   prioridades: Prioridad[] | undefined
   setValue: UseFormSetValue<ActaFilterForm>
+  resetForm: boolean
 }
 
-export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
+export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Props) => {
+  const [infraccionStorage, setInfraccionStorage] = useState<string>(localStorage.getItem('infraccion') || '')
+
+  const onFocusInfraccionInput = () => {
+    localStorage.removeItem('infraccion')
+    setInfraccionStorage('')
+    setValue('articulo_id', '')
+  }
 
   // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: IArticulo) => {
-    setValue('infraccion_id', articulo.id.toString())
+    setValue('articulo_id', articulo.id.toString())
     localStorage.setItem('infraccion', `${articulo.numero}`)
   }
+
+  useEffect(() => {
+    if(!resetForm) return
+      
+    onFocusInfraccionInput()
+  }, [resetForm])
 
   return (
     <Accordion className='my-4' collapseAll>
@@ -45,19 +60,17 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
 
             {/* Buscar por codigo de articulo  */}
             {
-              localStorage.getItem('infraccion') 
+              infraccionStorage 
                 ? 
                 <div className='mb-4'>
                   <div className='mb-2 block'>
-                    <Label
-                      htmlFor='infraccion'
-                      value='Articulo'
-                    />
+                    <Label htmlFor='infraccion' value='Articulo' />
                   </div>
                   <TextInput
                     id='infraccion'
-                    value={localStorage.getItem('infraccion') || ''}
+                    value={infraccionStorage}
                     readOnly
+                    onFocus={onFocusInfraccionInput}
                   />
                 </div> 
                 : 
@@ -70,6 +83,8 @@ export const AdvanceFilter = ({ register, prioridades, setValue }: Props) => {
                     <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
                   )}
                   renderInput={(item) => { return `${item.numero}`} }
+                  resetInput={onFocusInfraccionInput}
+                  resetForm={resetForm}
                 />
             }
           </div>

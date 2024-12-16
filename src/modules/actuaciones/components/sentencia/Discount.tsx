@@ -18,10 +18,10 @@ export const Discount = ({descuento, applyDiscount}: Props) => {
             name='descuento'
             className='w-full'
             type='number'
-            placeholder='Descuento a aplicar (se va a medir porcentualmente)'
+            placeholder='Descuento a aplicar (%)'
             min={0}
             step='0.01'
-            value={descuento}
+            value={descuento === 0 ? '' : descuento}
             onChange={(e) => applyDiscount(+e.target.value)}
           />
         </div>

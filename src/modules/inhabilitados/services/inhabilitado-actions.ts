@@ -27,3 +27,11 @@ export const deleteInhabilitado =  async (id: number) => {
   const { data: inhabilitado } = response.data
   return inhabilitado
 }
+
+export const getInhabilitadosHistory = async (query: object) => {
+  const params = setUrlParams(query) // { query(dni): 999999 }
+
+  const response = await apiJuzgado.get('/inhabilitados', { params })
+  const { data } = response.data
+  return data
+}

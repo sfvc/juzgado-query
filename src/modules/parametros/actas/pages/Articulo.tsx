@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Select, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Select, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { useArticulo } from '../hooks/useArticulo'
-import { IArticulo } from '../interfaces'
 import ArticuloForm from '../forms/ArticuloForm'
-import { Column } from '../../../../shared/interfaces'
-import { TIPO_ACTAS } from '../../../../shared/constants'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
+import { TIPO_ACTAS } from '../../../../shared/constants'
+import type { Column } from '../../../../shared/interfaces'
+import type { IArticulo } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },
@@ -67,82 +67,67 @@ export const Articulo = () => {
             <Select onChange={(e) => updateFilter('filter', e.target.value)} value={filterParams.filter}>
               <option value='' hidden>Seleccionar tipo</option>
               <option value=''>TODAS</option>
-              {
-                TIPO_ACTAS?.map((tipoActa: string) => (
-                  <option key={tipoActa} value={tipoActa}>{tipoActa}</option>
-                ))
-              }
+              {TIPO_ACTAS?.map((tipoActa: string) => (
+                <option key={tipoActa} value={tipoActa}>{tipoActa}</option>
+              ))}
             </Select>
-            <div className='relative'>
-              <TextInput
-                name='search'
-                placeholder='Buscar'
-                value={filterParams.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.search}/>
-            </div>
 
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <InputTable onSearch={(value: string) => updateFilter('search', value)} />
+
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {
-            colums.map((column: Column) => (
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
               <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
-        </Table.Head>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length} />
-              : (articulos.length > 0)
-                ? (articulos.map((articulo: IArticulo) => (
-                  <Table.Row key={articulo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{articulo.numero}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{articulo?.inciso || '-'}</Table.Cell>
-                    <Tooltip content={articulo.detalle || 'Sin datos'} className='max-w-lg'>
-                      <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.detalle}</Table.Cell>
-                    </Tooltip>
-                    <Table.Cell className='text-center dark:text-white'>{articulo.tipo_acta}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{articulo.tipo_infraccion}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_desde}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_hasta}</Table.Cell>
-                    <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
-                      <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo?.norma_legal || '-'}</Table.Cell>
-                    </Tooltip>
-                    <Table.Cell className='text-center dark:text-white'>{ articulo.descuento ? 'Si' : 'No' }</Table.Cell>
-                    <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{articulo.id}</Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(articulo)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length} />
+                : (articulos.length > 0)
+                  ? (articulos.map((articulo: IArticulo) => (
+                    <Table.Row key={articulo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.numero}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{articulo?.inciso || '-'}</Table.Cell>
+                      <Tooltip content={articulo.detalle || 'Sin datos'} className='max-w-lg'>
+                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.detalle}</Table.Cell>
                       </Tooltip>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.tipo_acta}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.tipo_infraccion}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_desde}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_hasta}</Table.Cell>
+                      <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
+                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo?.norma_legal || '-'}</Table.Cell>
+                      </Tooltip>
+                      <Table.Cell className='text-center dark:text-white'>{ articulo.descuento ? 'Si' : 'No' }</Table.Cell>
+                      <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{articulo.id}</Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(articulo)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(articulo)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => openDelteModal(articulo)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

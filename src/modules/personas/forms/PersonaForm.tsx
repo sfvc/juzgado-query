@@ -92,7 +92,12 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
           <div className='flex justify-end gap-2'>
             <Button color="failure" onClick={onSucces}>Cancelar</Button>
 
-            <Button type='submit' disabled={methods.formState.isSubmitting} isProcessing={methods.formState.isSubmitting}>
+            <Button 
+              type='button' 
+              disabled={methods.formState.isSubmitting} 
+              isProcessing={methods.formState.isSubmitting}
+              onClick={() => methods.handleSubmit(onSubmit)()}
+            >
               {methods.formState.isSubmitting ? 'Guardando...' : 'Guardar'}
             </Button>
           </div>

@@ -29,17 +29,18 @@ export const getActaById = async (id: string): Promise<IActa> => {
 
 export const createActa = async (form: IActaForm) => {  
   const response = await apiJuzgado.post('/actas', form)
-  console.log(response)
+  const { data } = response.data
+  return data
 }
 
 export const updateActa = async (id: number, form: IActaForm) => {  
   const response = await apiJuzgado.put(`/actas/${id}`, form)
-  console.log(response)
+  const { data } = response.data
+  return data
 }
 
 export const deleteActa = async (id: number) => {  
-  const response = await apiJuzgado.delete(`/actas/${id}`)
-  console.log(response)
+  await apiJuzgado.delete(`/actas/${id}`)
 }
 
 // Parametros de formularios de actas

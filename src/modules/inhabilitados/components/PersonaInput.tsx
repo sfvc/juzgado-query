@@ -1,4 +1,4 @@
-import { SearchInput } from '../../../shared'
+import { clearNames, SearchInput } from '../../../shared'
 import { personaActions } from '../../personas'
 import { UseFormSetValue } from 'react-hook-form'
 import { IPersona } from '../../personas/interfaces'
@@ -21,9 +21,10 @@ export const PersonaInput = ({ setValue }: Props) => {
       onSearch={handleSearch}
       onSelect={handleSelect}
       renderItem={(item) => (
-        <div><strong>{item.apellido}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
+        <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
       )}
-      renderInput={(item) => { return `${item.apellido} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
+      renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
+      resetInput={() => setValue('persona_id', 0)}
     />
   )
 }

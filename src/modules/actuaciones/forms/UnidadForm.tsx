@@ -24,6 +24,7 @@ export const UnidadForm = ({activeItem, onCloseModal, updateImporte}: Props) => 
     reset,
     register, 
     handleSubmit, 
+    setError,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -36,8 +37,22 @@ export const UnidadForm = ({activeItem, onCloseModal, updateImporte}: Props) => 
     reset()
     onCloseModal()
   }
+
+  const validateUnidad = (data: IUnidadMulta) => {
+    if(!activeItem) return 
+
+    if(data.unidad < activeItem?.valor_desde || data.unidad > activeItem?.valor_hasta) {
+      setError('unidad', {message: 'El valor de unidad debe estar dentro del rango'})
+      return false
+    }
+
+    return true
+  }
     
   const onSubmit = async (data: IUnidadMulta) => {
+    const validate = validateUnidad(data)
+    if(!validate) return 
+
     updateImporte(data)
     onSuccess()
   }

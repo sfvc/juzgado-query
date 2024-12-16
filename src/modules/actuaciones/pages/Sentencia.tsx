@@ -97,8 +97,7 @@ export const Sentencia = () => {
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2 mb-4 '>
-        {/* Resultados de busqueda de articulos */}
-        <SearchInput<InfraccionesCometida> // IArticulo
+        <SearchInput<InfraccionesCometida>
           label="Articulo"
           placeholder="Buscar articulo"
           onSearch={searchArticulo}
@@ -106,18 +105,16 @@ export const Sentencia = () => {
           renderItem={(item) => (
             <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
           )}
-          renderInput={(item) => { return `${item.numero} - ${item?.detalle || 'SIN DETALLE'}`} }
+          renderInput={(item) => { return `${item.numero}`} }
         />
       </div>
 
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {
-              colums.map((column: Column) => (
-                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
           </Table.Head>
           <Table.Body className='divide-y'>
             {
@@ -160,7 +157,7 @@ export const Sentencia = () => {
       </div>
 
       {/* Sección de importe total */}
-      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[{ id: acta.id }]}/>
+      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[acta.id]}/>
 
       {/* Modal para editar unidad tributaria de articulo */}
       <Modal show={openModal.create} onClose={() => onCloseModal('create')}>

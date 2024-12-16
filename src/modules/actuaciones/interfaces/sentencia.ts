@@ -13,8 +13,20 @@ export interface ITotal {
 }
   
 export interface ISentenciaForm extends ITotal{
-    actas: [{ id: number }], // TODO: Cambiar por array de ids de actas [ 1230 ]
+    actas: number[],
     plantilla_id: number,
     tipo_actuacion: string,
     infracciones: InfraccionesCometida[],
+    sub_total: number,
+    total: number,
+    descuento: number,
+    recargo: number,
+    observaciones: string,
+    user_id: number,
+    conceptos: Concepto[]
+}
+
+export interface Concepto {
+  concepto: string
+  monto: number
 }

@@ -3,11 +3,12 @@ import { Button, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { propiedadActions } from '../../../parametros/actas'
+import { CreatePropiedad } from '../integrations/CreatePropiedad'
 import { icons } from '../../../../shared'
 import type { IPropiedad } from '../../../parametros/actas/interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { Column } from '../../../../shared/interfaces'
-import { CreatePropiedad } from '../integrations/CreatePropiedad'
+import { formatMatricula } from '../../../../shared/helpers/utilsMatricula'
 
 const colums: Column[] = [
   { key: 'matricula_catastral', label: 'Matricula Catastral' },
@@ -57,9 +58,9 @@ export const PropiedadData = ({ data }: Props) => {
           onSearch={handleSearch}
           onSelect={handleSelect}
           renderItem={(item) => (
-            <div><strong>{item.matricula_catastral}</strong> - {item.propietario || 'SIN PROPIETARIO'}</div>
+            <div><strong>{formatMatricula(item.matricula_catastral)}</strong> - {item.propietario || 'SIN PROPIETARIO'}</div>
           )}
-          renderInput={(item) => { return `${item.matricula_catastral} - ${item.propietario || 'SIN PROPIETARIO'}`} }
+          renderInput={(item) => { return `${formatMatricula(item.matricula_catastral)} - ${item.propietario || 'SIN PROPIETARIO'}`} }
         />
 
         <div className='flex items-end mb-4'><CreatePropiedad /></div>
@@ -77,7 +78,7 @@ export const PropiedadData = ({ data }: Props) => {
             {
               propiedades.map((propiedad: IPropiedad) => (
                 <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800 max-h-5'>
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.matricula_catastral}</Table.Cell> 
+                  <Table.Cell className='text-center dark:text-white'>{formatMatricula(propiedad.matricula_catastral)}</Table.Cell> 
                   <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell> 
                   <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell> 
                   <Table.Cell className='text-center flex items-center justify-center'>

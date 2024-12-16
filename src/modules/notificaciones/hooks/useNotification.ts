@@ -1,12 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { notificacionActions } from '..'
-import { useContext } from 'react'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
+import { useQueryParams } from '../../../shared'
 
 export const useNotification = () => {
-  const { resetProvider } = useContext(ActuacionContext)
   const queryClient = useQueryClient()
+  const { resetProvider } = useContext(ActuacionContext)
+  const { filters } = useQueryParams()
+  const { id } = useParams()
 
   /* Mutations */
   const createNotification = useMutation({
@@ -14,8 +19,8 @@ export const useNotification = () => {
       notificacionActions.createNotification(selectedActas, plantillaId),
     onSuccess: () => {
       toast.success('Notificación creada exitosamente')
-      queryClient.clear()
       resetProvider()
+      queryClient.invalidateQueries({ queryKey: ['actas',{...filters}] })
     },
     onError: (error) => {
       toast.error('Error crear la notificación')
@@ -25,10 +30,12 @@ export const useNotification = () => {
 
   // Elimnar notificación del historial de notificaciones
   const deleteNotificationHistory = useMutation({
-    mutationFn: (id: number) => notificacionActions.deleteNotificationHistory(id),
-    onSuccess: () => {
+    mutationFn: ({ id }: {id: number, queryKey?: any[]}) => notificacionActions.deleteNotificationHistory(id),
+    onSuccess: (_, __, context: any) => {
       toast.success('Notificación eliminada exitosamente')
-      queryClient.clear()
+      
+      queryClient.invalidateQueries({ queryKey: context?.queryKey })
+      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
     onError: (error) => {
       toast.error('Error al eliminar la notificación')

@@ -1,9 +1,7 @@
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
 import { DropdownHeader } from './'
-import logoJuzgado from '../assets/images/logo-juzgado.png'
-// import logoCapitalDark from '../assets/images/logo-capital-dark.png'
-// import logoCapitalLight from '../assets/images/logo-capital-light.png'
+import logoJuzgado from '../assets/images/logo-juzgado.webp'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 

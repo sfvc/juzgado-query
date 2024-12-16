@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { Column } from '../../../shared/interfaces'
-import { DeleteModal } from '../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import { usePersona } from '../hooks/usePersona'
-import { IPersona } from '../interfaces'
 import { PersonaForm } from '../forms/PersonaForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import type { Column } from '../../../shared/interfaces'
+import type { IPersona } from '../interfaces'
+import { clearNames } from '../../../shared/helpers/clearNames'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -27,7 +28,6 @@ export const Persona = () => {
     personas,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
     deletePersona 
   } = usePersona()
@@ -43,12 +43,6 @@ export const Persona = () => {
     setOpenModal(false)
   }
 
-  /* Modal eliminar */
-  // const openDelteModal = (persona: IPersona) => {
-  //   setActiveItem(persona)
-  //   setOpenDeleteModal(true)
-  // }
-
   const closeDeleteModal = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
@@ -60,68 +54,48 @@ export const Persona = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Personas</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='query'
-                placeholder='Buscar'
-                value={filterParams.query}
-                onChange={(e) => updateFilter('query', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.query}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='submit' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {
-            colums.map((column: Column) => (
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            { colums.map((column: Column) => (
               <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
-        </Table.Head>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length}/>
-              : (personas.length > 0)
-                ? (personas.map((persona: IPersona) => (
-                  <Table.Row key={persona.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{persona.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{persona.apellido|| '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{persona.razon_social|| '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{persona.numero_documento|| '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{persona.email|| '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{persona.tipo_persona}</Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(persona)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
-                      </Tooltip>
-
-                      {/* <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(persona)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip> */}
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length}/>
+                : (personas.length > 0)
+                  ? (personas.map((persona: IPersona) => (
+                    <Table.Row key={persona.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{persona.id}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(persona.apellido, persona.nombre)}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.razon_social|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.numero_documento|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.email|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.tipo_persona}</Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(persona)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

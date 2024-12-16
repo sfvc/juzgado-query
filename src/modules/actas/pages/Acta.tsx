@@ -14,7 +14,7 @@ export const Acta = () => {
     <React.Fragment>
       <div>
         {/* Creacion de Actas */}
-        <div className='titulos  rounded-md py-2 text-center mb-2'>
+        <div className='titulos rounded-md py-2 text-center mb-2'>
           <h3 className='text-xl font-semibold text-white'>Agregar Acta</h3>
         </div>
 

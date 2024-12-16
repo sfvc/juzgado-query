@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
-import { DeleteModal, icons } from '../../../../shared'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
 import UsuarioForm from '../forms/UsuarioForm'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
@@ -19,15 +19,16 @@ const colums: Column[] = [
 export const Usuario = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const [openResetModal, setOpenResetModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IUsuario | null>(null)
 
   const { 
     usuarios,
     pagination,
     isFetching,
-    filterParams,
     updateFilter,
-    deleteUsuario 
+    deleteUsuario,
+    resetPassword
   } = useUsuario()
 
   /* Modal crear/editar */
@@ -52,29 +53,26 @@ export const Usuario = () => {
     setOpenDeleteModal(false)
   }
 
+  /* Modal resetear clave */
+  const onOpenResetModal = (usuario: IUsuario) => {
+    setActiveItem(usuario)
+    setOpenResetModal(true)
+  }
+
+  const onCloseResetModal = () => {
+    setActiveItem(null)
+    setOpenResetModal(false)
+  }
+
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Usuarios</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <div className='relative'>
-              <TextInput
-                name='search'
-                placeholder='Buscar'
-                value={filterParams.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
-              />
-              <icons.Search hidden={filterParams.search}/>
-            </div>
+            <InputTable onSearch={(value: string) => updateFilter('search', value)} />
             
-            <Button 
-              type='submit' 
-              color="gray"
-              onClick={() => setOpenModal(true)}
-            >
-              Crear
-            </Button>
+            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>
@@ -112,6 +110,12 @@ export const Usuario = () => {
                           <icons.Trash />
                         </Button>
                       </Tooltip>
+
+                      {/* <Tooltip content='Resetear clave'>
+                        <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Reset />
+                        </Button>
+                      </Tooltip> */}
                     </Table.Cell>
                   </Table.Row>
                 )))
@@ -153,6 +157,31 @@ export const Usuario = () => {
           onClose={closeDeleteModal}
         />
       }
+
+      {/* Modal resetear clave */} 
+      <Modal show={openResetModal} onClose={onCloseResetModal} size='3xl'>
+        <Modal.Header>Resetear contraseña</Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <icons.Warning />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                ¿Estás seguro de que deseas resetear la clave del usuario?
+            </h3>
+          
+            <div className="flex justify-center gap-4">
+              <Button color="gray" onClick={onCloseResetModal}>Cancelar</Button>
+              <Button 
+                color="failure" 
+                onClick={() => resetPassword.mutate(activeItem!.id)} 
+                isProcessing={resetPassword.isPending}
+                disabled={resetPassword.isPending}
+              > 
+                Sí, resetear
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   )
 }

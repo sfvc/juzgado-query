@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData, VehiculoData } from './components'
 import { IActaForm } from '../interfaces/form-interfaces'
@@ -9,6 +9,7 @@ import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
 import { IActa } from '../interfaces'
 import { formatVehiculo } from '../helpers/formatVehiculo'
+import { useNavigateActa } from '../../../shared'
 
 interface Props {
   acta: IActa | null | undefined
@@ -16,6 +17,8 @@ interface Props {
 
 export const TransitoForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
+  const { goBack } = useNavigateActa()
+  
 
   const methods = useForm<IActaForm>({
     defaultValues: {
@@ -40,8 +43,6 @@ export const TransitoForm = ({ acta }: Props) => {
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
-    console.log(form)
-
     if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
     else await createActa.mutateAsync(form)
   }
@@ -58,13 +59,9 @@ export const TransitoForm = ({ acta }: Props) => {
           <ArticuloData data={acta?.infracciones_cometidas} />
           <VehiculoData data={formatVehiculo(acta?.vehiculo)} />
 
-          <div className='flex justify-end'>
-            <Button
-              type='submit'
-              className='px-8 titulos'
-            >
-              Finalizar
-            </Button>
+          <div className='flex justify-end gap-4'>
+            <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
+            <Button type='submit' className='px-4'>Finalizar</Button>
           </div>
         </form>
       </FormProvider>

@@ -25,10 +25,9 @@ export const createNotificacion = async (
     notificacion_id: notificacion.id
   }
 
-  const response = await apiJuzgado.post('notificacion-detalle', data, {
+  await apiJuzgado.post('notificacion-detalle', data, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
-  console.log(response)
 }
 
 export const showPDF = (url: string) => {
@@ -36,8 +35,7 @@ export const showPDF = (url: string) => {
 }
 
 export const deleteNotificacion = async (historyId: number) => {
-  const response = await apiJuzgado.delete(`notificacion-detalle/${historyId}`)
-  console.log(response)
+  await apiJuzgado.delete(`notificacion-detalle/${historyId}`)
 }
 
 // TODO: Agregar esta funcion al crear un plantilla

@@ -27,9 +27,7 @@ export const useFilter =  <T>(initialValues: T) => {
   const formFilter =  <T>(form: T) => {
     const data = setKeyParams<T>(form)
 
-    setFilterParams( prev => {
-      return {...prev,...data }
-    })
+    setFilterParams(data)
   }
 
   const resetFilter = (params: T) => {

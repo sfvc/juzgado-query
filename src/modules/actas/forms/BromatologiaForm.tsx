@@ -4,11 +4,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
 import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData } from './components'
-import { IActaForm } from '../interfaces/form-interfaces'
-import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
-import { IActa } from '../interfaces'
 import { ComercioData } from './components/ComercioData'
+import { useNavigateActa } from '../../../shared'
+import { ACTAS } from '../../../shared/constants'
+import type { IActaForm } from '../interfaces/form-interfaces'
+import type { IActa } from '../interfaces'
 
 interface Props {
   acta: IActa | null | undefined
@@ -16,6 +17,7 @@ interface Props {
 
 export const BromatologiaForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
+  const { goBack } = useNavigateActa()
 
   const methods = useForm<IActaForm>({
     defaultValues: {
@@ -41,8 +43,6 @@ export const BromatologiaForm = ({ acta }: Props) => {
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
-    console.log(form)
-
     if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
     else await createActa.mutateAsync(form)
   }
@@ -59,10 +59,9 @@ export const BromatologiaForm = ({ acta }: Props) => {
           <InfraccionData />
           <ArticuloData data={acta?.infracciones_cometidas} />
 
-          <div className='flex justify-end'>
-            <Button type='submit' className='px-8 titulos'>
-              Finalizar
-            </Button>
+          <div className='flex justify-end gap-4'>
+            <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
+            <Button type='submit' className='px-4'>Finalizar</Button>
           </div>
         </form>
       </FormProvider>

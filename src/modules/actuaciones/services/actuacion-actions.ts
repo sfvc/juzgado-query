@@ -15,20 +15,18 @@ export const getPlantillasByActuacion = async (tipo: string, juzgadoId: number) 
 }
 
 export const deleteActuacion = async (actaId: number, actuacionId: number) => {
-  const response = await apiJuzgado.delete(`/actuaciones/${actuacionId}/${actaId}`)
+  const response = await apiJuzgado.delete(`/actuaciones/${actaId}/${actuacionId}`)
   const { data } = response.data
   return data
 }
 
 // Crear multiples actuaciones (Decretos u Oficios) a la vez
 export const createActuacion = async (form: IActuacionForm) => {
-  const response = await apiJuzgado.post('/actuaciones', form)
-  console.log(response)
+  await apiJuzgado.post('/actuaciones', form)
 }
 
 export const createSentencia = async (form: ISentenciaForm) => {
-  const response = await apiJuzgado.post('/actuaciones', form)
-  console.log(response)
+  await apiJuzgado.post('/actuaciones', form)
 }
 
 // Trae el historial de una actuacion
