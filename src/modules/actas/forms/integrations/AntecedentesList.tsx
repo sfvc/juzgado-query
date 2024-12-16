@@ -21,6 +21,7 @@ interface Props {
 }
 
 export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
+  
   const { data: antecedentes, isLoading } = useQuery<IActa[]>({
     queryKey: ['antecedentes', {id}],
     queryFn: () => personaActions.getAntecedentesByPersona(id!),

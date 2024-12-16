@@ -93,11 +93,13 @@ const PropiedadForm = ({ propiedad, onSucces }: Props) => {
       </div>
 
       <div className='flex justify-end'>
-        <Button
-          type='submit'
+        <Button 
           size='md'
+          type='button' 
+          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           Guardar
         </Button>

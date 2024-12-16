@@ -3,11 +3,10 @@ import { Button, Label, Select, Spinner, Textarea, TextInput } from 'flowbite-re
 import { useQuery } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { FormArticulo, IArticulo } from '../interfaces'
 import { useArticulo } from '../hooks/useArticulo'
-import { articuloActions } from '..'
 import { TIPO_ACTAS } from '../../../../shared/constants'
 import { actaActions } from '../../../actas'
+import type { FormArticulo, IArticulo } from '../interfaces'
 
 const validationSchema = yup.object().shape({
   numero: yup.string(),
@@ -55,7 +54,6 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormArticulo> = async (form: FormArticulo) => {
-    console.log(form)
     if (articulo) await updateArticulo.mutateAsync({ id: articulo.id, articulo: form })
     else await createArticulo.mutateAsync(form)
   
@@ -218,10 +216,11 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
 
       <div className='flex justify-end'>
         <Button
-          type='submit'
+          type='button'
           size='md'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           Guardar
         </Button>

@@ -41,8 +41,6 @@ export const ObrasParticularesForm = ({ acta }: Props) => {
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
-    console.log(form)
-
     if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
     else await createActa.mutateAsync(form)
   }

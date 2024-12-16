@@ -36,7 +36,6 @@ const EstadoForm = ({ estado, onSucces }: Props) => {
   })
 
   const onSubmit: SubmitHandler<FormEstado> = async (data: FormEstado) => {
-    console.log(data)
     if (estado) await updateEstado.mutateAsync({ id: estado.id, estado: data })
     else await createEstado.mutateAsync(data)
   
