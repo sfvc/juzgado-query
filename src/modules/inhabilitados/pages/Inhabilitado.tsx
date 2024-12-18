@@ -104,7 +104,13 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias} Días</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.tiempo_transcurrido_dias || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        {
+                          inhabilitado?.tiempo_transcurrido_dias 
+                            ? `${inhabilitado?.tiempo_transcurrido_dias} Días` 
+                            : '-'
+                        }
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span 
                           className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white  
