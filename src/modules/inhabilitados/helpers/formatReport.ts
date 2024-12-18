@@ -1,3 +1,4 @@
+import { clearNames } from '../../../shared'
 import { IInhabilitado } from '../interfaces'
 
 export const formatReport = (inhabilitaciones: IInhabilitado[] | undefined) => {
@@ -11,7 +12,7 @@ export const formatReport = (inhabilitaciones: IInhabilitado[] | undefined) => {
       causa: inhabilitacion.causa,
       instrumento: inhabilitacion.instrumento,
       juzgado: inhabilitacion.juzgado.nombre,
-      persona: `${inhabilitacion.persona.apellido} ${inhabilitacion.persona.nombre}`
+      persona: clearNames(inhabilitacion.persona.apellido, inhabilitacion.persona.nombre)
     }
   })
         

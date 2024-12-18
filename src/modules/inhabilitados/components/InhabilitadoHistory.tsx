@@ -20,7 +20,7 @@ interface Props {
   closeModal: () => void
 }
 
-const INHABILITADO_TEMPLATE: string = 'ticket-oso.docx'
+const INHABILITADO_TEMPLATE: string = 'reporte-inhabilitados.docx'
 
 export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
   const { inhabilitaciones, isLoading } = useHistoryInhabilitado(dni)
@@ -76,9 +76,9 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
         }
 
         <div className='flex justify-end gap-4 mt-4'>
-          {/* <Button color='warning' onClick={renderHistoryPDF} isProcessing={useAction.loading} disabled={useAction.loading}>
+          <Button color='warning' onClick={renderHistoryPDF} isProcessing={useAction.loading} disabled={useAction.loading}>
             <icons.Print/>&#160; Imprimir
-          </Button> */}
+          </Button>
 
           <Button onClick={closeModal} className='px-2' color='failure'>Cerrar</Button>
         </div>
