@@ -95,7 +95,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
           </div>
           <TextInput
             {...register('numero_acta')}
-            type='number'
+            type='text'
             helperText={errors?.numero_acta && errors?.numero_acta?.message} 
             color={errors?.numero_acta && 'failure'}
             placeholder='Número de acta'
