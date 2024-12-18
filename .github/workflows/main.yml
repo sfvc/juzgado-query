@@ -5,12 +5,38 @@ on:
       - development
   workflow_dispatch:
 jobs:
-  run_pull_dev:
-    name: Deploy Dev Branch
+  run_pull_main:
+    name: Deploy Main Branch
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Executing remote SSH commands for Dev
+      - name: Executing remote SSH commands for Main
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          timeout: 1200s
+          script: |
+            cd ${{ secrets.WORK_DIR }} 
+            git fetch 
+            git checkout main
+            git pull 
+            docker stop juzgado-query || true
+            docker rm juzgado-query || true
+            docker rmi municipalidad/juzgado-query:lastest || true
+            docker build --no-cache --build-arg VITE_API_URL='https://api-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query:lastest .
+            docker run --restart=always --name juzgado-query -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query:lastest
+            docker builder prune || true
+            exit
+
+  run_pull_dev:
+    name: Deploy development Branch
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote SSH commands for development
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SSH_DEV_HOST }}
@@ -21,12 +47,13 @@ jobs:
           script: |
             cd ${{ secrets.DEV_WORK_DIR }} 
             git fetch 
-            git checkout main
+            git checkout development
             git pull 
-            docker stop juzgado-query || true
-            docker rm juzgado-query || true
-            docker rmi municipalidad/juzgado-query:lastest || true
-            docker build --no-cache --build-arg VITE_API_URL='https://api-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query-dev:lastest .
-            docker run --restart=always --name juzgado-query -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query:lastest
+            docker stop juzgado-query-dev || true
+            docker rm juzgado-query-dev || true
+            docker rmi municipalidad/juzgado-query-dev:lastest || true
+            docker build --no-cache --build-arg VITE_API_URL='https://api-test-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://dev-reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://dev-reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query-dev:lastest .
+            docker run --restart=always --name juzgado-query-dev -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query-dev:lastest
             docker builder prune || true
             exit
+
