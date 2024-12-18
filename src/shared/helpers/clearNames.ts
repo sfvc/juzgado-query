@@ -4,7 +4,7 @@ export const clearNames = (apellido: string | undefined, nombre: string| undefin
   if(!apellido && !nombre) return 'SIN DATOS'
 
   if (nombre === apellido) string = apellido!
-  else string = `${nombre} ${apellido}`
+  else string = `${apellido} ${nombre}`
 
   return string
 }

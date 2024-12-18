@@ -15,7 +15,7 @@ const validationSchema = yup.object().shape({
   juzgado_id: yup.number().transform(value => isNaN(value) ? null : value).required('El juzgado es requerido'),
   fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
   fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
-  // numero_acta: yup.string().required('El número del acta es requerido'),
+  numero_acta: yup.string().required('El número del acta es requerido'),
   instrumento: yup.string().required('El instrumento es requerido'),
   causa: yup.string().required('La causa es requerida')
 })
@@ -91,19 +91,6 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='acta_id' value='Acta ID' /><strong className='obligatorio'>(*)</strong>
-          </div>
-          <TextInput
-            {...register('acta_id')}
-            type='number'
-            helperText={errors?.acta_id && errors?.acta_id?.message} 
-            color={errors?.acta_id && 'failure'}
-            placeholder='Acta ID'
-          />
-        </div>
-
-        {/* <div className='mb-4'>
-          <div className='mb-2 block dark:text-white'>
             <Label color='gray' htmlFor='numero_acta' value='Nro. de Acta' /><strong className='obligatorio'>(*)</strong>
           </div>
           <TextInput
@@ -113,7 +100,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
             color={errors?.numero_acta && 'failure'}
             placeholder='Número de acta'
           />
-        </div> */}
+        </div>
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
