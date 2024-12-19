@@ -77,52 +77,54 @@ export const Usuario = () => {
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {
-            colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-            ))
-          }
-        </Table.Head>
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {
+              colums.map((column: Column) => (
+                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+              ))
+            }
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length}/>
-              : (usuarios.length > 0)
-                ? (usuarios.map((usuario: IUsuario) => (
-                  <Table.Row key={usuario.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{usuario.role.name}</Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
-                      </Tooltip>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length}/>
+                : (usuarios.length > 0)
+                  ? (usuarios.map((usuario: IUsuario) => (
+                    <Table.Row key={usuario.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{usuario.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{usuario.dni}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{usuario.username}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{usuario.juzgado.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{usuario.role.name}</Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => onOpenDeleteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => onOpenDeleteModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Resetear clave'>
-                        <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Reset />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Resetear clave'>
+                          <Button color='purple' onClick={() => onOpenResetModal(usuario)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Reset />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

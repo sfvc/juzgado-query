@@ -21,8 +21,21 @@
 .rainbow-text {
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    background-clip: text;
+    color: transparent;
+    animation: rainbow-animation 10s infinite linear;
+    background-size: 200% 100%;
+  }
+  
+  @keyframes rainbow-animation {
+    0% {
+        background-position: 0 0;
+    }
+  
+    100% {
+        background-position: 200% 0;
+    }
+  }
   
 .readonly-input {
     border-color: #e4e4e4;

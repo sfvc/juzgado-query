@@ -1,6 +1,6 @@
 export const TIPO_ACTAS: string[] = ['TRANSITO', 'INSPECCION', 'BROMATOLOGIA', 'OBRAS PARTICULARES']
 
-export const TIPO_ACTUACION: string[] = ['DECRETO', 'SENTENCIA', 'OFICIO', 'NOTIFICACION']
+export const TIPO_ACTUACION: string[] = ['SENTENCIA', 'DECRETO', 'OFICIO', 'NOTIFICACION']
 
 export enum ACTAS {
   TRANSITO = 'TRANSITO', 
@@ -10,8 +10,8 @@ export enum ACTAS {
 }
 
 export enum ACTUACION {
-  DECRETO = 'DECRETO', 
   SENTENCIA = 'SENTENCIA', 
+  DECRETO = 'DECRETO', 
   OFICIO = 'OFICIO', 
   NOTIFICACION = 'NOTIFICACION'
 }

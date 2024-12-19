@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Label, TextInput } from 'flowbite-react'
 import { CustomSelect } from './CustomSelect'
@@ -12,6 +12,16 @@ import type { IActaForm } from '../../interfaces/form-interfaces'
 export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
   const { prioridades, isLoading } = usePrioridad()
+  const [numeroActa, setNumeroActa] = useState('')
+  const allowedCharactersRegex = /^[aibopd\d]*$/i
+
+  const onChangeNumeroActa = (e) => {
+    const { value } = e.target
+    if (allowedCharactersRegex.test(value)) {
+      setNumeroActa(value)
+      setValue('numero_acta', value)
+    }
+  }
 
   return (
     <React.Fragment>
@@ -31,10 +41,13 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
               </div>
               <TextInput
                 {...register('numero_acta')}
+                type='text'
                 id='numero_acta'
+                value={numeroActa}
                 placeholder='Ingrese el número de acta'
                 helperText={errors?.numero_acta?.message}
                 color={errors?.numero_acta && 'failure'}
+                onChange={onChangeNumeroActa}
               />
             </div>
 

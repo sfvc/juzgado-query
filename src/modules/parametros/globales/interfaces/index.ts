@@ -26,6 +26,7 @@ export interface IUsuario {
     juzgado: IJuzgado
     dni: string
     username: string
+    password: string
     role: Role
 }
 

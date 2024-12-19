@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -30,18 +30,22 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: { 
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
-      password: usuario?.username || '',
+      password: usuario ? '' : '', // Vacío para edición
       juzgado_id: usuario?.juzgado?.id.toString() || '',
       role: usuario?.role?.id.toString() || '',
     },
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
+    context: { isEditing: !!usuario }, // Define el contexto
   })
+  
 
   const onSubmit: SubmitHandler<FormUsuario> = async (data: FormUsuario) => {
     if (usuario) await updateUsuario.mutateAsync({id: usuario.id, usuario: data})
@@ -49,6 +53,19 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
   
     onSucces()
   }
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'nombre' && value.nombre) {
+        const parts = value.nombre.trim().toLowerCase().split(' ')
+        if (parts.length > 1) {
+          const username = `${parts[0][0]}${parts.slice(1).join('')}`
+          setValue('username', username)
+        }
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, setValue])
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
@@ -73,7 +90,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           </div>
           <TextInput
             {...register('dni')}
-            placeholder='Dni'
+            placeholder='DNI'
             helperText={errors?.dni && errors?.dni?.message} 
             color={errors?.dni && 'failure'}
           />
@@ -105,7 +122,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           
           <button
             type='button'
-            className='absolute top-1/3 right-2 transform h-full'
+            className='absolute top-[55%] right-3'
             title='Mostrar Contraseña'
             onClick={() => setShowPassword(!showPassword)}
           >

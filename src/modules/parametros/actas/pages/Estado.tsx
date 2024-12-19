@@ -62,44 +62,46 @@ export const Estado = () => {
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {colums.map((column: Column) => (
-            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-          ))}
-        </Table.Head>
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length} />
-              : (estados.length > 0)
-                ? (estados.map((estado: IEstado) => (
-                  <Table.Row key={estado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{estado.id}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{estado.nombre}</Table.Cell>
-                    <Table.Cell className='text-center'>
-                      <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color }} />
-                    </Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(estado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
-                      </Tooltip>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length} />
+                : (estados.length > 0)
+                  ? (estados.map((estado: IEstado) => (
+                    <Table.Row key={estado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{estado.id}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{estado.nombre}</Table.Cell>
+                      <Table.Cell className='text-center'>
+                        <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color }} />
+                      </Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(estado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(estado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => openDelteModal(estado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination
@@ -114,7 +116,7 @@ export const Estado = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Rubro' : 'Editar Rubro'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Estado' : 'Editar Estado'}</Modal.Header>
         <Modal.Body>
           <EstadoForm
             estado={activeItem} 

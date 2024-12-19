@@ -9,7 +9,8 @@ import { useLocalidad } from '../hooks/useLocalidad'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('La localidad es requerida'),
-  departamento_id: yup.string().required('Debe seleccionar un departamento')
+  departamento_id: yup.string().required('Debe seleccionar un departamento'),
+  provincia_id: yup.string().nullable('Debe seleccionar una provincia')
 })
 
 interface Props {
@@ -33,7 +34,8 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
   } = useForm({
     defaultValues: {
       nombre: localidad?.nombre || '',
-      departamento_id: localidad?.departamento?.id?.toString() || ''
+      departamento_id: localidad?.departamento?.id?.toString() || '',
+      provincia_id: localidad?.provincia_id?.toString() || '3'
     },
     resolver: yupResolver(validationSchema)
   })
@@ -54,7 +56,7 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
           <Label
             color='gray'
             htmlFor='nombre'
-            value='Provincia'
+            value='Nombre'
           />
         </div>
         

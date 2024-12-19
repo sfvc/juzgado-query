@@ -62,44 +62,46 @@ export const Juzgado = () => {
         </div>
       </div>
 
-      <Table>
-        <Table.Head>
-          {colums.map((column: Column) => (
-            <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-          ))}
-        </Table.Head>
+      <div className='overflow-x-auto'>
+        <Table>
+          <Table.Head>
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
+          </Table.Head>
 
-        <Table.Body className='divide-y'>
-          {
-            isFetching
-              ? <TableSkeleton colums={colums.length} />
-              : (juzgados.length > 0)
-                ? (juzgados.map((juzgado: IJuzgado) => (
-                  <Table.Row key={juzgado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='text-center dark:text-white'>{juzgado.nombre}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{juzgado.juez}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{juzgado.secretario}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{juzgado.direccion}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{juzgado.telefono}</Table.Cell>
-                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                      <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onOpenModal(juzgado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Pencil />
-                        </Button>
-                      </Tooltip>
+          <Table.Body className='divide-y'>
+            {
+              isFetching
+                ? <TableSkeleton colums={colums.length} />
+                : (juzgados.length > 0)
+                  ? (juzgados.map((juzgado: IJuzgado) => (
+                    <Table.Row key={juzgado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                      <Table.Cell className='text-center dark:text-white'>{juzgado.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{juzgado.juez}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{juzgado.secretario}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{juzgado.direccion}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{juzgado.telefono}</Table.Cell>
+                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onOpenModal(juzgado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
 
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(juzgado)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
-                    </Table.Cell>
-                  </Table.Row>
-                )))
-                : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-          }
-        </Table.Body>
-      </Table>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => openDelteModal(juzgado)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </Table.Cell>
+                    </Table.Row>
+                  )))
+                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+            }
+          </Table.Body>
+        </Table>
+      </div>
 
       <div className='flex overflow-x-auto sm:justify-center mt-4'>
         <Pagination

@@ -24,7 +24,7 @@ export const defaultValues: ActaFilterForm = {
 
 export const ActaColums: Column[] = [
   { key: 'numero_acta', label: 'Nro. Acta' },
-  { key: 'numero_causa', label: 'Nro. Causa' },
+  { key: 'numero_causa', label: 'Nro. Causa', },
   { key: 'fecha', label: 'fecha' },
   { key: 'tipo_acta', label: 'Tipo' },
   { key: 'estado', label: 'Estado' },

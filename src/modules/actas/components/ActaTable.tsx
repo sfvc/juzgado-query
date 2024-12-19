@@ -31,7 +31,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Actas</h1>
       </div>
 
-      <div className={`${pathname === PATH.NOTIFICATION && 'overflow-x-auto pb-4'}`}>
+      <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
             {colums.map((column: Column) => (

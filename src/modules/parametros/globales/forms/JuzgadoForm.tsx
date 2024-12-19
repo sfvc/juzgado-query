@@ -47,7 +47,7 @@ const JuzgadoForm = ({ juzgado, onSucces }: Props) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-4'>
         <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='nombre' value='Pais' /><strong className='obligatorio'>(*)</strong>
+          <Label color='gray' htmlFor='nombre' value='Nombre' /><strong className='obligatorio'>(*)</strong>
         </div>
         <TextInput
           {...register('nombre')}

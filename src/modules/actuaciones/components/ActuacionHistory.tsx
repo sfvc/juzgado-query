@@ -14,6 +14,7 @@ import type { IActuacionHistory } from '../interfaces/actuacion-history'
 
 const colums: Column[] = [
   { key: 'icon', label: '' },
+  { key: 'id', label: 'id' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
   { key: 'usuario', label: 'Usuario' },
@@ -111,6 +112,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                           <icons.Pdf />
                         </div>
                       </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{actuacion.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>

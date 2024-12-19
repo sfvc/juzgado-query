@@ -14,6 +14,7 @@ import type { INotificationHistory } from '../interfaces/notificacion-history'
 
 const colums: Column[] = [
   { key: 'icon', label: '' },
+  { key: 'id', label: 'id' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
   { key: 'usuario', label: 'Usuario' },
@@ -113,6 +114,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
                           <icons.Pdf />
                         </div>
                       </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{notificacion.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion.usuario}</Table.Cell>
