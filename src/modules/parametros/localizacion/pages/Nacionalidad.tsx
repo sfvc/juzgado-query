@@ -104,7 +104,7 @@ export const Nacionalidad = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Pais' : 'Editar Pais'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Nacionalidad' : 'Editar Nacionalidad'}</Modal.Header>
         <Modal.Body>
           <NacionalidadForm 
             nacionalidad={activeItem} 

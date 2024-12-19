@@ -38,8 +38,10 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
   })
 
   const changeTypePersona = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTipoPersona(e.target.value)
     methods.reset()
+    
+    setTipoPersona(e.target.value)
+    methods.setValue('tipo_persona', e.target.value)
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (form: FormValues) => {

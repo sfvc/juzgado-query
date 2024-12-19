@@ -26,7 +26,7 @@ export const BromatologiaForm = ({ acta }: Props) => {
       fecha: acta?.fecha || '',
       fecha_prescripcion: acta?.fecha_prescripcion || '',
       hora: acta?.hora || '',
-      prioridad_id: acta?.prioridad_id || 0,
+      prioridad_id: acta?.prioridad_id,
       retencion_vehiculo: acta?.retencion_vehiculo || 0,
       retencion_licencia: acta?.retencion_licencia || 0,
       notificado: acta?.notificado || 0,
