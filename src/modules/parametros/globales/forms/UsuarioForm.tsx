@@ -1,10 +1,9 @@
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import { useUsuario } from '../hooks/useUsuario'
-import { icons } from '../../../../shared'
 import { useUsuarioParams } from '../hooks/useUsuarioParams'
 import type { FormUsuario, IUsuario } from '../interfaces'
 
@@ -25,7 +24,6 @@ interface Props {
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
   const { data, isLoading } = useUsuarioParams()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const {
     register,
@@ -36,7 +34,6 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
-      password: usuario?.username || '',
       juzgado_id: usuario?.juzgado?.id.toString() || '',
       role: usuario?.role?.id.toString() || '',
     },
@@ -91,7 +88,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           />
         </div>
 
-        <div className='relative mb-4'>
+        {/* <div className='relative mb-4'>
           <div className='mb-2 block dark:text-white'>
             <Label color='gray' htmlFor='password' value='Contraseña' /><strong className='obligatorio'>(*)</strong>
           </div>
@@ -105,7 +102,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           
           <button
             type='button'
-            className='absolute top-1/3 right-2 transform h-full'
+            className='absolute top-1/4 right-2 transform h-full'
             title='Mostrar Contraseña'
             onClick={() => setShowPassword(!showPassword)}
           >
@@ -115,8 +112,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
                 : <icons.EyeClose />
             }
           </button>
-        </div>
-
+        </div> */}
 
         <div className='mb-4'>
           <div className='mb-2 block'>

@@ -54,7 +54,7 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
           <Label
             color='gray'
             htmlFor='nombre'
-            value='Provincia'
+            value='Localidad'
           />
         </div>
         

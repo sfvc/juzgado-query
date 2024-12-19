@@ -114,7 +114,7 @@ export const Estado = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Rubro' : 'Editar Rubro'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Estado' : 'Editar Estado'}</Modal.Header>
         <Modal.Body>
           <EstadoForm
             estado={activeItem} 

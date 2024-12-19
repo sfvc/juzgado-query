@@ -52,7 +52,7 @@ jobs:
             docker stop juzgado-query-dev || true
             docker rm juzgado-query-dev || true
             docker rmi municipalidad/juzgado-query-dev:lastest || true
-            docker build --no-cache --build-arg VITE_API_URL='https://api-test-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://dev-reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://dev-reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query-dev:lastest .
+            docker build --no-cache --build-arg VITE_API_URL='https://api-test-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query-dev:lastest .
             docker run --restart=always --name juzgado-query-dev -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query-dev:lastest
             docker builder prune || true
             exit

@@ -11,7 +11,7 @@ import {
 } from '../../../../shared/constants'
 
 export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, prioridades: Prioridad[] }) => {
-  const { register, formState: { errors } } = useFormContext<IActaForm>()
+  const { register, setValue, formState: { errors } } = useFormContext<IActaForm>()
   const [showPreventiva, setShowPreventiva] = useState<boolean>(false)
     
   const preventivas = 
@@ -28,7 +28,7 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
           <Label htmlFor='prioridad_id' value='Prioridad' /><strong className='obligatorio'>(*)</strong>
         </div>
         <Select
-          {...register('prioridad_id', { valueAsNumber: true })}
+          {...register('prioridad_id')}
           helperText={errors?.prioridad_id?.message}
           color={errors?.prioridad_id && 'failure'}
           onChange={(e) => {
@@ -36,9 +36,11 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
               setShowPreventiva(true)
             else 
               setShowPreventiva(false)
+
+            setValue('prioridad_id', +e.target.value)
           }}
         >
-          <option value={0} hidden>Seleccione una prioridad</option>
+          <option value='' hidden>Seleccione una prioridad</option>
           {
             prioridades?.length && prioridades.map((prioridad: Prioridad) => (
               <option key={prioridad.id} value={prioridad.id}>{prioridad.nombre}</option>
@@ -63,6 +65,8 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
             </Select>
           </div>
       }
+
+      {/* <span>{JSON.stringify(errors?.prioridad_id?.message)}</span> */}
     </div>
   )
 }

@@ -54,7 +54,7 @@ const DepartamentoForm = ({ departamento, onSucces }: Props) => {
           <Label
             color='gray'
             htmlFor='nombre'
-            value='Provincia'
+            value='Departamento'
           />
         </div>
         
