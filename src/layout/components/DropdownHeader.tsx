@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from 'react'
 import { DarkThemeToggle, Dropdown, Flowbite, Tooltip } from 'flowbite-react'
 import { AuthContext } from '../../context/Auth/AuthContext'
 import { icons } from '../../shared'
+import { useNavigate } from 'react-router-dom'
 
 export const DropdownHeader = () => {
   const { user, logoutUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('darkMode')
@@ -44,7 +46,12 @@ export const DropdownHeader = () => {
           <span className='block text-sm'>Usuario</span>
           <span className='block truncate text-sm font-medium'>{user?.nombre}</span>
         </Dropdown.Header>
-        <Dropdown.Item onClick={logoutUser}>
+
+        <Dropdown.Item onClick={() => navigate('/profile')}>
+          <span className='text-sm flex gap-2'><icons.Reset /> Resetear contraseña</span>
+        </Dropdown.Item>
+
+        <Dropdown.Item className='text-smflex gap-2' onClick={logoutUser}>
           <icons.Logout />
           Cerrar Sesión
         </Dropdown.Item>

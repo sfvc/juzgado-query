@@ -1,6 +1,6 @@
 import { apiJuzgado } from '../../../../api/config'
 import { setUrlParams } from '../../../../shared/helpers/setUrlParams'
-import { FormUsuario } from '../interfaces'
+import { FormPassword, FormUsuario } from '../interfaces'
 
 export const getUsuarios = async (filters: object) => {
   const params = setUrlParams(filters)
@@ -36,6 +36,12 @@ export const deleteUsuario =  async (id: number) => {
 
 export const resetPassword =  async (id: number) => {
   const response = await apiJuzgado.get(`/usuarios/reset/${id}`)
+  const { data: usuario } = response.data
+  return usuario
+}
+
+export const modifyPassword =  async (id: number, form: FormPassword) => {
+  const response = await apiJuzgado.post(`/usuarios/profile/${id}`, form)
   const { data: usuario } = response.data
   return usuario
 }

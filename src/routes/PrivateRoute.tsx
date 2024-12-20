@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom'
 import { Layout } from '../layout'
 import { Barrio, Departamento, Localidad, Nacionalidad, Pais, Provincia } from '../modules/parametros/localizacion/pages'
 import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
-import { Juzgado, Unidad, Usuario } from '../modules/parametros/globales'
+import { Juzgado, Profile, Unidad, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
@@ -88,6 +88,11 @@ export const PrivateRoute = [
       {
         path: '/usuarios',
         element: <Usuario />
+      },
+
+      {
+        path: '/profile',
+        element: <Profile />
       },
 
       {

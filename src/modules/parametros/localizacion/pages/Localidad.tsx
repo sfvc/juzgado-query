@@ -104,7 +104,7 @@ export const Localidad = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Departemento' : 'Editar Departemento'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Localidad' : 'Editar Localidad'}</Modal.Header>
         <Modal.Body>
           <LocalidadForm 
             localidad={activeItem} 
