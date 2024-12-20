@@ -104,7 +104,7 @@ export const Departamento = () => {
 
       {/* Modal crear/editar */} 
       <Modal show={openModal} onClose={onCloseModal}>
-        <Modal.Header>{!activeItem ? 'Agregar Departemento' : 'Editar Departemento'}</Modal.Header>
+        <Modal.Header>{!activeItem ? 'Agregar Departamento' : 'Editar Departamento'}</Modal.Header>
         <Modal.Body>
           <DepartamentoForm 
             departamento={activeItem} 

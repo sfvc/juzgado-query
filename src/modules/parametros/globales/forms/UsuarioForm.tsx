@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
-import { useUsuario } from '../hooks/useUsuario'
 import { icons } from '../../../../shared'
+import { useUsuario } from '../hooks/useUsuario'
 import { useUsuarioParams } from '../hooks/useUsuarioParams'
 import type { FormUsuario, IUsuario } from '../interfaces'
 
@@ -133,7 +134,6 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             }
           </button>
         </div>
-
 
         <div className='mb-4'>
           <div className='mb-2 block'>

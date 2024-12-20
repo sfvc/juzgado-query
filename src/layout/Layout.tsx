@@ -14,10 +14,17 @@ export const Layout = () => {
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
 
         <Link to='/'>
-          <h1 className='rainbow-text'>
-  Esta es la version de prueba
-          </h1>
+          <img src={logoJuzgado} 
+            alt='Logo Juzgado' 
+            className='w-48 md:w-40 inline-block mx-auto pointer-events-none' 
+          />
         </Link>
+        
+        {/* <Link to='/'>
+          <h1 className='rainbow-text'>
+            Esta es la version de prueba
+          </h1>
+        </Link> */}
 
         <div className='flex md:order-2'>
           <DropdownHeader />

@@ -51,3 +51,7 @@ export interface FormUnidad {
     fecha_desde: string
     fecha_hasta: string
 }
+
+export interface FormPassword {
+    password: string
+}
