@@ -1,11 +1,15 @@
+import { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
-import { DropdownHeader } from './'
-import logoJuzgado from '../assets/images/logo-juzgado.webp'
+import { ThemeContext } from '../context/Theme/ThemeContext'
 import { ToastContainer } from 'react-toastify'
+import { DropdownHeader } from './'
+import logoDark from '../assets/images/logo-capital-dark.webp'
+import logoLight from '../assets/images/logo-capital-light.webp'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
+  const { theme } = useContext(ThemeContext)
   
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
@@ -13,17 +17,11 @@ export const Layout = () => {
 
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
 
-        {/* <Link to='/'>
-          <img src={logoJuzgado} 
+        <Link to='/'>
+          <img src={ theme === 'light' ? logoLight : logoDark} 
             alt='Logo Juzgado' 
             className='w-48 md:w-40 inline-block mx-auto pointer-events-none' 
           />
-        </Link> */}
-        
-        <Link to='/'>
-          <h1 className='rainbow-text'>
-            Esta es la version de prueba
-          </h1>
         </Link>
 
         <div className='flex md:order-2'>

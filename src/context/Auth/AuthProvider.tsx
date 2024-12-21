@@ -3,7 +3,7 @@ import { useAuth } from '../../auth'
 import { AuthContext } from './AuthContext'
 
 interface Props {
-    children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[]
 }
 
 export const AuthProvider = ({ children }: Props) => {

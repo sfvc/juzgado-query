@@ -1,9 +1,14 @@
+import { useContext } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { LoginForm } from '../forms/LoginForm'
 import loginJuzgado from '../../assets/images/login-juzgado.webp'
-import logoJuzgado from '../../assets/images/logo-juzgado.webp'
+import logoLight from '../../assets/images/logo-capital-light.webp'
+import logoDark from '../../assets/images/logo-capital-dark.webp'
+import { ThemeContext } from '../../context/Theme/ThemeContext'
 
 export const Login = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext)
+
   return (
     <>
       <ToastContainer />
@@ -21,7 +26,7 @@ export const Login = () => {
           <div className='right-column relative bg-gray-100 dark:bg-dark'>
             <div className='inner-content h-full flex flex-col'>
               <div className='auth-box h-full flex flex-col justify-center'>
-                <img src={logoJuzgado} 
+                <img src={theme === 'light' ? logoLight :  logoDark} 
                   alt='Logo del Juzgado' 
                   className='w-48 md:w-64 pb-6 inline-block mx-auto pointer-events-none' 
                 />

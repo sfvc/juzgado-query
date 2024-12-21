@@ -30,7 +30,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Documento:</strong> {inhabilitado?.persona.numero_documento}
+              <strong>Documento:</strong> {inhabilitado?.persona?.numero_documento}
             </span>
           </li>
 
@@ -93,7 +93,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Número de acta:</strong> {inhabilitado?.acta.numero_acta}
+              <strong>Número de acta:</strong> {inhabilitado?.acta?.numero_acta || '-'}
             </span>
           </li>
 
@@ -107,7 +107,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Articulos:</strong> {articuloList}
+              <strong>Articulos:</strong> {articuloList.length ? articuloList : '-'}
             </span>
           </li>
 
