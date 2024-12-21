@@ -1,26 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Label, TextInput } from 'flowbite-react'
 import { CustomSelect } from './CustomSelect'
 import { formatDate } from '../../helpers/formatDate'
 import { PreventivaData } from './PreventivaData'
-import { ACTAS } from '../../../../shared/constants'
 import { usePrioridad } from '../../hooks/usePrioridad'
 import { SkeletonFilter } from '../../components/SkeletonFilter'
+import { characterValidate } from '../../helpers/characterValidate'
+import { ACTAS } from '../../../../shared/constants'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 
 export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
   const { prioridades, isLoading } = usePrioridad()
-  const [numeroActa, setNumeroActa] = useState('')
-  const allowedCharactersRegex = /^[aibopd\d]*$/i
 
-  const onChangeNumeroActa = (e) => {
-    const { value } = e.target
-    if (allowedCharactersRegex.test(value)) {
-      setNumeroActa(value)
-      setValue('numero_acta', value)
-    }
+  const onChangeNumeroActa = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    const numero = characterValidate(tipoActa, value)
+    setValue('numero_acta', numero)
   }
 
   return (
@@ -43,7 +41,6 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
                 {...register('numero_acta')}
                 type='text'
                 id='numero_acta'
-                value={numeroActa}
                 placeholder='Ingrese el número de acta'
                 helperText={errors?.numero_acta?.message}
                 color={errors?.numero_acta && 'failure'}

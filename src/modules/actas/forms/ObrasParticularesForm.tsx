@@ -25,7 +25,7 @@ export const ObrasParticularesForm = ({ acta }: Props) => {
       fecha: acta?.fecha || '',
       fecha_prescripcion: acta?.fecha_prescripcion || '',
       hora: acta?.hora || '',
-      prioridad_id: acta?.prioridad?.id || '',
+      prioridad_id: acta?.prioridad?.id,
       retencion_vehiculo: acta?.retencion_vehiculo || 0,
       retencion_licencia: acta?.retencion_licencia || 0,
       notificado: acta?.notificado || 0,
