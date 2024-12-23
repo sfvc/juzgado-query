@@ -100,7 +100,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Retención de Licencia:</strong> {inhabilitado?.acta.retencion_licencia ? 'Si' : 'No'}
+              <strong>Retención de Licencia:</strong> {inhabilitado?.acta?.retencion_licencia ? 'Si' : 'No'}
             </span>
           </li>
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Label, TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
 
@@ -15,11 +15,11 @@ interface SearchInputProps<T extends SearchItem> {
   renderItem?: (item: T) => React.ReactNode
   debounceTime?: number
   renderInput: (item: T) => string
-  resetInput?: () => void
-  resetForm?: boolean
+  defaultValue?: string
+  resetInput: () => void
 }
 
-export function SearchInput<T extends SearchItem>({
+export function SearchableSelect<T extends SearchItem>({
   label = 'Buscar',
   placeholder = 'Buscar...',
   onSearch,
@@ -27,10 +27,10 @@ export function SearchInput<T extends SearchItem>({
   renderItem,
   debounceTime = 300,
   renderInput,
-  resetInput,
-  resetForm
+  defaultValue,
+  resetInput
 }: SearchInputProps<T>) {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(defaultValue || '')
   const [data, setData] = useState<T[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [showResults, setShowResults] = useState(false)
@@ -72,12 +72,8 @@ export function SearchInput<T extends SearchItem>({
 
   const onFocusInput = () => {
     setSearch('')
-    if (resetInput) resetInput()
+    resetInput()
   }
-
-  useEffect(() => {
-    if(resetForm) onFocusInput()
-  }, [resetForm])
 
   return (
     <div className="mb-4 relative w-full">
@@ -102,7 +98,7 @@ export function SearchInput<T extends SearchItem>({
           }
         </div>
       </div>
-      {showResults && search.length >= 3 && (
+      {( showResults && search.length >= 3) && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
           {data.length > 0 ? (
             data.map((item) => (

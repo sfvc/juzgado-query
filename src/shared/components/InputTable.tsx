@@ -40,6 +40,7 @@ export function InputTable({ onSearch, debounceTime = 400 }: Props) {
         value={search}
         onChange={handleSearch}
         placeholder='Buscar'
+        autoComplete='off'
       />
       <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
         { isLoading

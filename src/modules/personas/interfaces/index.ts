@@ -1,4 +1,4 @@
-import { ILocalidad } from '../../parametros/localizacion/interfaces/localizacion'
+import { IBarrio, ILocalidad } from '../../parametros/localizacion/interfaces/localizacion'
 
 export interface INacionalidad {
     id: number
@@ -18,12 +18,13 @@ export interface IDomicilio {
     numero: number | null
     manzana_piso: string | null
     lote_dpto: string | null
-    barrio_id: number | null
     pais_id: number | null
     provincia_id: number | null
     departamento_id: number | null
     localidad_id: number | null
     localidad: ILocalidad | null
+    barrio_id: number | null
+    barrio: IBarrio | null
     deleted_at?: string | null
 }
  

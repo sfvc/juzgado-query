@@ -2,10 +2,11 @@
 import { useEffect } from 'react'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
-import { Domicilio, IDomicilio } from '../../interfaces'
-import { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
+import { apiJuzgado } from '../../../../api/config'
 import { useDomicilio } from '../../hooks/useDomicilio'
-import { SearchInput } from '../../../../shared'
+import { SearchableSelect } from '../../../../shared/components/SearchableSelect'
+import type { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
+import type { Domicilio, IDomicilio } from '../../interfaces'
 
 export interface Props {
   showDomicilio: boolean
@@ -22,23 +23,35 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
     paises,
     provincias,
     departamentos,
-    barrios,
-    handleSearch,
+    // barrios,
+    // handleSearch,
     getProvinciasByPais,
     getDepartamentosByProvincia,
-    getBarriosByDepartamento
+    // getBarriosByDepartamento
   } = useDomicilio({ selectLocalidad })
 
   const initLoading = async () => {
     if(!domicilio) return
     await getProvinciasByPais(domicilio?.pais_id)
     await getDepartamentosByProvincia(domicilio?.provincia_id)
-    await getBarriosByDepartamento(domicilio?.localidad)
+    // await getBarriosByDepartamento(domicilio?.localidad)
   }
 
   useEffect(() => {
     initLoading()
   }, [])
+
+  const fetchLocalidades = async (query: string): Promise<ILocalidad[]> => {
+    const response = await apiJuzgado.get(`localidades?query=${query}`)
+    const { data } = response.data
+    return data
+  }
+
+  const fetchBarrios = async (query: string): Promise<IBarrio[]> => {
+    const response = await apiJuzgado.get(`barrios?query=${query}`)
+    const { data } = response.data
+    return data
+  }
   
   return (
     <>
@@ -114,35 +127,31 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
                 </Select>
               </div>
 
-              <SearchInput<ILocalidad>
+              <SearchableSelect<ILocalidad>
                 label="Localidad"
                 placeholder="Buscar localidad"
-                onSearch={handleSearch}
-                onSelect={(item: ILocalidad) => getBarriosByDepartamento(item)}
+                onSearch={fetchLocalidades}
+                onSelect={(item: ILocalidad) => setValue('localidad_id', item.id)}
                 renderItem={(item) => (
                   <div><strong>{item.nombre}</strong> - CP. {item.codigo_postal}</div>
                 )}
-                renderInput={(item) => { return `${item.nombre} - CP. ${item.codigo_postal}`} }
+                renderInput={(item) => { return `${item.nombre} - CP. ${item.codigo_postal}`}}
+                defaultValue={domicilio?.localidad?.nombre}
+                resetInput={() => setValue('localidad_id', null)}
               />
 
-              <div className='mb-4'>
-                <div className='mb-2 block dark:text-white'>
-                  <Label htmlFor='barrio_id' value='Barrio' />
-                </div>
-
-                <Select 
-                  {...register('barrio_id')}
-                  helperText={errors?.barrio_id && errors?.barrio_id?.message} 
-                  color={errors?.barrio_id && 'failure'}
-                >
-                  <option value=''>Seleccione un barrio</option>
-                  {barrios?.map((barrio: IBarrio) => (
-                    <option key={barrio.id} value={barrio.id}>
-                      {barrio.nombre}
-                    </option>
-                  ))}
-                </Select>
-              </div>
+              <SearchableSelect<IBarrio>
+                label="Barrio"
+                placeholder="Buscar barrio"
+                onSearch={fetchBarrios}
+                onSelect={(item: IBarrio) => setValue('barrio_id', item.id)}
+                renderItem={(item) => (
+                  <div><strong>{item.nombre}</strong></div>
+                )}
+                renderInput={(item) => { return `${item.nombre}`} }
+                defaultValue={domicilio?.barrio?.nombre}
+                resetInput={() => setValue('barrio_id', null)}
+              />
 
               <div className='mb-4'>
                 <div className='mb-2 block dark:text-white'>
