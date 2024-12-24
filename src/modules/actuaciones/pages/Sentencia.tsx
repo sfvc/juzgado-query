@@ -11,8 +11,8 @@ import type { IUnidadMulta } from '../interfaces/sentencia'
 
 const colums: Column[] = [
   { key: 'numero', label: 'Nro. Acta' },
-  { key: 'detalle', label: 'Detalle' },
   { key: 'articulo', label: 'Articulo' },
+  { key: 'detalle', label: 'Detalle' },
   { key: 'importe', label: 'importe' },
   { key: 'acciones', label: 'Acciones' }
 ]
@@ -122,12 +122,10 @@ export const Sentencia = () => {
                 ? infracciones.map((infraccion: InfraccionesCometida) => (
                   <Table.Row key={infraccion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta || '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>
-                      <div className='truncate w-[40rem]'>
-                        {infraccion.detalle}
-                      </div>
-                    </Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{infraccion.numero}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>
+                      <div className='truncate w-[40rem]'>{infraccion.detalle}</div>
+                    </Table.Cell>
                     <Table.Cell className='text-center  dark:text-white'>$ {infraccion.importe}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>

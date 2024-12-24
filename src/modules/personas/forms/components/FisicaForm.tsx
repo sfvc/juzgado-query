@@ -60,7 +60,7 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <TextInput
           {...register('numero_documento')}
-          type='text'
+          type='number'
           placeholder='Numero de Documento'
           helperText={errors?.numero_documento && errors?.numero_documento?.message} 
           color={errors?.numero_documento && 'failure'}
@@ -104,7 +104,7 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <TextInput
           {...register('cuil')}
-          type='text'
+          type='number'
           placeholder='C.U.I.L'
           helperText={errors?.cuil && errors?.cuil?.message} 
           color={errors?.cuil && 'failure'}

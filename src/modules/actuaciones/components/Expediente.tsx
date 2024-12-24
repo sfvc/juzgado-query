@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Modal, Table, Tooltip } from 'flowbite-react'
-import { Column } from '../../../shared/interfaces'
-import { Actuacion, ActuacionActa } from '../interfaces'
 import { icons } from '../../../shared'
 import { useActuacion } from '../hooks/useActuacion'
 import { usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
+import type { Column } from '../../../shared/interfaces'
+import type { Actuacion, ActuacionActa } from '../interfaces'
 
 const colums: Column[] = [
   { key: 'tipo', label: 'Tipo' },
@@ -21,7 +21,6 @@ const colums: Column[] = [
 export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuaciones:Actuacion[]}) => {
   const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
   const { deleteActuacion } = useActuacion()
-  // const [actuaciones, setActuaciones] = useState<Actuacion[]>(acta?.actuaciones || [])
 
   const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
@@ -41,7 +40,6 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
     const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId: activeItem.id })
     
     if(!response) return
-    // setActuaciones((prevState) => prevState.filter(prev => prev.id !== activeItem.id))
     toggleModal('delete', false)
   }
 
@@ -54,11 +52,9 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {
-              colums.map((colum: Column) => (
-                <Table.HeadCell key={colum.key} className='text-center bg-gray-300'>{colum.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((colum: Column) => (
+              <Table.HeadCell key={colum.key} className='text-center bg-gray-300'>{colum.label}</Table.HeadCell>
+            ))}
           </Table.Head>
           <Table.Body className='divide-y'>
             {

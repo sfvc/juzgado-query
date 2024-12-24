@@ -4,10 +4,11 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Color, FormVehiculo, IVehiculo, Marca, Tipo } from '../interfaces'
 import { useVehiculo } from '../hooks/useVehiculo'
 import { vehiculoActions } from '..'
 import { TitularInput } from '../components/TitularInput'
+import type { Color, FormVehiculo, IVehiculo, Marca, Tipo } from '../interfaces'
+// import { SearchableSelect } from '../../../shared'
 
 const SERVICIO_PUBLICO_ID = 50067
 
@@ -116,6 +117,17 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
             ))}
           </Select>
         </div>
+
+        {/* <SearchableSelect<Marca>
+          label="Marca"
+          placeholder="Buscar marca"
+          onSearch={vehiculoActions.getMarcas}
+          onSelect={(item: Marca) => setValue('marca_id', item.id)}
+          renderItem={(item: Marca) => <div><strong>{item.nombre}</strong></div>}
+          renderInput={(item) => { return `${item.nombre}`}}
+          defaultValue={vehiculo?.marca?.nombre}
+          resetInput={() => setValue('marca_id', null)}
+        /> */}
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>

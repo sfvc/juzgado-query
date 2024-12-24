@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Label, TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
 
@@ -35,13 +35,10 @@ export function SearchableSelect<T extends SearchItem>({
   const [isLoading, setIsLoading] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
-      if (query.length < 3) {
-        setData([])
-        return
-      }
-
       setIsLoading(true)
       try {
         const results = await onSearch(query)
@@ -56,8 +53,7 @@ export function SearchableSelect<T extends SearchItem>({
     [onSearch, debounceTime]
   )
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
+  const handleSearch = (value: string) => {
     setSearch(value)
     setShowResults(true)
     debouncedSearch(value)
@@ -71,12 +67,25 @@ export function SearchableSelect<T extends SearchItem>({
   }
 
   const onFocusInput = () => {
-    setSearch('')
     resetInput()
+    handleSearch('')
   }
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      setShowResults(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
-    <div className="mb-4 relative w-full">
+    <div ref={containerRef} className="mb-4 relative w-full">
       <div className="mb-2 block dark:text-white">
         <Label color="gray" htmlFor="search" value={label} />
       </div>
@@ -84,7 +93,7 @@ export function SearchableSelect<T extends SearchItem>({
         <TextInput
           name="search"
           type="text"
-          onChange={handleSearch}
+          onChange={(e) => handleSearch(e.target.value)}
           value={search}
           placeholder={placeholder}
           className="w-full"
@@ -98,23 +107,24 @@ export function SearchableSelect<T extends SearchItem>({
           }
         </div>
       </div>
-      {( showResults && search.length >= 3) && (
+      { showResults && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
-          {data.length > 0 ? (
-            data.map((item) => (
-              <li key={item.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 border-b last:border-b-0">
-                <button
-                  type="button"
-                  className="w-full text-start py-2 px-4"
-                  onClick={() => handleSelect(item)}
-                >
-                  {renderItem ? renderItem(item) : item?.nombre}
-                </button>
-              </li>
-            ))
-          ) : (
-            <li className="py-2 px-4">No se encontraron resultados.</li>
-          )}
+          {
+            data.length > 0 
+              ? 
+              (data.map((item) => (
+                <li key={item.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 border-b last:border-b-0">
+                  <button
+                    type="button"
+                    className="w-full text-start py-2 px-4"
+                    onClick={() => handleSelect(item)}
+                  >
+                    {renderItem ? renderItem(item) : item?.nombre}
+                  </button>
+                </li>
+              ))) 
+              : <li className="py-2 px-4">{ isLoading ? 'Cargando...' : 'No se encontraron resultados.' }</li>
+          }
         </ul>
       )}
     </div>

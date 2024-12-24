@@ -25,7 +25,7 @@ export const InspeccionForm = ({ acta }: Props) => {
       fecha: acta?.fecha || '',
       fecha_prescripcion: acta?.fecha_prescripcion || '',
       hora: acta?.hora || '',
-      prioridad_id: acta?.prioridad?.id,
+      prioridad_id: acta?.prioridad_id,
       retencion_vehiculo: acta?.retencion_vehiculo || 0,
       retencion_licencia: acta?.retencion_licencia || 0,
       notificado: acta?.notificado || 0,
@@ -59,7 +59,14 @@ export const InspeccionForm = ({ acta }: Props) => {
 
           <div className='flex justify-end gap-4'>
             <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
-            <Button type='submit' className='px-4'>Finalizar</Button>
+            <Button 
+              type='submit' 
+              className='px-4' 
+              disabled={methods.formState.isSubmitting} 
+              isProcessing={methods.formState.isSubmitting}
+            >
+              Finalizar
+            </Button>
           </div>
         </form>
       </FormProvider>

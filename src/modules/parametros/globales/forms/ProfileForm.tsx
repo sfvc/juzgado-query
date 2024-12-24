@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Alert, Button, Label, TextInput } from 'flowbite-react'
 import { AuthContext, UserContext } from '../../../../context/Auth/AuthContext'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -7,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useProfile } from '../hooks/useProfile'
 import { icons } from '../../../../shared'
 import type { FormPassword } from '../interfaces'
-import { useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object().shape({
   password: yup.string().required('La contraseña es requerida')
@@ -31,9 +31,7 @@ const ProfileForm = () => {
   })
 
   const onSubmit: SubmitHandler<FormPassword> = async (data: FormPassword) => {
-    console.log(data)
-    modifyPassword.mutateAsync({id: user!.id, data})
-    // onSucces()
+    await modifyPassword.mutateAsync({id: user!.id, data})
   }
 
   if(!user) return (
@@ -110,6 +108,7 @@ const ProfileForm = () => {
             placeholder='Contraseña'
             helperText={errors?.password && errors?.password?.message} 
             color={errors?.password && 'failure'}
+            autoComplete='off'
           />
           
           <button

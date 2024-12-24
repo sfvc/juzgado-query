@@ -1,16 +1,13 @@
 import { useState } from 'react'
-import { IBarrio, IDepartamento, ILocalidad, IProvincia } from '../../parametros/localizacion/interfaces/localizacion'
 import { useQuery } from '@tanstack/react-query'
-import { barrioActions, departamentoActions, localidadActions, paisActions, provinciaActions } from '../../parametros/localizacion'
+import { apiJuzgado } from '../../../api/config'
+import { departamentoActions, paisActions, provinciaActions } from '../../parametros/localizacion'
+import type { IBarrio, IDepartamento, ILocalidad, IProvincia } from '../../parametros/localizacion/interfaces/localizacion'
 
-export interface Props {
-  selectLocalidad: (localidad: ILocalidad) => void
-}
 
-export const useDomicilio = ({ selectLocalidad }: Props) => {
+export const useDomicilio = () => {
   const [provincias, setProvincias] = useState<IProvincia[]>([])
   const [departamentos, setDepartamentos] = useState<IDepartamento[]>([])
-  const [barrios, setBarrios] = useState<IBarrio[]>([])
 
   const { data: paises } = useQuery({
     queryKey: ['paises', 'all'], 
@@ -30,27 +27,27 @@ export const useDomicilio = ({ selectLocalidad }: Props) => {
     setDepartamentos(data)
   }
 
-  // Buscardor de localidades
-  const handleSearch = async (query: string) => localidadActions.getLocalidadesByFilter(query)
+  const getLocalidades = async (query: string): Promise<ILocalidad[]> => {
+    const response = await apiJuzgado.get(`localidades?query=${query}`)
+    const { data } = response.data
+    return data
+  }
 
-  const getBarriosByDepartamento = async (localidad: ILocalidad | null) => {
-    if (!localidad) return 
-    
-    selectLocalidad(localidad)
-    const data: IBarrio[] = await barrioActions.getBarriosByLocalidades(localidad.id)
-    setBarrios(data)
+  const getBarrios = async (query: string): Promise<IBarrio[]> => {
+    const response = await apiJuzgado.get(`barrios?query=${query}`)
+    const { data } = response.data
+    return data
   }
 
   return {
     paises,
     provincias,
     departamentos,
-    barrios,
 
     // Funciones
+    getBarrios,
+    getLocalidades,
     getProvinciasByPais,
-    getDepartamentosByProvincia,
-    handleSearch,
-    getBarriosByDepartamento
+    getDepartamentosByProvincia
   }
 }

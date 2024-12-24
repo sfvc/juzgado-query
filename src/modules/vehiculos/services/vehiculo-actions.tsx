@@ -45,3 +45,9 @@ export const getVehiculosByFilter = async (query: string) => {
   return vehiculos
 }
   
+// TODO: Cambiar por query params
+export const getMarcas = async (query: string) => {
+  const response = await apiJuzgado.get(`marcas/buscar/${query}`)
+  const { data } = response.data
+  return data
+}

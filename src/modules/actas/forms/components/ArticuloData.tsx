@@ -71,7 +71,7 @@ export const ArticuloData = ({ data }: Props) => {
             <Table.Head>
               <Table.HeadCell className='text-center bg-gray-300'>Descripcion</Table.HeadCell>
               <Table.HeadCell className='text-center bg-gray-300'>Articulo</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Importe</Table.HeadCell>
+              <Table.HeadCell className='text-center bg-gray-300'>Unidades</Table.HeadCell>
               <Table.HeadCell className='text-center bg-gray-300'>Acciones</Table.HeadCell>
             </Table.Head>
             <Table.Body className='divide-y'>

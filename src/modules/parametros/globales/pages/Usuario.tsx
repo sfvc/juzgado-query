@@ -80,11 +80,9 @@ export const Usuario = () => {
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {
-              colums.map((column: Column) => (
-                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
           </Table.Head>
 
           <Table.Body className='divide-y'>
@@ -174,7 +172,10 @@ export const Usuario = () => {
               <Button color="gray" onClick={onCloseResetModal}>Cancelar</Button>
               <Button 
                 color="failure" 
-                onClick={() => resetPassword.mutate(activeItem!.id)} 
+                onClick={ async() => {
+                  await resetPassword.mutateAsync(activeItem!.id)
+                  onCloseResetModal()
+                }} 
                 isProcessing={resetPassword.isPending}
                 disabled={resetPassword.isPending}
               > 

@@ -10,6 +10,7 @@ interface DefaultValues {
     pais_id: number | null;
     provincia_id: number | null;
     departamento_id: number | null;
+    localidad_id: number | null;
     barrio_id: number | null;
     calle: string;
     numero: number | null;
@@ -43,7 +44,9 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     pais_id: persona?.domicilio?.pais_id || null,
     provincia_id: persona?.domicilio?.provincia_id || null,
     departamento_id: persona?.domicilio?.departamento_id || null,
-    barrio_id: persona?.domicilio?.barrio_id || null,
+    localidad_id: persona?.domicilio?.localidad?.id || null,
+    barrio_id: persona?.domicilio?.barrio?.id || null,
+    // barrio_id: persona?.domicilio?.barrio_id || null,
     calle: persona?.domicilio?.calle || '',
     numero: persona?.domicilio?.numero || null,
     lote_dpto: persona?.domicilio?.lote_dpto || null,
