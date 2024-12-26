@@ -42,7 +42,7 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
   return (
     <React.Fragment>
       <Dropdown label={icons.EllipsisVertical()} arrowIcon={false} placement='left' inline>
-        <div className='flex flex-col justify-center items-center gap-2 m-2 relative'>
+        <div className='flex flex-col justify-center items-center gap-2 m-2'>
           <Tooltip content='Editar' placement="left">
             <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Pencil />

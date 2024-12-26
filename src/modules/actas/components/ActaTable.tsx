@@ -31,11 +31,11 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Actas</h1>
       </div>
 
-      <div className='overflow-x-auto'>
+      <div className=''>
         <Table>
           <Table.Head>
             {colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+              <Table.HeadCell key={column.key} className={'text-center bg-gray-300 hidden lg:table-cell'}>{column.label}</Table.HeadCell>
             ))}
           </Table.Head>
 
@@ -62,10 +62,10 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                       }
 
                       <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{acta.fecha}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
-                      <Table.Cell className='text-center text-white dark:text-white'>
+                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.numero_causa}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.fecha}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.tipo_acta}</Table.Cell>
+                      <Table.Cell className='text-center text-white dark:text-white hidden lg:table-cell'>
                         <Tooltip content={acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'} className='max-w-80'>
                           <span 
                             className='max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block' 
@@ -75,13 +75,13 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                           </span>
                         </Tooltip>
                       </Table.Cell>
-                      <Table.Cell className='text-center'>
+                      <Table.Cell className='text-center hidden lg:table-cell'>
                         <span className={`dark:text-white ${acta.prioridad?.nombre === 'URGENTE' && 'bg-red-600 text-white px-2 py-1 border-none rounded-lg inline-block'}`}>
                           {acta.prioridad?.nombre || '-'}
                         </span>
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(acta?.infractores[0]?.apellido, acta?.infractores[0]?.nombre)}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{acta?.infractores[0]?.documento || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta?.infractores[0]?.documento || '-'}</Table.Cell>
                       
                       <Table.Cell className='text-center dark:text-white'>
                         {
