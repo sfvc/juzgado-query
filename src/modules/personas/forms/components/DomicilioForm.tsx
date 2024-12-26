@@ -38,7 +38,7 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
   
   return (
     <>
-      <Button color='gray' className='my-2' onClick={() => setShowDomicilio(!showDomicilio)} >Mostrar Domicilio</Button>
+      <Button color='blue' className='my-2' onClick={() => setShowDomicilio(!showDomicilio)} >Mostrar Domicilio</Button>
       {
         showDomicilio && 
           <div>

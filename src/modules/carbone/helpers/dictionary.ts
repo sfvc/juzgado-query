@@ -23,14 +23,13 @@ export const dictionary = () => {
     lugar: '{d.lugar}',
 
     // Vehiculo
-    titular: '{d.titular}',
     patente: '{d.patente}',
-    chasis: '{d.chasis}',
-    motor: '{d.motor}',
-    // marca: '{d.marca}',
-    // modelo: '{d.modelo}',
-    tipo: '{d.tipo}',
+    marca: '{d.marca}',
     color: '{d.color}',
+    modelo: '{d.modelo}',
+    chasis: '{d.chasis}',
+    titular: '{d.titular}',
+    tipo: '{d.tipo}',
     numeroTaxiRemis: '{d.numeroTaxiRemis}',
     vehiculo: '{d.vehiculo}',
 
@@ -42,6 +41,8 @@ export const dictionary = () => {
     descuento: '{d.descuento}',
     recargo: '{d.recargo}',
     conceptos: '{d.conceptos}',
+    // ImporteLetrasSinDescuento: '{d.ImporteLetrasSinDescuento}',
+    // importeInfraccionMultiple: '{d.importeInfraccionMultiple}',
     fechaSentencia: '{d.fechaSentencia}',
 
     // Notificaciones

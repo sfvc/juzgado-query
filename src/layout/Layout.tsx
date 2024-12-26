@@ -51,6 +51,10 @@ export const Layout = () => {
             Inhabilitados
           </Link>
 
+          <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            Plantillas
+          </Link>
+
           <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
             <Dropdown label='Parámetros' inline>
               <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
@@ -73,9 +77,7 @@ export const Layout = () => {
 
                   <Dropdown.Divider />
 
-                  <Link to='/plantillas'>
-                    <Dropdown.Item>Plantillas</Dropdown.Item>
-                  </Link>
+
                 </Dropdown>
               </div>
 

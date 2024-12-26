@@ -55,8 +55,7 @@ const NacionalidadForm = ({ nacionalidad, onSucces }: Props) => {
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
         <Button 
           size='md'
-          type='submit' 
-          color="gray"
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

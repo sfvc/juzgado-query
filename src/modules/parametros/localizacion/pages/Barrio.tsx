@@ -50,7 +50,7 @@ export const Barrio = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
+            <Button type='button' onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

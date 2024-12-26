@@ -100,7 +100,7 @@ export const InfractorData = ({ data }: Props) => {
           </div>
 
           <div className='flex items-start mt-8 gap-4'>
-            <Button type='button' color='success' className='h-10' onClick={addInfractor}>Agregar</Button>
+            <Button type='button' color='success' onClick={addInfractor}>Agregar</Button>
 
             <CreatePersona />
           </div>

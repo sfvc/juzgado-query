@@ -57,10 +57,10 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     defaultValues = {
       ...defaultValues,
       apellido: persona?.apellido || '',
-      numero_documento: persona?.numero_documento.toString() || '',
+      numero_documento: persona?.numero_documento?.toString() || '',
       estado_civil: persona?.estado_civil || '',
       fecha_nacimiento: persona?.fecha_nacimiento || '',
-      cuil: persona?.cuil.toString() || '',
+      cuil: persona?.cuil?.toString() || '',
       sexo: persona?.sexo || '',
       nacionalidad_id: persona?.nacionalidad?.id || null,
     }
@@ -68,7 +68,7 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     defaultValues = {
       ...defaultValues,
       razon_social: persona?.razon_social || '',
-      cuit: persona?.cuit.toString() || '',
+      cuit: persona?.cuit?.toString() || '',
       numero_inscripcion: persona?.numero_inscripcion || '',
       tipo_sociedad_id: persona?.tipo_sociedad_id || null,
     }

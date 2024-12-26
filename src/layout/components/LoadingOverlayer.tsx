@@ -1,5 +1,7 @@
-import React from 'react'
-import logoJuzgado from '../../assets/images/logo-juzgado.webp'
+import React, { useContext } from 'react'
+import logoDark from '../../assets/images/logo-capital-dark.webp'
+import logoLight from '../../assets/images/logo-capital-light.webp'
+import { ThemeContext } from '../../context/Theme/ThemeContext'
 
 const overlayStyles: React.CSSProperties = {
   position: 'fixed',
@@ -21,18 +23,20 @@ const imageStyles: React.CSSProperties = {
 
 const styles = document.createElement('style')
 styles.innerHTML = `
-    @keyframes float {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0); }
-    }
+  @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+  }
 `
 document.getElementsByTagName('head')[0].appendChild(styles)
 
 export const LoadingOverlay = () => {
+  const { theme } = useContext(ThemeContext)
+
   return (
     <div style={overlayStyles}>
-      <img src={logoJuzgado} alt="Loading..." style={imageStyles} />
+      <img src={ theme === 'light' ? logoLight : logoDark}  alt="Loading..." style={imageStyles} />
     </div>
   )
 }
