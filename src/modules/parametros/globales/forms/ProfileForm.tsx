@@ -50,7 +50,7 @@ const ProfileForm = () => {
           <TextInput
             name='nombre'
             value={user.nombre}
-            readOnly
+            disabled
           />
         </div>
 
@@ -61,7 +61,7 @@ const ProfileForm = () => {
           <TextInput
             name='dni'
             value={user.dni}
-            readOnly
+            disabled
           />
         </div>
 
@@ -72,7 +72,7 @@ const ProfileForm = () => {
           <TextInput
             name='username'
             value={user.username}
-            readOnly
+            disabled
           />
         </div>
 
@@ -83,7 +83,7 @@ const ProfileForm = () => {
           <TextInput
             name='juzgado'
             value={user.juzgado?.nombre}
-            readOnly
+            disabled
           />
         </div>
 
@@ -94,7 +94,7 @@ const ProfileForm = () => {
           <TextInput
             name='rol'
             value={user.role?.name}
-            readOnly
+            disabled
           />
         </div>
 
@@ -132,7 +132,6 @@ const ProfileForm = () => {
         <Button 
           size='md'
           type='submit' 
-          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

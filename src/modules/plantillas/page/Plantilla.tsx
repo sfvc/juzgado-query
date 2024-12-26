@@ -78,7 +78,7 @@ export const Plantilla = () => {
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
             <Button type='button' color="purple" onClick={renderDictionaryPDF} >Diccionario</Button>
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
+            <Button type='button' onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

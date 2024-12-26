@@ -114,7 +114,6 @@ const JuzgadoForm = ({ juzgado, onSucces }: Props) => {
         <Button 
           size='md'
           type='submit' 
-          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >
