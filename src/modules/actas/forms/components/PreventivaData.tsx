@@ -22,7 +22,7 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
         : []
         
   return (
-    <div className={`grid gap-4 ${showPreventiva ? 'md:grid-cols-2' : 'grid-cols-1'} `}>
+    <div className={`grid gap-4 ${(showPreventiva && preventivas.length > 0) ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
       <div>
         <div className='mb-2 block'>
           <Label htmlFor='prioridad_id' value='Prioridad' /><strong className='obligatorio'>(*)</strong>
@@ -41,32 +41,26 @@ export const PreventivaData = ({ tipoActa, prioridades }: { tipoActa: string, pr
           }}
         >
           <option value='' hidden>Seleccione una prioridad</option>
-          {
-            prioridades?.length && prioridades.map((prioridad: Prioridad) => (
-              <option key={prioridad.id} value={prioridad.id}>{prioridad.nombre}</option>
-            ))
-          }
+          {prioridades?.length && prioridades.map((prioridad: Prioridad) => (
+            <option key={prioridad.id} value={prioridad.id}>{prioridad.nombre}</option>
+          ))}
         </Select>
       </div>
 
       {
-        showPreventiva &&
+        (showPreventiva && preventivas.length > 0) &&
           <div>
             <div className='mb-2 block'>
               <Label htmlFor='preventiva' value='Preventiva' /><strong className='obligatorio'>(*)</strong>
             </div>
             <Select {...register('preventiva')}>
               <option value='' hidden>Seleccione una medida</option>
-              {
-                preventivas.map((preventiva, index: number) => (
-                  <option key={index} value={preventiva.value}>{preventiva.label}</option>
-                ))
-              }
+              {preventivas.map((preventiva, index: number) => (
+                <option key={index} value={preventiva.value}>{preventiva.label}</option>
+              ))}
             </Select>
           </div>
       }
-
-      {/* <span>{JSON.stringify(errors?.prioridad_id?.message)}</span> */}
     </div>
   )
 }

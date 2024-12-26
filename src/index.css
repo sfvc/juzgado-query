@@ -19,22 +19,30 @@
 }
   
 .rainbow-text {
-    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
     -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: rainbow-animation 10s infinite linear;
-    background-size: 200% 100%;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow 3s infinite linear;
   }
   
-  @keyframes rainbow-animation {
+  @keyframes rainbow {
     0% {
-        background-position: 0 0;
+      background-position: 0%;
     }
-  
     100% {
-        background-position: 200% 0;
+      background-position: 100%;
     }
+  }
+  
+  .prueba-banner {
+    border: 2px dashed #ff8c00;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.7);
+    display: inline-block;
   }
   
 .readonly-input {

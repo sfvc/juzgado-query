@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { useFilter } from '../../../../shared/hooks/useFilter'
-import { FormUsuario, IUsuario } from '../interfaces'
 import { usuarioActions } from '..'
+import type { FormUsuario, IUsuario } from '../interfaces'
 
 interface FilterParams {
   search: string

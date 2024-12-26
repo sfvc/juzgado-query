@@ -4,11 +4,9 @@ export const personaFisicaSchema = yup.object().shape({
   apellido: yup.string().required('El apellido es requerido'),
   nombre: yup.string().required('El nombre es requerido'),
   tipo_documento: yup.string().required('El tipo de documento es requerido'),
-  // numero_documento: yup.number().transform(value => isNaN(value) ? null : value).required('El número de documento es requerido'),
   numero_documento: yup.string().required('El número de documento es requerido'),
   fecha_nacimiento: yup.string().notRequired(),
   estado_civil:  yup.string().notRequired(),
-  // cuil: yup.number().transform(value => isNaN(value) ? null : value).required('El cuil es requerido'),
   cuil: yup.string().required('El cuil es requerido'),
   sexo: yup.string().required('El sexo es requerido'),
   email: yup.string().email('Email no válido').notRequired(),
@@ -22,7 +20,6 @@ export const personaJuridicaSchema = yup.object().shape({
   razon_social: yup.string().required('La razon social es requerida'),
   nombre: yup.string().required('El nombre es requerido'),
   tipo_documento: yup.string().required('El tipo de documento es requerido'),
-  // cuit: yup.number().transform(value => isNaN(value) ? null : value).required('El cuit es requerido'),
   cuit: yup.string().required('El cuit es requerido'),
   email: yup.string().email('Email no válido').notRequired(),
   numero_inscripcion: yup.string().notRequired(),
@@ -33,19 +30,22 @@ export const personaJuridicaSchema = yup.object().shape({
 })
 
 export const domicilioSchema = yup.object({
-  pais_id: yup.string()
+  pais_id: yup.number()
     .when('$showDomicilio', {
       is: true,
-      then: (schema) => schema.required('El país es requerido'),
+      then: (schema) => schema.transform((value) => (isNaN(value) ? null : value)).required('El país es requerido'),
       otherwise: (schema) => schema.notRequired(),
     }),
-  provincia_id: yup.string()
+  provincia_id: yup.number()
     .when('$showDomicilio', {
       is: true,
-      then: (schema) => schema.required('La provincia es requerida'),
+      then: (schema) => schema.transform((value) => (isNaN(value) ? null : value)).required('La provincia es requerida'),
       otherwise: (schema) => schema.notRequired(),
     }),
   departamento_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  localidad_id: yup.number()
     .transform((value) => (isNaN(value) ? null : value))
     .notRequired(),
   barrio_id: yup.number()

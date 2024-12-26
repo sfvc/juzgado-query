@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { apiJuzgado } from '../../../api/config'
-import { User } from '../../../auth/interfaces/auth'
 import { clearNames } from '../../../shared'
+import type { User } from '../../../auth/interfaces/auth'
 
 const getProvincia = async (provinciaId: number) => {
   if (!provinciaId) return
@@ -47,7 +46,7 @@ const formatDomicilio = async (domicilio: any) => {
     Numero: ${domicilio?.numero || ''}, 
     Manzana: ${domicilio?.manzana_piso || ''}, 
     Lote: ${domicilio?.lote_dpto || ''}
-        `.trim()
+  `.trim()
 }
 
 export const formatData = async (acta: any, user: User, actuacionId: number) => {
@@ -67,6 +66,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let infraccionesFormatted = ''
   let actuacionSeleccionada = null
   let fechaNotificacion = []
+  let conceptos = ''
 
   for (const [i, infractor] of acta?.infractores?.entries() || []) {
     const domicilioFormatted = await formatDomicilio(infractor?.domicilio)
@@ -98,11 +98,11 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
   if (acta?.actuaciones) {
     actuacionSeleccionada = acta.actuaciones.find((actuacion: any) => actuacion.id === actuacionId)
-    actuacionesFormatted = `
-        Tipo: ${actuacionSeleccionada?.tipo || ''}, 
-        Monto: $${actuacionSeleccionada?.monto || ''}, 
-        Observaciones: ${actuacionSeleccionada?.observaciones || ''}. 
-    `
+    actuacionesFormatted = `Tipo: ${actuacionSeleccionada?.tipo || ''}, Monto: $${actuacionSeleccionada?.total || ''}, Observaciones: ${actuacionSeleccionada?.observaciones || ''}.`
+
+    actuacionSeleccionada?.conceptos.forEach((item: any) => {
+      conceptos += `${item?.concepto} de $${item?.monto}, `
+    })
   }
 
   if (acta?.infracciones_cometidas) {
@@ -139,17 +139,21 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     patente: acta?.vehiculo?.dominio || '',
     chasis: acta?.vehiculo?.numero_chasis || '',
     motor: acta?.vehiculo?.numero_motor || '',
-    marca: acta?.vehiculo?.marca || '',
-    modelo: acta?.vehiculo?.modelo || '',
     tipo: acta?.vehiculo?.tipo || '',
     color: acta?.vehiculo?.color || '',
     numeroTaxiRemis: acta?.vehiculo?.numero_taxi_remis || '',
     vehiculo: vehiculoFormatted || '',
+    // marca: acta?.vehiculo?.marca || '',
+    // modelo: acta?.vehiculo?.modelo || '',
 
     // Actuaciones e Infracciones Cometidas
     actuaciones: actuacionesFormatted || '',
     infracciones: infraccionesFormatted || '',
-    monto: actuacionSeleccionada?.monto || '',
+    total: actuacionSeleccionada?.total || '',
+    subTotal: actuacionSeleccionada?.sub_total,
+    descuento: actuacionSeleccionada?.descuento,
+    recargo: actuacionSeleccionada?.recargo,
+    conceptos,
     fechaSentencia: actuacionSeleccionada?.fecha || '',
 
     // Notificaciones

@@ -13,6 +13,7 @@ export const usePdf = (acta?: any) => {
       if(!acta) throw new Error('No se encontró la acta')
 
       const actaformated = await formatData(acta, user!, notificacionId)
+      console.log(actaformated)
     
       const data = {
         convertTo: 'pdf',

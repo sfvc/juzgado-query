@@ -35,7 +35,7 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
     defaultValues: {
       nombre: localidad?.nombre || '',
       departamento_id: localidad?.departamento?.id?.toString() || '',
-      provincia_id: localidad?.provincia_id?.toString() || '3'
+      provincia_id: localidad?.provincia_id?.toString() || '3' // TODO: Eliminar provincia_id por defecto y agragr en DB
     },
     resolver: yupResolver(validationSchema)
   })
@@ -96,7 +96,6 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
         <Button 
           size='md'
           type='submit' 
-          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

@@ -10,6 +10,7 @@ interface DefaultValues {
     pais_id: number | null;
     provincia_id: number | null;
     departamento_id: number | null;
+    localidad_id: number | null;
     barrio_id: number | null;
     calle: string;
     numero: number | null;
@@ -43,7 +44,9 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     pais_id: persona?.domicilio?.pais_id || null,
     provincia_id: persona?.domicilio?.provincia_id || null,
     departamento_id: persona?.domicilio?.departamento_id || null,
-    barrio_id: persona?.domicilio?.barrio_id || null,
+    localidad_id: persona?.domicilio?.localidad?.id || null,
+    barrio_id: persona?.domicilio?.barrio?.id || null,
+    // barrio_id: persona?.domicilio?.barrio_id || null,
     calle: persona?.domicilio?.calle || '',
     numero: persona?.domicilio?.numero || null,
     lote_dpto: persona?.domicilio?.lote_dpto || null,
@@ -54,10 +57,10 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     defaultValues = {
       ...defaultValues,
       apellido: persona?.apellido || '',
-      numero_documento: persona?.numero_documento.toString() || '',
+      numero_documento: persona?.numero_documento?.toString() || '',
       estado_civil: persona?.estado_civil || '',
       fecha_nacimiento: persona?.fecha_nacimiento || '',
-      cuil: persona?.cuil.toString() || '',
+      cuil: persona?.cuil?.toString() || '',
       sexo: persona?.sexo || '',
       nacionalidad_id: persona?.nacionalidad?.id || null,
     }
@@ -65,7 +68,7 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     defaultValues = {
       ...defaultValues,
       razon_social: persona?.razon_social || '',
-      cuit: persona?.cuit.toString() || '',
+      cuit: persona?.cuit?.toString() || '',
       numero_inscripcion: persona?.numero_inscripcion || '',
       tipo_sociedad_id: persona?.tipo_sociedad_id || null,
     }

@@ -2,10 +2,10 @@
 import { useEffect } from 'react'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
-import { Domicilio, IDomicilio } from '../../interfaces'
-import { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
 import { useDomicilio } from '../../hooks/useDomicilio'
-import { SearchInput } from '../../../../shared'
+import { SearchableSelect } from '../../../../shared/components/SearchableSelect'
+import type { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../../../parametros/localizacion/interfaces/localizacion'
+import type { Domicilio, IDomicilio } from '../../interfaces'
 
 export interface Props {
   showDomicilio: boolean
@@ -16,24 +16,20 @@ export interface Props {
 export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Props) => {
   const { register, setValue, formState: { errors } } = useFormContext<Domicilio>()
 
-  const selectLocalidad = (localidad: ILocalidad) => setValue('localidad_id', localidad.id)
-
   const { 
     paises,
     provincias,
     departamentos,
-    barrios,
-    handleSearch,
+    getBarrios,
+    getLocalidades,
     getProvinciasByPais,
     getDepartamentosByProvincia,
-    getBarriosByDepartamento
-  } = useDomicilio({ selectLocalidad })
+  } = useDomicilio()
 
   const initLoading = async () => {
     if(!domicilio) return
     await getProvinciasByPais(domicilio?.pais_id)
     await getDepartamentosByProvincia(domicilio?.provincia_id)
-    await getBarriosByDepartamento(domicilio?.localidad)
   }
 
   useEffect(() => {
@@ -42,7 +38,7 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
   
   return (
     <>
-      <Button color='gray' className='my-2' onClick={() => setShowDomicilio(!showDomicilio)} >Mostrar Domicilio</Button>
+      <Button color='blue' className='my-2' onClick={() => setShowDomicilio(!showDomicilio)} >Mostrar Domicilio</Button>
       {
         showDomicilio && 
           <div>
@@ -59,7 +55,7 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
                 </div>
 
                 <Select 
-                  {...register('pais_id')}
+                  {...register('pais_id', { valueAsNumber: true })}
                   helperText={errors?.pais_id && errors?.pais_id?.message} 
                   color={errors?.pais_id && 'failure'}
                   onChange={(e) => getProvinciasByPais(+e.target.value)}
@@ -79,7 +75,7 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
                 </div>
 
                 <Select 
-                  {...register('provincia_id')}
+                  {...register('provincia_id', { valueAsNumber: true })}
                   helperText={errors?.provincia_id && errors?.provincia_id?.message} 
                   color={errors?.provincia_id && 'failure'}
                   onChange={(e) => getDepartamentosByProvincia(+e.target.value)}
@@ -100,7 +96,7 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
                 </div>
 
                 <Select 
-                  {...register('departamento_id')}
+                  {...register('departamento_id', { valueAsNumber: true })}
                   helperText={errors?.departamento_id && errors?.departamento_id?.message} 
                   color={errors?.departamento_id && 'failure'}
                   disabled={departamentos.length === 0}
@@ -114,35 +110,31 @@ export const DomicilioForm = ({ showDomicilio, setShowDomicilio, domicilio }: Pr
                 </Select>
               </div>
 
-              <SearchInput<ILocalidad>
+              <SearchableSelect<ILocalidad>
                 label="Localidad"
                 placeholder="Buscar localidad"
-                onSearch={handleSearch}
-                onSelect={(item: ILocalidad) => getBarriosByDepartamento(item)}
+                onSearch={getLocalidades}
+                onSelect={(item: ILocalidad) => setValue('localidad_id', item.id)}
                 renderItem={(item) => (
                   <div><strong>{item.nombre}</strong> - CP. {item.codigo_postal}</div>
                 )}
-                renderInput={(item) => { return `${item.nombre} - CP. ${item.codigo_postal}`} }
+                renderInput={(item) => { return `${item.nombre} - CP. ${item.codigo_postal}`}}
+                defaultValue={domicilio?.localidad?.nombre}
+                resetInput={() => setValue('localidad_id', null)}
               />
 
-              <div className='mb-4'>
-                <div className='mb-2 block dark:text-white'>
-                  <Label htmlFor='barrio_id' value='Barrio' />
-                </div>
-
-                <Select 
-                  {...register('barrio_id')}
-                  helperText={errors?.barrio_id && errors?.barrio_id?.message} 
-                  color={errors?.barrio_id && 'failure'}
-                >
-                  <option value=''>Seleccione un barrio</option>
-                  {barrios?.map((barrio: IBarrio) => (
-                    <option key={barrio.id} value={barrio.id}>
-                      {barrio.nombre}
-                    </option>
-                  ))}
-                </Select>
-              </div>
+              <SearchableSelect<IBarrio>
+                label="Barrio"
+                placeholder="Buscar barrio"
+                onSearch={getBarrios}
+                onSelect={(item: IBarrio) => setValue('barrio_id', item.id)}
+                renderItem={(item) => (
+                  <div><strong>{item.nombre}</strong></div>
+                )}
+                renderInput={(item) => { return `${item.nombre}`} }
+                defaultValue={domicilio?.barrio?.nombre}
+                resetInput={() => setValue('barrio_id', null)}
+              />
 
               <div className='mb-4'>
                 <div className='mb-2 block dark:text-white'>

@@ -11,6 +11,7 @@ export { SearchInput } from './components/SearchInput'
 export { Loading } from './components/Loading'
 export { DetalleActa } from './components/DetalleActa'
 export { InputTable } from './components/InputTable'
+export { SearchableSelect } from './components/SearchableSelect'
 
 /* Icons */
 export * as icons from './icons/Icons'

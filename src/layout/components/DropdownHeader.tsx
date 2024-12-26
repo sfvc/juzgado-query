@@ -32,7 +32,7 @@ export const DropdownHeader = () => {
         </Dropdown.Header>
         
         <Dropdown.Item onClick={() => navigate('/profile')}>
-          <span className='text-sm flex gap-2'><icons.Reset /> Resetear contraseña</span>
+          <span className='text-sm flex gap-2'><icons.Reset /> Cambiar contraseña</span>
         </Dropdown.Item>
 
         <Dropdown.Item className='text-smflex gap-2' onClick={logoutUser}>

@@ -45,7 +45,6 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (form: FormValues) => {
-    console.log(form)
     if (persona) await updatePersona.mutateAsync({id: persona.id, persona: form})
     else await createPersona.mutateAsync(form)
 

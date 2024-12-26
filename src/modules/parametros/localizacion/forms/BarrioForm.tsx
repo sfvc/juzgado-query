@@ -80,7 +80,6 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
         <Button 
           size='md'
           type='submit' 
-          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

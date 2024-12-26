@@ -74,7 +74,7 @@ export const Articulo = () => {
 
             <InputTable onSearch={(value: string) => updateFilter('search', value)} />
 
-            <Button type='button' color="gray" onClick={() => setOpenModal(true)} >Agregar</Button>
+            <Button type='button' onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
       </div>

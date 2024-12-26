@@ -55,7 +55,6 @@ const RubroForm = ({ rubro, onSucces }: Props) => {
         <Button 
           size='md'
           type='button' 
-          color="gray"
           disabled={isSubmitting}
           isProcessing={isSubmitting}
           onClick={() => handleSubmit(onSubmit)()}

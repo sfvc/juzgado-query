@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, Prioridad } from '../interfaces'
 import { SearchInput } from '../../../shared'
 import { IArticulo } from '../../parametros/actas/interfaces'
 import { articuloActions } from '../../parametros/actas'
+import { useStorageFilter } from '../hooks/useStorageFilter'
 
 interface Props {
   register: UseFormRegister<ActaFilterForm>
@@ -14,7 +15,7 @@ interface Props {
 }
 
 export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Props) => {
-  const [infraccionStorage, setInfraccionStorage] = useState<string>(localStorage.getItem('infraccion') || '')
+  const { infraccionStorage, setInfraccionStorage } = useStorageFilter()
 
   const onFocusInfraccionInput = () => {
     localStorage.removeItem('infraccion')
