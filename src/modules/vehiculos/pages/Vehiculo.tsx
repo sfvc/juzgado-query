@@ -82,13 +82,13 @@ export const Vehiculo = () => {
                 :(vehiculos.length > 0)
                   ? (vehiculos.map((vehiculo: IVehiculo) => (
                     <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre)}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.marca.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo.color.nombre}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.id || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.dominio || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre) || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.marca?.nombre || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.modelo || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.tipo?.nombre || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.color?.nombre || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Editar'>
                           <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>

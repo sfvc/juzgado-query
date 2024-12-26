@@ -41,15 +41,15 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
 
   return (
     <React.Fragment>
-      <Dropdown label={icons.EllipsisVertical()} arrowIcon={false} inline>
-        <div className='flex flex-col justify-center items-center gap-2 m-2'>
-          <Tooltip content='Editar' placement="right">
+      <Dropdown label={icons.EllipsisVertical()} arrowIcon={false} placement='left' inline>
+        <div className='flex flex-col justify-center items-center gap-2 m-2 relative'>
+          <Tooltip content='Editar' placement="left">
             <Button color='success' onClick={() => handleEditActa(acta.id, acta.tipo_acta)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Pencil />
             </Button>
           </Tooltip>
 
-          <Tooltip content='Estados' placement="right">
+          <Tooltip content='Estados' placement="left">
             <Button color='warning' onClick={() => handleChangeStatus(acta.id)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Status />
             </Button>
@@ -57,20 +57,20 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
 
           {
             (acta?.notificacion && !!acta.notificacion.length) &&
-              <Tooltip content='Notificaciones' placement="right">
+              <Tooltip content='Notificaciones' placement="left">
                 <Button color='blue' onClick={() => handleNotification(acta.id)} className='w-8 h-8 flex items-center justify-center'>
                   <icons.Notification />
                 </Button>
               </Tooltip>
           }
 
-          <Tooltip content='Actuaciones' placement="right">
+          <Tooltip content='Actuaciones' placement="left">
             <Button color='purple' onClick={() => handleActuacion(acta.id)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Actuacion />
             </Button>
           </Tooltip>
 
-          <Tooltip content='Eliminar' placement="right">
+          <Tooltip content='Eliminar' placement="left">
             <Button color='failure' onClick={() => onOpenModal(acta)} className='w-8 h-8 flex items-center justify-center'>
               <icons.Trash />
             </Button>
