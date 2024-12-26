@@ -1,25 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister } from 'react-hook-form'
 import { SearchInput } from '../../../shared'
 import { vehiculoActions } from '../../vehiculos'
 import { personaActions } from '../../personas'
 import { clearNames } from '../../../shared'
+import { useStorageFilter } from '../hooks/useStorageFilter'
 import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
 
 interface Props {
     register: UseFormRegister<ActaFilterForm>,
-    setValue: (key: keyof ActaFilterForm, value: string) => void ,
-    filterParams: ActaFilterForm,
+    setValue: (key: keyof ActaFilterForm, value: string) => void,
     data: DataFilters
     resetForm: boolean
 }
 
-export const FormFilter = ({ register, setValue, filterParams, data, resetForm }: Props) => {
-  const [personaStorage, setPersonaStorage] = useState<string>(localStorage.getItem('infractor') || '')
-  const [vehiculoStorage, setVehiculoStorage] = useState<string>(localStorage.getItem('vehiculo') || '')
+export const FormFilter = ({ register, setValue, data, resetForm }: Props) => {
+  const { personaStorage, setPersonaStorage, vehiculoStorage, setVehiculoStorage } = useStorageFilter()
 
   const onFocusPersonaInput = () => {
     localStorage.removeItem('infractor')
