@@ -8,7 +8,7 @@ import { Loading } from '../../../shared'
 import EstadoForm from '../forms/EstadoForm'
 
 const colums: Column[] = [
-  { key: 'estado', label: 'Id' },
+  { key: 'estado', label: 'Estado' },
   { key: 'color', label: 'color' },
   { key: 'fecha_desde', label: 'fecha_desde' },
   { key: 'fecha_hasta', label: 'fecha_hasta' },

@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { apiJuzgado } from '../../../api/config'
+// import { apiJuzgado } from '../../../api/config'
 import { clearNames } from '../../../shared'
-import type { User } from '../../../auth/interfaces/auth'
 import { numberToWords } from './numberToWords'
+import type { User } from '../../../auth/interfaces/auth'
 
-const getProvincia = async (provinciaId: number) => {
-  if (!provinciaId) return
-  const response = await apiJuzgado.get(`/provincias/${provinciaId}`)
-  const { data: provincia } = response.data
-  return provincia?.nombre || ''
-}
+// const getProvincia = async (provinciaId: number) => {
+//   if (!provinciaId) return
+//   const response = await apiJuzgado.get(`/provincias/${provinciaId}`)
+//   const { data: provincia } = response.data
+//   return provincia?.nombre || ''
+// }
   
-const getDepartamento = async (departamentoId: number) => {
-  if (!departamentoId) return
-  const response = await apiJuzgado.get(`/departamentos/${departamentoId}`)
-  const { data: departamento } = response.data
-  return departamento?.nombre || ''
-}
+// const getDepartamento = async (departamentoId: number) => {
+//   if (!departamentoId) return
+//   const response = await apiJuzgado.get(`/departamentos/${departamentoId}`)
+//   const { data: departamento } = response.data
+//   return departamento?.nombre || ''
+// }
   
-const getLocalidad = async (localidadId: number) => {
-  if (!localidadId) return
-  const response = await apiJuzgado.get(`/localidades/${localidadId}`)
-  const { data: localidad } = response.data
-  return localidad?.nombre || ''
-}
+// const getLocalidad = async (localidadId: number) => {
+//   if (!localidadId) return
+//   const response = await apiJuzgado.get(`/localidades/${localidadId}`)
+//   const { data: localidad } = response.data
+//   return localidad?.nombre || ''
+// }
   
 const matchMakeAndModel = (vehiculo: any) => {
   if (!vehiculo) return ''
@@ -34,7 +34,7 @@ const matchMakeAndModel = (vehiculo: any) => {
 }
 
 // Función para formatear el domicilio
-const formatDomicilio = async (domicilio: any) => {
+/* const formatDomicilio = async (domicilio: any) => {
   const provincia = await getProvincia(domicilio?.provincia_id)
   const departamento = await getDepartamento(domicilio?.departamento_id)
   const localidad = await getLocalidad(domicilio?.localidad_id)
@@ -48,6 +48,10 @@ const formatDomicilio = async (domicilio: any) => {
     Manzana: ${domicilio?.manzana_piso || ''}, 
     Lote: ${domicilio?.lote_dpto || ''}
   `.trim()
+} */
+
+const formatDomicilio = async (domicilio: any) => {
+  return `${domicilio?.calle || ''}`.trim()
 }
 
 export const formatData = async (acta: any, user: User, actuacionId: number) => {
@@ -68,6 +72,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let actuacionSeleccionada = null
   let fechaNotificacion = []
   let conceptos = ''
+  let numeroArticulo = ''
 
   for (const [i, infractor] of acta?.infractores?.entries() || []) {
     const domicilioFormatted = await formatDomicilio(infractor?.domicilio)
@@ -107,7 +112,12 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   }
 
   if (acta?.infracciones_cometidas) {
-    infraccionesFormatted = acta.infracciones_cometidas.map((infraccion: any) => {
+    infraccionesFormatted = acta.infracciones_cometidas.map((infraccion: any, index: number) => {
+      numeroArticulo = 
+        index === 0 
+          ? `${infraccion?.numero}` 
+          : `${numeroArticulo}, ${infraccion?.numero}`
+
       return `Artículo: ${infraccion?.numero || ''}, Detalle: ${infraccion?.detalle || ''}`
     }).join('; ')
   }
@@ -134,6 +144,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     actaHs: acta?.hora || '',
     actaObservaciones: acta?.observaciones || '',
     lugar: acta?.lugar || '',
+    numeroArticulo,
 
     // Vehiculo
     titular,
@@ -144,8 +155,6 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     color: acta?.vehiculo?.color || '',
     numeroTaxiRemis: acta?.vehiculo?.numero_taxi_remis || '',
     vehiculo: vehiculoFormatted || '',
-    // marca: acta?.vehiculo?.marca || '',
-    // modelo: acta?.vehiculo?.modelo || '',
 
     // Actuaciones e Infracciones Cometidas
     actuaciones: actuacionesFormatted || '',

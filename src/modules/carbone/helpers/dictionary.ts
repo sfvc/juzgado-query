@@ -21,6 +21,7 @@ export const dictionary = () => {
     actaHs: '{d.actaHs}',
     actaObservaciones: '{d.actaObservaciones}',
     lugar: '{d.lugar}',
+    numeroArticulo: '{d.numeroArticulo}',
 
     // Vehiculo
     patente: '{d.patente}',
@@ -30,8 +31,6 @@ export const dictionary = () => {
     tipo: '{d.tipo}',
     numeroTaxiRemis: '{d.numeroTaxiRemis}',
     vehiculo: '{d.vehiculo}',
-    // marca: '{d.marca}',
-    // color: '{d.color}',
 
     // Actuaciones
     actuaciones: '{d.actuaciones}',
