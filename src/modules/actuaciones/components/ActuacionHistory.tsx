@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react'
-import { useQuery, useQueryClient, QueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Button, FileInput, Label, Modal, Spinner, Table, Tooltip } from 'flowbite-react'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 import { icons } from '../../../shared'
@@ -28,7 +28,6 @@ interface Props {
 }
 
 export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
-  // const queryClient = useQueryClient()
   const { deleteActuacionHistory } = useActuacion()
   const { uploadFile, downloadWord } = useUploadFile()
   const { showPDFGotenberg } = usePdf()

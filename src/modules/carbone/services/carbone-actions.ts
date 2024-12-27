@@ -134,7 +134,8 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
     a.href = fileURL
 
     // Especificar el nombre con el que se descargará el archivo
-    a.download = `${itemId} - ${path}`
+    // a.download = `${itemId} - ${path}`
+    a.download = `${acta.numero_acta} - ${path}`
 
     // Simular el clic en el enlace
     document.body.appendChild(a)
