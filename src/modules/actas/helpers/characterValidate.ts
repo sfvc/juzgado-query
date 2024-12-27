@@ -1,8 +1,8 @@
 import { ACTAS } from '../../../shared/constants'
 
 const lettersTransito = /^[abcdgsp\d]*$/i
-const lettersInspeccion = /^[b\d]*$/i
-const lettersBromatologia = /^[i\d]*$/i
+const lettersInspeccion = /^[i\d]*$/i
+const lettersBromatologia = /^[b\d]*$/i
 const lettersObras = /^[op\d]*$/i
 
 
