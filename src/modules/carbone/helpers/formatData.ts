@@ -2,6 +2,7 @@
 import { apiJuzgado } from '../../../api/config'
 import { clearNames } from '../../../shared'
 import type { User } from '../../../auth/interfaces/auth'
+import { numberToWords } from './numberToWords'
 
 const getProvincia = async (provinciaId: number) => {
   if (!provinciaId) return
@@ -155,6 +156,8 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     recargo: actuacionSeleccionada?.recargo,
     conceptos,
     fechaSentencia: actuacionSeleccionada?.fecha || '',
+    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.total),
+    importeInfraccionMultiple: actuacionSeleccionada?.total || '', //** Es lo mismo que total. REVISAR */
 
     // Notificaciones
     fechaNotificacion: fechaNotificacion || ''
