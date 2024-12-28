@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
 import { ThemeContext } from '../context/Theme/ThemeContext'
+import { RoleGuard, UserRole } from '../auth'
 import { ToastContainer } from 'react-toastify'
 import { DropdownHeader } from './'
 import logoDark from '../assets/images/logo-capital-dark.webp'
@@ -51,103 +52,107 @@ export const Layout = () => {
             Inhabilitados
           </Link>
 
-          <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+            <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             Plantillas
-          </Link>
+            </Link>
+          </RoleGuard>
 
-          <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
-            <Dropdown label='Parámetros' inline>
-              <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
-                <Dropdown label='Actas' placement='right' inline>
-                  <Link to='/articulos'>
-                    <Dropdown.Item>Articulos</Dropdown.Item>
-                  </Link>
+          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+            <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
+              <Dropdown label='Parámetros' inline>
+                <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
+                  <Dropdown label='Actas' placement='right' inline>
+                    <Link to='/articulos'>
+                      <Dropdown.Item>Articulos</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/propiedades'>
-                    <Dropdown.Item>Propiedades</Dropdown.Item>
-                  </Link>
+                    <Link to='/propiedades'>
+                      <Dropdown.Item>Propiedades</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/rubros'>
-                    <Dropdown.Item>Rubros</Dropdown.Item>
-                  </Link>
+                    <Link to='/rubros'>
+                      <Dropdown.Item>Rubros</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
 
-                </Dropdown>
-              </div>
+                  </Dropdown>
+                </div>
 
-              <Dropdown.Divider />
+                <Dropdown.Divider />
 
-              <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
-                <Dropdown label='Localización' placement='right' inline>
+                <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
+                  <Dropdown label='Localización' placement='right' inline>
 
-                  <Link to='/paises'>
-                    <Dropdown.Item>Países</Dropdown.Item>
-                  </Link>
+                    <Link to='/paises'>
+                      <Dropdown.Item>Países</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/provincias'>
-                    <Dropdown.Item>Provincias</Dropdown.Item>
-                  </Link>
+                    <Link to='/provincias'>
+                      <Dropdown.Item>Provincias</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/departamentos'>
-                    <Dropdown.Item>Departamentos</Dropdown.Item>
-                  </Link>
+                    <Link to='/departamentos'>
+                      <Dropdown.Item>Departamentos</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/localidades'>
-                    <Dropdown.Item>Localidades</Dropdown.Item>
-                  </Link>
+                    <Link to='/localidades'>
+                      <Dropdown.Item>Localidades</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/barrios'>
-                    <Dropdown.Item>Barrios</Dropdown.Item>
-                  </Link>
+                    <Link to='/barrios'>
+                      <Dropdown.Item>Barrios</Dropdown.Item>
+                    </Link>
 
-                  <Dropdown.Divider />
+                    <Dropdown.Divider />
 
-                  <Link to='/nacionalidades'>
-                    <Dropdown.Item>Nacionalidades</Dropdown.Item>
-                  </Link>
+                    <Link to='/nacionalidades'>
+                      <Dropdown.Item>Nacionalidades</Dropdown.Item>
+                    </Link>
 
-                </Dropdown>
-              </div>
+                  </Dropdown>
+                </div>
 
-              <Dropdown.Divider />
+                <Dropdown.Divider />
 
-              <Link to='/estados'>
-                <Dropdown.Item>Estados</Dropdown.Item>
-              </Link>
+                <Link to='/estados'>
+                  <Dropdown.Item>Estados</Dropdown.Item>
+                </Link>
 
-              <Dropdown.Divider />
+                <Dropdown.Divider />
 
-              <Link to='/juzgados'>
-                <Dropdown.Item>Juzgados</Dropdown.Item>
-              </Link>
+                <Link to='/juzgados'>
+                  <Dropdown.Item>Juzgados</Dropdown.Item>
+                </Link>
 
-              <Dropdown.Divider />
+                <Dropdown.Divider />
 
-              <Link to='/usuarios'>
-                <Dropdown.Item>Usuarios</Dropdown.Item>
-              </Link>
+                <Link to='/usuarios'>
+                  <Dropdown.Item>Usuarios</Dropdown.Item>
+                </Link>
 
-              <Dropdown.Divider />
+                <Dropdown.Divider />
 
-              <Link to='/unidades'>
-                <Dropdown.Item>Ud. de Multa</Dropdown.Item>
-              </Link>
-            </Dropdown>
-          </div>
+                <Link to='/unidades'>
+                  <Dropdown.Item>Ud. de Multa</Dropdown.Item>
+                </Link>
+              </Dropdown>
+            </div>
+          </RoleGuard>
         </Navbar.Collapse>
       </Navbar>
       

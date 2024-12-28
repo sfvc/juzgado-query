@@ -20,7 +20,7 @@ export interface FormInhabilitado {
     fecha_desde: string
     fecha_hasta: string
     numero_acta: string
-    instrumento: string
+    instrumento?: string
     causa: string
 }
 

@@ -69,16 +69,18 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
     const conceptoTotal = entries.reduce((acc, concepto) => acc + (concepto.monto || 0), 0)
   
     setFormState((prev) => {
-      const nuevoSubTotal = conceptoTotal + infracciones.reduce((acc, infraccion) => acc + (infraccion.importe || 0), 0)
+      const nuevoSubTotal = infracciones.reduce((acc, infraccion) => acc + (infraccion.importe || 0), 0)
+      const nuevoTotal = 
+       action === 'DESCUENTO'
+         ? Number((nuevoSubTotal - ((nuevoSubTotal * descuento) / 100)).toFixed(1))
+         : action === 'RECARGO'
+           ? Number((nuevoSubTotal + ((nuevoSubTotal * recargo) / 100)).toFixed(1))
+           : nuevoSubTotal
 
       return {
         ...prev,
         sub_total: nuevoSubTotal,
-        total: action === 'DESCUENTO'
-          ? Number((nuevoSubTotal - ((nuevoSubTotal * descuento) / 100)).toFixed(1))
-          : action === 'RECARGO'
-            ? Number((nuevoSubTotal + ((nuevoSubTotal * recargo) / 100)).toFixed(1))
-            : nuevoSubTotal,
+        total: nuevoTotal + conceptoTotal
       }
     })
   }

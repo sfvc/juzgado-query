@@ -42,11 +42,9 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {
-              colums.map((colum: Column) => (
-                <Table.HeadCell key={colum.key} className='text-center bg-gray-300'>{colum.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((colum: Column) => (
+              <Table.HeadCell key={colum.key} className='text-center bg-gray-300'>{colum.label}</Table.HeadCell>
+            ))}
           </Table.Head>
           <Table.Body className='divide-y'>
             {

@@ -1,3 +1,5 @@
+import { UserRole } from '../constants'
+
 export interface AuthForm {
     username: string
     password: string
@@ -18,7 +20,7 @@ export interface User {
     }
     role: {
         id: number
-        name: string
+        name: UserRole
     }
 }
 

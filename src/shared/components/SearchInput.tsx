@@ -37,7 +37,7 @@ export function SearchInput<T extends SearchItem>({
 
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
-      if (query.length < 3) {
+      if (query.length < 2) {
         setData([])
         return
       }
@@ -102,7 +102,7 @@ export function SearchInput<T extends SearchItem>({
           }
         </div>
       </div>
-      {showResults && search.length >= 3 && (
+      {showResults && search.length >= 2 && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
           {data.length > 0 ? (
             data.map((item) => (

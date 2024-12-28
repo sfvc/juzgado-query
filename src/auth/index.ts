@@ -1,3 +1,6 @@
 export { useAuth } from './hooks/useAuth'
+export { useRole } from './hooks/useRole'
 export { Login } from './pages/Login'
 export { LoginForm } from './forms/LoginForm'
+export { RoleGuard } from './components/RoleGuard'
+export { UserRole } from './constants'

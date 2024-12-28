@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
   fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
   fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
   numero_acta: yup.string().required('El número del acta es requerido'),
-  instrumento: yup.string().required('El instrumento es requerido'),
+  instrumento: yup.string(),
   causa: yup.string().required('La causa es requerida')
 })
 

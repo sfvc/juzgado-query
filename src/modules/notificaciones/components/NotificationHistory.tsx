@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Button, FileInput, Label, Modal, Spinner, Table, Tooltip } from 'flowbite-react'
+import { Alert, Button, FileInput, Label, Modal, Spinner, Table, Tooltip } from 'flowbite-react'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 import { icons } from '../../../shared'
 import { notificacionActions } from '..'
@@ -11,6 +11,7 @@ import { useUploadFile } from '../../carbone/hooks/useUploadFile'
 import type { Column } from '../../../shared/interfaces'
 import type { Notificacion, NotificationActa } from '../interfaces'
 import type { INotificationHistory } from '../interfaces/notificacion-history'
+import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
   { key: 'icon', label: '' },
@@ -125,11 +126,13 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
                           </Button>
                         </Tooltip>
 
-                        <Tooltip content='Eliminar' placement='top'>
-                          <Button color='failure' onClick={() => onOpenModalHistory(notificacion)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Trash />
-                          </Button>
-                        </Tooltip>
+                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                          <Tooltip content='Eliminar' placement='top'>
+                            <Button color='failure' onClick={() => onOpenModalHistory(notificacion)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Trash />
+                            </Button>
+                          </Tooltip>
+                        </RoleGuard>
                       </Table.Cell>
                     </Table.Row>
                   ))
@@ -139,13 +142,22 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
           </Table>
       }
 
-      <footer className='flex justify-end gap-4 mt-4'>
-        <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
-          <icons.Dowloand size={18}/> 
-          &#160; Descargar Notificación
-        </Button>
+      <footer className='flex flex-col'>
+        <Alert color='warning' className='mt-4' icon={icons.Error}>
+          <span>
+            <span className='font-medium mr-1'>Importante!</span>   
+            Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.
+          </span>
+        </Alert>
+
+        <div className='flex justify-end gap-4 mt-4'>
+          <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
+            <icons.Dowloand size={18}/> 
+            &#160; Descargar Notificación
+          </Button>
         
-        <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
+          <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
+        </div>
       </footer>
 
       { (uploadFile.isPending || downloadWord.isPending) && <LoadingOverlay /> }

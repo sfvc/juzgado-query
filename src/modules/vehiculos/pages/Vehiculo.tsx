@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { useVehiculo } from '../hooks/useVehiculo'
+import { RoleGuard, UserRole } from '../../../auth'
 import { clearNames, DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import VehiculoForm from '../forms/VehiculoForm'
@@ -96,11 +97,13 @@ export const Vehiculo = () => {
                           </Button>
                         </Tooltip>
 
-                        <Tooltip content='Eliminar'>
-                          <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Trash />
-                          </Button>
-                        </Tooltip>
+                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                          <Tooltip content='Eliminar'>
+                            <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Trash />
+                            </Button>
+                          </Tooltip>
+                        </RoleGuard>
                       </Table.Cell>
                     </Table.Row>
                   )))

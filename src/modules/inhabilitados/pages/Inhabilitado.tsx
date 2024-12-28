@@ -8,6 +8,7 @@ import { InhabilitadoHistory } from '../components/InhabilitadoHistory'
 import { ShowInhabilitado } from '../components/ShowInhabilitado'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
+import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -135,11 +136,13 @@ export const Inhabilitado = () => {
                           </Button>
                         </Tooltip>
                       
-                        <Tooltip content='Eliminar'>
-                          <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Trash />
-                          </Button>
-                        </Tooltip>
+                        <RoleGuard roles={[UserRole.ADMIN]}>
+                          <Tooltip content='Eliminar'>
+                            <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Trash />
+                            </Button>
+                          </Tooltip>
+                        </RoleGuard>
                       </Table.Cell>
                     </Table.Row>
                   )))

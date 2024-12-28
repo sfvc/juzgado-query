@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Dropdown, Modal, Tooltip } from 'flowbite-react'
+import { RoleGuard, UserRole } from '../../../auth'
 import { useMutationActa } from '../hooks/useMutationActa'
 import { icons } from '../../../shared'
 import type { IActa } from '../interfaces'
@@ -70,11 +71,13 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
             </Button>
           </Tooltip>
 
-          <Tooltip content='Eliminar' placement="left">
-            <Button color='failure' onClick={() => onOpenModal(acta)} className='w-8 h-8 flex items-center justify-center'>
-              <icons.Trash />
-            </Button>
-          </Tooltip> 
+          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+            <Tooltip content='Eliminar' placement="left">
+              <Button color='failure' onClick={() => onOpenModal(acta)} className='w-8 h-8 flex items-center justify-center'>
+                <icons.Trash />
+              </Button>
+            </Tooltip> 
+          </RoleGuard>
         </div>
       </Dropdown>
 

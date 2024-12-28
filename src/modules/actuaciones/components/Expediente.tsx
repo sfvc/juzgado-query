@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { icons } from '../../../shared'
 import { useActuacion } from '../hooks/useActuacion'
+import { RoleGuard, UserRole } from '../../../auth'
 import { usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
@@ -89,11 +90,13 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
                         </Button>
                       </Tooltip>
                       
-                      <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => toggleModal('delete', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
-                          <icons.Trash />
-                        </Button>
-                      </Tooltip>
+                      <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                        <Tooltip content='Eliminar'>
+                          <Button color='failure' onClick={() => toggleModal('delete', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Trash />
+                          </Button>
+                        </Tooltip>
+                      </RoleGuard>
                     </Table.Cell>
                   </Table.Row>
                 ))

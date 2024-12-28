@@ -1,36 +1,13 @@
 import { Button, TextInput } from 'flowbite-react'
 import {icons} from '../../../shared'
-import { Concepto } from '../interfaces/sentencia'
+import type { Concepto } from '../interfaces/sentencia'
 
 interface Props {
   entries: Concepto[]
   setEntries: (entries: Concepto[]) => void
-  // totalWithConceptos: () => void
 }
 
 export const ConceptoForm = ({ entries, setEntries }: Props) => {
-
-  // const handleInputChange = (index: number, field: keyof Concepto, value: string | number) => {
-  //   const newEntries = [...entries]
-  
-  //   // Si el campo es "valor", asegúrate de manejar NaN y convertirlo a 0
-  //   const parsedValue = field === 'monto' ? (isNaN(parseFloat(value as string)) ? '' : parseFloat(value as string)) : value
-  
-  //   newEntries[index] = { ...newEntries[index], [field]: parsedValue }
-  //   setEntries(newEntries)
-  // }
-
-  // const handleInputChange = (index: number, field: keyof Concepto, value: string | number) => {
-  //   const newEntries = [...entries]
-  
-  //   // Si el campo es "monto", valida que no sea menor a 0
-  //   const parsedValue = field === 'monto'
-  //     ? Math.max(0, isNaN(parseFloat(value as string)) ? 0 : parseFloat(value as string))
-  //     : value
-
-  //   newEntries[index] = { ...newEntries[index], [field]: parsedValue }
-  //   setEntries(newEntries)
-  // }
 
   const handleInputChange = (index: number, field: keyof Concepto, value: string | number) => {
     const newEntries = [...entries]

@@ -1,12 +1,12 @@
 import { DetalleActa, Loading } from '../../../shared'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import type{ ActuacionActa } from '../interfaces'
 import { actuacionActions } from '..'
 import { Expediente } from '../components/Expediente'
 import { RelatedActas } from '../components/RelatedActas'
 import { ActuacionProvider } from '../../../context/Actuacion/ActuacionProvider'
 import { GenerateActuacion } from '../components/GenerateActuacion'
+import type { ActuacionActa } from '../interfaces'
 
 export const Actuacion = () => {
   const navigate = useNavigate()
