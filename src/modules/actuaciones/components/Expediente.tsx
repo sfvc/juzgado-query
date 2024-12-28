@@ -10,6 +10,7 @@ import type { Column } from '../../../shared/interfaces'
 import type { Actuacion, ActuacionActa } from '../interfaces'
 
 const colums: Column[] = [
+  { key: 'id', label: 'id' },
   { key: 'tipo', label: 'Tipo' },
   { key: 'numero_causa', label: 'Nro. Causa' },
   { key: 'fecha', label: 'Fecha de inicio' },
@@ -62,6 +63,7 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
               actuaciones?.length
                 ? actuaciones.map((actuacion: Actuacion) => (
                   <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{actuacion.id}</Table.Cell>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>

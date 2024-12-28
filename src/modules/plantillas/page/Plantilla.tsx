@@ -9,6 +9,7 @@ import { carboneActions } from '../../carbone'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import type { Column } from '../../../shared/interfaces'
 import type { IPlantilla } from '../interfaces'
+import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -115,11 +116,13 @@ export const Plantilla = () => {
                           </Button>
                         </Tooltip>
 
-                        <Tooltip content='Eliminar'>
-                          <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Trash />
-                          </Button>
-                        </Tooltip>
+                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                          <Tooltip content='Eliminar'>
+                            <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Trash />
+                            </Button>
+                          </Tooltip>
+                        </ RoleGuard>
                       </Table.Cell>
                     </Table.Row>
                   )))

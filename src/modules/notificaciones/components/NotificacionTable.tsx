@@ -8,6 +8,7 @@ import type { Notificacion, NotificationActa } from '../interfaces'
 import type { Column } from '../../../shared/interfaces'
 
 const colums: Column[] = [
+  { key: 'id', label: 'id' },
   { key: 'tipo', label: 'Tipo' },
   { key: 'tipo_acta', label: 'Tipo Acta' },
   { key: 'fecha', label: 'Fecha' },
@@ -51,6 +52,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
               (notificaciones.length > 0)
                 ? notificaciones.map((notificacion: Notificacion) => (
                   <Table.Row key={notificacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                    <Table.Cell className='text-center dark:text-white'>{notificacion.id}</Table.Cell>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{notificacion.tipo_actuacion}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>

@@ -67,7 +67,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let personas = ''
   let documentos = ''
   let titular = ''
-  let actuacionesFormatted = ''
+  // let actuacionesFormatted = ''
   let infraccionesFormatted = ''
   let actuacionSeleccionada = null
   let fechaNotificacion = []
@@ -104,7 +104,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
   if (acta?.actuaciones) {
     actuacionSeleccionada = acta.actuaciones.find((actuacion: any) => actuacion.id === actuacionId)
-    actuacionesFormatted = `Tipo: ${actuacionSeleccionada?.tipo || ''}, Monto: $${actuacionSeleccionada?.total || ''}, Observaciones: ${actuacionSeleccionada?.observaciones || ''}.`
+    // actuacionesFormatted = `Tipo: ${actuacionSeleccionada?.tipo || ''}, Monto: $${actuacionSeleccionada?.total || ''}, Observaciones: ${actuacionSeleccionada?.observaciones || ''}.`
 
     actuacionSeleccionada?.conceptos.forEach((item: any) => {
       conceptos += `${item?.concepto} de $${item?.monto}, `
@@ -157,7 +157,8 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     vehiculo: vehiculoFormatted || '',
 
     // Actuaciones e Infracciones Cometidas
-    actuaciones: actuacionesFormatted || '',
+    // actuaciones: actuacionesFormatted || '',
+    actuaciones: numeroArticulo || '', // Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa
     infracciones: infraccionesFormatted || '',
     total: actuacionSeleccionada?.total || '',
     subTotal: actuacionSeleccionada?.sub_total,

@@ -52,11 +52,9 @@ export const Layout = () => {
             Inhabilitados
           </Link>
 
-          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
-            <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+          <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             Plantillas
-            </Link>
-          </RoleGuard>
+          </Link>
 
           <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
             <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
