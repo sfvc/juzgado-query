@@ -161,13 +161,15 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa */
     infracciones: infraccionesFormatted || '',
     total: actuacionSeleccionada?.total || '',
+    importe: actuacionSeleccionada?.total || '',
     subTotal: actuacionSeleccionada?.sub_total,
     descuento: actuacionSeleccionada?.descuento,
     recargo: actuacionSeleccionada?.recargo,
     conceptos,
     fechaSentencia: actuacionSeleccionada?.fecha || '',
-    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.total),
-    importeInfraccionMultiple: actuacionSeleccionada?.total || '', //** Es lo mismo que total. REVISAR */
+    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
+    ImporteLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
+    importeInfraccionMultiple: actuacionSeleccionada?.sub_total || '', //** Es lo mismo que total. REVISAR */
 
     // Notificaciones
     fechaNotificacion: fechaNotificacion || ''

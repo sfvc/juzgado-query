@@ -36,12 +36,14 @@ export const dictionary = () => {
     actuaciones: '{d.actuaciones}',
     infracciones: '{d.infracciones}',
     total: '{d.total}',
+    importe: '{d.importe}',
     subTotal: '{d.subTotal}',
     descuento: '{d.descuento}',
     recargo: '{d.recargo}',
     conceptos: '{d.conceptos}',
     fechaSentencia: '{d.fechaSentencia}',
     ImporteLetrasSinDescuento: '{d.ImporteLetrasSinDescuento}',
+    importeLetrasConDescuento: '{d.importeLetrasConDescuento}',
     importeInfraccionMultiple: '{d.importeInfraccionMultiple}',
 
     // Notificaciones
