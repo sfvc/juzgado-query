@@ -2,11 +2,11 @@
 import axios from 'axios'
 import { dictionary } from '../helpers/dictionary'
 import { apiJuzgado } from '../../../api/config'
-import { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
 import { User } from '../../../auth/interfaces/auth'
 import { formatData } from '../helpers/formatData'
 import { cleanFileName } from '../helpers/cleanFileName'
 import { getFileExtension } from '../helpers/getFileExtension'
+import type { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
 const CARBONE_URL = `${import.meta.env.VITE_CARBONE_URL}`
@@ -15,14 +15,16 @@ const NOTIFICACION_URL = 'notificacion-detalle'
 const ACTUACION_URL = 'actuacion-detalle'
 
 // Sube una nueva plantilla a carbone
-export const uploadFilePlantilla = async (file: File):  Promise<string | undefined> => {
+export const uploadFilePlantilla = async (file: File, path?: string):  Promise<string | undefined> => {
   try {
     // Limpia el nombre del archivo
     const cleanName = cleanFileName(file.name)
-    const path = `${cleanName}.${getFileExtension(file.name)}`
+
+    // Sobreescribir una plantilla en carbone o crear una nueva
+    const pathName = path ? path : `${cleanName}.${getFileExtension(file.name)}`
 
     // Crea un nuevo archivo con el nombre limpio
-    const renamedFile = new File([file], path, {
+    const renamedFile = new File([file], pathName, {
       type: file.type,
     })
 
@@ -35,7 +37,7 @@ export const uploadFilePlantilla = async (file: File):  Promise<string | undefin
       headers: { 'Content-Type': 'multipart/form-data' }
     })
         
-    if (response?.data.message === 'File uploaded successfully') return path
+    if (response?.data.message === 'File uploaded successfully') return pathName
     else throw new Error('Error al subir el archivo')
   
   } catch (error) {
@@ -134,7 +136,6 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
     a.href = fileURL
 
     // Especificar el nombre con el que se descargará el archivo
-    // a.download = `${itemId} - ${path}`
     a.download = `${acta.numero_acta} - ${path}`
 
     // Simular el clic en el enlace
@@ -150,7 +151,7 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
 }
 
 // Subir nuevo archivo editado (word) para que el back lo convierta en PDF y almacene en la DB
-// Se utiliza el mis endpoint para subir la notificacion y la actuacion. Por lo tanto pasar la property correspondiente
+// Se utiliza el mismo endpoint para subir la notificacion y la actuacion. Por lo tanto pasar la property correspondiente
 export const uploadFilePDF = async (file: File, item: any, property: string, userId: number) => { // property: notificacion_id | actuacion_id
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')

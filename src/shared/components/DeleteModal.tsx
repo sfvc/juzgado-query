@@ -23,7 +23,7 @@ export const DeleteModal = ({
   }
 
   return (
-    <Modal show={openModal} size="md" popup={true} onClose={onClose}>
+    <Modal show={openModal} size="xl" popup={true} onClose={onClose}>
       <Modal.Header />
       <Modal.Body>
         <div className="text-center">

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import { useFilter, usePagination } from '../../../shared'
 import { IPlantilla, FormPlantilla } from '../interfaces'
 import { plantillaActions } from '..'
+import { carboneActions } from '../../carbone'
 
 interface FilterParams {
   query: string
@@ -61,6 +62,18 @@ export const usePlantilla = () => {
     }
   })
 
+  const editPlantilla = useMutation({
+    mutationFn: ({file, path}: {file: File, path?: string}) => carboneActions.uploadFilePlantilla(file, path),
+    onSuccess: () => {
+      toast.success('Plantilla editada con exito')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al editar plantilla')
+      console.log(error)
+    }
+  })
+
   return {
     plantillas,
     pagination,
@@ -71,6 +84,7 @@ export const usePlantilla = () => {
     // Mutations
     createPlantilla,
     updatePlantilla,
-    deletePlantilla
+    deletePlantilla,
+    editPlantilla
   }
 }

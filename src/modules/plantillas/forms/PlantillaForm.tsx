@@ -26,7 +26,7 @@ interface Props {
   
 const PlantillaForm = ({ plantilla, onSucces }: Props) => {
   const { createPlantilla } = usePlantilla()
-  const { juzgados, isLoading } = useJuzgado()
+  const { juzgados, isFetching } = useJuzgado()
 
   const [file, setFile] = useState<File | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -67,7 +67,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
     setFile(file)
   }
 
-  if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
+  if (isFetching) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} >

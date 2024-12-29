@@ -158,7 +158,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
     // Actuaciones e Infracciones Cometidas
     // actuaciones: actuacionesFormatted || '',
-    actuaciones: numeroArticulo || '', // Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa
+    actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa */
     infracciones: infraccionesFormatted || '',
     total: actuacionSeleccionada?.total || '',
     subTotal: actuacionSeleccionada?.sub_total,

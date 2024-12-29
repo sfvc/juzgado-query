@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, InputTable, useLoading } from '../../../shared'
-import { icons } from '../../../shared'
 import { usePlantilla } from '../hooks/usePlantilla'
 import PlantillaForm from '../forms/PlantillaForm'
 import { LoadingOverlay } from '../../../layout'
 import { carboneActions } from '../../carbone'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import { RoleGuard, UserRole } from '../../../auth'
+import { EditPlantilla } from '../components/EditPlantilla'
+import { useModals } from '../../../shared/hooks/useModals'
+import { icons } from '../../../shared'
 import type { Column } from '../../../shared/interfaces'
 import type { IPlantilla } from '../interfaces'
-import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -22,10 +24,11 @@ const colums: Column[] = [
 const DICTIONARY_PATH = '/diccionario-juzgado-de-faltas.pdf'
 
 export const Plantilla = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const { isOpen, openModal, closeModal } = useModals()
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPlantilla | null>(null)
   const useAction = useLoading()
+
 
   const { 
     plantillas,
@@ -35,10 +38,15 @@ export const Plantilla = () => {
     deletePlantilla 
   } = usePlantilla()
 
-  /* Modal crear */
-  const onCloseModal = async () => {
+  /* Modal editar */
+  const onEditModal = (plantilla: IPlantilla) => {
+    setActiveItem(plantilla)
+    openModal('edit')
+  }
+
+  const closeEditModal = () => {
     setActiveItem(null)
-    setOpenModal(false)
+    closeModal('edit')
   }
 
   /* Modal eliminar */
@@ -79,7 +87,7 @@ export const Plantilla = () => {
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
             
             <Button type='button' color="purple" onClick={renderDictionaryPDF} >Diccionario</Button>
-            <Button type='button' onClick={() => setOpenModal(true)} >Agregar</Button>
+            <Button type='button' onClick={() => openModal('create')} >Agregar</Button>
           </div>
         </div>
       </div>
@@ -117,6 +125,12 @@ export const Plantilla = () => {
                         </Tooltip>
 
                         <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                          <Tooltip content='Editar'>
+                            <Button color='success' onClick={() => onEditModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Pencil />
+                            </Button>
+                          </Tooltip>
+                          
                           <Tooltip content='Eliminar'>
                             <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
                               <icons.Trash />
@@ -143,13 +157,24 @@ export const Plantilla = () => {
         />
       </div>
 
-      {/* Modal crear/editar */} 
-      <Modal show={openModal} onClose={onCloseModal} size='4xl'>
-        <Modal.Header>{!activeItem ? 'Agregar Plantilla' : 'Editar Plantilla'}</Modal.Header>
+      {/* Modal crear */} 
+      <Modal show={isOpen.create} onClose={() => closeModal('create')} size='4xl'>
+        <Modal.Header>Agregar Plantilla</Modal.Header>
         <Modal.Body>
           <PlantillaForm 
             plantilla={activeItem} 
-            onSucces={onCloseModal}
+            onSucces={() => closeModal('create')}
+          />
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal editar */} 
+      <Modal show={isOpen.edit} onClose={() => closeModal('edit')} size='4xl'>
+        <Modal.Header>Editar Plantilla</Modal.Header>
+        <Modal.Body>
+          <EditPlantilla 
+            plantilla={activeItem} 
+            onCloseModal={closeEditModal}
           />
         </Modal.Body>
       </Modal>

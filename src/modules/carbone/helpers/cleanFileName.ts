@@ -1,4 +1,5 @@
 // Función para quitar la extensión del archivo y limpiar el nombre
+
 export const cleanFileName = (fileName: string): string => {
   // Quitar la extensión del archivo
   const lastDotIndex = fileName.lastIndexOf('.')
@@ -10,6 +11,5 @@ export const cleanFileName = (fileName: string): string => {
   // Reemplazar caracteres no alfanuméricos por guiones bajos
   baseName = baseName.replace(/[^a-zA-Z0-9]/g, '-')
   
-  // Convertir a minúsculas para mayor consistencia
   return baseName.toLowerCase()
 }
