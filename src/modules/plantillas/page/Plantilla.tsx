@@ -124,13 +124,13 @@ export const Plantilla = () => {
                           </Button>
                         </Tooltip>
 
-                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
-                          <Tooltip content='Editar'>
-                            <Button color='success' onClick={() => onEditModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Pencil />
-                            </Button>
-                          </Tooltip>
+                        <Tooltip content='Editar'>
+                          <Button color='success' onClick={() => onEditModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Pencil />
+                          </Button>
+                        </Tooltip>
                           
+                        <RoleGuard roles={[UserRole.ADMIN]}>
                           <Tooltip content='Eliminar'>
                             <Button color='failure' onClick={() => openDelteModal(plantilla)} className='w-8 h-8 flex items-center justify-center'>
                               <icons.Trash />

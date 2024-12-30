@@ -1,29 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { apiJuzgado } from '../../../api/config'
 import { clearNames } from '../../../shared'
 import { numberToWords } from './numberToWords'
 import type { User } from '../../../auth/interfaces/auth'
-
-// const getProvincia = async (provinciaId: number) => {
-//   if (!provinciaId) return
-//   const response = await apiJuzgado.get(`/provincias/${provinciaId}`)
-//   const { data: provincia } = response.data
-//   return provincia?.nombre || ''
-// }
-  
-// const getDepartamento = async (departamentoId: number) => {
-//   if (!departamentoId) return
-//   const response = await apiJuzgado.get(`/departamentos/${departamentoId}`)
-//   const { data: departamento } = response.data
-//   return departamento?.nombre || ''
-// }
-  
-// const getLocalidad = async (localidadId: number) => {
-//   if (!localidadId) return
-//   const response = await apiJuzgado.get(`/localidades/${localidadId}`)
-//   const { data: localidad } = response.data
-//   return localidad?.nombre || ''
-// }
   
 const matchMakeAndModel = (vehiculo: any) => {
   if (!vehiculo) return ''
@@ -32,23 +10,6 @@ const matchMakeAndModel = (vehiculo: any) => {
   const modelo = vehiculo?.modelo || ''
   return `${marca} ${modelo}`.trim()
 }
-
-// Función para formatear el domicilio
-/* const formatDomicilio = async (domicilio: any) => {
-  const provincia = await getProvincia(domicilio?.provincia_id)
-  const departamento = await getDepartamento(domicilio?.departamento_id)
-  const localidad = await getLocalidad(domicilio?.localidad_id)
-
-  return `
-    Provincia: ${provincia}, 
-    Departamento: ${departamento}, 
-    Localidad: ${localidad}, 
-    Calle: ${domicilio?.calle || ''}, 
-    Numero: ${domicilio?.numero || ''}, 
-    Manzana: ${domicilio?.manzana_piso || ''}, 
-    Lote: ${domicilio?.lote_dpto || ''}
-  `.trim()
-} */
 
 const formatDomicilio = async (domicilio: any) => {
   return `${domicilio?.calle || ''}`.trim()
