@@ -29,10 +29,16 @@ export const createNotification = async (selectedActas: number[], plantillaId: n
       tipo_actuacion: 'NOTIFICACION'
     })
 
-    // Subir el archivo a s3
+    // TODO: Subir el archivo a s3
   })
 
   await Promise.all(notificationsPromise)
+}
+
+// Eliminar notificacion relacionada al acta 
+export const deleteNotification = async (id: number) => {
+  const response = await apiJuzgado.delete(`notificaciones/${id}`)
+  return response
 }
 
 // Trae el historial de una notificación

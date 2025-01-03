@@ -66,7 +66,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     downloadWord.mutate({ item: actuacion, acta, user: user! })
   }
 
-  const onDeleteNotificacion = async () => {
+  const onDeleteActuacion = async () => {
     if (!activeItem) return
     
     const response = await deleteActuacionHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: actuacion.id}]})
@@ -174,7 +174,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                 <Button color="gray" onClick={onCloseModalHistory}>Cancelar</Button>
                 <Button 
                   color="failure" 
-                  onClick={onDeleteNotificacion} 
+                  onClick={onDeleteActuacion} 
                   isProcessing={deleteActuacionHistory.isPending}
                   disabled={deleteActuacionHistory.isPending}
                 > 

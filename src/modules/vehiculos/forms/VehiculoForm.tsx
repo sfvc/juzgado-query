@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useVehiculo } from '../hooks/useVehiculo'
 import { vehiculoActions } from '..'
 import { TitularInput } from '../components/TitularInput'
+import { SearchableSelect } from '../../../shared'
 import type { Color, FormVehiculo, IVehiculo, Marca, Tipo } from '../interfaces'
-// import { SearchableSelect } from '../../../shared'
 
 const SERVICIO_PUBLICO_ID = 50067
 
@@ -100,34 +100,16 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
           />
         </div>
 
-        <div className='mb-4'>
-          <div className='mb-2 block'>
-            <Label htmlFor='marca_id' value='Marca de Vehiculo' />
-          </div>
-          <Select
-            {...register('marca_id', { valueAsNumber: true })}
-            helperText={errors?.marca_id && errors.marca_id.message}
-            color={errors?.marca_id && 'failure'}
-          >
-            <option value='' hidden>Seleccione la marca</option>
-            {data?.marcas.map((marca: Marca) => (
-              <option key={marca.id} value={marca.id}>
-                {marca.nombre}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        {/* <SearchableSelect<Marca>
+        <SearchableSelect<Marca>
           label="Marca"
           placeholder="Buscar marca"
-          onSearch={vehiculoActions.getMarcas}
+          onSearch={(query: string) => vehiculoActions.getMarcas(query)}
           onSelect={(item: Marca) => setValue('marca_id', item.id)}
           renderItem={(item: Marca) => <div><strong>{item.nombre}</strong></div>}
           renderInput={(item) => { return `${item.nombre}`}}
           defaultValue={vehiculo?.marca?.nombre}
           resetInput={() => setValue('marca_id', null)}
-        /> */}
+        />
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>

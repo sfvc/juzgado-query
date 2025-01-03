@@ -11,12 +11,11 @@ import { usePersona } from '../hooks/usePersona'
 import { TipoPersona, setDefaulValues } from './helpers'
 
 interface Props {
-    persona: IPersona | null
-    onSucces: () => void
+  persona: IPersona | null
+  onSucces: () => void
 }
 
 export const PersonaForm = ({ persona, onSucces }: Props) => {
-  const [showDomicilio, setShowDomicilio] = useState<boolean>(false)
   const [ tipoPersona, setTipoPersona ] = useState<string>(persona?.tipo_persona || TipoPersona.FISICA)
   const { createPersona, updatePersona } = usePersona()
 
@@ -33,7 +32,6 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
     
   const methods = useForm<FormValues>({
     defaultValues: setDefaulValues(persona, tipoPersona),
-    context: { showDomicilio },
     resolver: yupResolver(validationSchema)
   })
 
@@ -83,8 +81,6 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
 
           {
             <DomicilioForm
-              showDomicilio={showDomicilio} 
-              setShowDomicilio={setShowDomicilio} 
               domicilio={persona?.domicilio}
             />
           }

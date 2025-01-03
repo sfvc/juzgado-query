@@ -4,6 +4,8 @@ export interface ModalAction {
   delete: boolean
   edit: boolean
   create: boolean
+  history?: boolean
+  show?: boolean
 }
 
 export const useModals = () => {

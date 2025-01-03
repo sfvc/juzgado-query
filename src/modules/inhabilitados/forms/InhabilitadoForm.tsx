@@ -7,7 +7,7 @@ import { useJuzgado } from '../../parametros/globales/hooks/useJuzgado'
 import { PersonaInput } from '../components/PersonaInput'
 import { icons } from '../../../shared'
 import type { IJuzgado } from '../../parametros/globales/interfaces'
-import type { FormInhabilitado } from '../interfaces'
+import type { FormInhabilitado, IInhabilitado } from '../interfaces'
 
 
 const validationSchema = yup.object().shape({
@@ -21,12 +21,13 @@ const validationSchema = yup.object().shape({
 })
 
 interface Props {
+  inhabilitado: IInhabilitado | null
   onSucces: () => void
 }
   
-const InhabilitadoForm = ({ onSucces }: Props) => {
+const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
   const { juzgados, isFetching } = useJuzgado()
-  const { createInhabilitado } = useInhabilitado()
+  const { createInhabilitado, updateInhabilitado } = useInhabilitado()
 
   const {
     register,
@@ -34,11 +35,21 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormInhabilitado>({
+    defaultValues: {
+      persona_id: inhabilitado?.persona.id,
+      juzgado_id: inhabilitado?.juzgado.id,
+      fecha_desde: inhabilitado?.fecha_desde || '',
+      fecha_hasta: inhabilitado?.fecha_hasta || '',
+      numero_acta: inhabilitado?.acta.numero_acta || '',
+      instrumento: inhabilitado?.instrumento || '',
+      causa: inhabilitado?.causa || ''
+    },
     resolver: yupResolver(validationSchema)
   })
 
   const onSubmit: SubmitHandler<FormInhabilitado> = async (data: FormInhabilitado) => {
-    await createInhabilitado.mutateAsync(data)
+    if (inhabilitado) await updateInhabilitado.mutateAsync({ id: inhabilitado.id, inhabilitado: data })
+    else await createInhabilitado.mutateAsync(data)
     onSucces()
   }
 
@@ -47,7 +58,7 @@ const InhabilitadoForm = ({ onSucces }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-        <PersonaInput setValue={setValue} />
+        <PersonaInput setValue={setValue} persona={inhabilitado?.persona}/>
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>

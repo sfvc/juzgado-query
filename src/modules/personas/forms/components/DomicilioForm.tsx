@@ -8,8 +8,6 @@ import type { IBarrio, IDepartamento, ILocalidad, IPais, IProvincia } from '../.
 import type { Domicilio, IDomicilio } from '../../interfaces'
 
 export interface Props {
-  showDomicilio: boolean
-  // setShowDomicilio: (show: boolean) => void
   domicilio: IDomicilio | null
 }
 
@@ -50,7 +48,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
           <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
             <div className='mb-4'>
               <div className='mb-2 block dark:text-white'>
-                <Label htmlFor='pais_id' value='Pais' /><strong className='obligatorio'>(*)</strong>
+                <Label htmlFor='pais_id' value='Pais' />
               </div>
 
               <Select 
@@ -70,7 +68,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
 
             <div className='mb-4'>
               <div className='mb-2 block dark:text-white'>
-                <Label htmlFor='provincia_id' value='Provincia' /><strong className='obligatorio'>(*)</strong>
+                <Label htmlFor='provincia_id' value='Provincia' />
               </div>
 
               <Select 
@@ -137,7 +135,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
 
             <div className='mb-4'>
               <div className='mb-2 block dark:text-white'>
-                <Label color='gray' htmlFor='calle' value='Calle' /><strong className='obligatorio'>(*)</strong>
+                <Label color='gray' htmlFor='calle' value='Calle' />
               </div>
               <TextInput
                 {...register('calle')}

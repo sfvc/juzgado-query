@@ -16,7 +16,8 @@ interface SearchInputProps<T extends SearchItem> {
   debounceTime?: number
   renderInput: (item: T) => string
   resetInput?: () => void
-  resetForm?: boolean
+  resetForm?: boolean,
+  defaultValue?: string
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -28,9 +29,10 @@ export function SearchInput<T extends SearchItem>({
   debounceTime = 300,
   renderInput,
   resetInput,
-  resetForm
+  resetForm,
+  defaultValue
 }: SearchInputProps<T>) {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState<string>(defaultValue || '')
   const [data, setData] = useState<T[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [showResults, setShowResults] = useState(false)

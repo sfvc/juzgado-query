@@ -31,6 +31,30 @@ export const personaJuridicaSchema = yup.object().shape({
 
 export const domicilioSchema = yup.object({
   pais_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  provincia_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  departamento_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  localidad_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  barrio_id: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  calle: yup.string().notRequired(),
+  numero: yup.number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .notRequired(),
+  lote_dpto: yup.string().notRequired(),
+  manzana_piso: yup.string().notRequired()
+})
+
+/* export const domicilioSchema = yup.object({
+  pais_id: yup.number()
     .when('$showDomicilio', {
       is: true,
       then: (schema) => schema.transform((value) => (isNaN(value) ? null : value)).required('El país es requerido'),
@@ -62,4 +86,4 @@ export const domicilioSchema = yup.object({
     .notRequired(),
   lote_dpto: yup.string().notRequired(),
   manzana_piso: yup.string().notRequired()
-})
+}) */

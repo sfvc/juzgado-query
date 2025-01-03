@@ -4,6 +4,7 @@ import { icons } from '../../../shared'
 import { LoadingOverlay } from '../../../layout'
 import { usePdf } from '../../carbone'
 import { NotificationHistory } from './NotificationHistory'
+import { useNotification } from '../hooks/useNotification'
 import type { Notificacion, NotificationActa } from '../interfaces'
 import type { Column } from '../../../shared/interfaces'
 
@@ -19,19 +20,38 @@ const colums: Column[] = [
 
 export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
   const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
-  const notificaciones: Notificacion[] = acta.notificaciones
+  const { deleteNotification } = useNotification()
+  const notificaciones: Notificacion[] = acta?.notificaciones || []
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<Notificacion | null>(null)
 
-  const onEditNotificacion = async (notificacion: Notificacion) => {
-    setActiveItem(notificacion)
-    setIsOpen(true)
+  const onEditModal= async (notificacion?: Notificacion) => {
+    if (!notificacion) {
+      setActiveItem(null)
+      setIsOpen(false)
+    } else {
+      setActiveItem(notificacion)
+      setIsOpen(true)
+    }
   }
 
-  const onCloseModal = async () => {
-    setActiveItem(null)
-    setIsOpen(false)
+  const onDeleteModal= async (notificacion?: Notificacion) => {
+    if (!notificacion) {
+      setActiveItem(null)
+      setOpenDeleteModal(false)
+    } else {
+      setActiveItem(notificacion)
+      setOpenDeleteModal(true)
+    }
+  }
+
+  const deleteNotificacion = async () => {
+    if (!activeItem) return
+    
+    const response = await deleteNotification.mutateAsync({id: activeItem.id, queryKey: ['acta-notificacion', {id: activeItem.id}]})
+    if (response.status === 200) onDeleteModal()
   }
 
   return (
@@ -75,8 +95,14 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                       </Tooltip>
 
                       <Tooltip content='Editar'>
-                        <Button color='success' onClick={() => onEditNotificacion(notificacion)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='success' onClick={() => onEditModal(notificacion)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Pencil />
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => onDeleteModal(notificacion)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
                         </Button>
                       </Tooltip>
                     </Table.Cell>
@@ -89,12 +115,39 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
       </div>
 
       {/* Modal para actualizar notificacion */}
-      <Modal size='4xl' show={isOpen} onClose={onCloseModal}>
+      <Modal size='4xl' show={isOpen} onClose={onEditModal}>
         <Modal.Header>Editar Notificación</Modal.Header>
         <Modal.Body>
-          { activeItem && <NotificationHistory acta={acta} notificacion={activeItem} onCloseModal={onCloseModal} /> }
+          { activeItem && <NotificationHistory acta={acta} notificacion={activeItem} onCloseModal={onEditModal} /> }
         </Modal.Body>
       </Modal>
+
+      {/* Modal para eliminar notificacion */}
+      { activeItem && 
+        <Modal show={openDeleteModal} onClose={onDeleteModal}>
+          <Modal.Header>Eliminar actuación</Modal.Header>
+          <Modal.Body>
+            <div className="text-center">
+              <icons.Warning />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                ¿Estás seguro de que deseas eliminar la actuación del historial?
+              </h3>
+          
+              <div className="flex justify-center gap-4">
+                <Button color="gray" onClick={() => onDeleteModal()}>Cancelar</Button>
+                <Button 
+                  color="failure" 
+                  onClick={deleteNotificacion} 
+                  isProcessing={deleteNotification.isPending}
+                  disabled={deleteNotification.isPending}
+                > 
+                  Sí, eliminar
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      }
 
       { useAction.loading && <LoadingOverlay /> }
     </React.Fragment>

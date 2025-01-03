@@ -6,9 +6,10 @@ import { FormInhabilitado } from '../interfaces'
 
 interface Props {
   setValue: UseFormSetValue<FormInhabilitado>
+  persona?: IPersona
 }
 
-export const PersonaInput = ({ setValue }: Props) => {
+export const PersonaInput = ({ setValue, persona }: Props) => {
 
   // Buscardor de titulares
   const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
@@ -25,6 +26,7 @@ export const PersonaInput = ({ setValue }: Props) => {
       )}
       renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
       resetInput={() => setValue('persona_id', 0)}
+      defaultValue={clearNames(persona?.apellido, persona?.nombre, true)}
     />
   )
 }

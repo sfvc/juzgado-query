@@ -23,7 +23,20 @@ export const useNotification = () => {
       queryClient.invalidateQueries({ queryKey: ['actas',{...filters}] })
     },
     onError: (error) => {
-      toast.error('Error crear la notificación')
+      toast.error('Error al crear la notificación')
+      console.log(error)
+    }
+  })
+
+  // Elimnar notificación relacionada al acta
+  const deleteNotification = useMutation({
+    mutationFn: ({ id }: {id: number, queryKey?: any[]}) => notificacionActions.deleteNotification(id),
+    onSuccess: (_, __, context: any) => {
+      toast.success('Notificación eliminada exitosamente')
+      queryClient.invalidateQueries({ queryKey: context?.queryKey })
+    },
+    onError: (error) => {
+      toast.error('Error al eliminar la notificación')
       console.log(error)
     }
   })
@@ -43,5 +56,5 @@ export const useNotification = () => {
     }
   }) 
   
-  return { createNotification, deleteNotificationHistory }
+  return { createNotification, deleteNotification, deleteNotificationHistory }
 }
