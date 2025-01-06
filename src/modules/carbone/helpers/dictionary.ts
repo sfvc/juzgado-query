@@ -1,6 +1,7 @@
 export const dictionary = () => {
   const data = {
     // Fecha actual
+    añoActual: '{d.añoActual}',
     fecha: '{d.fechaActual}',
     horaActual: '{d.horaActual}',
   

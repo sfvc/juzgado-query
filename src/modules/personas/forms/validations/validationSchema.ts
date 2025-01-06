@@ -7,7 +7,6 @@ export const personaFisicaSchema = yup.object().shape({
   numero_documento: yup.string().required('El número de documento es requerido'),
   fecha_nacimiento: yup.string().notRequired(),
   estado_civil:  yup.string().notRequired(),
-  cuil: yup.string().required('El cuil es requerido'),
   sexo: yup.string().required('El sexo es requerido'),
   email: yup.string().email('Email no válido').notRequired(),
   nacionalidad_id: yup.number()

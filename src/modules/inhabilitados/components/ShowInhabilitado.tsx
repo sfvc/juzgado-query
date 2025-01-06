@@ -51,7 +51,7 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Periodo de Inhabilitación:</strong> {inhabilitado.periodo_inhabilitacion_dias} Días
+              <strong>Periodo de Inhabilitación:</strong> {inhabilitado.periodo_inhabilitacion_dias} 
             </span>
           </li>
 

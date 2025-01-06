@@ -100,14 +100,12 @@ export const FisicaForm = ({ data }: Props) => {
 
       <div className='mb-4'>
         <div className='mb-2 block dark:text-white'>
-          <Label htmlFor='cuil' value='C.U.I.L' /> <strong className='obligatorio'>(*)</strong>
+          <Label htmlFor='cuil' value='C.U.I.L' />
         </div>
         <TextInput
           {...register('cuil')}
           type='number'
           placeholder='C.U.I.L'
-          helperText={errors?.cuil && errors?.cuil?.message} 
-          color={errors?.cuil && 'failure'}
         />
       </div>
 

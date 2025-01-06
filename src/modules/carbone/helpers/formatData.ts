@@ -17,6 +17,7 @@ const formatDomicilio = async (domicilio: any) => {
 
 export const formatData = async (acta: any, user: User, actuacionId: number) => {
   const f = new Date()
+  const añoActual = f.getFullYear()
   const fechaActual = f.toLocaleDateString('es-AR')
   const horaActual = f.toLocaleTimeString('es-AR', {
     hour: '2-digit',
@@ -28,7 +29,6 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let personas = ''
   let documentos = ''
   let titular = ''
-  // let actuacionesFormatted = ''
   let infraccionesFormatted = ''
   let actuacionSeleccionada = null
   let fechaNotificacion = []
@@ -65,7 +65,6 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
   if (acta?.actuaciones) {
     actuacionSeleccionada = acta.actuaciones.find((actuacion: any) => actuacion.id === actuacionId)
-    // actuacionesFormatted = `Tipo: ${actuacionSeleccionada?.tipo || ''}, Monto: $${actuacionSeleccionada?.total || ''}, Observaciones: ${actuacionSeleccionada?.observaciones || ''}.`
 
     actuacionSeleccionada?.conceptos.forEach((item: any) => {
       conceptos += `${item?.concepto} de $${item?.monto}, `
@@ -79,12 +78,13 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
           ? `${infraccion?.numero}` 
           : `${numeroArticulo}, ${infraccion?.numero}`
 
-      return `Artículo: ${infraccion?.numero || ''}, Detalle: ${infraccion?.detalle || ''}`
+      return `${infraccion?.detalle || ''}`
     }).join('; ')
   }
 
   const data = {
     // Fecha actual
+    añoActual: añoActual || '',
     fechaActual: fechaActual || '',
     horaActual: horaActual || '',
 
@@ -118,7 +118,6 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     vehiculo: vehiculoFormatted || '',
 
     // Actuaciones e Infracciones Cometidas
-    // actuaciones: actuacionesFormatted || '',
     actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa */
     infracciones: infraccionesFormatted || '',
     total: actuacionSeleccionada?.total || '',
@@ -130,7 +129,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     fechaSentencia: actuacionSeleccionada?.fecha || '',
     ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
     ImporteLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
-    importeInfraccionMultiple: actuacionSeleccionada?.sub_total || '', //** Es lo mismo que total. REVISAR */
+    importeInfraccionMultiple: actuacionSeleccionada?.total || '',
 
     // Notificaciones
     fechaNotificacion: fechaNotificacion || ''

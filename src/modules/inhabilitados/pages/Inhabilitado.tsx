@@ -89,7 +89,9 @@ export const Inhabilitado = () => {
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />            
             
-            <Button type='button' onClick={() => onOpenModal(null)} >Agregar</Button>
+            <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+              <Button type='button' onClick={() => onOpenModal(null)} >Agregar</Button>
+            </RoleGuard>
           </div>
         </div>
       </div>

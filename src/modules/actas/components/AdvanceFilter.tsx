@@ -1,20 +1,21 @@
 import { useEffect } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import { ActaFilterForm, Prioridad } from '../interfaces'
+import { ActaFilterForm, DataFilters, Prioridad, EstadoActa } from '../interfaces'
 import { SearchInput } from '../../../shared'
-import { IArticulo } from '../../parametros/actas/interfaces'
+import { IArticulo, } from '../../parametros/actas/interfaces'
 import { articuloActions } from '../../parametros/actas'
 import { useStorageFilter } from '../hooks/useStorageFilter'
 
 interface Props {
   register: UseFormRegister<ActaFilterForm>
   prioridades: Prioridad[] | undefined
+  data: DataFilters
   setValue: UseFormSetValue<ActaFilterForm>
   resetForm: boolean
 }
 
-export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Props) => {
+export const AdvanceFilter = ({ register, prioridades, setValue, resetForm, data }: Props) => {
   const { infraccionStorage, setInfraccionStorage } = useStorageFilter()
 
   const onFocusInfraccionInput = () => {
@@ -59,6 +60,31 @@ export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Pr
               </Select>
             </div>
 
+            <div className='mb-4'>
+              <div className='mb-2 block'>
+                <Label htmlFor='estado_id' value='Estados' />
+              </div>
+              <Select {...register('estado_id')}>
+                <option value='' hidden>Filtrar por estado</option>
+                {
+                  data?.estadosActa?.map((estado: EstadoActa) => (
+                    <option key={estado.id} value={estado.id} >{estado.nombre}</option>
+                  ))
+                }
+              </Select>
+            </div>
+            
+            <div className='mb-4 relative'>
+              <div className='mb-2 block'>
+                <Label htmlFor='numero_causa'value='Número de Causa' />
+              </div>
+              <TextInput
+                {...register('numero_causa')}
+                id='numero_causa'
+                placeholder='Filtrar por número de causa'
+              />
+            </div>
+
             {/* Buscar por codigo de articulo  */}
             {
               infraccionStorage 
@@ -88,6 +114,29 @@ export const AdvanceFilter = ({ register, prioridades, setValue, resetForm }: Pr
                   resetForm={resetForm}
                 />
             }
+
+            <div className='mb-4'>
+              <div className='mb-2 block'>
+                <Label htmlFor='fecha_desde' value='Fecha Desde' />
+              </div>
+              <TextInput
+                {...register('fecha_desde')}
+                name='fecha_desde'
+                placeholder='Ingrese la fecha de acta'
+                type='date'
+              />
+            </div>
+
+            <div className='mb-4'>
+              <div className='mb-2 block'>
+                <Label htmlFor='fecha_hasta' value='Fecha Hasta' />
+              </div>
+              <TextInput
+                {...register('fecha_hasta')}
+                placeholder='Ingrese la fecha de acta'
+                type='date'
+              />
+            </div>
           </div>
         </Accordion.Content>
       </Accordion.Panel>

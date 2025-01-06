@@ -6,7 +6,7 @@ import { vehiculoActions } from '../../vehiculos'
 import { personaActions } from '../../personas'
 import { clearNames } from '../../../shared'
 import { useStorageFilter } from '../hooks/useStorageFilter'
-import type { ActaFilterForm, DataFilters, EstadoActa } from '../interfaces'
+import type { ActaFilterForm, DataFilters } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
 
@@ -17,7 +17,7 @@ interface Props {
     resetForm: boolean
 }
 
-export const FormFilter = ({ register, setValue, data, resetForm }: Props) => {
+export const FormFilter = ({ register, setValue, resetForm, data }: Props) => {
   const { personaStorage, setPersonaStorage, vehiculoStorage, setVehiculoStorage } = useStorageFilter()
 
   const onFocusPersonaInput = () => {
@@ -94,68 +94,6 @@ export const FormFilter = ({ register, setValue, data, resetForm }: Props) => {
           placeholder='Filtrar por número de acta'
         />
       </div>
-        
-      <div className='mb-4'>
-        <div className='mb-2 block'>
-          <Label htmlFor='estado_id' value='Estados' />
-        </div>
-        <Select {...register('estado_id')}>
-          <option value='' hidden>Filtrar por estado</option>
-          {
-            data?.estadosActa?.map((estado: EstadoActa) => (
-              <option key={estado.id} value={estado.id} >{estado.nombre}</option>
-            ))
-          }
-        </Select>
-      </div>
-
-      <div className='mb-4'>
-        <div className='mb-2 block'>
-          <Label htmlFor='tipo_acta_id' value='Tipo de Acta'/>
-        </div>
-        <Select {...register('tipo_acta_id')} disabled={!data?.tiposActa?.length}>
-          <option value='' hidden>Filtrar por tipo de acta</option>
-          {
-            data?.tiposActa?.map((tipoActa: string, index: number) => (
-              <option key={index} value={tipoActa}>{tipoActa}</option>
-            ))
-          }
-        </Select>
-      </div>
-
-      <div className='mb-4'>
-        <div className='mb-2 block'>
-          <Label htmlFor='fecha_desde' value='Fecha Desde' />
-        </div>
-        <TextInput
-          {...register('fecha_desde')}
-          name='fecha_desde'
-          placeholder='Ingrese la fecha de acta'
-          type='date'
-        />
-      </div>
-
-      <div className='mb-4'>
-        <div className='mb-2 block'>
-          <Label htmlFor='fecha_hasta' value='Fecha Hasta' />
-        </div>
-        <TextInput
-          {...register('fecha_hasta')}
-          placeholder='Ingrese la fecha de acta'
-          type='date'
-        />
-      </div>
-
-      <div className='mb-4 relative'>
-        <div className='mb-2 block'>
-          <Label htmlFor='numero_causa'value='Número de Causa' />
-        </div>
-        <TextInput
-          {...register('numero_causa')}
-          id='numero_causa'
-          placeholder='Filtrar por número de causa'
-        />
-      </div>
 
       {
         vehiculoStorage
@@ -185,6 +123,20 @@ export const FormFilter = ({ register, setValue, data, resetForm }: Props) => {
             resetForm={resetForm}
           />
       }
+
+      <div className='mb-4'>
+        <div className='mb-2 block'>
+          <Label htmlFor='tipo_acta_id' value='Tipo de Acta'/>
+        </div>
+        <Select {...register('tipo_acta_id')} disabled={!data?.tiposActa?.length}>
+          <option value='' hidden>Filtrar por tipo de acta</option>
+          {
+            data?.tiposActa?.map((tipoActa: string, index: number) => (
+              <option key={index} value={tipoActa}>{tipoActa}</option>
+            ))
+          }
+        </Select>
+      </div>
     </div>
   )
 }
