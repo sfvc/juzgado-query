@@ -19,6 +19,17 @@ export const useMutationEstado = () => {
     }
   })
 
+  const updateEstado = useMutation({
+    mutationFn: ({ id, estadoActaId, form }: { id: number, estadoActaId: number, form: EstadoActaForm }) => estadoActaActions.updateEstadoActa(id, estadoActaId, form),
+    onSuccess: () => {
+      toast.success('Estado actualizado con exito')
+      queryClient.clear()
+    },
+    onError: (error) => {
+      toast.error('Error al editar el estado')
+      console.log(error)
+    }
+  })
   
-  return { createEstado }
+  return { createEstado, updateEstado }
 }

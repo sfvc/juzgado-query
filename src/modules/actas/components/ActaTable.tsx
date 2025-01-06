@@ -69,7 +69,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.numero_causa}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.fecha}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.tipo_acta}</Table.Cell>
-                      <Table.Cell className='text-center text-white dark:text-white hidden lg:table-cell'>
+                      <Table.Cell className='lg:flex lg:justify-center text-white dark:text-white hidden'>
                         <Tooltip content={acta.estados[0]?.nombre.toLocaleUpperCase() || 'SIN ESTADO'} className='max-w-80'>
                           <span
                             className='max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block'

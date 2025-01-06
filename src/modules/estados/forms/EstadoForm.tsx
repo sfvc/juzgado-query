@@ -1,4 +1,4 @@
-import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
+import { Button, Label, Select, Spinner, Textarea } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,12 +14,13 @@ const validationSchema = yup.object().shape({
 })
   
 interface Props {
-  actaId: number,
+  actaId: number
+  estado: IEstadoActa | null
   onSucces: () => void
 }
 
-const EstadoForm = ({ actaId, onSucces }: Props) => {
-  const { createEstado } = useMutationEstado()
+const EstadoForm = ({ actaId, estado, onSucces }: Props) => {
+  const { createEstado, updateEstado } = useMutationEstado()
 
   const { data: estados, isLoading } = useQuery<IEstadoActa[]>({
     queryKey: ['estados-actas'],
@@ -32,11 +33,17 @@ const EstadoForm = ({ actaId, onSucces }: Props) => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<EstadoActaForm>({
+    defaultValues: {
+      estado_id: estado?.id,
+      observaciones: estado?.pivot?.observaciones || ''
+    },
     resolver: yupResolver(validationSchema)
   })
 
   const onSubmit: SubmitHandler<EstadoActaForm> = async (form: EstadoActaForm) => {
-    await createEstado.mutateAsync({ id: actaId, form })
+    if (estado) await updateEstado.mutateAsync({ id: actaId, estadoActaId: estado.pivot.id, form })
+    else await createEstado.mutateAsync({ id: actaId, form })
+    
     onSucces()
   }
 
@@ -52,6 +59,7 @@ const EstadoForm = ({ actaId, onSucces }: Props) => {
           {...register('estado_id', { valueAsNumber: true })}
           helperText={errors?.estado_id && errors.estado_id.message}
           color={errors?.estado_id && 'failure'}
+          disabled={!!estado}
         >
           <option value='' hidden>Seleccione el estado</option>
           {
@@ -66,10 +74,10 @@ const EstadoForm = ({ actaId, onSucces }: Props) => {
         <div className='mb-2 block dark:text-white'>
           <Label htmlFor='observaciones' value='Observaciones' />
         </div>
-        <TextInput
+        <Textarea
           {...register('observaciones')}
-          type='text'
           placeholder='Observaciones'
+          rows={4}
         />
       </div>
 

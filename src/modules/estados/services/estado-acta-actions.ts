@@ -13,4 +13,8 @@ export const createEstadoActa = async (id: number, data: EstadoActaForm) => {
   return estado
 }
   
-  
+export const updateEstadoActa = async (id: number, estadoActaId: number , data: EstadoActaForm) => {
+  const response = await apiJuzgado.put(`/actas/${id}/estados/${estadoActaId}/observaciones`, data)
+  const { data: estado } = response.data
+  return estado
+}

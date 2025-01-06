@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Button, Modal, Table } from 'flowbite-react'
-import { Column } from '../../../shared/interfaces'
+import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { useEstadoActa } from '../hooks/useEstadoActa'
 import { useNavigate, useParams } from 'react-router-dom'
-import type { IEstadoActa } from '../interfaces'
-import { Loading } from '../../../shared'
 import EstadoForm from '../forms/EstadoForm'
+import { icons, Loading } from '../../../shared'
+import type { IEstadoActa } from '../interfaces'
+import type { Column } from '../../../shared/interfaces'
 
 const colums: Column[] = [
   { key: 'estado', label: 'Estado' },
@@ -13,6 +13,7 @@ const colums: Column[] = [
   { key: 'fecha_desde', label: 'fecha_desde' },
   { key: 'fecha_hasta', label: 'fecha_hasta' },
   { key: 'observaciones', label: 'observaciones' },
+  { key: 'acciones', label: 'Acciones' }
 ]
   
 export const EstadoActa = () => {
@@ -21,10 +22,19 @@ export const EstadoActa = () => {
   const actaId = parseInt(id!)
 
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<IEstadoActa | null>(null)
   const { estados, isFetching, isError } = useEstadoActa(actaId)
 
   /* Modal cambiar estado */
-  const onCloseModal = () => setOpenModal(false)
+  const onCloseModal = () => {
+    setOpenModal(false)
+    if (activeItem) setActiveItem(null)
+  }
+
+  const onEditEstado = (estado: IEstadoActa) => {
+    setActiveItem(estado)
+    setOpenModal(true)
+  }
 
   if (isFetching) return <Loading />
 
@@ -44,11 +54,9 @@ export const EstadoActa = () => {
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {
-              colums.map((column: Column) => (
-                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-              ))
-            }
+            {colums.map((column: Column) => (
+              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            ))}
           </Table.Head>
           <Table.Body className='divide-y'>
             {
@@ -64,6 +72,13 @@ export const EstadoActa = () => {
                       { !estado.pivot.fecha_hasta ? '-' : estado.pivot.fecha_hasta }
                     </Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{estado.pivot.observaciones || '-'}</Table.Cell>
+                    <Table.Cell className='flex gap-2 text-center items-center justify-center'>
+                      <Tooltip content='Editar'>
+                        <Button color='success' onClick={() => onEditEstado(estado)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Pencil />
+                        </Button>
+                      </Tooltip>
+                    </Table.Cell>
                   </Table.Row>
                 ))
                 : <tr><td colSpan={10} className='text-center py-2 dark:bg-gray-800'>No se encontraron resultados</td></tr>
@@ -78,6 +93,7 @@ export const EstadoActa = () => {
         <Modal.Body>
           <EstadoForm 
             actaId={actaId}
+            estado={activeItem}
             onSucces={onCloseModal}
           />
         </Modal.Body>

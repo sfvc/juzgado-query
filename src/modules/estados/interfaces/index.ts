@@ -6,6 +6,7 @@ export interface IEstadoActa {
   updated_at: string
   deleted_at: string | null
   pivot: {
+    id: number
     acta_id: number
     estado_actas_id: number
     fecha_desde: string
