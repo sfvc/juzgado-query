@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { ToastContainer } from 'react-toastify'
 import { useInhabilitado } from '../hooks/useInhabilitado'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import { clearNames, DeleteModal, icons, InputTable } from '../../../shared'
@@ -217,6 +218,8 @@ export const Inhabilitado = () => {
           />
         </Modal.Body>
       </Modal>
+
+      <ToastContainer containerId="custom" className="custom-toast-container" />
     </React.Fragment>
   )
 }

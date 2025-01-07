@@ -3,18 +3,9 @@ import { toast } from 'react-toastify'
 import { actaActions } from '..'
 import { IActaForm } from '../interfaces/form-interfaces'
 import { useNavigate } from 'react-router-dom'
-import { IActa } from '../interfaces'
-import { useQueryParams } from '../../../shared'
+import { useQueryParams, validateErrors } from '../../../shared'
+import type { IActa } from '../interfaces'
 
-// Definir el tipo para el error que viene del backend
-interface BackendError {
-  response?: {
-    data?: {
-      mensaje?: string;
-      errores?: Record<string, string[]>;
-    };
-  };
-}
 
 export const useMutationActa = () => {
   const navigate = useNavigate()
@@ -28,20 +19,9 @@ export const useMutationActa = () => {
       toast.success('Acta creada con éxito')
       queryClient.clear()
     },
-    onError: (error: BackendError) => {
-      if (error.response?.data?.errores) {
-        // Obtener el primer error específico del campo
-        const errores = error.response.data.errores
-        const [campo, mensajes] = Object.entries(errores)[0]
-        const mensajeError = mensajes[0]
-
-        // Mostrar el mensaje específico en un toast
-        toast.error(`Error en ${campo}: ${mensajeError}`)
-      } else {
-        // Mensaje genérico si no hay detalles específicos
-        toast.error('Error al crear el acta')
-      }
-      console.error(error) // Mantener el log para depuración
+    onError: (error) => {
+      validateErrors(error, 'Error al crear acta')
+      console.log(error)
     }
   })
 
@@ -53,16 +33,9 @@ export const useMutationActa = () => {
       toast.success('Acta actualizada con éxito')
       queryClient.clear()
     },
-    onError: (error: BackendError) => {
-      if (error.response?.data?.errores) {
-        const errores = error.response.data.errores
-        const [campo, mensajes] = Object.entries(errores)[0]
-        const mensajeError = mensajes[0]
-        toast.error(`Error en ${campo}: ${mensajeError}`)
-      } else {
-        toast.error('Error al actualizar el acta')
-      }
-      console.error(error)
+    onError: (error) => {
+      validateErrors(error, 'Error al actualizar acta')
+      console.log(error)
     }
   })
 
@@ -72,13 +45,9 @@ export const useMutationActa = () => {
       toast.success('Acta eliminada con éxito')
       queryClient.invalidateQueries({ queryKey: ['actas', { ...filters }] })
     },
-    onError: (error: BackendError) => {
-      if (error.response?.data?.mensaje) {
-        toast.error(error.response.data.mensaje)
-      } else {
-        toast.error('Error al eliminar el acta')
-      }
-      console.error(error)
+    onError: (error) => {
+      toast.error('Error al eliminar el acta')
+      console.log(error)
     }
   })
 

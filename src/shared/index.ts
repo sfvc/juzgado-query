@@ -19,3 +19,4 @@ export * as icons from './icons/Icons'
 /* Helpers */
 export { setUrlParams } from './helpers/setUrlParams'
 export { clearNames } from './helpers/clearNames'
+export { validateErrors } from './helpers/validateErrors'

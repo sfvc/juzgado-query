@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useFilter, usePagination } from '../../../shared'
+import { useFilter, usePagination, validateErrors } from '../../../shared'
 import { inhabilitadoActions } from '..'
 import { FormInhabilitado, IInhabilitado } from '../interfaces'
 
@@ -32,7 +32,7 @@ export const useInhabilitado = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el registro')
+      validateErrors(error, 'Error al crear el registro')
       console.log(error)
     }
   })
@@ -44,7 +44,7 @@ export const useInhabilitado = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al actualizar registro')
+      validateErrors(error, 'Error al actualizar registro')
       console.log(error)
     }
   })

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { usePagination, useFilter } from '../../../shared'
-import { IPersona, PersonaHumana, PersonaJuridica } from '../interfaces'
+import { usePagination, useFilter, validateErrors } from '../../../shared'
+import { IPersona, PersonaFisica, PersonaJuridica } from '../interfaces'
 import { personaActions } from '..'
 
 interface FilterParams {
@@ -32,19 +32,19 @@ export const usePersona = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear la persona')
+      validateErrors(error, 'Error al crear la persona')
       console.log(error)
     }
   })
 
   const updatePersona = useMutation({
-    mutationFn: ({ id, persona }: { id: number, persona: PersonaHumana | PersonaJuridica }) => personaActions.updatePersona(id, persona),
+    mutationFn: ({ id, persona }: { id: number, persona: PersonaFisica | PersonaJuridica }) => personaActions.updatePersona(id, persona),
     onSuccess: () => {
       toast.success('Persona actualizada con exito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al actualizar la persona')
+      validateErrors(error, 'Error al actualizar la persona')
       console.log(error)
     }
   })

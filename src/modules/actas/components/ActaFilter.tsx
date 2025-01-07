@@ -90,7 +90,7 @@ export const ActaFilter = () => {
               <FormFilter register={register} setValue={setValue} data={data} resetForm={resetForm} />
             
               {/* Filtros avanzados */}
-              <AdvanceFilter register={register} prioridades={data?.prioridades} data={data} setValue={setValue} resetForm={resetForm} />
+              <AdvanceFilter register={register} data={data} setValue={setValue} resetForm={resetForm} />
             </div>
         }
 

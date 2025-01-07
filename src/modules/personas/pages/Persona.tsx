@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { ToastContainer } from 'react-toastify'
 import { DeleteModal, InputTable } from '../../../shared'
 import { icons } from '../../../shared'
 import { usePersona } from '../hooks/usePersona'
 import { PersonaForm } from '../forms/PersonaForm'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import { clearNames } from '../../../shared/helpers/clearNames'
 import type { Column } from '../../../shared/interfaces'
 import type { IPersona } from '../interfaces'
-import { clearNames } from '../../../shared/helpers/clearNames'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -130,6 +131,8 @@ export const Persona = () => {
           onClose={closeDeleteModal}
         />
       }
+
+      <ToastContainer containerId="custom" className="custom-toast-container" />
     </React.Fragment>
   )
 }

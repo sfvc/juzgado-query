@@ -9,13 +9,12 @@ import { useStorageFilter } from '../hooks/useStorageFilter'
 
 interface Props {
   register: UseFormRegister<ActaFilterForm>
-  prioridades: Prioridad[] | undefined
   data: DataFilters
   setValue: UseFormSetValue<ActaFilterForm>
   resetForm: boolean
 }
 
-export const AdvanceFilter = ({ register, prioridades, setValue, resetForm, data }: Props) => {
+export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) => {
   const { infraccionStorage, setInfraccionStorage } = useStorageFilter()
 
   const onFocusInfraccionInput = () => {
@@ -50,10 +49,10 @@ export const AdvanceFilter = ({ register, prioridades, setValue, resetForm, data
                   value='Prioridad'
                 />
               </div>
-              <Select {...register('prioridad_id')} disabled={!prioridades?.length}>
+              <Select {...register('prioridad_id')} disabled={!data?.prioridades?.length}>
                 <option value='' hidden>Filtrar por prioridad</option>
                 {
-                  prioridades?.map((prioridad: Prioridad) => (
+                  data?.prioridades?.map((prioridad: Prioridad) => (
                     <option key={prioridad.id} value={prioridad.id}>{prioridad.nombre}</option>
                   ))
                 }

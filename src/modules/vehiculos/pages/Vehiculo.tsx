@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
+import { ToastContainer } from 'react-toastify'
 import { useVehiculo } from '../hooks/useVehiculo'
 import { RoleGuard, UserRole } from '../../../auth'
 import { clearNames, DeleteModal, InputTable } from '../../../shared'
@@ -146,6 +147,8 @@ export const Vehiculo = () => {
           onClose={closeDeleteModal}
         />
       }
+
+      <ToastContainer containerId="custom" className="custom-toast-container" />
     </React.Fragment>
   )
 }

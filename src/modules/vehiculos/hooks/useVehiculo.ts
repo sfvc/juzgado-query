@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { usePagination, useFilter } from '../../../shared'
+import { usePagination, useFilter, validateErrors } from '../../../shared'
 import { vehiculoActions } from '..'
-import { FormVehiculo, IVehiculo } from '../interfaces'
+import type { FormVehiculo, IVehiculo } from '../interfaces'
 
 interface FilterParams {
   query: string
@@ -32,7 +32,7 @@ export const useVehiculo = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al crear el vehiculo')
+      validateErrors(error, 'Error al crear el vehiculo')
       console.log(error)
     }
   })
@@ -44,7 +44,7 @@ export const useVehiculo = () => {
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al actualizar el vehiculo')
+      validateErrors(error, 'Error al actualizar el vehiculo')
       console.log(error)
     }
   })
