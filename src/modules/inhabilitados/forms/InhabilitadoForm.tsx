@@ -40,7 +40,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
       juzgado_id: inhabilitado?.juzgado.id,
       fecha_desde: inhabilitado?.fecha_desde || '',
       fecha_hasta: inhabilitado?.fecha_hasta || '',
-      numero_acta: inhabilitado?.acta.numero_acta || '',
+      numero_acta: inhabilitado?.acta?.numero_acta || '',
       instrumento: inhabilitado?.instrumento || '',
       causa: inhabilitado?.causa || ''
     },
