@@ -1,9 +1,5 @@
-import axios from 'axios'
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
-import { formatData } from '../../carbone/helpers/formatData'
-
-const CARBONE_URL = import.meta.env.VITE_CARBONE_URL
 
 export const getNotifications = async (filters: object) => {
   const params = setUrlParams(filters)
@@ -19,17 +15,16 @@ export const getNotificationsByActa = async (id: number) => {
   return data
 }
   
-export const createNotification = async (selectedActas: number[], plantillaId: number | null) => {
+export const createNotification = async (selectedActas: number[], plantillaId: number | null, userId: number) => {
   if (selectedActas.length === 0 || !plantillaId) throw new Error('No hay actas o plantilla seleccionada')
 
   const notificationsPromise = selectedActas.map((actaId: number) => {
     return apiJuzgado.post('/notificaciones', {
       acta_id: actaId,
       plantilla_id: plantillaId,
-      tipo_actuacion: 'NOTIFICACION'
+      tipo_actuacion: 'NOTIFICACION',
+      user_id: userId
     })
-
-    // TODO: Subir el archivo a s3
   })
 
   await Promise.all(notificationsPromise)

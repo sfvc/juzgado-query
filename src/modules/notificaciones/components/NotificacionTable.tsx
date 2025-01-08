@@ -77,7 +77,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                     <Table.Cell className='text-center dark:text-white'>{acta.tipo_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{notificacion.plantilla?.denominacion || '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{notificacion.usuario}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{notificacion.usuario || '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Ver notificación'>
                         <Button color='warning' 

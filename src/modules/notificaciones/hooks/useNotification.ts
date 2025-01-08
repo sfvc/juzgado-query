@@ -15,8 +15,8 @@ export const useNotification = () => {
 
   /* Mutations */
   const createNotification = useMutation({
-    mutationFn: ({ selectedActas, plantillaId }: { selectedActas: number[], plantillaId: number | null }) => 
-      notificacionActions.createNotification(selectedActas, plantillaId),
+    mutationFn: ({ selectedActas, plantillaId, userId }: { selectedActas: number[], plantillaId: number | null, userId: number }) => 
+      notificacionActions.createNotification(selectedActas, plantillaId, userId),
     onSuccess: () => {
       toast.success('Notificación creada exitosamente')
       resetProvider()

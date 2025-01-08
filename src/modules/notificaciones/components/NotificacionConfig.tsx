@@ -70,7 +70,7 @@ export const NotificacionConfig = () => {
             type='button' 
             className='px-6' 
             disabled={!selectedActas.length || !plantillaId} 
-            onClick={() => createNotification.mutateAsync({ selectedActas, plantillaId })}
+            onClick={() => createNotification.mutateAsync({ selectedActas, plantillaId, userId: user!.id })}
             isProcessing={createNotification.isPending}
           >
             Notificar
