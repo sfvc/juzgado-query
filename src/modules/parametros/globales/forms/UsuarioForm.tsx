@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
-import { icons } from '../../../../shared'
 import { useUsuario } from '../hooks/useUsuario'
 import { useUsuarioParams } from '../hooks/useUsuarioParams'
 import type { FormUsuario, IUsuario } from '../interfaces'
@@ -13,9 +12,8 @@ const validationSchema = yup.object().shape({
   nombre: yup.string().required('El pais es requerido'),
   dni: yup.string().required('El dni es requerido'),
   username: yup.string().required('El usuario es requerido'),
-  password: yup.string().required('La contraseña es requerida'),
   juzgado_id: yup.string().required('El juzgado es requerido'),
-  role: yup.string().required('El rol es requerido'),
+  role: yup.number().transform((value) => isNaN(value) ? null : value).required('El rol es requerido'),
 })
 
 interface Props {
@@ -26,7 +24,6 @@ interface Props {
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
   const { data, isLoading } = useUsuarioParams()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const {
     register,
@@ -39,12 +36,10 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
-      password: usuario ? '' : '', // Vacío para edición
-      juzgado_id: usuario?.juzgado?.id.toString() || '',
-      role: usuario?.role?.id.toString() || '',
+      juzgado_id: usuario?.juzgado.id.toString() || '',
+      role: usuario?.role.id || null,
     },
     resolver: yupResolver(validationSchema),
-    context: { isEditing: !!usuario }, // Define el contexto
   })
   
 
@@ -109,32 +104,6 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           />
         </div>
 
-        <div className='relative mb-4'>
-          <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='password' value='Contraseña' /><strong className='obligatorio'>(*)</strong>
-          </div>
-          <TextInput
-            {...register('password')}            
-            type={showPassword ? 'text' : 'password'}
-            placeholder='Contraseña'
-            helperText={errors?.password && errors?.password?.message} 
-            color={errors?.password && 'failure'}
-          />
-          
-          <button
-            type='button'
-            className='absolute top-[55%] right-3'
-            title='Mostrar Contraseña'
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {
-              showPassword
-                ? <icons.Eye />
-                : <icons.EyeClose />
-            }
-          </button>
-        </div>
-
         <div className='mb-4'>
           <div className='mb-2 block'>
             <Label htmlFor='juzgado_id' value='Juzgado' /><strong className='obligatorio'>(*)</strong>
@@ -158,15 +127,13 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             <Label htmlFor='role' value='Rol' /><strong className='obligatorio'>(*)</strong>
           </div>
           <Select
-            {...register('role')}
+            {...register('role', { valueAsNumber: true })}
             helperText={errors?.role && errors.role.message}
             color={errors?.role && 'failure'}
           >
             <option value='' hidden>Seleccione el rol</option>
             {data?.roles.map((rol: any) => (
-              <option key={rol.id} value={rol.id}>
-                {rol.nombre}
-              </option>
+              <option key={rol.id} value={rol.id}>{rol.nombre}</option>
             ))}
           </Select>
         </div>

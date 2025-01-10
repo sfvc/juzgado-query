@@ -36,7 +36,6 @@ export const usePdf = (acta?: any) => {
   const convertToPDF = async (url: string) => {
     useAction.actionFn( async () => {
       const response = await apiJuzgado.post('servicios/convertir-url-pdf', { file_url: url }, { responseType: 'blob' })
-      console.log(response)
       const fileBlob = response.data
       const file = new Blob([fileBlob], { type: 'application/pdf' })
       const fileURL = URL.createObjectURL(file)

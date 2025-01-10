@@ -156,7 +156,8 @@ export const uploadFilePDF = async (file: File, item: any, property: string, use
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')
 
-  const name = cleanFileName(file.name)
+  const name = cleanFileName(item?.plantilla?.path)
+  // const name = cleanFileName(file.name)
 
   const data = {
     file,

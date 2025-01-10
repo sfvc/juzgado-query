@@ -34,9 +34,8 @@ export interface FormUsuario {
     nombre: string
     dni: string
     username: string
-    password: string
     juzgado_id: string
-    role: string
+    role: number | null
 }
 
 export interface IUnidad {
