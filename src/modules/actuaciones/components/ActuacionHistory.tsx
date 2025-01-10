@@ -8,16 +8,15 @@ import { LoadingOverlay } from '../../../layout'
 import { useUploadFile } from '../../carbone/hooks/useUploadFile'
 import { useActuacion } from '../hooks/useActuacion'
 import { actuacionActions } from '..'
+import { RoleGuard, UserRole } from '../../../auth'
 import type { Actuacion, ActuacionActa } from '../interfaces'
 import type { Column } from '../../../shared/interfaces'
 import type { IActuacionHistory } from '../interfaces/actuacion-history'
-import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
-  { key: 'icon', label: '' },
-  { key: 'id', label: 'id' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
+  { key: 'hora', label: 'Hora' },
   { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' }
 ]
@@ -29,11 +28,11 @@ interface Props {
 }
 
 export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
+  const { user } = useContext(AuthContext)
   const { deleteActuacionHistory } = useActuacion()
   const { uploadFile, downloadWord } = useUploadFile()
-  const { showPDFGotenberg } = usePdf()
-  const { user } = useContext(AuthContext)
-  const refFile = useRef(null)
+  const { downloadWordS3, convertToPDF, useAction } = usePdf()
+  const refFile = useRef<HTMLInputElement | null>(null)
   
   const [ openDeleteModal, setOpenDeleteModal ] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IActuacionHistory | null>(null)
@@ -59,7 +58,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     const file = e.target.files![0]
     if (!file) return
 
-    await uploadFile.mutateAsync({ file, item: actuacion, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
+    await uploadFile.mutateAsync({ file, item: actuacion, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })  
   }
 
   const onDownloadWord = async () => {
@@ -71,6 +70,11 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     
     const response = await deleteActuacionHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: actuacion.id}]})
     if (response.status === 200) onCloseModalHistory()
+  }
+
+  const cleanInputFile = () => {
+    if (refFile.current) 
+      refFile.current.value = ''
   }
     
   return (
@@ -85,6 +89,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
               name='file'
               placeholder='Seleccionar el archivo'
               onChange={(e) => onUploadFile(e)}
+              onFocus={cleanInputFile}
               accept='.doc,.docx'
               ref={refFile}
             />
@@ -107,22 +112,23 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                 history?.length
                   ? history.map((actuacion: IActuacionHistory) => (
                     <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                        <div className='flex justify-center text-red-600'>
-                          <icons.Pdf />
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{actuacion.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white px-2'>{actuacion?.hora || '-'} hs</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                        <Tooltip content='Ver' placement='top'>
-                          <Button color='warning' onClick={() => showPDFGotenberg(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
+                        <Tooltip content='PDF' placement='top'>
+                          <Button color='warning' onClick={() => convertToPDF(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Print />
                           </Button>
                         </Tooltip>
-
+                        
+                        <Tooltip content='Descargar' placement='top'>
+                          <Button color='success' onClick={() => downloadWordS3(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Dowloand />
+                          </Button>
+                        </Tooltip>
+                        
                         <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
                           <Tooltip content='Eliminar' placement='top'>
                             <Button color='failure' onClick={() => onOpenModalHistory(actuacion)} className='w-8 h-8 flex items-center justify-center'>
@@ -148,16 +154,19 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
         </Alert>
                 
         <div className='flex justify-end gap-4 mt-4'>
-          <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
-            <icons.Dowloand size={18}/> 
-          &#160; Descargar Actuación
-          </Button>
+          {
+            !history?.length && 
+            <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
+              <icons.Dowloand size={18}/> 
+              &#160; Descargar Actuación
+            </Button>
+          }
         
           <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
         </div>
       </footer>
 
-      { (uploadFile.isPending || downloadWord.isPending) && <LoadingOverlay /> }
+      { (uploadFile.isPending || downloadWord.isPending || useAction.loading) && <LoadingOverlay /> }
 
       {/* Modal para eliminar actuación del historial */}
       { activeItem && 

@@ -8,16 +8,15 @@ import { usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { useNotification } from '../hooks/useNotification'
 import { useUploadFile } from '../../carbone/hooks/useUploadFile'
+import { RoleGuard, UserRole } from '../../../auth'
 import type { Column } from '../../../shared/interfaces'
 import type { Notificacion, NotificationActa } from '../interfaces'
 import type { INotificationHistory } from '../interfaces/notificacion-history'
-import { RoleGuard, UserRole } from '../../../auth'
 
 const colums: Column[] = [
-  { key: 'icon', label: '' },
-  { key: 'id', label: 'id' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'fecha', label: 'Fecha' },
+  { key: 'hora', label: 'Hora' },
   { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' }
 ]
@@ -31,9 +30,9 @@ interface Props {
 export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props) => {
   const { deleteNotificationHistory } = useNotification()
   const { uploadFile, downloadWord } = useUploadFile()
-  const { showPDFGotenberg } = usePdf()
+  const { convertToPDF, downloadWordS3, useAction } = usePdf()
   const { user } = useContext(AuthContext)
-  const refFile = useRef(null)
+  const refFile = useRef<HTMLInputElement | null>(null)
   
   const [ openDeleteModal, setOpenDeleteModal ] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<INotificationHistory | null>(null)
@@ -73,6 +72,11 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
     const response = await deleteNotificationHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: notificacion.id}]})
     if (response.status === 200) onCloseModalHistory()
   }
+
+  const cleanInputFile = () => {
+    if (refFile.current) 
+      refFile.current.value = ''
+  }
     
   return (
     <div>
@@ -86,6 +90,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
               name='file'
               placeholder='Seleccionar el archivo'
               onChange={(e) => onUploadFile(e)}
+              onFocus={cleanInputFile}
               accept='.doc,.docx'
               ref={refFile}
             />
@@ -99,30 +104,30 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
           : 
           <Table className='shadow-md'>
             <Table.Head>
-              {
-                colums.map((column: Column) => (
-                  <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
-                ))
-              }
+              {colums.map((column: Column) => (
+                <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+              ))}
             </Table.Head>
             <Table.Body className='divide-y'>
               {
                 history?.length
                   ? history.map((notificacion: INotificationHistory) => (
                     <Table.Row key={notificacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                        <div className='flex justify-center text-red-600'>
-                          <icons.Pdf />
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{notificacion.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{notificacion.fecha}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{notificacion.usuario}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{notificacion?.fecha || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white px-2'>{notificacion?.hora || '-'} hs</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{notificacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                        <Tooltip content='Ver' placement='top'>
-                          <Button color='warning' onClick={() => showPDFGotenberg(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
+
+                        <Tooltip content='PDF' placement='top'>
+                          <Button color='warning' onClick={() => convertToPDF(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Print />
+                          </Button>
+                        </Tooltip>
+
+                        <Tooltip content='Descargar' placement='top'>
+                          <Button color='success' onClick={() => downloadWordS3(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
+                            <icons.Dowloand />
                           </Button>
                         </Tooltip>
 
@@ -151,16 +156,19 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
         </Alert>
 
         <div className='flex justify-end gap-4 mt-4'>
-          <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
-            <icons.Dowloand size={18}/> 
-            &#160; Descargar Notificación
-          </Button>
+          {
+            !history?.length && 
+            <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
+              <icons.Dowloand size={18}/> 
+              &#160; Descargar Notificación
+            </Button>
+          }
         
-          <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
+          <Button color='red' type='button' className='px-4' onClick={() => onCloseModal()}>Cerrar</Button>
         </div>
       </footer>
 
-      { (uploadFile.isPending || downloadWord.isPending) && <LoadingOverlay /> }
+      { (uploadFile.isPending || downloadWord.isPending || useAction.loading) && <LoadingOverlay /> }
 
       {/* Modal para eliminar notificación del historial */}
       { activeItem && 

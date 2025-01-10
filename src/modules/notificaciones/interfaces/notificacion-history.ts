@@ -4,5 +4,6 @@ export interface INotificationHistory {
     nombre:          string
     url:             string
     fecha:           string
+    hora:            string
     usuario:         string
 }

@@ -19,7 +19,7 @@ const colums: Column[] = [
 ]
 
 export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
-  const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
+  const { useAction, showPDFCarbone, convertToPDF } = usePdf(acta)
   const { deleteNotification } = useNotification()
   const notificaciones: Notificacion[] = acta?.notificaciones || []
 
@@ -29,11 +29,11 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
 
   const onEditModal= async (notificacion?: Notificacion) => {
     if (!notificacion) {
-      setActiveItem(null)
       setIsOpen(false)
+      setActiveItem(null)
     } else {
-      setActiveItem(notificacion)
       setIsOpen(true)
+      setActiveItem(notificacion)
     }
   }
 
@@ -84,7 +84,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(notificacion?.url)
-                              showPDFGotenberg(notificacion.url)
+                              convertToPDF(notificacion.url)
                             else 
                               showPDFCarbone(notificacion?.plantilla?.path, notificacion.id)
                           }} 
@@ -115,7 +115,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
       </div>
 
       {/* Modal para actualizar notificacion */}
-      <Modal size='4xl' show={isOpen} onClose={onEditModal}>
+      <Modal size='4xl' show={isOpen} onClose={() => onEditModal()}>
         <Modal.Header>Editar Notificación</Modal.Header>
         <Modal.Body>
           { activeItem && <NotificationHistory acta={acta} notificacion={activeItem} onCloseModal={onEditModal} /> }

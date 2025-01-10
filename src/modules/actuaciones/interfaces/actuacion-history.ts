@@ -4,5 +4,6 @@ export interface IActuacionHistory {
     nombre:          string
     url:             string
     fecha:           string
+    hora:            string
     usuario:         string
 }

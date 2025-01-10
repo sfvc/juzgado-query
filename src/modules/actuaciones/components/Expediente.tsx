@@ -21,7 +21,7 @@ const colums: Column[] = [
 ]
 
 export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuaciones:Actuacion[]}) => {
-  const { useAction, showPDFCarbone, showPDFGotenberg } = usePdf(acta)
+  const { useAction, showPDFCarbone, convertToPDF } = usePdf(acta)
   const { deleteActuacion } = useActuacion()
 
   const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history
@@ -76,7 +76,7 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(actuacion?.url)
-                              showPDFGotenberg(actuacion.url)
+                              convertToPDF(actuacion.url)
                             else 
                               showPDFCarbone(actuacion?.plantilla?.path, actuacion.id)
                           }} 
