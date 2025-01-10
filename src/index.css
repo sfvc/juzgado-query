@@ -192,3 +192,8 @@ td > button {
   bottom: 20px !important;
   width: 50%;
 }
+
+/* Negrita */
+h1, h2, h3, h4, h5, h6, p, Label, Table, ul, ::placeholder {
+  font-weight: bold !important;
+}

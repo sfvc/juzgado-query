@@ -118,7 +118,7 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>
                         {
                           inhabilitado?.tiempo_transcurrido_dias 
-                            ? `${inhabilitado?.tiempo_transcurrido_dias} días` 
+                            ? `${inhabilitado?.tiempo_transcurrido_dias}` 
                             : '-'
                         }
                       </Table.Cell>
@@ -134,11 +134,13 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
 
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                        <Tooltip content='Editar'>
-                          <Button onClick={() => onOpenModal(inhabilitado)} color='success' className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Pencil  />
-                          </Button>
-                        </Tooltip>
+                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                          <Tooltip content='Editar'>
+                            <Button onClick={() => onOpenModal(inhabilitado)} color='success' className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Pencil  />
+                            </Button>
+                          </Tooltip>
+                        </RoleGuard>
                         
                         <Tooltip content='Ver más'>
                           <Button onClick={() => onOpenShowModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>

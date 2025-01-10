@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Table, Tooltip } from 'flowbite-react'
+import { Button, Label, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
@@ -50,18 +50,28 @@ export const ArticuloData = ({ data }: Props) => {
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-        <SearchInput<IArticulo>
-          label="Infracciones"
-          placeholder="Codigo de la infracción"
-          onSearch={handleSearch}
-          onSelect={handleSelect}
-          renderItem={(item) => (
-            <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
-          )}
-          renderInput={(item) => { return `${item.numero}`} }
-        />
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label
+              color='gray'
+              htmlFor='calle'
+              value='Infracciones'
+            />
+            <strong className='obligatorio'>(*)</strong>
+          </div>
+          <SearchInput<IArticulo>
+            label=""
+            placeholder="Codigo de la infracción"
+            onSearch={handleSearch}
+            onSelect={handleSelect}
+            renderItem={(item) => (
+              <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
+            )}
+            renderInput={(item) => { return `${item.numero}`} }
+          />
+        </div>
 
-        <div className='flex items-end mb-4'><CreateArticulo /></div>
+        <div className='flex items-end mb-8'><CreateArticulo /></div>
       </div>
 
       {/* Tabla de infracciones */}
