@@ -1,6 +1,7 @@
 
-import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { AuthForm, User } from '../interfaces/auth'
 import { apiJuzgado } from '../../api/config'
 import { Status } from '../../context/Auth/AuthContext'
@@ -9,6 +10,7 @@ export const useAuth = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<Status>(Status.CHECKING)
+  const queryClient = useQueryClient()
 
   // Manejar el login del usuario
   const loginUser = async (data: AuthForm) => {
@@ -47,6 +49,7 @@ export const useAuth = () => {
   // Cerrar sesión del usuario
   const logoutUser = () => {
     localStorage.clear()
+    queryClient.clear()
 
     setUser(null)
     setIsAuthenticated(Status.NOT_AUTHENTICATED)
