@@ -33,7 +33,7 @@ export const Dashboard = () => {
                   <div className="flex items-center space-x-4">
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-md font-medium text-gray-900 dark:text-white">Sesiones Iniciadas</p>
-                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.sesiones.total}</p>
+                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.sesiones.total || 0}</p>
                     </div>
                   </div>
                 </li>
@@ -52,7 +52,7 @@ export const Dashboard = () => {
                   <div className="flex items-center space-x-4">
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-md font-medium text-gray-900 dark:text-white">Camios de Estado</p>
-                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.estados.total_cambios}</p>
+                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.estados.total_cambios || 0}</p>
                     </div>
                   </div>
                 </li>
@@ -72,7 +72,7 @@ export const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-md font-medium text-gray-900 dark:text-white">Creadas Hoy</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_hoy}</p>
+                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_hoy || 0}</p>
                   </div>
                 </div>
               </li>
@@ -80,7 +80,7 @@ export const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-md font-medium text-gray-900 dark:text-white">Juzgado 1</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_1}</p>
+                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_1 || 0}</p>
                   </div>
                 </div>
               </li>
@@ -88,7 +88,7 @@ export const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-md font-medium text-gray-900 dark:text-white">Juzgado 2</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_2}</p>
+                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_2 || 0}</p>
                   </div>
                 </div>
               </li>
@@ -96,7 +96,7 @@ export const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-md font-medium text-gray-900 dark:text-white">Total del Mes</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.total}</p>
+                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.total || 0}</p>
                   </div>
                 </div>
               </li>
@@ -118,14 +118,17 @@ export const Dashboard = () => {
           </Table.Head>
           <Table.Body className="divide-y">
             {
-              data?.sesiones?.users?.map((login: User) => (
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{login.username}</Table.Cell>
-                  <Table.Cell>{login.nombre}</Table.Cell>
-                  <Table.Cell>{login.juzgado}</Table.Cell>
-                  <Table.Cell>{login.created_at}</Table.Cell>
-                </Table.Row>
-              ))
+              data?.sesiones?.users?.length
+                ?
+                data?.sesiones?.users?.map((login: User) => (
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell>{login.username}</Table.Cell>
+                    <Table.Cell>{login.nombre}</Table.Cell>
+                    <Table.Cell>{login.juzgado}</Table.Cell>
+                    <Table.Cell>{login.created_at}</Table.Cell>
+                  </Table.Row>
+                ))
+                : (<tr><td colSpan={4} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
             }
           </Table.Body>
         </Table>
@@ -143,13 +146,15 @@ export const Dashboard = () => {
           </Table.Head>
           <Table.Body className="divide-y">
             {
-              data?.estados?.cambios_por_estado?.map((estado: CambioEstado) => (
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{estado.estado_id}</Table.Cell>
-                  <Table.Cell>{estado.estado_nombre}</Table.Cell>
-                  <Table.Cell>{estado.cantidad}</Table.Cell>
-                </Table.Row>
-              ))
+              data?.estados?.cambios_por_estado.length
+                ? data?.estados?.cambios_por_estado?.map((estado: CambioEstado) => (
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell>{estado.estado_id}</Table.Cell>
+                    <Table.Cell>{estado.estado_nombre}</Table.Cell>
+                    <Table.Cell>{estado.cantidad}</Table.Cell>
+                  </Table.Row>
+                ))
+                : (<tr><td colSpan={3} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
             }
           </Table.Body>
         </Table>

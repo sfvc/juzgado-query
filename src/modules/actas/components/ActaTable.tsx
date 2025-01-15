@@ -1,14 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Checkbox, Pagination, Table, Tooltip } from 'flowbite-react'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import { ActaDrawer } from './ActaDrawer'
 import { ActionButtons } from './ActionButtons'
 import { clearNames } from '../../../shared'
 import { DEFAULT_COLOR } from '../../../shared/constants'
 import { ActaColums, NotificacionColums, PATH } from '../constants'
 import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
 import type { ActaFilterForm, IActa } from '../interfaces'
+import { JuzgadoGuard } from './JuzgadoGuard'
 
 
 interface Props {
@@ -22,8 +24,16 @@ interface Props {
 export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterParams }: Props) => {
   const { checkingActa } = useContext(ActuacionContext)
 
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [activeItem, setActiveItem] = useState<string>('')
+
   const { pathname } = useLocation()
   const colums = pathname === PATH.ACTA ? ActaColums : NotificacionColums
+
+  const showActa = (id: number) => {
+    setActiveItem(id.toString())
+    setIsOpen(true)
+  }
 
   return (
     <React.Fragment>
@@ -65,7 +75,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                           />
                         </Table.Cell>
                       }
-                      <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white underline hover:cursor-pointer' onClick={() => showActa(acta.id)}>{acta.numero_acta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.numero_causa}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.fecha}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.tipo_acta}</Table.Cell>
@@ -98,7 +108,11 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                                   : <span>No</span>
                               }
                             </div>
-                            : <ActionButtons acta={acta} />
+                            : (
+                              <JuzgadoGuard fechaActa={acta.fecha}>
+                                <ActionButtons acta={acta} />
+                              </JuzgadoGuard>
+                            )
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -119,6 +133,8 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
           />
         </div>
       </div>
+
+      <ActaDrawer id={activeItem} isOpen={isOpen} setIsOpen={setIsOpen}/>
     </React.Fragment>
   )
 }
