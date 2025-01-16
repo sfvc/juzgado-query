@@ -127,7 +127,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     recargo: actuacionSeleccionada?.recargo,
     conceptos,
     fechaSentencia: actuacionSeleccionada?.fecha || '',
-    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
+    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.total),
     ImporteLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
     importeInfraccionMultiple: actuacionSeleccionada?.total || '',
 
