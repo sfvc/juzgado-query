@@ -11,7 +11,6 @@ import { Notificacion, NotificacionActa } from '../modules/notificaciones'
 import { Actuacion, Sentencia } from '../modules/actuaciones'
 import { Inhabilitado } from '../modules/inhabilitados'
 import { Dashboard } from '../modules/dashboard'
-import { Licencia } from '../modules/licencias'
 import { 
   Acta, 
   ActaBromatologia, 
@@ -196,12 +195,6 @@ export const PrivateRoute = [
       {
         path: '/inhabilitados',
         element: <Inhabilitado />
-      },
-
-      // Licencias
-      {
-        path: '/licencias',
-        element: <Licencia />
       },
 
       // Dashboard
