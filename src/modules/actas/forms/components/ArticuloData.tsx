@@ -57,7 +57,6 @@ export const ArticuloData = ({ data }: Props) => {
               htmlFor='calle'
               value='Infracciones'
             />
-            <strong className='obligatorio'>(*)</strong>
           </div>
           <SearchInput<IArticulo>
             label=""

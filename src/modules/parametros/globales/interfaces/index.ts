@@ -34,6 +34,7 @@ export interface FormUsuario {
     nombre: string
     dni: string
     username: string
+    password: string
     juzgado_id: string
     role: number | null
 }

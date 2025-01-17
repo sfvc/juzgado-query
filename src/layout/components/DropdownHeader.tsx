@@ -5,6 +5,7 @@ import { icons } from '../../shared'
 import { useNavigate } from 'react-router-dom'
 import { ThemeContext } from '../../context/Theme/ThemeContext'
 import { ThemeButton } from './ThemeButton'
+import { RoleGuard, UserRole } from '../../auth'
 
 export const DropdownHeader = () => {
   const { user, logoutUser } = useContext(AuthContext)
@@ -30,6 +31,12 @@ export const DropdownHeader = () => {
           <span className='block truncate text-sm font-medium'>{user?.nombre}</span>
           <span className='block text-sm'>{user?.role.name}</span>
         </Dropdown.Header>
+
+        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+          <Dropdown.Item onClick={() => navigate('/dashboard')}>
+            <span className='text-sm flex gap-2'><icons.Dashboard /> Dashboard</span>
+          </Dropdown.Item>
+        </RoleGuard>
         
         <Dropdown.Item onClick={() => navigate('/profile')}>
           <span className='text-sm flex gap-2'><icons.Reset /> Cambiar contraseña</span>

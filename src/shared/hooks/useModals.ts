@@ -6,6 +6,7 @@ export interface ModalAction {
   create: boolean
   history?: boolean
   show?: boolean
+  hand?: boolean
 }
 
 export const useModals = () => {

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,17 +8,26 @@ import { useUsuarioParams } from '../hooks/useUsuarioParams'
 import type { FormUsuario, IUsuario } from '../interfaces'
 
 const validationSchema = yup.object().shape({
-  nombre: yup.string().required('El pais es requerido'),
+  nombre: yup.string().required('El nombre es requerido'),
   dni: yup.string().required('El dni es requerido'),
   username: yup.string().required('El usuario es requerido'),
+  password: yup.string()
+    .when('$usuario', {
+      is: false,
+      then: (schema) => schema.required('La contraseña es requerida'),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   juzgado_id: yup.string().required('El juzgado es requerido'),
-  role: yup.number().transform((value) => isNaN(value) ? null : value).required('El rol es requerido'),
+  role: yup
+    .number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .required('El rol es requerido'),
 })
 
 interface Props {
-    usuario: IUsuario | null
-    onSucces: () => void
-  }
+  usuario: IUsuario | null
+  onSucces: () => void
+}
   
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
@@ -28,18 +36,18 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: { 
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
+      password: usuario?.password || '',
       juzgado_id: usuario?.juzgado.id.toString() || '',
-      role: usuario?.role.id || null,
+      role: usuario?.role.id,
     },
     resolver: yupResolver(validationSchema),
+    context: { usuario: usuario ? true: false }
   })
   
 
@@ -49,19 +57,6 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
   
     onSucces()
   }
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name === 'nombre' && value.nombre) {
-        const parts = value.nombre.trim().toLowerCase().split(' ')
-        if (parts.length > 1) {
-          const username = `${parts[0][0]}${parts.slice(1).join('')}`
-          setValue('username', username)
-        }
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [watch, setValue])
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
@@ -103,6 +98,21 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             color={errors?.username && 'failure'}
           />
         </div>
+
+        {
+          !usuario &&
+          <div className='mb-4'>
+            <div className='mb-2 block dark:text-white'>
+              <Label color='gray' htmlFor='password' value='Contraseña' /><strong className='obligatorio'>(*)</strong>
+            </div>
+            <TextInput
+              {...register('password')}
+              placeholder='Contraseña'
+              helperText={errors?.password && errors?.password?.message} 
+              color={errors?.password && 'failure'}
+            />
+          </div>
+        }
 
         <div className='mb-4'>
           <div className='mb-2 block'>
