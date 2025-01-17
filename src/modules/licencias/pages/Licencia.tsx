@@ -116,19 +116,22 @@ export const Licencia = () => {
                       <Table.Cell className='text-center dark:text-white'>{licencia?.user?.username || '-'}</Table.Cell>
 
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                        <Tooltip content='Entregar licencia'>
-                          <Button onClick={() => onOpenHandModal(licencia)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Send  />
-                          </Button>
-                        </Tooltip>
-
                         {
-                          !licencia.user && 
-                          <Tooltip content='Editar'>
-                            <Button color='success' onClick={() => onOpenModal(licencia)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Pencil  />
-                            </Button>
-                          </Tooltip>
+                          !licencia.user && (
+                            <>
+                              <Tooltip content='Entregar licencia'>
+                                <Button onClick={() => onOpenHandModal(licencia)} className='w-8 h-8 flex items-center justify-center'>
+                                  <icons.Send  />
+                                </Button>
+                              </Tooltip>
+                          
+                              <Tooltip content='Editar'>
+                                <Button color='success' onClick={() => onOpenModal(licencia)} className='w-8 h-8 flex items-center justify-center'>
+                                  <icons.Pencil  />
+                                </Button>
+                              </Tooltip>
+                            </>
+                          )
                         }
                       
                         <RoleGuard roles={[UserRole.ADMIN]}>
