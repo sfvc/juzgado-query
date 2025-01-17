@@ -15,6 +15,7 @@ import type { IInhabilitado } from '../interfaces'
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
   { key: 'documento', label: 'Dni' },
+  { key: 'numero_acta', label: 'Número de Acta' },
   { key: 'periodo_inhabilitacion', label: 'Periodo de inhabilitación' },
   { key: 'tiempo_tanscurrido', label: 'Tiempo transcurrido' },
   { key: 'estado', label: 'Estado' },
@@ -112,9 +113,10 @@ export const Inhabilitado = () => {
                 : (inhabilitados.length > 0)
                   ? (inhabilitados.map((inhabilitado: IInhabilitado) => (
                     <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre) || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.acta?.numero_acta || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         {
                           inhabilitado?.tiempo_transcurrido_dias 

@@ -1,6 +1,7 @@
 import { Button, Card } from 'flowbite-react'
 import { clearNames, icons } from '../../../shared'
 import type { IInhabilitado } from '../interfaces'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 interface Props {
   inhabilitado: IInhabilitado
@@ -37,14 +38,14 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Fecha de inhabilitación:</strong> {inhabilitado.fecha_desde}
+              <strong>Fecha de inhabilitación:</strong> {formatDate(inhabilitado.fecha_desde)}
             </span>
           </li>
 
           <li className='flex items-center space-x-1'>
             <icons.Check />
             <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Fecha de vencimiento:</strong> {inhabilitado.fecha_hasta}
+              <strong>Fecha de vencimiento:</strong> {formatDate(inhabilitado.fecha_hasta)}
             </span>
           </li>
 

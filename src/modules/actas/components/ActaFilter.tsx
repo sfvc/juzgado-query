@@ -95,7 +95,7 @@ export const ActaFilter = () => {
         }
 
         <div className='flex justify-end gap-4 mb-4'>
-          <Button type='button' color='gray' className='px-6' onClick={() => clearFilters()}>
+          <Button type='button' color='purple' className='px-6' onClick={() => clearFilters()}>
             <icons.Eraser />
             Limpiar Filtros
           </Button>

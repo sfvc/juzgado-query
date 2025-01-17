@@ -5,10 +5,11 @@ import { carboneActions } from '../../carbone'
 import { formatReport } from '../helpers/formatReport'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 const colums: Column[] = [
-  { key: 'id', label: 'Id' },
   { key: 'persona', label: 'Persona' },
+  { key: 'numero_acta', label: 'Número de Acta' },
   { key: 'fecha_inhabilitacion', label: 'Fecha de inhabilitación' },
   { key: 'fecha_vencimiento', label: 'Fecha de vencimiento' },
   { key: 'causa', label: 'Causa' },
@@ -61,10 +62,10 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
                   inhabilitaciones?.length
                     ? inhabilitaciones.map((inhabilitado: IInhabilitado) => (
                       <Table.Row key={inhabilitado.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                        <Table.Cell className='text-center dark:text-white'>{inhabilitado.id}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre)}</Table.Cell>
-                        <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_desde}</Table.Cell>
-                        <Table.Cell className='text-center dark:text-white'>{inhabilitado.fecha_hasta}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{inhabilitado?.acta?.numero_acta || '-'}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{formatDate(inhabilitado.fecha_desde)}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{formatDate(inhabilitado.fecha_hasta)}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado.causa}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{inhabilitado?.juzgado?.nombre}</Table.Cell>
                       </Table.Row>

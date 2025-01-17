@@ -44,7 +44,7 @@ export const JuzgadoGuard = ({ fechaActa, children }: JuzgadoGuardProps) => {
     ? <>{children}</> 
     : (
       <div className='min-w-[94px]'>
-        <span className='bg-red-500/30 text-red-600 rounded-full px-2 py-0.5 font-semibold'>Sin acciones</span>
+        <span className='bg-red-500/30 text-red-600 rounded-full px-2 py-0.5 font-semibold'>Juzgado N°{juzgado}</span>
       </div>
     )
 }

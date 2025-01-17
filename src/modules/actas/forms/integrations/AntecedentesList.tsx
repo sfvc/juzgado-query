@@ -8,9 +8,9 @@ import { clearNames } from '../../../../shared'
 const colums: Column[] = [
   { label: 'Nro. Acta', key: 'numero_acta' },
   { label: 'Nro. Causa', key: 'numero_causa' },
+  { label: 'Nombre y Apellido', key: 'nombre_apellido' },
   { label: 'Fecha', key: 'fecha' },
   { label: 'Tipo', key: 'tipo_acta' },
-  { label: 'Nombre y Apellido', key: 'nombre_apellido' },
   { label: 'Estado', key: 'estado' },
 ]
 
@@ -52,9 +52,9 @@ export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
                           {antecedente.numero_acta}
                         </Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.numero_causa}</Table.Cell>
+                        <Table.Cell className='text-center dark:text-white'>{clearNames(antecedente.infractores[0]?.apellido, antecedente.infractores[0]?.nombre)}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.fecha}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.tipo_acta}</Table.Cell>
-                        <Table.Cell className='text-center dark:text-white'>{clearNames(antecedente.infractores[0]?.apellido, antecedente.infractores[0]?.nombre)}</Table.Cell>
                         <Table.Cell className='text-center dark:text-white'>{antecedente.estados[antecedente.estados.length - 1].nombre}</Table.Cell>
                       </Table.Row>
                     ))

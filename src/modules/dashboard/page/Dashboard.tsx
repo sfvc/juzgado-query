@@ -5,161 +5,107 @@ import { dashboardActions } from '..'
 import { Loading } from '../../../shared'
 
 export const Dashboard = () => {
-
   const { data, isLoading } = useQuery<IDashboard>({
     queryKey: ['dashboard'],
     queryFn: dashboardActions.getDataDashboard,
-    staleTime: 1000 * 60
+    staleTime: 1000 * 60,
   })
 
   if (isLoading) return <Loading />
 
   return (
-    <>
-      <div className='titulos rounded-md py-2 text-center mb-2'>
-        <h3 className='text-xl font-semibold text-white'>Dashboard</h3>
-      </div>
-        
-      <div className='flex justify-between gap-4 mt-4'>
-        <div className='flex flex-col justify-between gap-4 w-2/3'>
-          <Card className='h-full' horizontal>
-            <div className="mb-4 flex items-center justify-between">
-              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Usuarios</h5>
-            </div>
-
-            <div className="flow-root">
-              <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                <li className="py-3 sm:py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-md font-medium text-gray-900 dark:text-white">Sesiones Iniciadas</p>
-                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.sesiones.total || 0}</p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </Card>
-
-          <Card className='h-full' horizontal>
-            <div className="mb-4 flex items-center justify-between">
-              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Estados de actas</h5>
-            </div>
-
-            <div className="flow-root w-full">
-              <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                <li className="py-3 sm:py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-md font-medium text-gray-900 dark:text-white">Camios de Estado</p>
-                      <p className="truncate text-4xl text-gray-500 dark:text-gray-400">{data?.estados.total_cambios || 0}</p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </Card>  
-        </div>
-
-        <Card className="w-full">
-          <div className="mb-4 flex items-center justify-between">
-            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Actas</h5>
-          </div>
-
-          <div className="flow-root">
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-              <li className="py-3 sm:py-4">
-                <div className="flex items-center space-x-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-md font-medium text-gray-900 dark:text-white">Creadas Hoy</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_hoy || 0}</p>
-                  </div>
-                </div>
-              </li>
-              <li className="py-3 sm:py-4">
-                <div className="flex items-center space-x-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-md font-medium text-gray-900 dark:text-white">Juzgado 1</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_1 || 0}</p>
-                  </div>
-                </div>
-              </li>
-              <li className="py-3 sm:py-4">
-                <div className="flex items-center space-x-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-md font-medium text-gray-900 dark:text-white">Juzgado 2</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.actas_juzgado_2 || 0}</p>
-                  </div>
-                </div>
-              </li>
-              <li className="py-3 sm:py-4">
-                <div className="flex items-center space-x-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-md font-medium text-gray-900 dark:text-white">Total del Mes</p>
-                    <p className="truncate text-lg text-gray-500 dark:text-gray-400">{data?.actas.total || 0}</p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </Card> 
+    <div className="p-6 bg-gray-100 dark:bg-gray-800 min-h-screen">
+      <div className="bg-blue-600 rounded-md py-4 text-center mb-6">
+        <h3 className="text-2xl font-semibold text-white">Dashboard</h3>
       </div>
 
-      <div className='md:flex md:justify-between my-4'>
-        <h3 className='text-xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Sesiones Iniciadas</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6 shadow-lg border rounded-lg bg-gradient-to-r from-red-500 to-red-700">
+          <h5 className="text-lg font-semibold text-white border-b pb-2">Usuarios</h5>
+          <p className="mt-4 text-5xl font-bold text-white">
+            {data?.sesiones.total || 0}
+          </p>
+          <p className="mt-2 text-sm text-blue-100">Sesiones iniciadas</p>
+        </Card>
+
+        <Card className="p-6 shadow-lg border rounded-lg bg-gradient-to-r from-green-500 to-green-700">
+          <h5 className="text-lg font-semibold text-white border-b pb-2">Estados de Actas</h5>
+          <p className="mt-4 text-5xl font-bold text-white">
+            {data?.estados.total_cambios || 0}
+          </p>
+          <p className="mt-2 text-sm text-green-100">Cambios de estado</p>
+        </Card>
+
+        <Card className="p-6 shadow-lg border rounded-lg bg-gradient-to-r from-purple-500 to-purple-700">
+          <h5 className="text-lg font-semibold text-white border-b pb-2">Actas</h5>
+          <ul className="mt-4 space-y-2 text-md text-purple-100">
+            <li>Actas creadas hoy: <span className="font-bold text-white">{data?.actas.actas_hoy || 0}</span></li>
+            <li>Juzgado 1: <span className="font-bold text-white">{data?.actas.actas_juzgado_1 || 0}</span></li>
+            <li>Juzgado 2: <span className="font-bold text-white">{data?.actas.actas_juzgado_2 || 0}</span></li>
+            <li>Total del mes: <span className="font-bold text-white">{data?.actas.total || 0}</span></li>
+          </ul>
+        </Card>
       </div>
-      <div className="overflow-x-auto mt-4">
-        <Table>
-          <Table.Head>
-            <Table.HeadCell>Usuario</Table.HeadCell>
-            <Table.HeadCell>Nombre</Table.HeadCell>
-            <Table.HeadCell>Juzgado</Table.HeadCell>
-            <Table.HeadCell>Fecha y Hora</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {
-              data?.sesiones?.users?.length
-                ?
-                data?.sesiones?.users?.map((login: User) => (
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+
+      <section className="mt-8">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Sesiones Iniciadas</h3>
+        <div className="overflow-x-auto overflow-y-auto h-72">
+          <Table hoverable className="border">
+            <Table.Head>
+              <Table.HeadCell>Usuario</Table.HeadCell>
+              <Table.HeadCell>Nombre</Table.HeadCell>
+              <Table.HeadCell>Juzgado</Table.HeadCell>
+              <Table.HeadCell>Fecha y Hora</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {data?.sesiones?.users?.length ? (
+                data.sesiones.users.map((login: User) => (
+                  <Table.Row key={login.username} className="dark:bg-gray-800">
                     <Table.Cell>{login.username}</Table.Cell>
                     <Table.Cell>{login.nombre}</Table.Cell>
                     <Table.Cell>{login.juzgado}</Table.Cell>
                     <Table.Cell>{login.created_at}</Table.Cell>
                   </Table.Row>
                 ))
-                : (<tr><td colSpan={4} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-            }
-          </Table.Body>
-        </Table>
-      </div>
+              ) : (
+                <tr>
+                  <td colSpan={4} className="text-center py-4 dark:bg-gray-800">
+                    No se encontraron resultados
+                  </td>
+                </tr>
+              )}
+            </Table.Body>
+          </Table>
+        </div>
+      </section>
 
-      <div className='md:flex md:justify-between my-4'>
-        <h3 className='text-xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Cambios de Estados</h3>
-      </div>
-      <div className="overflow-x-auto">
-        <Table>
-          <Table.Head>
-            <Table.HeadCell>Id</Table.HeadCell>
-            <Table.HeadCell>Estado</Table.HeadCell>
-            <Table.HeadCell>Cantidad de actas</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {
-              data?.estados?.cambios_por_estado.length
-                ? data?.estados?.cambios_por_estado?.map((estado: CambioEstado) => (
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell>{estado.estado_id}</Table.Cell>
+      <section className="mt-8">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Cambios de Estados</h3>
+        <div className="overflow-x-auto overflow-y-auto h-72">
+          <Table className="border">
+            <Table.Head>
+              <Table.HeadCell>Estado</Table.HeadCell>
+              <Table.HeadCell>Cantidad de actas</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {data?.estados?.cambios_por_estado.length ? (
+                data.estados.cambios_por_estado.map((estado: CambioEstado) => (
+                  <Table.Row className="bg-white dark:bg-gray-800">
                     <Table.Cell>{estado.estado_nombre}</Table.Cell>
                     <Table.Cell>{estado.cantidad}</Table.Cell>
                   </Table.Row>
                 ))
-                : (<tr><td colSpan={3} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-            }
-          </Table.Body>
-        </Table>
-      </div>
-
-    </>
+              ) : (
+                <tr>
+                  <td colSpan={3} className="text-center py-4 dark:bg-gray-800">
+                    No se encontraron resultados
+                  </td>
+                </tr>
+              )}
+            </Table.Body>
+          </Table>
+        </div>
+      </section>
+    </div>
   )
 }

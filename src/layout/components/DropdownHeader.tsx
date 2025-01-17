@@ -29,7 +29,8 @@ export const DropdownHeader = () => {
       >
         <Dropdown.Header>
           <span className='block truncate text-sm font-medium'>{user?.nombre}</span>
-          <span className='block text-sm'>{user?.role.name}</span>
+          <span className='block text-sm font-medium'>{user?.juzgado?.nombre}</span>
+          <span className='block text-sm'>{user?.role?.name}</span>
         </Dropdown.Header>
 
         <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
