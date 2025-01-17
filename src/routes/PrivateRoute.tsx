@@ -202,6 +202,11 @@ export const PrivateRoute = [
         path: '/dashboard',
         element: <Dashboard />
       },
+
+      {
+        path: '*',
+        element: <Navigate to='/actas' replace />
+      }
     ]
   }
 ]

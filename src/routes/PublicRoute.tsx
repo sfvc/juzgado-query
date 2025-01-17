@@ -6,8 +6,9 @@ export const PublicRoute = [
     path: '/login',
     element: <Login />
   },
+
   {
-    path: '/*',
-    element: <Navigate to='/login' />
+    path: '*',
+    element: <Navigate to='/login' replace />
   }
 ]
