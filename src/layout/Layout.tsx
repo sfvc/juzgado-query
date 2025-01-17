@@ -52,6 +52,10 @@ export const Layout = () => {
             Inhabilitados
           </Link>
 
+          <Link to='/licencias' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            Licencias
+          </Link>
+
           <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             Plantillas
           </Link>
