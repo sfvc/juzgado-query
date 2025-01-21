@@ -14,14 +14,14 @@ export const Dashboard = () => {
   if (isLoading) return <Loading />
 
   return (
-    <div className="p-6 bg-gray-100 dark:bg-gray-800 min-h-screen">
+    <div className="p-6  dark:bg-gray-800 min-h-screen">
       <div className="bg-blue-600 rounded-md py-4 text-center mb-6">
         <h3 className="text-2xl font-semibold text-white">Dashboard</h3>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-6 shadow-lg border rounded-lg bg-gradient-to-r from-red-500 to-red-700">
-          <h5 className="text-lg font-semibold text-white border-b pb-2">Usuarios</h5>
+          <h5 className="text-lg font-semibold text-white border-b pb-2">Uso</h5>
           <p className="mt-4 text-5xl font-bold text-white">
             {data?.sesiones.total || 0}
           </p>
@@ -48,36 +48,86 @@ export const Dashboard = () => {
       </div>
 
       <section className="mt-8">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Sesiones Iniciadas</h3>
-        <div className="overflow-x-auto overflow-y-auto h-72">
-          <Table hoverable className="border">
-            <Table.Head>
-              <Table.HeadCell>Usuario</Table.HeadCell>
-              <Table.HeadCell>Nombre</Table.HeadCell>
-              <Table.HeadCell>Juzgado</Table.HeadCell>
-              <Table.HeadCell>Fecha y Hora</Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {data?.sesiones?.users?.length ? (
-                data.sesiones.users.map((login: User) => (
-                  <Table.Row key={login.username} className="dark:bg-gray-800">
-                    <Table.Cell>{login.username}</Table.Cell>
-                    <Table.Cell>{login.nombre}</Table.Cell>
-                    <Table.Cell>{login.juzgado}</Table.Cell>
-                    <Table.Cell>{login.created_at}</Table.Cell>
-                  </Table.Row>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="text-center py-4 dark:bg-gray-800">
-                    No se encontraron resultados
-                  </td>
-                </tr>
-              )}
-            </Table.Body>
-          </Table>
+
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Sesiones Iniciadas
+        </h3>
+        <div className='flex justify-around'>
+          <h4 className="text-lg font-semibold text-blue-500 dark:text-white mb-2 hidden md:flex">
+          Juzgado de Faltas N° 1
+          </h4>
+          <h4 className="text-lg font-semibold text-blue-500 dark:text-white mb-2 hidden md:flex">
+          Juzgado de Faltas N° 2
+          </h4>
         </div>
+
+        <div className="overflow-x-auto overflow-y-auto h-72 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 md:hidden text-center">
+              Juzgado de Faltas N° 1
+            </h4>
+            <Table hoverable className="border">
+              <Table.Head>
+                <Table.HeadCell>Usuario</Table.HeadCell>
+                <Table.HeadCell>Nombre</Table.HeadCell>
+                <Table.HeadCell>Fecha y Hora</Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {data?.sesiones?.users?.length ? (
+                  data.sesiones.users
+                    .filter((login: User) => login.juzgado === 'Juzgado de Faltas N° 1')
+                    .map((login: User) => (
+                      <Table.Row key={login.username} className="dark:bg-gray-800">
+                        <Table.Cell>{login.username}</Table.Cell>
+                        <Table.Cell>{login.nombre}</Table.Cell>
+                        <Table.Cell>{login.created_at}</Table.Cell>
+                      </Table.Row>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className="text-center py-4 dark:bg-gray-800">
+                      No se encontraron resultados
+                    </td>
+                  </tr>
+                )}
+              </Table.Body>
+            </Table>
+          </div>
+          <div>
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 md:hidden text-center">
+              Juzgado de Faltas N° 2
+            </h4>
+            <Table hoverable className="border">
+              <Table.Head>
+                <Table.HeadCell>Usuario</Table.HeadCell>
+                <Table.HeadCell>Nombre</Table.HeadCell>
+                <Table.HeadCell>Fecha y Hora</Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {data?.sesiones?.users?.length ? (
+                  data.sesiones.users
+                    .filter((login: User) => login.juzgado === 'Juzgado de Faltas N° 2')
+                    .map((login: User) => (
+                      <Table.Row key={login.username} className="dark:bg-gray-800">
+                        <Table.Cell>{login.username}</Table.Cell>
+                        <Table.Cell>{login.nombre}</Table.Cell>
+                        <Table.Cell>{login.created_at}</Table.Cell>
+                      </Table.Row>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className="text-center py-4 dark:bg-gray-800">
+                      No se encontraron resultados
+                    </td>
+                  </tr>
+                )}
+              </Table.Body>
+            </Table>
+          </div>
+        </div>
+
       </section>
+
 
       <section className="mt-8">
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Cambios de Estados</h3>

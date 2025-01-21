@@ -8,7 +8,7 @@ interface SearchItem {
 }
 
 interface SearchInputProps<T extends SearchItem> {
-  label?: string
+  label?: React.ReactNode  // Cambiado de string a React.ReactNode
   placeholder?: string
   onSearch: (query: string) => Promise<T[]>
   onSelect: (item: T) => void
@@ -17,7 +17,9 @@ interface SearchInputProps<T extends SearchItem> {
   renderInput: (item: T) => string
   resetInput?: () => void
   resetForm?: boolean,
-  defaultValue?: string
+  defaultValue?: string,
+  helperText?: string,
+  color?: string
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -30,7 +32,9 @@ export function SearchInput<T extends SearchItem>({
   renderInput,
   resetInput,
   resetForm,
-  defaultValue
+  defaultValue,
+  helperText,
+  color
 }: SearchInputProps<T>) {
   const [search, setSearch] = useState<string>(defaultValue || '')
   const [data, setData] = useState<T[]>([])
@@ -67,7 +71,7 @@ export function SearchInput<T extends SearchItem>({
 
   const handleSelect = (item: T) => {
     onSelect(item)
-    setSearch( renderInput(item) )
+    setSearch(renderInput(item))
     setShowResults(false)
     setData([])
   }
@@ -78,12 +82,12 @@ export function SearchInput<T extends SearchItem>({
   }
 
   useEffect(() => {
-    if(resetForm) onFocusInput()
+    if (resetForm) onFocusInput()
   }, [resetForm])
 
   return (
     <div className="mb-4 relative w-full">
-      <div className="mb-2 block dark:text-white">
+      <div className="mb-2 dark:text-white">
         <Label color="gray" htmlFor="search" value={label} />
       </div>
       <div className="relative">
@@ -93,17 +97,17 @@ export function SearchInput<T extends SearchItem>({
           onChange={handleSearch}
           value={search}
           placeholder={placeholder}
-          className="w-full"
+          className={`${
+            color === 'failure' ? 'text-red-500 bg-white border border-red-500 placeholder-red-500 rounded-lg' : ''
+          }`}
           onFocus={onFocusInput}
-          autoComplete='off'
+          autoComplete="off"
         />
-        <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
-          { isLoading
-            ? <Spinner size="sm" />
-            : <icons.Search hidden={search}/>
-          }
+        <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${!isLoading && search ? 'hidden' : ''}`}>
+          {isLoading ? <Spinner size="sm" /> : <icons.Search hidden={search} />}
         </div>
       </div>
+
       {showResults && search.length >= 2 && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
           {data.length > 0 ? (
@@ -123,15 +127,17 @@ export function SearchInput<T extends SearchItem>({
           )}
         </ul>
       )}
+
+      {helperText && (
+        <div className={`mt-2 text-sm ${color === 'failure' ? 'text-red-500 font-bold' : 'text-gray-500'}`}>
+          {helperText}
+        </div>
+      )}
     </div>
   )
 }
 
-function debounce<T extends (query: string) => void>(
-  func: T,
-  wait: number
-): (query: string) => void {
-
+function debounce<T extends (query: string) => void>(func: T, wait: number): (query: string) => void {
   let timeout: number | undefined
 
   return (query: string) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Label, Table, Tooltip } from 'flowbite-react'
+import { Button, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const ArticuloData = ({ data }: Props) => {
-  const { setValue, getValues } = useFormContext<IActaForm>() 
+  const { setValue, getValues, formState: { errors } } = useFormContext<IActaForm>() 
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
   
   // Agregar articulo al listado de infracciones
@@ -50,27 +50,19 @@ export const ArticuloData = ({ data }: Props) => {
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-        <div className='mb-4'>
-          <div className='mb-2 block dark:text-white'>
-            <Label
-              color='gray'
-              htmlFor='calle'
-              value='Infracciones'
-            />
-          </div>
-          <SearchInput<IArticulo>
-            label=""
-            placeholder="Codigo de la infracción"
-            onSearch={handleSearch}
-            onSelect={handleSelect}
-            renderItem={(item) => (
-              <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
-            )}
-            renderInput={(item) => { return `${item.numero}`} }
-          />
-        </div>
-
-        <div className='flex items-end mb-8'><CreateArticulo /></div>
+        <SearchInput<IArticulo>
+          label={<><span>Infracciones</span> <strong className='obligatorio'>(*)</strong></>}
+          placeholder="Codigo de la infracción"
+          onSearch={handleSearch}
+          onSelect={handleSelect}
+          helperText={errors?.infracciones_cometidas?.message}
+          color={errors?.infracciones_cometidas && 'failure'}
+          renderItem={(item) => (
+            <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
+          )}
+          renderInput={(item) => { return `${item.numero}`} }
+        />
+        <div className='mt-8'><CreateArticulo /></div>
       </div>
 
       {/* Tabla de infracciones */}

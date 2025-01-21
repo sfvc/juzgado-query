@@ -52,7 +52,9 @@ export const transitoSchema = yup.object().shape({
       numero: yup.string().required(),
       valor_desde: yup.number().required(),
     })
-  ).required(),
+  )
+    .required('Debe haber al menos un artículo cargado')
+    .min(1, 'Debe haber al menos un artículo cargado'),
 
   // Vehículo data (definido pero sin validación)
 

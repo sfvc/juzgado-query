@@ -6,12 +6,13 @@ import EstadoForm from '../forms/EstadoForm'
 import { icons, Loading } from '../../../shared'
 import type { IEstadoActa } from '../interfaces'
 import type { Column } from '../../../shared/interfaces'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 const colums: Column[] = [
   { key: 'estado', label: 'Estado' },
   { key: 'color', label: 'color' },
-  { key: 'fecha_desde', label: 'fecha_desde' },
-  { key: 'fecha_hasta', label: 'fecha_hasta' },
+  { key: 'fecha_desde', label: 'fecha desde' },
+  { key: 'fecha_hasta', label: 'fecha hasta' },
   { key: 'observaciones', label: 'observaciones' },
   { key: 'acciones', label: 'Acciones' }
 ]
@@ -67,9 +68,9 @@ export const EstadoActa = () => {
                     <Table.Cell className='text-center dark:text-white'>
                       <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color || '#000000' }} />
                     </Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{estado.pivot.fecha_desde}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{formatDate(estado.pivot.fecha_desde)}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>
-                      { !estado.pivot.fecha_hasta ? '-' : estado.pivot.fecha_hasta }
+                      { !estado.pivot.fecha_hasta ? '-' : formatDate(estado.pivot.fecha_hasta) }
                     </Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{estado.pivot.observaciones || '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>

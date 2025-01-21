@@ -15,6 +15,12 @@ export const getPlantillaById = async (id: number) => {
   const { data } = response.data
   return data
 }
+
+// export const getPlantillasByJuzgado = async (juzgadoId: number, page: number) => {
+//   const response = await apiJuzgado.get(`/plantillas?juzgado=${juzgadoId}&page=${page}`)
+//   const { data } = response.data
+//   return data
+// }
   
 export const createPlantilla = async (data: FormPlantilla) => {
   const response = await apiJuzgado.post('/plantillas', data)

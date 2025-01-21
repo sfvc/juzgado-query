@@ -19,7 +19,7 @@ export interface IActaForm {
 
     // Secciones del acta
     infractores: InfractorActa[]
-    infracciones_cometidas: InfraccionActa[]
+    infracciones_cometidas?: InfraccionActa[]
     vehiculo_id?: number | null
     propiedades?: IPropiedad[]
     rubros?: IRubro[]
