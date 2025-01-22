@@ -38,7 +38,7 @@ export const Dashboard = () => {
 
         <Card className="p-6 shadow-lg border rounded-lg bg-gradient-to-r from-purple-500 to-purple-700">
           <h5 className="text-lg font-semibold text-white border-b pb-2">Actas</h5>
-          <ul className="mt-4 space-y-2 text-md text-purple-100">
+          <ul className="mt-4 text-md text-purple-100">
             <li>Actas creadas hoy: <span className="font-bold text-white">{data?.actas.actas_hoy || 0}</span></li>
             <li>Juzgado 1: <span className="font-bold text-white">{data?.actas.actas_juzgado_1 || 0}</span></li>
             <li>Juzgado 2: <span className="font-bold text-white">{data?.actas.actas_juzgado_2 || 0}</span></li>

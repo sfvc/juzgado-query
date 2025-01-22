@@ -43,7 +43,7 @@ export const dictionary = () => {
     recargo: '{d.recargo}',
     conceptos: '{d.conceptos}',
     fechaSentencia: '{d.fechaSentencia}',
-    ImporteLetrasSinDescuento: '{d.ImporteLetrasSinDescuento}',
+    importeLetrasSinDescuento: '{d.importeLetrasSinDescuento}',
     importeLetrasConDescuento: '{d.importeLetrasConDescuento}',
     importeInfraccionMultiple: '{d.importeInfraccionMultiple}',
 

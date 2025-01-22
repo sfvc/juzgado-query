@@ -125,11 +125,11 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     subTotal: actuacionSeleccionada?.sub_total,
     descuento: actuacionSeleccionada?.descuento,
     recargo: actuacionSeleccionada?.recargo,
+    importeLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
+    importeLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
+    importeInfraccionMultiple: actuacionSeleccionada?.total || '',
     conceptos,
     fechaSentencia: actuacionSeleccionada?.fecha || '',
-    ImporteLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
-    ImporteLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
-    importeInfraccionMultiple: actuacionSeleccionada?.total || '',
 
     // Notificaciones
     fechaNotificacion: fechaNotificacion || ''
