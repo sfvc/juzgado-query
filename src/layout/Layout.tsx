@@ -76,10 +76,6 @@ export const Layout = () => {
                     <Link to='/rubros'>
                       <Dropdown.Item>Rubros</Dropdown.Item>
                     </Link>
-
-                    <Dropdown.Divider />
-
-
                   </Dropdown>
                 </div>
 

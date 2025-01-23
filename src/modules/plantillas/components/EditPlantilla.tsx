@@ -56,10 +56,13 @@ export const EditPlantilla = ({ plantilla, onCloseModal }: Props) => {
       </div>
 
       <footer className='flex flex-col'>
-        <Alert color='warning' className='mt-4' icon={icons.Error}>
+        <Alert color='failure' className='mt-4' icon={icons.Warning}>
           <span>
-            <span className='font-medium mr-1'>Importante!</span>   
-            Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.
+            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>   
+            <span className='text-blue-600'>Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.</span>
+            <br />
+            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>   
+            <span className='text-blue-600'>El tamaño maximo del archivo tiene que ser menor a 2MB.</span>
           </span>
         </Alert>
 
