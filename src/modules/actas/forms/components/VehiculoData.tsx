@@ -59,7 +59,7 @@ export const VehiculoData = ({ data }: Props) => {
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
         <SearchInput<IVehiculo>
-          label="Vehiculos"
+          label="Vehículo"
           placeholder="Buscar por patente"
           onSearch={handleSearch}
           onSelect={handleSelect}

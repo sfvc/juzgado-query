@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Label, TextInput } from 'flowbite-react'
 import { CustomSelect } from './CustomSelect'
@@ -13,6 +13,25 @@ import type { IActaForm } from '../../interfaces/form-interfaces'
 export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
   const { prioridades, isLoading } = usePrioridad()
+  const [maxDate, setMaxDate] = useState('')
+
+  useEffect(() => {
+    const today = new Date()
+    const formattedDate = today.toISOString().split('T')[0]
+    setMaxDate(formattedDate)
+  }, [])
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputDate = e.target.value
+
+    if (inputDate > maxDate) {
+      // Si la fecha ingresada supera la fecha máxima, la ajustamos al máximo permitido
+      setValue('fecha', maxDate)
+    } else {
+      // Formateamos y actualizamos la fecha ingresada correctamente
+      formatDate(inputDate, setValue)
+    }
+  }
 
   const onChangeNumeroActa = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -71,9 +90,10 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
               <TextInput
                 {...register('fecha')}
                 id='fecha'
-                placeholder='Ingrese la fecha de la infraccion'
+                placeholder='Ingrese la fecha de la infracción'
                 type='date'
-                onChange={(e) => formatDate(e.target.value, setValue)}
+                max={maxDate}
+                onChange={handleDateChange}
                 helperText={errors?.fecha?.message}
                 color={errors?.fecha && 'failure'}
               />

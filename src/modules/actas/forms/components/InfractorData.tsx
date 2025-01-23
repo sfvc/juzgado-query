@@ -77,7 +77,7 @@ export const InfractorData = ({ data }: Props) => {
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
         <SearchInput<IPersona>
           label="Persona"
-          placeholder="Ingrese en apellido o dni de la persona"
+          placeholder="Ingrese el apellido o DNI de la persona"
           onSearch={handleSearch}
           onSelect={handleSelect}
           renderItem={(item) => (
