@@ -25,10 +25,8 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
     const inputDate = e.target.value
 
     if (inputDate > maxDate) {
-      // Si la fecha ingresada supera la fecha máxima, la ajustamos al máximo permitido
-      setValue('fecha', maxDate)
+      setValue('fecha', '')
     } else {
-      // Formateamos y actualizamos la fecha ingresada correctamente
       formatDate(inputDate, setValue)
     }
   }
