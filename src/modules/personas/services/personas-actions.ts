@@ -1,4 +1,5 @@
 import { apiJuzgado } from '../../../api/config'
+import { setKeyParams } from '../../../shared/helpers/setKeyParams'
 import { setUrlParams } from '../../../shared/helpers/setUrlParams'
 import { PersonaFisica, PersonaJuridica } from '../interfaces'
 
@@ -16,7 +17,8 @@ export const getPersonaById = async (id: number) => {
   return data
 }
   
-export const createPersona = async (data: PersonaFisica | PersonaJuridica) => {
+export const createPersona = async (form: PersonaFisica | PersonaJuridica) => {
+  const data = setKeyParams(form)
   const response = await apiJuzgado.post('/personas', data)
   const { data: persona } = response.data
   return persona
