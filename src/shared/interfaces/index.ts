@@ -6,4 +6,5 @@ export interface Column {
 export interface Pagination {
     currentPage: number
     lastPage: number
+    total: number
 }

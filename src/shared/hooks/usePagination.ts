@@ -5,6 +5,7 @@ import { Pagination } from '../interfaces'
 interface Meta {
   current_page: number
   last_page: number
+  total: number
 }
 
 interface Response<T> {
@@ -53,7 +54,8 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
 
   const pagination: Pagination = {
     currentPage:  response?.meta.current_page || 1,
-    lastPage: response?.meta.last_page || 1
+    lastPage: response?.meta.last_page || 1,
+    total: response?.meta.total || 1
   } 
 
   return {
