@@ -12,7 +12,6 @@ import type { Column, Pagination as IPagination } from '../../../shared/interfac
 import type { ActaFilterForm, IActa } from '../interfaces'
 import { JuzgadoGuard } from './JuzgadoGuard'
 
-
 interface Props {
   actas: IActa[]
   isFetching: boolean
@@ -35,10 +34,14 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
     setIsOpen(true)
   }
 
+  console.log(pagination)
+
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Actas</h1>
+        <h1 className='text-2xl font-semibold dark:text-white mb-4 md:mb-0'>
+          Listado de Actas ({pagination.total})
+        </h1>
       </div>
 
       <div className=''>
@@ -134,7 +137,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
         </div>
       </div>
 
-      <ActaDrawer id={activeItem} isOpen={isOpen} setIsOpen={setIsOpen}/>
+      <ActaDrawer id={activeItem} isOpen={isOpen} setIsOpen={setIsOpen} />
     </React.Fragment>
   )
 }
