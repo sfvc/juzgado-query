@@ -14,9 +14,9 @@ export const Dashboard = () => {
   if (isLoading) return <Loading />
 
   return (
-    <div className="p-6  dark:bg-gray-800 min-h-screen">
-      <div className="bg-blue-600 rounded-md py-4 text-center mb-6">
-        <h3 className="text-2xl font-semibold text-white">Dashboard</h3>
+    <div className="px-6 dark:bg-gray-800 min-h-screen">
+      <div className='titulos rounded-md py-2 text-center my-6'>
+        <h3 className='text-xl font-semibold text-white'>Dashboard</h3>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -48,7 +48,6 @@ export const Dashboard = () => {
       </div>
 
       <section className="mt-8">
-
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           Sesiones Iniciadas
         </h3>
@@ -61,7 +60,7 @@ export const Dashboard = () => {
           </h4>
         </div>
 
-        <div className="overflow-x-auto overflow-y-auto h-72 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="overflow-x-auto overflow-y-auto max-h-72 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 md:hidden text-center">
               Juzgado de Faltas N° 1
@@ -128,10 +127,9 @@ export const Dashboard = () => {
 
       </section>
 
-
       <section className="mt-8">
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Cambios de Estados</h3>
-        <div className="overflow-x-auto overflow-y-auto h-72">
+        <div className="overflow-x-auto overflow-y-auto max-h-72">
           <Table className="border">
             <Table.Head>
               <Table.HeadCell>Estado</Table.HeadCell>
