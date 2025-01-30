@@ -17,7 +17,6 @@ export const personaFisicaSchema = yup.object().shape({
 
 export const personaJuridicaSchema = yup.object().shape({
   razon_social: yup.string().required('La razon social es requerida'),
-  nombre: yup.string().required('El nombre es requerido'),
   tipo_documento: yup.string().required('El tipo de documento es requerido'),
   cuit: yup.string().required('El cuit es requerido'),
   email: yup.string().email('Email no válido').notRequired(),

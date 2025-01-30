@@ -4,7 +4,6 @@ import { DataPersona, ITipoSociedad, PersonaJuridica } from '../../interfaces'
 
 interface Props {
   data: DataPersona
-  // isLoading: boolean
 }
 
 export const JuridicaForm = ({ data }: Props) => {
@@ -27,14 +26,12 @@ export const JuridicaForm = ({ data }: Props) => {
 
       <div className='mb-4'>
         <div className='mb-2 block dark:text-white'>
-          <Label color='gray' htmlFor='nombre' value='Nombre' /><strong className='obligatorio'>(*)</strong>
+          <Label color='gray' htmlFor='nombre' value='Nombre' />
         </div>
         <TextInput
           {...register('nombre')}
           type='text'
           placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
-          color={errors?.nombre && 'failure'}
         />
       </div>
 
