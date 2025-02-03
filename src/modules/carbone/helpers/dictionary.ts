@@ -35,7 +35,8 @@ export const dictionary = () => {
 
     // Actuaciones
     actuaciones: '{d.actuaciones}',
-    infracciones: '{d.infracciones}',
+    infracciones: '{d.infracciones}', //** Formato de infracciones [Codigo - Detalle] */
+    codigo_infracciones: '{d.codigo_infracciones}', //** Formato de infracciones [Detalle - Unidad Tributaria] */
     total: '{d.total}',
     importe: '{d.importe}',
     subTotal: '{d.subTotal}',

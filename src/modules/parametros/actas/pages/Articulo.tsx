@@ -101,8 +101,8 @@ export const Articulo = () => {
                       </Tooltip>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_acta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_infraccion}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_desde}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>$ {articulo.valor_hasta}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.valor_desde}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.valor_hasta}</Table.Cell>
                       <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
                         <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo?.norma_legal || '-'}</Table.Cell>
                       </Tooltip>

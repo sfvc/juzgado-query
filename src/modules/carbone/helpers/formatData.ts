@@ -30,6 +30,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let documentos = ''
   let titular = ''
   let infraccionesFormatted = ''
+  let codigoInfracciones = ''
   let actuacionSeleccionada = null
   let fechaNotificacion = []
   let conceptos = ''
@@ -80,6 +81,10 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
       return `${infraccion?.detalle || ''}`
     }).join('; ')
+
+    codigoInfracciones = acta.infracciones_cometidas.map((infraccion: any) => {
+      return `${infraccion?.numero || ''} - ${infraccion?.detalle || ''}`
+    }).join('; ')
   }
 
   const data = {
@@ -118,8 +123,9 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     vehiculo: vehiculoFormatted || '',
 
     // Actuaciones e Infracciones Cometidas
-    actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado asi. Hay que chequear luego por cualquier cosa */
-    infracciones: infraccionesFormatted || '',
+    actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado. Hay que chequear luego */
+    infracciones: infraccionesFormatted || '', //** Formato de infracciones [Codigo - Detalle] */
+    codigo_infracciones: codigoInfracciones, //** Formato de infracciones [Detalle - Unidad Tributaria] */
     total: actuacionSeleccionada?.total || '',
     importe: actuacionSeleccionada?.total || '',
     subTotal: actuacionSeleccionada?.sub_total,
