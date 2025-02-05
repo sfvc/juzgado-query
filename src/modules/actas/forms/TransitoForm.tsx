@@ -4,12 +4,12 @@ import { Button } from 'flowbite-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData, VehiculoData } from './components'
-import { IActaForm } from '../interfaces/form-interfaces'
 import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
-import { IActa } from '../interfaces'
 import { formatVehiculo } from '../helpers/formatVehiculo'
 import { useNavigateActa } from '../../../shared'
+import type { IActa } from '../interfaces'
+import type { IActaForm } from '../interfaces/form-interfaces'
 
 interface Props {
   acta: IActa | null | undefined
@@ -18,7 +18,6 @@ interface Props {
 export const TransitoForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
   const { goBack } = useNavigateActa()
-  
 
   const methods = useForm<IActaForm>({
     defaultValues: {

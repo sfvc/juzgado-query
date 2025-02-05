@@ -21,8 +21,23 @@ export const transitoSchema = yup.object().shape({
   tipo_acta: yup.string().required(),
   // preventiva (definido pero sin validación)
 
+  // Infracción data
+  calle: yup.string().required('La calle es requerida'),
+  observaciones: yup.string().required('La observación es requerida'),
+
+  // Articulos (infracciones)
+  infracciones_cometidas: yup.array(
+    yup.object().shape({
+      id: yup.number().required(),
+      detalle: yup.string().required(),
+      numero: yup.string().required(),
+      valor_desde: yup.number().required(),
+    })
+  ).required('Debe haber al menos un artículo cargado')
+    .min(1, 'Debe haber al menos un artículo cargado'),
+
   // Infractor data
-  infractores: yup.array(
+  /* infractores: yup.array(
     yup.object().shape({
       id: yup.number().required(),
       nombre: yup.string().required(),
@@ -38,23 +53,7 @@ export const transitoSchema = yup.object().shape({
         .transform(value => isNaN(value) ? null : value)
         .required(),
     })
-  ).required(),
-
-  // Infracción data
-  calle: yup.string().required('La calle es requerida'),
-  observaciones: yup.string().required('La observación es requerida'),
-
-  // Articulos (infracciones)
-  infracciones_cometidas: yup.array(
-    yup.object().shape({
-      id: yup.number().required(),
-      detalle: yup.string().required(),
-      numero: yup.string().required(),
-      valor_desde: yup.number().required(),
-    })
-  )
-    .required('Debe haber al menos un artículo cargado')
-    .min(1, 'Debe haber al menos un artículo cargado'),
+  ).required(), */
 
   // Vehículo data (definido pero sin validación)
 

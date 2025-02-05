@@ -120,10 +120,12 @@ export interface InfractorActa {
     id:           number
     nombre:       string
     apellido:     string
+    razon_social: string
     documento:    string
     cuit:         string
     responsable:  number
     antecedentes: number
+    tipo_persona: string
 }
 
 export interface Prioridad {

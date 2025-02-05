@@ -40,7 +40,7 @@ export interface IPersona {
     fecha_creacion: string | null
     fecha_nacimiento: string | null
     numero_inscripcion: string
-    cuit: number
+    cuit: string
     sexo: string
     cuil: number
     estado_civil: string

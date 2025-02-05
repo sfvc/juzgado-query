@@ -79,7 +79,7 @@ export const Persona = () => {
                     <Table.Row key={persona.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{persona.id}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(persona.apellido, persona.nombre)}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{persona.razon_social|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.razon_social || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.numero_documento|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.email|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.tipo_persona}</Table.Cell>

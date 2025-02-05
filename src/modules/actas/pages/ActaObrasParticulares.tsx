@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { useActaById } from '../hooks/useActaById'
 import { LoadingOverlay } from '../../../layout'
-import { ObrasParticularesForm } from '../forms/ObrasParticularesForm'
+import { ObrasParticularesForm } from '../forms'
 
 export const ActaObrasParticulares = () => {
   const { id } = useParams()

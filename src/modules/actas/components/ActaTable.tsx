@@ -8,9 +8,9 @@ import { ActionButtons } from './ActionButtons'
 import { clearNames } from '../../../shared'
 import { DEFAULT_COLOR } from '../../../shared/constants'
 import { ActaColums, NotificacionColums, PATH } from '../constants'
+import { JuzgadoGuard } from './JuzgadoGuard'
 import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
 import type { ActaFilterForm, IActa } from '../interfaces'
-import { JuzgadoGuard } from './JuzgadoGuard'
 
 interface Props {
   actas: IActa[]
@@ -33,8 +33,6 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
     setActiveItem(id.toString())
     setIsOpen(true)
   }
-
-  console.log(pagination)
 
   return (
     <React.Fragment>

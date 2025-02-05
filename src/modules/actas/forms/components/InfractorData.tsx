@@ -8,6 +8,7 @@ import { CreatePersona } from '../integrations/CreatePersona'
 import { clearNames } from '../../../../shared'
 import { AntecedentesList } from '../integrations/AntecedentesList'
 import { RESPONSABLE } from '../../../../shared/constants'
+import { TipoPersona } from '../../../personas/forms/helpers'
 import type { IPersona } from '../../../personas/interfaces'
 import type { InfractorActa } from '../../interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
@@ -15,7 +16,7 @@ import type { Column } from '../../../../shared/interfaces'
 
 const columns: Column[] = [
   { key: 'nombre', label: 'Nombre' },
-  { key: 'numero_documento', label: 'Documento' },
+  { key: 'numero_documento', label: 'DNI/CUIT' },
   { key: 'responsable', label: 'Responsable' },
   { key: 'antecedentes', label: 'Antecedentes' },
   { key: 'actions', label: 'Acciones' }
@@ -81,9 +82,19 @@ export const InfractorData = ({ data }: Props) => {
           onSearch={handleSearch}
           onSelect={handleSelect}
           renderItem={(item) => (
-            <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DOCUMENTO'}</div>
+            <div>
+              {
+                (item.tipo_persona === TipoPersona.FISICA)
+                  ? <span><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DNI'}</span>
+                  : <span><strong>{item.razon_social}</strong> - {item.cuit || 'SIN CUIT'}</span>
+              }
+            </div>
           )}
-          renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`} }
+          renderInput={(item) => { 
+            return (item.tipo_persona === TipoPersona.FISICA)
+              ? `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`
+              : `${item.razon_social} - ${item.cuit || 'SIN CUIT'}` }
+          }
         />
 
         <div className='grid sm:grid-cols-2 gap-4 grid-cols-1'>
@@ -120,7 +131,7 @@ export const InfractorData = ({ data }: Props) => {
               {infractores.map((infractor: InfractorActa) => (
                 <Table.Row key={infractor.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                    {infractor.nombre}
+                    {infractor?.nombre || '-'}
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.documento || infractor.cuit}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.responsable ? 'Si' : 'No' }

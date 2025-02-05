@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Label, TextInput } from 'flowbite-react'
 import { CustomSelect } from './CustomSelect'
@@ -10,25 +10,19 @@ import { characterValidate } from '../../helpers/characterValidate'
 import { ACTAS } from '../../../../shared/constants'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 
+const maxDate = new Date().toISOString().split('T')[0]
+
 export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
   const { prioridades, isLoading } = usePrioridad()
-  const [maxDate, setMaxDate] = useState('')
-
-  useEffect(() => {
-    const today = new Date()
-    const formattedDate = today.toISOString().split('T')[0]
-    setMaxDate(formattedDate)
-  }, [])
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputDate = e.target.value
 
-    if (inputDate > maxDate) {
-      setValue('fecha', '')
-    } else {
-      formatDate(inputDate, setValue)
-    }
+    if (inputDate > maxDate) return
+
+    setValue('fecha', inputDate)
+    formatDate(inputDate, setValue)
   }
 
   const onChangeNumeroActa = (e: React.ChangeEvent<HTMLInputElement>) => {

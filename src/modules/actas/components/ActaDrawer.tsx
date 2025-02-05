@@ -4,6 +4,7 @@ import { useActaById } from '../hooks/useActaById'
 import { clearNames } from '../../../shared'
 import { SkeletonDrawer } from './SkeletonDrawer'
 import { formatDate } from '../../../shared/helpers/formatDate'
+import { TipoPersona } from '../../personas/forms/helpers'
 
 interface Props {
   id: string
@@ -58,23 +59,39 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-2">
+                <div className="text-base font-semibold text-gray-900 dark:text-white">
+                  <strong>Calle:</strong> {acta?.calle}
+                </div>
+                <div className="text-base font-semibold text-gray-900 dark:text-white">
+                  <strong>Observaciones:</strong> {acta?.observaciones}
+                </div>
+              </div>
+
               <div>
                 <h4 className="text-xl font-semibold text-blue-500 mb-4">Infractor</h4>
                 {acta?.infractores.map((infractor, index) => (
-                  <div key={index} className="grid grid-cols-2 gap-2">
-                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      <strong>Nombre y apellido:</strong> {clearNames(infractor.apellido, infractor.nombre)}
-                    </div>
-                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      <strong>Documento:</strong> {infractor.documento}
-                    </div>
-                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      <strong>Calle:</strong> {acta?.calle}
-                    </div>
-                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      <strong>Observaciones:</strong> {acta?.observaciones}
-                    </div>
-                  </div>
+                  infractor.tipo_persona === TipoPersona.FISICA
+                    ? (
+                      <div key={index} className="grid grid-cols-2 gap-2">
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          <strong>Nombre y apellido:</strong> {clearNames(infractor.apellido, infractor.nombre)}
+                        </div>
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          <strong>Documento:</strong> {infractor.documento}
+                        </div>
+                      </div>
+                    )
+                    : (
+                      <div key={index} className="grid grid-cols-2 gap-2">
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          <strong>Razon social:</strong> {infractor.razon_social || infractor.nombre}
+                        </div>
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          <strong>Cuit:</strong> {infractor.cuit}
+                        </div>
+                      </div>
+                    )
                 ))}
               </div>
 

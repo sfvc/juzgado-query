@@ -6,6 +6,7 @@ import { vehiculoActions } from '../../vehiculos'
 import { personaActions } from '../../personas'
 import { clearNames } from '../../../shared'
 import { useStorageFilter } from '../hooks/useStorageFilter'
+import { TipoPersona } from '../../personas/forms/helpers'
 import type { ActaFilterForm, DataFilters } from '../interfaces'
 import type { IPersona } from '../../personas/interfaces'
 import type { IVehiculo } from '../../vehiculos/interfaces'
@@ -76,9 +77,19 @@ export const FormFilter = ({ register, setValue, resetForm, data }: Props) => {
             onSearch={searchPersona}
             onSelect={selectPersona}
             renderItem={(item) => (
-              <div><strong>{clearNames(item.apellido, item.nombre)}</strong> - DNI. {item?.numero_documento || 'NO REGISTRADO'}</div>
+              <div>
+                {
+                  (item.tipo_persona === TipoPersona.FISICA) 
+                    ? <span><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DNI'}</span>
+                    : <span><strong>{item.razon_social}</strong> - {item.cuit || 'SIN CUIT'}</span>
+                }
+              </div>
             )}
-            renderInput={(item) => { return `${clearNames(item.apellido, item.nombre)} - DNI. ${item?.numero_documento || 'NO REGISTRADO'}`} }
+            renderInput={(item) => { 
+              return (item.tipo_persona === TipoPersona.FISICA)
+                ? `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`
+                : `${item.razon_social} - ${item.cuit || 'SIN CUIT'}` }
+            }
             resetInput={onFocusPersonaInput}
             resetForm={resetForm}
           />
