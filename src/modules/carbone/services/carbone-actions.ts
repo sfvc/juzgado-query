@@ -2,10 +2,10 @@
 import axios from 'axios'
 import { dictionary } from '../helpers/dictionary'
 import { apiJuzgado } from '../../../api/config'
-import { User } from '../../../auth/interfaces/auth'
 import { formatData } from '../helpers/formatData'
 import { cleanFileName } from '../helpers/cleanFileName'
 import { getFileExtension } from '../helpers/getFileExtension'
+import type { User } from '../../../auth/interfaces/auth'
 import type { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
@@ -156,8 +156,7 @@ export const uploadFilePDF = async (file: File, item: any, property: string, use
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')
 
-  const name = cleanFileName(item?.plantilla?.path)
-  // const name = cleanFileName(file.name)
+  const name =  `${ item.numero_acta }-${ cleanFileName(item?.plantilla?.path) }` 
 
   const data = {
     file,
@@ -166,7 +165,25 @@ export const uploadFilePDF = async (file: File, item: any, property: string, use
     user_id: userId
   }
 
-  await apiJuzgado.post(url, data, {
+  const response = await apiJuzgado.post(url, data, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
+
+  return response.data.url
+}
+
+// Convertir la primera vez el word al pdf y subirlo a s3
+export const showFileWord = async (data: any): Promise<File | undefined> => {
+  try {
+    const response = await axios.post(CARBONE_URL, data, {
+      responseType: 'blob'
+    })
+
+    const fileBlob = response.data
+    const file = new File([fileBlob], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    return file
+
+  } catch (error) {
+    console.log(error)
+  }
 }

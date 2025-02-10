@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { AuthContext } from '../../../context/Auth/AuthContext'
 import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { icons } from '../../../shared'
 import { useActuacion } from '../hooks/useActuacion'
 import { RoleGuard, UserRole } from '../../../auth'
-import { usePdf } from '../../carbone'
+import { carboneActions, usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
 import type { Column } from '../../../shared/interfaces'
@@ -20,8 +22,11 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' },
 ]
 
-export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuaciones:Actuacion[]}) => {
-  const { useAction, showPDFCarbone, convertToPDF } = usePdf(acta)
+export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuaciones: Actuacion[]}) => {
+  const queryClient = useQueryClient()
+  const { user } = useContext(AuthContext)
+
+  const { useAction, generarPDFGotenberg, convertToPDF } = usePdf(acta)
   const { deleteActuacion } = useActuacion()
 
   const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history
@@ -43,6 +48,24 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
     
     if(!response) return
     toggleModal('delete', false)
+  }
+
+  const onGeneratePDF = async (actuacion: Actuacion) => {
+    await useAction.actionFn( async () => {
+      const file =  await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id)
+      if (!file) return
+    
+      const url = await carboneActions.uploadFilePDF( file, { ...actuacion , numero_acta: acta.numero_acta }, 'actuacion_id', user!.id )
+      if (url) convertToPDF(url)
+    })
+
+    queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
+  }
+
+  const handleconvertToPDF = async (url: string) => {
+    useAction.actionFn( async () => {
+      await convertToPDF(url)
+    })
   }
 
   return (
@@ -76,9 +99,9 @@ export const Expediente = ({acta, actuaciones}: {acta: ActuacionActa, actuacione
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(actuacion?.url)
-                              convertToPDF(actuacion.url)
+                              handleconvertToPDF(actuacion.url)
                             else 
-                              showPDFCarbone(actuacion?.plantilla?.path, actuacion.id)
+                              onGeneratePDF(actuacion)
                           }} 
                           disabled={!actuacion?.url && !actuacion?.plantilla?.path}
                         >

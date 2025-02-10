@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { icons } from '../../../shared'
 import { LoadingOverlay } from '../../../layout'
-import { usePdf } from '../../carbone'
+import { carboneActions, usePdf } from '../../carbone'
 import { NotificationHistory } from './NotificationHistory'
 import { useNotification } from '../hooks/useNotification'
+import { AuthContext } from '../../../context/Auth/AuthContext'
 import type { Notificacion, NotificationActa } from '../interfaces'
 import type { Column } from '../../../shared/interfaces'
 
@@ -19,7 +21,10 @@ const colums: Column[] = [
 ]
 
 export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
-  const { useAction, showPDFCarbone, convertToPDF } = usePdf(acta)
+  const queryClient = useQueryClient()
+  const { user } = useContext(AuthContext)
+
+  const { useAction, convertToPDF, generarPDFGotenberg } = usePdf(acta)
   const { deleteNotification } = useNotification()
   const notificaciones: Notificacion[] = acta?.notificaciones || []
 
@@ -54,6 +59,25 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
     if (response.status === 200) onDeleteModal()
   }
 
+  const onGeneratePDF = async (notificacion: Notificacion) => {
+    await useAction.actionFn( async () => {
+      const file =  await generarPDFGotenberg(notificacion.plantilla?.path, notificacion.id)
+      if (!file) return
+  
+      const url = await carboneActions.uploadFilePDF( file, { ...notificacion , numero_acta: acta.numero_acta }, 'notificacion_id', user!.id )
+      if (url) convertToPDF(url)
+  
+    })
+
+    queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
+  }
+
+  const handleconvertToPDF = async (url: string) => {
+    useAction.actionFn( async () => {
+      await convertToPDF(url)
+    })
+  }
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center mb-6'>
@@ -84,9 +108,9 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(notificacion?.url)
-                              convertToPDF(notificacion.url)
+                              handleconvertToPDF(notificacion.url)
                             else 
-                              showPDFCarbone(notificacion?.plantilla?.path, notificacion.id)
+                              onGeneratePDF(notificacion)
                           }} 
                           disabled={!notificacion?.url && !notificacion?.plantilla?.path}
                         >

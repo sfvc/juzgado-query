@@ -59,7 +59,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
     const file = e.target.files![0]
     if (!file) return
 
-    uploadFile.mutate({ file, item: notificacion, property: 'notificacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
+    uploadFile.mutate({ file, item: { ...notificacion, numero_acta: acta.numero_acta }, property: 'notificacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
   }
 
   const onDownloadWord = async () => {
@@ -76,6 +76,12 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
   const cleanInputFile = () => {
     if (refFile.current) 
       refFile.current.value = ''
+  }
+
+  const handleconvertToPDF = async (url: string) => {
+    useAction.actionFn( async () => {
+      await convertToPDF(url)
+    })
   }
     
   return (
@@ -120,7 +126,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
 
                         <Tooltip content='PDF' placement='top'>
-                          <Button color='warning' onClick={() => convertToPDF(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
+                          <Button color='warning' onClick={() => handleconvertToPDF(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Print />
                           </Button>
                         </Tooltip>

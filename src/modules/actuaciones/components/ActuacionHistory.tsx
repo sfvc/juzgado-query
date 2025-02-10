@@ -58,7 +58,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     const file = e.target.files![0]
     if (!file) return
 
-    await uploadFile.mutateAsync({ file, item: actuacion, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })  
+    await uploadFile.mutateAsync({ file, item: { ...actuacion, numero_acta: acta.numero_acta }, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })  
   }
 
   const onDownloadWord = async () => {
@@ -75,6 +75,12 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   const cleanInputFile = () => {
     if (refFile.current) 
       refFile.current.value = ''
+  }
+
+  const handleconvertToPDF = async (url: string) => {
+    useAction.actionFn( async () => {
+      await convertToPDF(url)
+    })
   }
     
   return (
@@ -118,7 +124,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='PDF' placement='top'>
-                          <Button color='warning' onClick={() => convertToPDF(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
+                          <Button color='warning' onClick={() => handleconvertToPDF(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Print />
                           </Button>
                         </Tooltip>
