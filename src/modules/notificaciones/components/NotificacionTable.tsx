@@ -70,6 +70,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
     })
 
     queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
+    queryClient.invalidateQueries({ queryKey: ['history', {id: notificacion.id}] })
   }
 
   const handleconvertToPDF = async (url: string) => {

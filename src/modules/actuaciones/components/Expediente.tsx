@@ -60,6 +60,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
     })
 
     queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
+    queryClient.invalidateQueries({ queryKey: ['history', {id: actuacion.id}] })
   }
 
   const handleconvertToPDF = async (url: string) => {
