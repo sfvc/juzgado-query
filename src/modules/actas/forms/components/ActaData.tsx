@@ -11,6 +11,7 @@ import { ACTAS } from '../../../../shared/constants'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 
 const maxDate = new Date().toISOString().split('T')[0]
+const minDate = '2000-01-01'
 
 export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const { register, formState: { errors }, setValue } = useFormContext<IActaForm>()
@@ -19,7 +20,7 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputDate = e.target.value
 
-    if (inputDate > maxDate) return
+    if (inputDate > maxDate || inputDate < minDate) return
 
     setValue('fecha', inputDate)
     formatDate(inputDate, setValue)
@@ -84,6 +85,7 @@ export const ActaData = ({ tipoActa }: { tipoActa: string }) => {
                 id='fecha'
                 placeholder='Ingrese la fecha de la infracción'
                 type='date'
+                min={minDate}
                 max={maxDate}
                 onChange={handleDateChange}
                 helperText={errors?.fecha?.message}
