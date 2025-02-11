@@ -34,6 +34,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   let actuacionSeleccionada = null
   let fechaNotificacion = []
   let conceptos = ''
+  let totalConceptos = 0
   let numeroArticulo = ''
 
   for (const [i, infractor] of acta?.infractores?.entries() || []) {
@@ -69,6 +70,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
     actuacionSeleccionada?.conceptos.forEach((item: any) => {
       conceptos += `${item?.concepto} de $${item?.monto}, `
+      totalConceptos += +item?.monto
     })
   }
 
@@ -86,6 +88,8 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
       return `${infraccion?.numero || ''} - ${infraccion?.detalle || ''}`
     }).join('; ')
   }
+
+  const totalSinConceptos = +actuacionSeleccionada?.total - totalConceptos
 
   const data = {
     // Fecha actual
@@ -138,7 +142,11 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     fechaSentencia: actuacionSeleccionada?.fecha || '',
 
     // Notificaciones
-    fechaNotificacion: fechaNotificacion || ''
+    fechaNotificacion: fechaNotificacion || '',
+
+    // Variables solicitadas
+    totalSinConceptos,
+    totalLetrasSinConceptos: numberToWords(+totalSinConceptos)
   }
 
   return data

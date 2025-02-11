@@ -49,7 +49,11 @@ export const dictionary = () => {
     importeInfraccionMultiple: '{d.importeInfraccionMultiple}',
 
     // Notificaciones
-    fechaNotificacion: '{d.fechaNotificacion}'
+    fechaNotificacion: '{d.fechaNotificacion}',
+
+    // Variables solicitadas
+    totalSinConceptos: '{d.totalSinConceptos}',
+    totalLetrasSinConceptos: '{d.totalLetrasSinConceptos}'
   }
   
   return data

@@ -50,7 +50,7 @@ export interface Actuacion {
     id:            number
     tipo:          string
     observaciones: null
-    monto:         null | string
+    total:         null | number
     fecha:         string
     plantilla:     Plantilla | null
     url:           string | null
