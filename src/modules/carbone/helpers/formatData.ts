@@ -12,7 +12,20 @@ const matchMakeAndModel = (vehiculo: any) => {
 }
 
 const formatDomicilio = async (domicilio: any) => {
-  return `${domicilio?.calle || ''}`.trim()
+  return `${domicilio?.calle || ''} ${domicilio.numero || ''}`.trim()
+}
+
+const formatDomicilioCompleto = async (domicilio: any) => {
+  console.log('Domicilio recibido en formatDomicilioCompleto:', domicilio)
+  if (!domicilio) return ''
+
+  const calle = domicilio?.calle ? `${domicilio.calle}` : ''
+  const numero = domicilio?.numero ? ` ${domicilio.numero}` : ''
+  const barrio = domicilio?.barrio ? ` - ${domicilio.barrio}` : ''
+  const localidad = domicilio?.localidad ? ` - ${domicilio.localidad}` : ''
+  const departamento = domicilio?.departamento ? ` - ${domicilio.departamento}` : ''
+
+  return `${calle}${numero}${barrio}${localidad}${departamento}`.trim()
 }
 
 export const formatData = async (acta: any, user: User, actuacionId: number) => {
@@ -26,6 +39,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   })
   
   const domicilios = []
+  const domiciliosCompleto = []
   let personas = ''
   let documentos = ''
   let titular = ''
@@ -39,23 +53,26 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
 
   for (const [i, infractor] of acta?.infractores?.entries() || []) {
     const domicilioFormatted = await formatDomicilio(infractor?.domicilio)
-
+    const domicilioFormattedCompleto = await formatDomicilioCompleto(infractor?.domicilio)
+  
     if (i === 0) {
       personas = clearNames(infractor?.apellido, infractor?.nombre)
       documentos = infractor?.documento || ''
       domicilios.push(domicilioFormatted)
+      domiciliosCompleto.push(domicilioFormattedCompleto)
     } else {
       personas += `, ${clearNames(infractor?.apellido, infractor?.nombre)}`
       documentos += `, ${infractor?.documento || ''}`
       domicilios.push(domicilioFormatted)
+      domiciliosCompleto.push(domicilioFormattedCompleto)
     }
-
     if (acta?.notificaciones && acta?.notificaciones.length) {
       fechaNotificacion = acta.notificaciones.map((notificacion: any) => notificacion.created_at).join(', ')
     }
   }
 
   const domiciliosFormatted = domicilios.join('; ')
+  const domiciliosFormattedCompleto = domiciliosCompleto.join('; ')
   const vehiculoFormatted = matchMakeAndModel(acta?.vehiculo)
 
   if (acta?.vehiculo?.titular) {
@@ -110,6 +127,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
     infractorNombreApellido: personas || '',
     infractorDocumento: documentos || '',
     infractorDomicilio: domiciliosFormatted || '',
+    infractorDomicilioCompleto: domiciliosFormattedCompleto || '',
     fechaActa: acta?.fecha || '',
     actaHs: acta?.hora || '',
     actaObservaciones: acta?.observaciones || '',

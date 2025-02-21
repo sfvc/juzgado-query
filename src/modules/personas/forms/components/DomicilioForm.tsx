@@ -44,7 +44,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
   }, [])
 
   return (
-    <div key={key}> {/* Se usa key para forzar la recarga */}
+    <div key={key}>
       <div className='my-4 titulos rounded-md py-2 text-center'>
         <h3 className='text-xl font-semibold text-white'>
             Datos de Domicilio
