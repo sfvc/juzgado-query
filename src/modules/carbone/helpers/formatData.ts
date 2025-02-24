@@ -12,18 +12,17 @@ const matchMakeAndModel = (vehiculo: any) => {
 }
 
 const formatDomicilio = async (domicilio: any) => {
-  return `${domicilio?.calle || ''} ${domicilio.numero || ''}`.trim()
+  return `${domicilio?.calle || ''} ${domicilio?.numero || ''}`.trim()
 }
 
 const formatDomicilioCompleto = async (domicilio: any) => {
-  console.log('Domicilio recibido en formatDomicilioCompleto:', domicilio)
   if (!domicilio) return ''
 
-  const calle = domicilio?.calle ? `${domicilio.calle}` : ''
-  const numero = domicilio?.numero ? ` ${domicilio.numero}` : ''
-  const barrio = domicilio?.barrio ? ` - ${domicilio.barrio}` : ''
-  const localidad = domicilio?.localidad ? ` - ${domicilio.localidad}` : ''
-  const departamento = domicilio?.departamento ? ` - ${domicilio.departamento}` : ''
+  const calle = domicilio?.calle ? `${domicilio?.calle}` : ''
+  const numero = domicilio?.numero ? ` ${domicilio?.numero}` : ''
+  const barrio = domicilio?.barrio ? ` - ${domicilio?.barrio}` : ''
+  const localidad = domicilio?.localidad ? ` - ${domicilio?.localidad}` : ''
+  const departamento = domicilio?.departamento ? ` - ${domicilio?.departamento}` : ''
 
   return `${calle}${numero}${barrio}${localidad}${departamento}`.trim()
 }
@@ -92,7 +91,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
   }
 
   if (acta?.infracciones_cometidas) {
-    infraccionesFormatted = acta.infracciones_cometidas.map((infraccion: any, index: number) => {
+    infraccionesFormatted = acta?.infracciones_cometidas?.map((infraccion: any, index: number) => {
       numeroArticulo = 
         index === 0 
           ? `${infraccion?.numero}` 
@@ -101,7 +100,7 @@ export const formatData = async (acta: any, user: User, actuacionId: number) => 
       return `${infraccion?.detalle || ''}`
     }).join('; ')
 
-    codigoInfracciones = acta.infracciones_cometidas.map((infraccion: any) => {
+    codigoInfracciones = acta?.infracciones_cometidas?.map((infraccion: any) => {
       return `${infraccion?.numero || ''} - ${infraccion?.detalle || ''}`
     }).join('; ')
   }
