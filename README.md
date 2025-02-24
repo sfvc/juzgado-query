@@ -17,7 +17,7 @@ Stack utilizado:
 
 ## Instalación
 
-- Clonar el repositorio
+- Clonar repositorio
 
 - Instalar dependencias:
 
