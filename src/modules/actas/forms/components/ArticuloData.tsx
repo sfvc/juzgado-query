@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Table, Tooltip } from 'flowbite-react'
+import { Button, Label, Table, TextInput, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
@@ -14,10 +14,9 @@ interface Props {
 }
 
 export const ArticuloData = ({ data }: Props) => {
-  const { setValue, getValues, formState: { errors } } = useFormContext<IActaForm>() 
+  const { setValue, register, getValues, formState: { errors } } = useFormContext<IActaForm>() 
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
   
-  // Agregar articulo al listado de infracciones
   const addArticulo = (articulo: IArticulo) => {
     if(!articulo) return
 
@@ -42,7 +41,9 @@ export const ArticuloData = ({ data }: Props) => {
   // Buscardor de articulos
   const handleSearch = async (query: string) => articuloActions.getArticulosByFilter(query)
   const handleSelect = (articulo: IArticulo) => addArticulo(articulo)
-    
+  
+  const articuloConGradoAlcoholemia = infracciones.find(infraccion => infraccion.id === 214)
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center'>
@@ -64,6 +65,24 @@ export const ArticuloData = ({ data }: Props) => {
         />
         <div className='mt-8'><CreateArticulo /></div>
       </div>
+
+      {articuloConGradoAlcoholemia && (
+        <div className='mb-4 w-96'>
+          <div className='mb-2 block dark:text-white'>
+            <Label
+              color='gray'
+              htmlFor='alcoholemia'
+              value='Alcoholemia'
+            />
+            <strong className='obligatorio'>(*)</strong>
+          </div>
+          <TextInput
+            {...register('alcoholemia')}
+            id='alcoholemia'
+            placeholder='Ingrese el grado de alcoholemia'
+          />
+        </div>
+      )}
 
       {/* Tabla de infracciones */}
       {(infracciones?.length > 0) && (

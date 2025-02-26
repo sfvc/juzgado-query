@@ -9,6 +9,7 @@ export interface IActaForm {
     fecha: string
     fecha_prescripcion: string
     hora: string
+    alcoholemia: string
     retencion_vehiculo: number
     retencion_licencia: number
     notificado: number

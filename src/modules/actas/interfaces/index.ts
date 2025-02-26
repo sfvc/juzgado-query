@@ -52,7 +52,8 @@ export interface IActa {
     calle:                  string
     observaciones:          string
     infracciones_cometidas: InfraccionActa[]
-    prioridad?:              Prioridad
+    alcoholemia:            string
+    prioridad?:             Prioridad
     prioridad_id:           number
     vehiculo:               IVehiculo
     comercio:               Comercio
@@ -123,6 +124,8 @@ export interface InfractorActa {
     razon_social: string
     documento:    string
     cuit:         string
+    email:        string
+    telefono:     string
     responsable:  number
     antecedentes: number
     tipo_persona: string

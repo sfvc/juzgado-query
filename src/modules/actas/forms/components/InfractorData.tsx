@@ -18,6 +18,9 @@ const columns: Column[] = [
   { key: 'nombre', label: 'Nombre' },
   { key: 'numero_documento', label: 'DNI/CUIT' },
   { key: 'responsable', label: 'Responsable' },
+  { key: 'email', label: 'Email' },
+  { key: 'telefono', label: 'Teléfono' },
+  { key: 'persona', label: 'Persona' },
   { key: 'antecedentes', label: 'Antecedentes' },
   { key: 'actions', label: 'Acciones' }
 ]
@@ -135,6 +138,11 @@ export const InfractorData = ({ data }: Props) => {
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.documento || infractor.cuit}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.responsable ? 'Si' : 'No' }
+                  </Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{infractor?.email || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{infractor?.telefono || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>
+                    <CreatePersona id={infractor.id} />
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white p-0 m-0'>
                     <div className='flex items-center justify-center '>
