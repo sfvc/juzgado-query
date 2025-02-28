@@ -1,16 +1,16 @@
-import { useContext } from 'react'
+// import { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { Dropdown, Footer, Navbar } from 'flowbite-react'
-import { ThemeContext } from '../context/Theme/ThemeContext'
+// import { ThemeContext } from '../context/Theme/ThemeContext'
 import { RoleGuard, UserRole } from '../auth'
 import { ToastContainer } from 'react-toastify'
 import { DropdownHeader } from './'
-import logoDark from '../assets/images/logo-capital-dark.webp'
-import logoLight from '../assets/images/logo-capital-light.webp'
+// import logoDark from '../assets/images/logo-capital-dark.webp'
+// import logoLight from '../assets/images/logo-capital-light.webp'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
-  const { theme } = useContext(ThemeContext)
+  // const { theme } = useContext(ThemeContext)
   
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
@@ -18,11 +18,17 @@ export const Layout = () => {
 
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
 
-        <Link to='/'>
+        {/* <Link to='/'>
           <img src={ theme === 'light' ? logoLight : logoDark} 
             alt='Logo Juzgado' 
             className='w-48 md:w-40 inline-block mx-auto pointer-events-none' 
           />
+        </Link> */}
+
+        <Link to="/">
+          <h1 className="text-xl font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-2xl shadow-lg transition-transform transform group-hover:scale-105">
+            Sistema de Prueba
+          </h1>
         </Link>
 
         <div className='flex md:order-2'>
