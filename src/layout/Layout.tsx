@@ -27,7 +27,7 @@ export const Layout = () => {
 
         <Link to="/">
           <h1 className="text-xl font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-2xl shadow-lg transition-transform transform group-hover:scale-105">
-            Sistema de Prueba
+            Sistema de Prueba 
           </h1>
         </Link>
 
