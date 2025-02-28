@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import type { InfraccionesCometida } from '../interfaces'
-import { IUnidadMulta } from '../interfaces/sentencia'
+import type { IUnidadMulta } from '../interfaces/sentencia'
 
 const validationSchema = yup.object().shape({
   unidad: yup

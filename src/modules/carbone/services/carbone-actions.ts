@@ -7,6 +7,7 @@ import { cleanFileName } from '../helpers/cleanFileName'
 import { getFileExtension } from '../helpers/getFileExtension'
 import type { User } from '../../../auth/interfaces/auth'
 import type { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
+import { ActuacionResponse } from '../../actuaciones/interfaces/actuacion'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
 const CARBONE_URL = `${import.meta.env.VITE_CARBONE_URL}`
@@ -115,15 +116,20 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
   const itemId = item?.id
 
   try {
-    const actaFormated = await formatData(acta, user, itemId)
+    // const actaFormated = await formatData(acta, user, itemId)
 
-    const data = {
+    const { data: actuaciones } = await apiJuzgado.post('actuaciones-acumuladas', { actuacion_id: itemId })
+    const data: ActuacionResponse = actuaciones.data
+      
+    const actaFormated = await formatData(data, user!)
+
+    const body = {
       convertTo: 'docx',
       data: actaFormated,
       template: `${path}`
     }
 
-    const response = await axios.post(CARBONE_URL, data, {
+    const response = await axios.post(CARBONE_URL, body, {
       responseType: 'blob'
     })
 

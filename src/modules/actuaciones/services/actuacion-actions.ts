@@ -1,6 +1,7 @@
 import { apiJuzgado } from '../../../api/config'
-import { IActuacionForm } from '../interfaces'
-import { ISentenciaForm } from '../interfaces/sentencia'
+import { setKeyParams } from '../../../shared/helpers/setKeyParams'
+import type { IActuacionForm } from '../interfaces'
+import type { ISentenciaForm } from '../interfaces/sentencia'
 
 export const getActuacionesByActa = async (id: number) => {
   const response = await apiJuzgado.get(`/actas/${id}/actuacion`)
@@ -10,6 +11,15 @@ export const getActuacionesByActa = async (id: number) => {
 
 export const getPlantillasByActuacion = async (tipo: string, juzgadoId: number) => {
   const response = await apiJuzgado.get(`/plantillas/tipos?tipo_actuacion=${tipo}&juzgado=${juzgadoId}`)
+  const { data } = response.data
+  return data
+}
+
+// Buscador de plantillas para actuaciones
+export const getPlantillasSearchableSelect = async (queryParams: { query?: string, tipo: string, juzgadoId: number }) => {
+  const params = setKeyParams(queryParams)
+
+  const response = await apiJuzgado.get('/plantillas/tipos', { params })
   const { data } = response.data
   return data
 }

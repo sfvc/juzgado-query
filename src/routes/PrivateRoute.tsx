@@ -8,7 +8,7 @@ import { Plantilla } from '../modules/plantillas'
 import { Persona } from '../modules/personas'
 import { EstadoActa } from '../modules/estados'
 import { Notificacion, NotificacionActa } from '../modules/notificaciones'
-import { Actuacion, Sentencia } from '../modules/actuaciones'
+import { Actuacion, Acumuladas, Sentencia, SentenciaMultiple } from '../modules/actuaciones'
 import { Inhabilitado } from '../modules/inhabilitados'
 import { Dashboard } from '../modules/dashboard'
 import { 
@@ -185,10 +185,20 @@ export const PrivateRoute = [
         element: <Actuacion />
       },
 
+      {
+        path: '/acumuladas',
+        element: <Acumuladas />
+      },
+
       // Sentencia
       {
         path: '/acta/:id/actuaciones/sentencia',
         element: <Sentencia />
+      },
+
+      {
+        path: '/acta/acumuladas/sentencia-multiple',
+        element: <SentenciaMultiple />
       },
 
       // Inhabilitados

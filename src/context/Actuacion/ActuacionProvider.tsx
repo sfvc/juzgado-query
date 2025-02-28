@@ -29,7 +29,17 @@ export const ActuacionProvider = ({children}: Props) => {
   }
     
   return (
-    <ActuacionContext.Provider value={{ selectedActas, checkingActa, resetProvider, plantillaId, setPlantillaId, tipoActuacion, setTipoActuacion, setDefalutSeleted }}>
+    <ActuacionContext.Provider 
+      value={{ 
+        selectedActas, 
+        checkingActa, 
+        resetProvider, 
+        plantillaId, 
+        setPlantillaId, 
+        tipoActuacion, 
+        setTipoActuacion, 
+        setDefalutSeleted 
+      }}>
       {children}
     </ActuacionContext.Provider>
   )

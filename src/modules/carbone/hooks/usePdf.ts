@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { useContext } from 'react'
 import { apiJuzgado } from '../../../api/config'
 import { useLoading } from '../../../shared'
 import { formatData } from '../helpers/formatData'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 import { showFilePDF, showFileWord } from '../services/carbone-actions'
+import type { ActuacionResponse } from '../../actuaciones/interfaces/actuacion'
 
-export const usePdf = (acta?: any) => {
+export const usePdf = () => { //** (acta?: any) */
   const useAction = useLoading()
   const { user } = useContext(AuthContext)
     
   // Mostrar pdf desde carbone
-  const showPDFCarbone = async(path: string | undefined, notificacionId: number) => {
+  /* const showPDFCarbone = async(path: string | undefined, notificacionId: number) => {
     useAction.actionFn( async () => {
       if(!acta) throw new Error('No se encontró la acta')
 
@@ -24,6 +25,25 @@ export const usePdf = (acta?: any) => {
       }
     
       await showFilePDF(data)
+    })
+  } */
+
+  const showPDFCarbone = async(path: string | undefined, actuacionId: number) => {
+    useAction.actionFn( async () => {
+      // if(!acta) throw new Error('No se encontró la acta')
+  
+      const { data: response } = await apiJuzgado.post('actuaciones-acumuladas', { actuacion_id: actuacionId })
+      const data: ActuacionResponse = response.data
+      
+      const actaformated = await formatData(data, user!)
+      
+      const body = {
+        convertTo: 'pdf',
+        data: actaformated,
+        template: `${path}`
+      }
+      
+      await showFilePDF(body)
     })
   }
     
@@ -48,7 +68,7 @@ export const usePdf = (acta?: any) => {
   }
 
   // Mostrar pdf desde carbone
-  const generarPDFGotenberg = async(path: string | undefined, notificacionId: number) => {
+  /* const generarPDFGotenberg = async(path: string | undefined, notificacionId: number) => {
     if(!acta) throw new Error('No se encontró la acta')
 
     const actaformated = await formatData(acta, user!, notificacionId)
@@ -60,6 +80,25 @@ export const usePdf = (acta?: any) => {
     }
     
     return await showFileWord(data)
+  } */
+
+  const generarPDFGotenberg = async(path: string | undefined, actuacionId: number) => {
+    // if(!acta) throw new Error('No se encontró la acta')
+
+    const { data: response } = await apiJuzgado.post('actuaciones-acumuladas', { actuacion_id: actuacionId })
+    const data: ActuacionResponse = response.data
+    console.log(data)
+  
+    const actaformated = await formatData(data, user!)
+    console.log(actaformated)
+      
+    const body = {
+      convertTo: 'docx',
+      data: actaformated,
+      template: `${path}`
+    }
+      
+    return await showFileWord(body)
   }
 
   return {

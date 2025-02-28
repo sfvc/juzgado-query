@@ -48,6 +48,10 @@ export const Layout = () => {
             Notificaciones
           </Link>
 
+          <Link to='/acumuladas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            Acumuladas
+          </Link>
+
           <Link to='/inhabilitados' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             Inhabilitados
           </Link>
@@ -148,6 +152,7 @@ export const Layout = () => {
             </div>
           </RoleGuard>
         </Navbar.Collapse>
+
       </Navbar>
       
       <main className='flex-grow w-10/12 m-auto dark:bg-dark'>

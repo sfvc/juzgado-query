@@ -15,6 +15,7 @@ export interface ActaFilterForm {
     vehiculo_id?: string
     articulo_id?: string
     page: number
+    juzgado?: number
 }
 
 export interface EstadoActa {
@@ -96,7 +97,7 @@ export interface EstadoPivot {
 
 export interface InfraccionActa {
     id:              number
-    numero:          string
+    numero:          number
     detalle:         string
     inciso?:          null
     norma_legal?:     string

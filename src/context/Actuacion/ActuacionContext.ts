@@ -5,7 +5,7 @@ export interface IActuacionContext {
     plantillaId: number | null,
     tipoActuacion: string,
     setTipoActuacion: (tipoActuacion: string) => void
-    setPlantillaId: (plantillaId: number) => void
+    setPlantillaId: (plantillaId: number | null) => void
     checkingActa: (event: React.ChangeEvent<HTMLInputElement>, actaId: number) => void
     resetProvider: () => void,
     setDefalutSeleted: (actaId: number) => void

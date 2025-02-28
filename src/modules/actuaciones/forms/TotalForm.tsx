@@ -100,6 +100,7 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
       conceptos: entries
     }
 
+    console.log(form)
     await createSentencia.mutateAsync(form)
   }
 

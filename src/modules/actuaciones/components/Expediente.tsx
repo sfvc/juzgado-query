@@ -26,7 +26,8 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
-  const { useAction, generarPDFGotenberg, convertToPDF } = usePdf(acta)
+  // const { useAction, generarPDFGotenberg, convertToPDF } = usePdf(acta)
+  const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
   const { deleteActuacion } = useActuacion()
 
   const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history

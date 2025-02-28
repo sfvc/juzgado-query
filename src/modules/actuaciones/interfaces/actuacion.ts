@@ -1,0 +1,118 @@
+import type { Titular } from '../../vehiculos/interfaces'
+
+export interface ActuacionResponse {
+    id:             number
+    tipo_actuacion: string
+    fecha:          string
+    observaciones:  string
+    usuario:        string
+    sub_total:      string
+    total:          string
+    descuento:      string
+    recargo:        string
+    conceptos:      Concepto[]
+    plantilla:      Plantilla
+    articulos:      Articulo[]
+    actas:          Acta[]
+    infractores:    Infractor[]
+    vehiculos:      Vehiculo[]
+    comercios:      any[]
+    notificaciones: any[]
+}
+
+export interface Acta {
+    id:                 number
+    numero_acta:        string
+    tipo_acta:          string
+    numero_causa:       string
+    hora:               string
+    lugar:              null
+    observaciones:      string
+    fecha:              null
+    fecha_prescripcion: Date
+}
+
+export interface Articulo {
+    id:              number
+    numero:          string
+    detalle:         string
+    inciso:          null
+    norma_legal:     string
+    tipo_acta:       string
+    tipo_infraccion: string
+    descuento:       number
+    valor_desde:     number
+    valor_hasta:     number
+    created_at:      null
+    updated_at:      null
+    deleted_at:      null
+    pivot:           Pivot
+}
+
+export interface Pivot {
+    acta_id:     number
+    articulo_id: number
+}
+
+export interface Concepto {
+    id:           number
+    concepto:     string
+    monto:        string
+    actuacion_id: number
+    created_at:   Date
+    updated_at:   Date
+}
+
+export interface Infractor {
+    id:           number
+    nombre:       string
+    apellido:     string
+    documento:    null
+    cuit:         string
+    responsable:  null
+    antecedentes: null
+    domicilio:    Domicilio
+}
+
+export interface Domicilio {
+    id:              number
+    calle:           string
+    numero:          number
+    barrio:          string
+    provincia:       string
+    departamento:    string
+    localidad:       string
+}
+
+export interface Plantilla {
+    id:             number
+    denominacion:   string
+    path:           string
+    tipo_actuacion: string
+    juzgado:        Juzgado
+}
+
+export interface Juzgado {
+    id:         number
+    nombre:     string
+    juez:       string
+    secretario: string
+    direccion:  string
+    telefono:   string
+    created_at: null
+    updated_at: null
+    deleted_at: null
+}
+
+export interface Vehiculo {
+    id:                number
+    dominio:           string
+    marca:             string
+    tipo:              string
+    color:             string
+    modelo:            string
+    titular:           Titular
+    numero_chasis:     null
+    numero_motor:      null
+    numero_taxi_remis: null
+}

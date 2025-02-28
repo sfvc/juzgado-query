@@ -17,6 +17,7 @@ interface SearchInputProps<T extends SearchItem> {
   renderInput: (item: T) => string
   defaultValue?: string
   resetInput: () => void
+  disabled?: boolean
 }
 
 export function SearchableSelect<T extends SearchItem>({
@@ -28,7 +29,8 @@ export function SearchableSelect<T extends SearchItem>({
   debounceTime = 300,
   renderInput,
   defaultValue,
-  resetInput
+  resetInput,
+  disabled
 }: SearchInputProps<T>) {
   const [search, setSearch] = useState(defaultValue || '')
   const [data, setData] = useState<T[]>([])
@@ -99,6 +101,7 @@ export function SearchableSelect<T extends SearchItem>({
           className="w-full"
           onFocus={onFocusInput}
           autoComplete='off'
+          disabled={disabled}
         />
         <div className={`absolute top-0 right-0 h-full flex items-center mr-2 pointer-events-none ${(!isLoading && search) && 'hidden'}`}>
           { isLoading

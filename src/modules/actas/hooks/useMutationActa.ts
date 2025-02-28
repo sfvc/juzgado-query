@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { actaActions } from '..'
-import { IActaForm } from '../interfaces/form-interfaces'
-import { useNavigate } from 'react-router-dom'
 import { useQueryParams, validateErrors } from '../../../shared'
+import type { IActaForm } from '../interfaces/form-interfaces'
 import type { IActa } from '../interfaces'
 
 

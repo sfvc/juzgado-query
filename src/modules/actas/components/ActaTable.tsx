@@ -7,7 +7,7 @@ import { ActaDrawer } from './ActaDrawer'
 import { ActionButtons } from './ActionButtons'
 import { clearNames } from '../../../shared'
 import { DEFAULT_COLOR } from '../../../shared/constants'
-import { ActaColums, NotificacionColums, PATH } from '../constants'
+import { ActaColums, AcumuladasColums, NotificacionColums, PATH } from '../constants'
 import { JuzgadoGuard } from './JuzgadoGuard'
 import type { Column, Pagination as IPagination } from '../../../shared/interfaces'
 import type { ActaFilterForm, IActa } from '../interfaces'
@@ -27,7 +27,12 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
   const [activeItem, setActiveItem] = useState<string>('')
 
   const { pathname } = useLocation()
-  const colums = pathname === PATH.ACTA ? ActaColums : NotificacionColums
+  const colums = 
+    pathname === PATH.ACTA 
+      ? ActaColums 
+      : pathname === PATH.NOTIFICATION
+        ? NotificacionColums
+        : AcumuladasColums
 
   const showActa = (id: number) => {
     setActiveItem(id.toString())
@@ -58,7 +63,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                   ? (actas.map((acta: IActa) => (
                     <Table.Row key={acta.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       {
-                        pathname === PATH.NOTIFICATION &&
+                        (pathname === PATH.NOTIFICATION || pathname === PATH.ACUMULADAS) &&
                         <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
                           <Checkbox
                             id={`${acta.id}`}
@@ -100,7 +105,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
 
                       <Table.Cell className='text-center dark:text-white'>
                         {
-                          pathname === PATH.NOTIFICATION
+                          (pathname === PATH.NOTIFICATION)
                             ?
                             <div>
                               {

@@ -24,7 +24,8 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
-  const { useAction, convertToPDF, generarPDFGotenberg } = usePdf(acta)
+  // const { useAction, convertToPDF, generarPDFGotenberg } = usePdf(acta)
+  const { useAction, convertToPDF, generarPDFGotenberg } = usePdf()
   const { deleteNotification } = useNotification()
   const notificaciones: Notificacion[] = acta?.notificaciones || []
 

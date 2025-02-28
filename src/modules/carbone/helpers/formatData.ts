@@ -1,153 +1,160 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { clearNames } from '../../../shared'
 import { numberToWords } from './numberToWords'
+import { clearNames } from '../../../shared'
+import { sanitizeData } from './sanitizeData'
 import type { User } from '../../../auth/interfaces/auth'
-  
-const matchMakeAndModel = (vehiculo: any) => {
+import type { 
+  ActuacionResponse, 
+  Vehiculo,
+  Domicilio
+} from '../../actuaciones/interfaces/actuacion'
+
+const f = new Date()
+const añoActual = f.getFullYear()
+const fechaActual = f.toLocaleDateString('es-AR')
+const horaActual = f.toLocaleTimeString('es-AR', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+})
+
+const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   if (!vehiculo) return ''
 
-  const marca = vehiculo?.marca || ''
-  const modelo = vehiculo?.modelo || ''
+  const marca = vehiculo.marca || ''
+  const modelo = vehiculo.modelo || ''
   return `${marca} ${modelo}`.trim()
 }
 
-const formatDomicilio = async (domicilio: any) => {
-  return `${domicilio?.calle || ''}`.trim()
+const formatAddress = async (domicilio: Domicilio) => {
+  if ( !domicilio ) return ''
+  const domicilioFormatedd = sanitizeData(domicilio)
+
+  let newDomicilio = ''
+  Object.entries(domicilioFormatedd).forEach(([key, value]) => {
+    newDomicilio += value
+  })
+
+  return newDomicilio
 }
 
-export const formatData = async (acta: any, user: User, actuacionId: number) => {
-  const f = new Date()
-  const añoActual = f.getFullYear()
-  const fechaActual = f.toLocaleDateString('es-AR')
-  const horaActual = f.toLocaleTimeString('es-AR', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  })
+export const formatData = async (data: ActuacionResponse, user: User) => {
+  const { 
+    actas,
+    notificaciones, 
+    infractores, 
+    vehiculos, 
+    articulos,
+    total,
+    descuento,
+    recargo,
+    conceptos,
+    fecha: fechaSentencia,
+    sub_total: subTotal,
+    // ** usuario => ¿Use el usuario que creo la actuacion ó el usuario que llega por parametros? 
+  } = data
   
-  const domicilios = []
-  let personas = ''
-  let documentos = ''
-  let titular = ''
-  let infraccionesFormatted = ''
-  let codigoInfracciones = ''
-  let actuacionSeleccionada = null
-  let fechaNotificacion = []
-  let conceptos = ''
-  let totalConceptos = 0
-  let numeroArticulo = ''
+  const juzgadoNombre = user.juzgado.nombre
+  const juzgadoDomicilio = user.juzgado.direccion
+  const juzgadoTelefono = user.juzgado.telefono
+  const nombreJuez = user.juzgado.juez
+  const nombreSecretario = user.juzgado.secretario
 
-  for (const [i, infractor] of acta?.infractores?.entries() || []) {
-    const domicilioFormatted = await formatDomicilio(infractor?.domicilio)
+  const numeroActa = actas.map(acta => acta.numero_acta).join(', ')
+  const numeroCausa = actas.map(acta => acta.numero_causa).join(', ')
+  const fechaActa = actas.map(acta => acta.fecha).join(', ')
+  const actaHs = actas.map(acta => acta.hora).join(', ')
+  const actaObservaciones = actas.map(acta => acta.observaciones).join(', ')
+  const lugar = actas.map(acta => acta.lugar).join(', ')
 
-    if (i === 0) {
-      personas = clearNames(infractor?.apellido, infractor?.nombre)
-      documentos = infractor?.documento || ''
-      domicilios.push(domicilioFormatted)
-    } else {
-      personas += `, ${clearNames(infractor?.apellido, infractor?.nombre)}`
-      documentos += `, ${infractor?.documento || ''}`
-      domicilios.push(domicilioFormatted)
-    }
+  const infractorNombreApellido = infractores?.map(infractor => clearNames(infractor.apellido, infractor.nombre)).join(', ')
+  const infractorDocumento = infractores?.map(infractor => infractor.documento).join(', ')
+  const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
+  const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
+  
+  const patente = vehiculos?.map(vehiculo => vehiculo.dominio).join(', ')
+  const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
+  const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
+  const tipo = vehiculos?.map(vehiculo => vehiculo.tipo).join(', ')
+  const color = vehiculos?.map(vehiculo => vehiculo.color).join(', ')
+  const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo.numero_taxi_remis).join(', ')
+  const vehiculoFormatted = vehiculos?.map(vehiculo => matchMakeAndModel(vehiculo)).join(', ')
 
-    if (acta?.notificaciones && acta?.notificaciones.length) {
-      fechaNotificacion = acta.notificaciones.map((notificacion: any) => notificacion.created_at).join(', ')
-    }
-  }
+  const numeroArticulo = articulos.map(articulo => articulo.numero).join(', ')
+  const detalleArticulos = articulos.map(articulo => articulo.detalle).join(' ')
+  const codigoInfracciones = articulos.map(articulo => `${articulo.numero} - ${articulo.detalle}`).join(' ')
 
-  const domiciliosFormatted = domicilios.join('; ')
-  const vehiculoFormatted = matchMakeAndModel(acta?.vehiculo)
+  const conceptosActuacion = conceptos?.map(item => `${item.concepto} de $${item.monto}`).join(', ')
+  const totalConceptos = conceptos?.reduce((sum, item) => sum + +item.monto, 0)
 
-  if (acta?.vehiculo?.titular) {
-    const nombreApellido = clearNames(acta?.vehiculo?.titular?.apellido, acta?.vehiculo?.titular?.nombre)
-    const numeroDocumento = acta?.vehiculo?.titular?.numero_documento || ''
+  const fechaNotificacion = notificaciones?.map(notificacion => notificacion.created_at).join(', ')
 
-    titular = `${nombreApellido} - ${numeroDocumento}`
-  }
+  const totalSinConceptos = +total - totalConceptos
 
-  if (acta?.actuaciones) {
-    actuacionSeleccionada = acta.actuaciones.find((actuacion: any) => actuacion.id === actuacionId)
-
-    actuacionSeleccionada?.conceptos.forEach((item: any) => {
-      conceptos += `${item?.concepto} de $${item?.monto}, `
-      totalConceptos += +item?.monto
-    })
-  }
-
-  if (acta?.infracciones_cometidas) {
-    infraccionesFormatted = acta.infracciones_cometidas.map((infraccion: any, index: number) => {
-      numeroArticulo = 
-        index === 0 
-          ? `${infraccion?.numero}` 
-          : `${numeroArticulo}, ${infraccion?.numero}`
-
-      return `${infraccion?.detalle || ''}`
-    }).join('; ')
-
-    codigoInfracciones = acta.infracciones_cometidas.map((infraccion: any) => {
-      return `${infraccion?.numero || ''} - ${infraccion?.detalle || ''}`
-    }).join('; ')
-  }
-
-  const totalSinConceptos = +actuacionSeleccionada?.total - totalConceptos
-
-  const data = {
+  const importeLetrasSinDescuento = numberToWords(+subTotal)
+  const importeLetrasConDescuento = numberToWords(+total)
+  const importeInfraccionMultiple = numberToWords(+total)
+  const totalLetrasSinConceptos = numberToWords(+totalSinConceptos)
+  
+  const dataFormatted = {
     // Fecha actual
-    añoActual: añoActual || '',
-    fechaActual: fechaActual || '',
-    horaActual: horaActual || '',
+    añoActual,
+    fechaActual,
+    horaActual,
 
     // Juzgado
-    juzgadoNombre: user?.juzgado?.nombre || '',
-    juzgadoDomicilio: user?.juzgado?.direccion || '',
-    juzgadoTelefono: user?.juzgado?.telefono || '',
-    nombreJuez: user?.juzgado?.juez || '',
-    nombreSecretario: user?.juzgado?.secretario || '',
+    juzgadoNombre,
+    juzgadoDomicilio,
+    juzgadoTelefono,
+    nombreJuez,
+    nombreSecretario,
 
     // Acta
-    causa: acta?.numero_causa || '',
-    acta: acta?.numero_acta || '',
-    infractorNombreApellido: personas || '',
-    infractorDocumento: documentos || '',
-    infractorDomicilio: domiciliosFormatted || '',
-    fechaActa: acta?.fecha || '',
-    actaHs: acta?.hora || '',
-    actaObservaciones: acta?.observaciones || '',
-    lugar: acta?.lugar || '',
-    numeroArticulo,
+    acta: numeroActa,
+    causa: numeroCausa,
+    fechaActa,
+    actaHs,
+    actaObservaciones,
+    lugar,
 
-    // Vehiculo
-    titular,
-    patente: acta?.vehiculo?.dominio || '',
-    chasis: acta?.vehiculo?.numero_chasis || '',
-    motor: acta?.vehiculo?.numero_motor || '',
-    tipo: acta?.vehiculo?.tipo || '',
-    color: acta?.vehiculo?.color || '',
-    numeroTaxiRemis: acta?.vehiculo?.numero_taxi_remis || '',
-    vehiculo: vehiculoFormatted || '',
+    // Personas
+    infractorNombreApellido,
+    infractorDocumento,
+    infractorDomicilio,                         //** Formato de domicilio [Calle - Numero] */
+    infractorDomicilioCompleto,                 //** Formato de domicilio [Calle - Numero, Barrio, Localidad, Departamento] */
 
-    // Actuaciones e Infracciones Cometidas
-    actuaciones: numeroArticulo || '', // ** Momentaneamente reemplazado. Hay que chequear luego */
-    infracciones: infraccionesFormatted || '', //** Formato de infracciones [Codigo - Detalle] */
-    codigo_infracciones: codigoInfracciones, //** Formato de infracciones [Detalle - Unidad Tributaria] */
-    total: actuacionSeleccionada?.total || '',
-    importe: actuacionSeleccionada?.total || '',
-    subTotal: actuacionSeleccionada?.sub_total,
-    descuento: actuacionSeleccionada?.descuento,
-    recargo: actuacionSeleccionada?.recargo,
-    importeLetrasSinDescuento: numberToWords(+actuacionSeleccionada?.sub_total),
-    importeLetrasConDescuento: numberToWords(+actuacionSeleccionada?.total),
-    importeInfraccionMultiple: actuacionSeleccionada?.total || '',
-    conceptos,
-    fechaSentencia: actuacionSeleccionada?.fecha || '',
+    // Vehichulo
+    patente,
+    chasis,
+    motor,
+    tipo,
+    color,
+    numeroTaxiRemis,
+    vehiculo: vehiculoFormatted,                //** Formato de vehiculo [Marca - Modelo] */
+
+    // Infracciones
+    infracciones: detalleArticulos,             //** Formato de infracciones [Detalles] */
+    numeroArticulo,                             //** Formato de infracciones [Codigos] */
+    codigo_infracciones: codigoInfracciones,    //** Formato de infracciones [Numero - Detalle] */
+    actuaciones: numeroArticulo,                //** Formato de infracciones [Codigos] */
+
+    // Actuaciones
+    total,
+    importe: total,
+    subTotal,
+    descuento,
+    recargo,
+    importeLetrasSinDescuento,
+    importeLetrasConDescuento,
+    importeInfraccionMultiple,
+    fechaSentencia,
+    conceptos: conceptosActuacion,              //** Listado de conceptos [Descripcion - Monto] */
+    totalConceptos,                             //** Total con conceptos [$] */
+    totalSinConceptos,                          //** Total sin conceptos [$] */
+    totalLetrasSinConceptos,                    //** Total sin conceptos en letras [String] */
 
     // Notificaciones
-    fechaNotificacion: fechaNotificacion || '',
-
-    // Variables solicitadas
-    totalSinConceptos,
-    totalLetrasSinConceptos: numberToWords(+totalSinConceptos)
+    fechaNotificacion
   }
 
-  return data
+  return sanitizeData(dataFormatted) 
 }
