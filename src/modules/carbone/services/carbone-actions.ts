@@ -92,7 +92,7 @@ export const showPlantilla = async (path: string): Promise<void> => {
   }
 }
 
-// Renderiza el pdf en el navegador con los datos enviados a carbone
+// Renderiza el pdf en el navegador con los datos enviados a carbone para inhabilitados
 export const showFilePDF = async (data: any) => {
   try {
     const response = await axios.post(CARBONE_URL, data, {

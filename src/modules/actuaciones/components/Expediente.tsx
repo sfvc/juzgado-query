@@ -26,7 +26,6 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
-  // const { useAction, generarPDFGotenberg, convertToPDF } = usePdf(acta)
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
   const { deleteActuacion } = useActuacion()
 
@@ -53,7 +52,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
 
   const onGeneratePDF = async (actuacion: Actuacion) => {
     await useAction.actionFn( async () => {
-      const file =  await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id)
+      const file =  await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id, 'ACTUACION')
       if (!file) return
     
       const url = await carboneActions.uploadFilePDF( file, { ...actuacion , numero_acta: acta.numero_acta }, 'actuacion_id', user!.id )

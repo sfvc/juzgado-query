@@ -20,12 +20,12 @@ const horaActual = f.toLocaleTimeString('es-AR', {
 const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   if (!vehiculo) return ''
 
-  const marca = vehiculo.marca || ''
-  const modelo = vehiculo.modelo || ''
+  const marca = vehiculo?.marca?.nombre || ''
+  const modelo = vehiculo?.modelo || ''
   return `${marca} ${modelo}`.trim()
 }
 
-const formatAddress = async (domicilio: Domicilio) => {
+const formatAddress = (domicilio: Domicilio) => {
   if ( !domicilio ) return ''
   const domicilioFormatedd = sanitizeData(domicilio)
 
@@ -50,14 +50,21 @@ export const formatData = async (data: ActuacionResponse, user: User) => {
     conceptos,
     fecha: fechaSentencia,
     sub_total: subTotal,
+    usuario
     // ** usuario => ¿Use el usuario que creo la actuacion ó el usuario que llega por parametros? 
   } = data
   
-  const juzgadoNombre = user.juzgado.nombre
-  const juzgadoDomicilio = user.juzgado.direccion
-  const juzgadoTelefono = user.juzgado.telefono
-  const nombreJuez = user.juzgado.juez
-  const nombreSecretario = user.juzgado.secretario
+  // const juzgadoNombre = user.juzgado.nombre
+  // const juzgadoDomicilio = user.juzgado.direccion
+  // const juzgadoTelefono = user.juzgado.telefono
+  // const nombreJuez = user.juzgado.juez
+  // const nombreSecretario = user.juzgado.secretario
+
+  const juzgadoNombre = usuario.juzgado.nombre
+  const juzgadoDomicilio = usuario.juzgado?.direccion || ''
+  const juzgadoTelefono = usuario.juzgado?.telefono || ''
+  const nombreJuez = usuario.juzgado?.juez || ''
+  const nombreSecretario = usuario.juzgado?.secretario || ''
 
   const numeroActa = actas.map(acta => acta.numero_acta).join(', ')
   const numeroCausa = actas.map(acta => acta.numero_causa).join(', ')
@@ -74,8 +81,8 @@ export const formatData = async (data: ActuacionResponse, user: User) => {
   const patente = vehiculos?.map(vehiculo => vehiculo.dominio).join(', ')
   const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
   const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
-  const tipo = vehiculos?.map(vehiculo => vehiculo.tipo).join(', ')
-  const color = vehiculos?.map(vehiculo => vehiculo.color).join(', ')
+  const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre).join(', ')
+  const color = vehiculos?.map(vehiculo => vehiculo?.color?.nombre).join(', ')
   const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo.numero_taxi_remis).join(', ')
   const vehiculoFormatted = vehiculos?.map(vehiculo => matchMakeAndModel(vehiculo)).join(', ')
 
