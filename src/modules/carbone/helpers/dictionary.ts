@@ -18,6 +18,7 @@ export const dictionary = () => {
     infractorNombreApellido: '{d.infractorNombreApellido}',
     infractorDocumento: '{d.infractorDocumento}',
     infractorDomicilio: '{d.infractorDomicilio}',
+    infractorDomicilioCompleto: '{d.infractorDomicilioCompleto}',
     fechaActa: '{d.fechaActa}',
     actaHs: '{d.actaHs}',
     actaObservaciones: '{d.actaObservaciones}',

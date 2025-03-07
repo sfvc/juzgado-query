@@ -8,6 +8,8 @@ export const formatPersona = (persona: IPersona, responsable: number): Infractor
     cuit: persona.cuit || '',
     nombre: persona.nombre,
     apellido: persona.apellido,
+    telefono: persona.telefono,
+    email: persona.email,
     antecedentes: 0, // TODO: Definir que hacer con antecedentes
     responsable: responsable
   }

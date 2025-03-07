@@ -33,6 +33,7 @@ export interface IPersona {
     nombre: string
     apellido: string
     email: string
+    telefono: string
     razon_social: string
     tipo_persona: string
     tipo_sociedad_id: number

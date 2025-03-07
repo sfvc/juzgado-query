@@ -35,27 +35,12 @@ export const transitoSchema = yup.object().shape({
     })
   ).required('Debe haber al menos un artículo cargado')
     .min(1, 'Debe haber al menos un artículo cargado'),
+  
+  alcoholemia: yup.string().required('El grado de alcoholemia es requerido'),
 
   // Infractor data
-  /* infractores: yup.array(
-    yup.object().shape({
-      id: yup.number().required(),
-      nombre: yup.string().required(),
-      apellido: yup.string().required(),
-      documento: yup.string().required(),
-      cuit: yup.string()
-        .transform(value => (!value) ? '-' : value)
-        .required(),
-      antecedentes: yup.number()
-        .transform(value => isNaN(value) ? null : value)
-        .required(),
-      responsable: yup.number()
-        .transform(value => isNaN(value) ? null : value)
-        .required(),
-    })
-  ).required(), */
 
-  // Vehículo data (definido pero sin validación)
+  // Vehículo data (definido sin validación)
 
-  // Propiedades data (definido pero sin validación)
+  // Propiedades data (definido sin validación)
 })

@@ -12,9 +12,8 @@ export interface Props {
 }
 
 export const DomicilioForm = ({ domicilio }: Props) => {
-  const { actionFn, loading } = useLoading()
-
   const { register, setValue, formState: { errors } } = useFormContext<Domicilio>()
+  const { actionFn, loading } = useLoading()
 
   const { 
     paises,
