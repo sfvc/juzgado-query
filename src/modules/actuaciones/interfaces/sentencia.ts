@@ -16,7 +16,7 @@ export interface ISentenciaForm extends ITotal{
     actas: number[],
     plantilla_id: number,
     tipo_actuacion: string,
-    infracciones: InfraccionesCometida[],
+    infracciones?: InfraccionesCometida[],
     sub_total: number,
     total: number,
     descuento: number,

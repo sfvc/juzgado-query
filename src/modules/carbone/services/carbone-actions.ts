@@ -92,7 +92,7 @@ export const showPlantilla = async (path: string): Promise<void> => {
   }
 }
 
-// Renderiza el pdf en el navegador con los datos enviados a carbone
+// Renderiza el pdf en el navegador con los datos enviados a carbone para inhabilitados
 export const showFilePDF = async (data: any) => {
   try {
     const response = await axios.post(CARBONE_URL, data, {
@@ -121,7 +121,7 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
     const { data: actuaciones } = await apiJuzgado.post('actuaciones-acumuladas', { actuacion_id: itemId })
     const data: ActuacionResponse = actuaciones.data
       
-    const actaFormated = await formatData(data, user!)
+    const actaFormated = await formatData(data)
 
     const body = {
       convertTo: 'docx',

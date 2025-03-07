@@ -5,7 +5,7 @@ export interface ActuacionResponse {
     tipo_actuacion: string
     fecha:          string
     observaciones:  string
-    usuario:        string
+    usuario:        Usuario
     sub_total:      string
     total:          string
     descuento:      string
@@ -107,12 +107,41 @@ export interface Juzgado {
 export interface Vehiculo {
     id:                number
     dominio:           string
-    marca:             string
-    tipo:              string
-    color:             string
+    marca: {
+        id: number,
+        nombre: string
+    },
+    tipo: {
+        id: number,
+        nombre: string
+    },
+    color: {
+        id: number,
+        nombre: string
+    },
     modelo:            string
     titular:           Titular
     numero_chasis:     null
     numero_motor:      null
     numero_taxi_remis: null
+}
+
+export interface Usuario {
+    id: number,
+    nombre: string,
+    juzgado: {
+        id: number,
+        nombre: string,
+        juez: string,
+        secretario: string,
+        direccion: string,
+        telefono: string
+    },
+    juzgado_id: number,
+    dni: string,
+    username: string,
+    role: {
+        id: number,
+        name: string
+    }
 }

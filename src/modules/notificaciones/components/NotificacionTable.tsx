@@ -24,7 +24,6 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
-  // const { useAction, convertToPDF, generarPDFGotenberg } = usePdf(acta)
   const { useAction, convertToPDF, generarPDFGotenberg } = usePdf()
   const { deleteNotification } = useNotification()
   const notificaciones: Notificacion[] = acta?.notificaciones || []
@@ -62,7 +61,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
 
   const onGeneratePDF = async (notificacion: Notificacion) => {
     await useAction.actionFn( async () => {
-      const file =  await generarPDFGotenberg(notificacion.plantilla?.path, notificacion.id)
+      const file =  await generarPDFGotenberg(notificacion.plantilla?.path, notificacion.id, 'NOTIFICACION')
       if (!file) return
   
       const url = await carboneActions.uploadFilePDF( file, { ...notificacion , numero_acta: acta.numero_acta }, 'notificacion_id', user!.id )

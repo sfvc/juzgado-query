@@ -1,4 +1,5 @@
 export const numberToWords = (num: number): string => {
+  if (!num) return ''
   if (num === 0) return 'cero'
 
   const units = [
