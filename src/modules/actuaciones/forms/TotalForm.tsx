@@ -86,6 +86,11 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
   }
 
   const onSubmit = async () => {
+    if (!user) {
+      console.error('No se encontro el usuario.')
+      return
+    }
+
     const form: ISentenciaForm = {
       sub_total,
       total,
@@ -95,12 +100,11 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
       actas,
       plantilla_id: plantillaId,
       tipo_actuacion: ACTUACION.SENTENCIA,
-      infracciones,
-      user_id: user!.id,
-      conceptos: entries
+      user_id: user.id,
+      conceptos: entries,
+      ...( actas.length === 1 && { infracciones } ) // Si la actuación es simple agrega los articulos, si es multiple no agrega. 
     }
 
-    console.log(form)
     await createSentencia.mutateAsync(form)
   }
 

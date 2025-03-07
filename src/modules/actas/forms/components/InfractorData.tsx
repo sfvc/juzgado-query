@@ -1,7 +1,7 @@
 import { Button, Label, Select, Table, Tooltip } from 'flowbite-react'
 import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { SearchInput, icons } from '../../../../shared'
+import { SearchInput, icons, showErrors } from '../../../../shared'
 import { personaActions } from '../../../personas'
 import { formatPersona } from '../../helpers/formatPersona'
 import { CreatePersona } from '../integrations/CreatePersona'
@@ -48,7 +48,14 @@ export const InfractorData = ({ data }: Props) => {
   // Agregar persona al listado de infractores
   const addInfractor = () => {
     if(!persona) return
+    
     const newPersona = formatPersona(persona, responsable)
+    
+    const existe = infractores.find((infractor: InfractorActa) => infractor.responsable === 1)
+    if (existe && newPersona.responsable) {
+      showErrors('Solo puede agregar un infractor responable.')
+      return
+    }
 
     setInfractores((prev) => [...prev, newPersona])
     setValue('infractores', [...getValues('infractores') || [], newPersona]) // Actualizar estado del formulario
