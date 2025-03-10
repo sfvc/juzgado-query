@@ -3,6 +3,7 @@ import { CambioEstado, IDashboard, User } from '../interfaces'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardActions } from '..'
 import { Loading } from '../../../shared'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 export const Dashboard = () => {
   const { data, isLoading } = useQuery<IDashboard>({
@@ -49,6 +50,80 @@ export const Dashboard = () => {
           </ul>
         </Card>
       </div>
+
+      {/* Facturación Mensual */}
+      <section className="mt-10">
+        <div className="overflow-x-auto overflow-y-auto max-h-[26rem]">
+          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">
+            Facturación
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            {[
+              { nombre: 'Juzgado de Faltas N° 1', key: 'juzgado_1' },
+              { nombre: 'Juzgado de Faltas N° 2', key: 'juzgado_2' },
+            ].map((juzgado, index) => (
+              <div key={index}>
+                <h4 className="text-lg font-semibold text-gray-200 bg-blue-800 rounded-md py-2 text-center mb-3">
+                  {juzgado.nombre}
+                </h4>
+                <Table hoverable className="border rounded-lg shadow-lg">
+                  <Table.Head>
+                    <Table.HeadCell>Facturación Diaria</Table.HeadCell>
+                    <Table.HeadCell>Facturación Mensual</Table.HeadCell>
+                  </Table.Head>
+                  <Table.Body className="divide-y dark:bg-gray-800">
+                    {data?.facturacion ? (
+                      <Table.Row>
+                        <Table.Cell>$ {data.facturacion[juzgado?.key]?.facturacion_diaria}</Table.Cell>
+                        <Table.Cell>$ {data.facturacion[juzgado?.key]?.facturacion_mensual}</Table.Cell>
+                      </Table.Row>
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="text-center py-4">
+                          No se encontraron datos
+                        </td>
+                      </tr>
+                    )}
+                  </Table.Body>
+                </Table>
+              </div>
+            ))}
+          </div>
+
+          {/* Facturación Total */}
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold text-gray-200 bg-green-600 rounded-md py-2 text-center mb-3">
+               Recaudación Total
+            </h4>
+            <Table hoverable className="border rounded-lg shadow-lg">
+              <Table.Head>
+                <Table.HeadCell>Facturación Diaria</Table.HeadCell>
+                <Table.HeadCell>Facturación Mensual</Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y dark:bg-gray-800">
+                {data?.facturacion ? (
+                  <Table.Row>
+                    <Table.Cell>$ {data?.facturacion?.total?.facturacion_diaria}</Table.Cell>
+                    <Table.Cell>$ {data?.facturacion?.total?.facturacion_mensual}</Table.Cell>
+                  </Table.Row>
+                ) : (
+                  <tr>
+                    <td colSpan={2} className="text-center py-4">
+                          No se encontraron datos
+                    </td>
+                  </tr>
+                )}
+              </Table.Body>
+            </Table>
+          </div>
+
+          {/* Fecha de Consulta */}
+          <p className="text-sm text-gray-500 mt-4 text-center">
+             Datos actualizados al {formatDate(data?.facturacion?.fecha_consulta?.dia)}
+          </p>
+        </div>
+      </section>
 
       {/* Sesiones Iniciadas */}
       <section className="mt-10">
