@@ -158,6 +158,19 @@ export const FisicaForm = ({ data }: Props) => {
           color={errors?.email && 'failure'}
         />
       </div>
+
+      <div className='mb-4'>
+        <div className='mb-2 block dark:text-white'>
+          <Label htmlFor='telefono' value='Telefono' />
+        </div>
+        <TextInput
+          {...register('telefono')}
+          type='text'
+          placeholder='Telefono'
+          helperText={errors?.telefono && errors?.telefono?.message} 
+          color={errors?.telefono && 'failure'}
+        />
+      </div>
     </div>
   )
 }

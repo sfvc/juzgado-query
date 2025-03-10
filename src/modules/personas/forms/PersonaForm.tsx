@@ -3,19 +3,21 @@ import { Button, Label, Select, Spinner } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DataPersona, FormValues, IPersona } from '../interfaces'
 import { personaActions } from '..'
 import { DomicilioForm, FisicaForm, JuridicaForm } from './components'
 import { domicilioSchema, personaFisicaSchema, personaJuridicaSchema } from './validations/validationSchema'
 import { usePersona } from '../hooks/usePersona'
 import { TipoPersona, setDefaulValues } from './helpers'
+import type { DataPersona, FormValues, IPersona } from '../interfaces'
+import { showErrors } from '../../../shared'
 
 interface Props {
   persona: IPersona | null
   onSucces: () => void
+  updateInfractores?: (persona: IPersona) => void
 }
 
-export const PersonaForm = ({ persona, onSucces }: Props) => {
+export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => {
   const [ tipoPersona, setTipoPersona ] = useState<string>(persona?.tipo_persona || TipoPersona.FISICA)
   const { createPersona, updatePersona } = usePersona()
 
@@ -43,8 +45,20 @@ export const PersonaForm = ({ persona, onSucces }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (form: FormValues) => {
-    if (persona) await updatePersona.mutateAsync({id: persona.id, persona: form})
-    else await createPersona.mutateAsync(form)
+    if (persona) {
+      const personaEdit = await updatePersona.mutateAsync({ id: persona.id, persona: form })
+
+      if (!personaEdit) {
+        showErrors('No se pudo editar los datos de la persona')
+        return
+      }
+
+      if (updateInfractores) {
+        updateInfractores(personaEdit)
+      }
+    } else {
+      await createPersona.mutateAsync(form)
+    }
 
     onSucces()
   }

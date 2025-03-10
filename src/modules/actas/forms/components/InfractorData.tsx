@@ -1,6 +1,6 @@
-import { Button, Label, Select, Table, Tooltip } from 'flowbite-react'
 import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { Button, Label, Modal, Select, Table, Tooltip } from 'flowbite-react'
 import { SearchInput, icons, showErrors } from '../../../../shared'
 import { personaActions } from '../../../personas'
 import { formatPersona } from '../../helpers/formatPersona'
@@ -9,6 +9,7 @@ import { clearNames } from '../../../../shared'
 import { AntecedentesList } from '../integrations/AntecedentesList'
 import { RESPONSABLE } from '../../../../shared/constants'
 import { TipoPersona } from '../../../personas/forms/helpers'
+import { PersonaForm } from '../../../personas/forms/PersonaForm'
 import type { IPersona } from '../../../personas/interfaces'
 import type { InfractorActa } from '../../interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
@@ -34,6 +35,10 @@ export const InfractorData = ({ data }: Props) => {
   const [infractores, setInfractores] = useState<InfractorActa[]>(data || [])
   const [responsable, setResponsable] = useState<number>(RESPONSABLE.SI)
   const [persona, setPersonaSelected] = useState<IPersona | null>(null) // Item seleccionado de la busqueda
+
+  // Modal de persona
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [editPersona, setEditPersona] = useState<IPersona | null>(null) 
 
   // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -77,6 +82,36 @@ export const InfractorData = ({ data }: Props) => {
   // Buscardor de personas
   const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
   const handleSelect = (persona: IPersona) => itemSelected(persona)
+
+  /* Modal crear/editar Persona */
+  const onOpenModal = async (personaId: number) => {
+    try {
+      const persona: IPersona = await personaActions.getPersonaById(personaId) 
+  
+      setEditPersona(persona)
+      setOpenModal(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  const onCloseModal = async () => {
+    setEditPersona(null)
+    setOpenModal(false)
+  }
+
+  const updateInfractores = (persona: IPersona) => {
+    const infractoresUpdate = infractores.map((infractor) => {
+      if (infractor.id === persona.id) {
+        const personaUpdate = formatPersona(persona, infractor.responsable)
+        return personaUpdate
+      } else {
+        return infractor
+      }
+    })
+    
+    setInfractores(infractoresUpdate)
+  }
     
   return (
     <React.Fragment>
@@ -162,7 +197,13 @@ export const InfractorData = ({ data }: Props) => {
                       </div>
                     </div>
                   </Table.Cell>
-                  <Table.Cell className='text-center flex items-center justify-center'>
+                  <Table.Cell className='text-center flex items-center gap-2 justify-center'>
+                    <Tooltip content='Editar'>
+                      <Button color='success' onClick={() => onOpenModal(infractor.id)} className='w-8 h-8 flex items-center justify-center'>
+                        <icons.Pencil />
+                      </Button>
+                    </Tooltip>
+                    
                     <Tooltip content='Eliminar'>
                       <Button color='failure' onClick={() => removeInfractor(infractor.id)} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Trash />
@@ -181,6 +222,21 @@ export const InfractorData = ({ data }: Props) => {
         isOpen={isOpen}
         toggleModal={toggleModal}
       />
+
+      {/* Modal crear/editar */} 
+      {
+        editPersona &&
+        <Modal show={openModal} onClose={onCloseModal} size='5xl'>
+          <Modal.Header>Editar Persona</Modal.Header>
+          <Modal.Body>
+            <PersonaForm
+              persona={editPersona} 
+              onSucces={onCloseModal}
+              updateInfractores={(persona: IPersona) => updateInfractores(persona)}
+            />
+          </Modal.Body>
+        </Modal>
+      }
     </React.Fragment>
   )
 }
