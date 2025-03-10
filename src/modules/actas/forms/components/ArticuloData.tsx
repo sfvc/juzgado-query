@@ -30,9 +30,29 @@ export const ArticuloData = ({ data }: Props) => {
     }
 
     setInfracciones((prev) => [...prev, newArticulo])
-    setValue('infracciones_cometidas', [...getValues('infracciones_cometidas') || [], newArticulo]) // Actualizar estado del formulario
+    setValue('infracciones_cometidas', [...getValues('infracciones_cometidas') || [], newArticulo])
   }
 
+  const handleAlcoholemiaChange = (e) => {
+    const value = e.target.value
+  
+    const cleanedValue = value.replace(/[^\d]/g, '')
+  
+    const maxLength = 3
+    if (cleanedValue.length > maxLength) {
+      return
+    }
+  
+    let formattedAlcoholemia = cleanedValue
+    if (cleanedValue.length === 2) {
+      formattedAlcoholemia = `${cleanedValue[0]},${cleanedValue[1]}`
+    } else if (cleanedValue.length === 3) {
+      formattedAlcoholemia = `${cleanedValue[0]},${cleanedValue.slice(1)}`
+    }
+  
+    setValue('grado_alcohol', formattedAlcoholemia)
+  }
+  
   const removeArticulo = (id: number) => {
     const updateInfracciones = infracciones.filter((infraccion: InfraccionActa) => infraccion.id !== id)
    
@@ -74,21 +94,21 @@ export const ArticuloData = ({ data }: Props) => {
           inputAlcoholemia && 
             <div className='mb-4'>
               <div className='mb-2 block dark:text-white'>
-                <Label htmlFor='alcoholemia' value='Alcoholemia' />
+                <Label htmlFor='grado_alcohol' value='Alcoholemia' />
                 <strong className='obligatorio'>(*)</strong>
               </div>
               <TextInput
-                {...register('alcoholemia')}
-                id='alcoholemia'
-                placeholder='Ingrese el grado de Alcoholemia'
-                helperText={errors?.alcoholemia?.message}
-                color={errors?.alcoholemia && 'failure'}
+                {...register('grado_alcohol')}
+                id='grado_alcohol'
+                placeholder='Ingrese el grado de alcoholemia'
+                helperText={errors?.grado_alcohol?.message}
+                color={errors?.grado_alcohol && 'failure'}
+                maxLength={4}
+                onChange={handleAlcoholemiaChange}
               />
             </div>
         }
       </div>
-
-      
 
       {/* Tabla de infracciones */}
       {(infracciones?.length > 0) && (

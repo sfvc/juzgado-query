@@ -32,8 +32,8 @@ export const TransitoForm = ({ acta }: Props) => {
       notificado: acta?.notificado || 0,
       calle: acta?.calle || '',
       observaciones: acta?.observaciones || '',
+      grado_alcohol: acta?.grado_alcohol || '',
       tipo_acta: ACTAS.TRANSITO,
-
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
       vehiculo_id: acta?.vehiculo?.id
@@ -42,8 +42,15 @@ export const TransitoForm = ({ acta }: Props) => {
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
-    if(acta) await updateActa.mutateAsync({ id: acta.id, acta: form })
-    else await createActa.mutateAsync(form)
+    if (form.grado_alcohol) {
+      form.grado_alcohol = parseFloat(form.grado_alcohol.replace(',', '.'))
+    }
+  
+    if (acta) {
+      await updateActa.mutateAsync({ id: acta.id, acta: form })
+    } else {
+      await createActa.mutateAsync(form)
+    }
   }
 
   return (

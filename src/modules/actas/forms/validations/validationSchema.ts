@@ -36,7 +36,7 @@ export const transitoSchema = yup.object().shape({
   ).required('Debe haber al menos un artículo cargado')
     .min(1, 'Debe haber al menos un artículo cargado'),
   
-  alcoholemia: yup.string().required('El grado de alcoholemia es requerido'),
+  // grado_alcohol: yup.string().required('El grado de alcoholemia es requerido'),
 
   // Infractor data
 

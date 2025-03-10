@@ -1,6 +1,6 @@
 // import { useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { Dropdown, Footer, Navbar } from 'flowbite-react'
+import { Dropdown, Footer, Navbar, Button, MegaMenu } from 'flowbite-react'
 // import { ThemeContext } from '../context/Theme/ThemeContext'
 import { RoleGuard, UserRole } from '../auth'
 import { ToastContainer } from 'react-toastify'
@@ -42,14 +42,6 @@ export const Layout = () => {
             Administrador de Actas
           </Link>
 
-          <Link to='/vehiculos' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-            Vehículos
-          </Link>
-
-          <Link to='/personas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-            Personas
-          </Link>
-
           <Link to='/notificaciones' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             Notificaciones
           </Link>
@@ -58,104 +50,132 @@ export const Layout = () => {
             Acumuladas
           </Link>
 
-          <Link to='/inhabilitados' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-            Inhabilitados
-          </Link>
+          <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+            <MegaMenu.Dropdown toggle={<>Creación</>}>
+              <ul className="grid grid-cols-2">
+                <div className="space-y-4 p-4 text-black">
+                  <li>
+                    <Link to='/vehiculos' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                      Vehículos
+                    </Link>
+                  </li>
 
-          <Link to='/plantillas' className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
-            Plantillas
-          </Link>
+                  <li>
+                    <Link to='/personas' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                      Personas
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link to='/inhabilitados' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                      Inhabilitados
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link to='/plantillas' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                      Plantillas
+                    </Link>
+                  </li>
+                </div>
+
+                <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                  <div className="space-y-4 p-4 text-black">
+                    <li>
+                      <Link to='/estados' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                    Estados
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link to='/juzgados' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                    Juzgados
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link to='/usuarios' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                    Usuarios
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link to='/unidades' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                    Ud. de Multa
+                      </Link>
+                    </li>
+                  </div>
+                </RoleGuard>
+              </ul>
+            </MegaMenu.Dropdown>
+          </MegaMenu>
 
           <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
-            <div className='flex md:order-2 dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400 cursor-pointer'>
-              <Dropdown label='Parámetros' inline>
-                <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
-                  <Dropdown label='Actas' placement='right' inline>
-                    <Link to='/articulos'>
-                      <Dropdown.Item>Articulos</Dropdown.Item>
-                    </Link>
+            <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
+              <MegaMenu.Dropdown toggle={<>Parámetros</>}>
+                <ul className="grid grid-cols-3">
+                  <div className="space-y-4 p-4 text-black">
+                    <li>
+                      <Link to='/articulos' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Articulos
+                      </Link>
+                    </li>
 
-                    <Dropdown.Divider />
+                    <li>
+                      <Link to='/propiedades' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Propiedades
+                      </Link>
+                    </li>
 
-                    <Link to='/propiedades'>
-                      <Dropdown.Item>Propiedades</Dropdown.Item>
-                    </Link>
+                    <li>
+                      <Link to='/rubros' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Rubros
+                      </Link>
+                    </li>
+                  </div>
 
-                    <Dropdown.Divider />
+                  <div className="space-y-4 p-4 text-black">
+                    <li>
+                      <Link to='/paises' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                       Países
+                      </Link>
+                    </li>
 
-                    <Link to='/rubros'>
-                      <Dropdown.Item>Rubros</Dropdown.Item>
-                    </Link>
-                  </Dropdown>
-                </div>
+                    <li>
+                      <Link to='/provincias' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Provincias
+                      </Link>
+                    </li>
 
-                <Dropdown.Divider />
+                    <li>
+                      <Link to='/departamentos' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Departamentos
+                      </Link>
+                    </li>
+                  </div>
 
-                <div className='flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white'>
-                  <Dropdown label='Localización' placement='right' inline>
+                  <div className="space-y-4 p-4 text-black">
+                    <li>
+                      <Link to='/localidades' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Localidades
+                      </Link>
+                    </li>
 
-                    <Link to='/paises'>
-                      <Dropdown.Item>Países</Dropdown.Item>
-                    </Link>
+                    <li>
+                      <Link to='/barrios' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Barrios
+                      </Link>
+                    </li>
 
-                    <Dropdown.Divider />
-
-                    <Link to='/provincias'>
-                      <Dropdown.Item>Provincias</Dropdown.Item>
-                    </Link>
-
-                    <Dropdown.Divider />
-
-                    <Link to='/departamentos'>
-                      <Dropdown.Item>Departamentos</Dropdown.Item>
-                    </Link>
-
-                    <Dropdown.Divider />
-
-                    <Link to='/localidades'>
-                      <Dropdown.Item>Localidades</Dropdown.Item>
-                    </Link>
-
-                    <Dropdown.Divider />
-
-                    <Link to='/barrios'>
-                      <Dropdown.Item>Barrios</Dropdown.Item>
-                    </Link>
-
-                    <Dropdown.Divider />
-
-                    <Link to='/nacionalidades'>
-                      <Dropdown.Item>Nacionalidades</Dropdown.Item>
-                    </Link>
-
-                  </Dropdown>
-                </div>
-
-                <Dropdown.Divider />
-
-                <Link to='/estados'>
-                  <Dropdown.Item>Estados</Dropdown.Item>
-                </Link>
-
-                <Dropdown.Divider />
-
-                <Link to='/juzgados'>
-                  <Dropdown.Item>Juzgados</Dropdown.Item>
-                </Link>
-
-                <Dropdown.Divider />
-
-                <Link to='/usuarios'>
-                  <Dropdown.Item>Usuarios</Dropdown.Item>
-                </Link>
-
-                <Dropdown.Divider />
-
-                <Link to='/unidades'>
-                  <Dropdown.Item>Ud. de Multa</Dropdown.Item>
-                </Link>
-              </Dropdown>
-            </div>
+                    <li>
+                      <Link to='/nacionalidades' className='dark:text-white hover:text-blue-700 dark:hover:text-blue-400'>
+                        Nacionalidades
+                      </Link>
+                    </li>
+                  </div>
+                </ul>
+              </MegaMenu.Dropdown>
+            </MegaMenu>
           </RoleGuard>
         </Navbar.Collapse>
 
