@@ -1,4 +1,5 @@
-import { Card, Table } from 'flowbite-react'
+import { useState } from 'react'
+import { Card, Table, Button } from 'flowbite-react'
 import { CambioEstado, IDashboard, User } from '../interfaces'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardActions } from '..'
@@ -12,11 +13,18 @@ export const Dashboard = () => {
     staleTime: 1000 * 60,
   })
 
+  const [activeSection, setActiveSection] = useState<string>('Recaudacion')
+
+
+  const toggleSection = (section: string) => {
+    setActiveSection(prev => (prev === section ? null : section))
+  }
+
   if (isLoading) return <Loading />
 
   return (
-    <div className="px-6 py-4 dark:bg-gray-800 min-h-screen">
-      <div className="text-center mb-8">
+    <div className="dark:bg-gray-800 min-h-screen">
+      <div className="text-center mb-4">
         <h3 className="text-2xl font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 py-3 rounded-lg shadow-md">
           Dashboard
         </h3>
@@ -51,14 +59,28 @@ export const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Facturación Mensual */}
-      <section className="mt-10">
-        <div className="overflow-x-auto overflow-y-auto max-h-[26rem]">
-          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">
-            Facturación
-          </h3>
+      {/* Botones de Secciones */}
+      <div className="flex justify-center gap-4 mb-4 mt-4">
+        {['Recaudacion', 'Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
+          <Button
+            key={section}
+            onClick={() => toggleSection(section)}
+            className={`px-6 py-2 font-semibold rounded-lg shadow-md ${
+              activeSection === section
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 dark:bg-gray-700 dark:text-white text-black hover:text-white'
+            }`}
+          >
+            {section}
+          </Button>
+        ))}
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+      {/* Sección de Recaudación */}
+      {activeSection === 'Recaudacion' && (
+        <section className="mt-4">
+          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">Recaudación</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { nombre: 'Juzgado de Faltas N° 1', key: 'juzgado_1' },
               { nombre: 'Juzgado de Faltas N° 2', key: 'juzgado_2' },
@@ -69,8 +91,8 @@ export const Dashboard = () => {
                 </h4>
                 <Table hoverable className="border rounded-lg shadow-lg">
                   <Table.Head>
-                    <Table.HeadCell>Facturación Diaria</Table.HeadCell>
-                    <Table.HeadCell>Facturación Mensual</Table.HeadCell>
+                    <Table.HeadCell>Recaudación Diaria</Table.HeadCell>
+                    <Table.HeadCell>Recaudación Mensual</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y dark:bg-gray-800">
                     {data?.facturacion ? (
@@ -80,9 +102,7 @@ export const Dashboard = () => {
                       </Table.Row>
                     ) : (
                       <tr>
-                        <td colSpan={2} className="text-center py-4">
-                          No se encontraron datos
-                        </td>
+                        <td colSpan={2} className="text-center py-4">No se encontraron datos</td>
                       </tr>
                     )}
                   </Table.Body>
@@ -91,15 +111,15 @@ export const Dashboard = () => {
             ))}
           </div>
 
-          {/* Facturación Total */}
-          <div className="mt-6">
+          {/* Recaudación Total */}
+          <div className="mt-4">
             <h4 className="text-lg font-semibold text-gray-200 bg-green-600 rounded-md py-2 text-center mb-3">
-               Recaudación Total
+              Recaudación Total
             </h4>
             <Table hoverable className="border rounded-lg shadow-lg">
               <Table.Head>
-                <Table.HeadCell>Facturación Diaria</Table.HeadCell>
-                <Table.HeadCell>Facturación Mensual</Table.HeadCell>
+                <Table.HeadCell>Recaudación Diaria</Table.HeadCell>
+                <Table.HeadCell>Recaudación Mensual</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y dark:bg-gray-800">
                 {data?.facturacion ? (
@@ -109,27 +129,24 @@ export const Dashboard = () => {
                   </Table.Row>
                 ) : (
                   <tr>
-                    <td colSpan={2} className="text-center py-4">
-                          No se encontraron datos
-                    </td>
+                    <td colSpan={2} className="text-center py-4">No se encontraron datos</td>
                   </tr>
                 )}
               </Table.Body>
             </Table>
           </div>
 
-          {/* Fecha de Consulta */}
           <p className="text-sm text-gray-500 mt-4 text-center">
-             Datos actualizados al {formatDate(data?.facturacion?.fecha_consulta?.dia)}
+            Datos actualizados el día {data?.facturacion?.fecha_consulta?.dia ? formatDate(data.facturacion.fecha_consulta.dia) : 'Fecha no disponible'}
           </p>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Sesiones Iniciadas */}
-      <section className="mt-10">
-        <div className="overflow-x-auto overflow-y-auto max-h-[22.3rem]">
+      {/* Sección de Sesiones Iniciadas */}
+      {activeSection === 'Sesiones Iniciadas' && (
+        <section className="mt-4">
           <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">Sesiones Iniciadas</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[26rem] overflow-y-auto">
             {['Juzgado de Faltas N° 1', 'Juzgado de Faltas N° 2'].map((juzgado, index) => (
               <div key={index}>
                 <h4 className="text-lg font-semibold text-gray-200 bg-blue-600 rounded-md py-2 text-center mb-3">
@@ -154,9 +171,7 @@ export const Dashboard = () => {
                         ))
                     ) : (
                       <tr>
-                        <td colSpan={3} className="text-center py-4">
-                        No se encontraron resultados
-                        </td>
+                        <td colSpan={3} className="text-center py-4">No se encontraron resultados</td>
                       </tr>
                     )}
                   </Table.Body>
@@ -164,14 +179,14 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Cambios de Estado */}
-      <section className="mt-10">
-        <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">Cambios de Estados</h3>
-        <div className="overflow-x-auto overflow-y-auto max-h-[22.5rem]">
-          <Table className="border rounded-lg shadow-lg">
+      {/* Sección de Cambios de Estado */}
+      {activeSection === 'Cambios de Estado' && (
+        <section className="mt-6">
+          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4 max-h-[26rem] overflow-y-auto">Cambios de Estados</h3>
+          <Table hoverable className="border rounded-lg shadow-lg">
             <Table.Head>
               <Table.HeadCell>Estado</Table.HeadCell>
               <Table.HeadCell>Cantidad de actas</Table.HeadCell>
@@ -186,15 +201,13 @@ export const Dashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="text-center py-4">
-                  No se encontraron resultados
-                  </td>
+                  <td colSpan={2} className="text-center py-4">No se encontraron resultados</td>
                 </tr>
               )}
             </Table.Body>
           </Table>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   )
 }

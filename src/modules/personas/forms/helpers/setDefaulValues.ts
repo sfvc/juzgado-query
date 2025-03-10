@@ -5,6 +5,7 @@ interface DefaultValues {
     nombre: string;
     tipo_documento: string;
     email: string;
+    telefono: string;
     tipo_persona: string;
   
     pais_id: number | null;
@@ -38,6 +39,7 @@ export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) =
     nombre: persona?.nombre || '',
     tipo_documento: persona?.tipo_documento || '',
     email: persona?.email || '',
+    telefono: persona?.telefono || '',
     tipo_persona: persona?.tipo_persona || tipoPersona,
 
     // Domicilio
