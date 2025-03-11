@@ -52,6 +52,13 @@ export const SentenciaMultiple = () => {
       return infracciones
     })
   }
+
+  const generateUUID = () => {
+    return typeof crypto?.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `uuid-${Date.now()}-${Math.random().toString(16).slice(2)}`
+  }
+  
   
   const handleDelete = () => {
     if(!activeItem) return 
@@ -91,7 +98,7 @@ export const SentenciaMultiple = () => {
                 ...prev, 
                 {
                   ...articulo, 
-                  uuid: crypto.randomUUID(),
+                  uuid: generateUUID(),
                   numero_acta_articulo: acta.numero_acta,
                   precio_unidad_articulo: +acta?.unidad_multa || unidadMulta, // Coloca la unidad de multa del acta, si no tiene pone la unidad la actual
                   importe: articulo.valor_desde * +acta.unidad_multa,

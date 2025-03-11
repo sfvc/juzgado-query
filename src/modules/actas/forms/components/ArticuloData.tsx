@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Label, Table, TextInput, Tooltip } from 'flowbite-react'
+import { Button, Label, Table, TextInput, Tooltip, Checkbox } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
@@ -18,7 +18,8 @@ const ART_ALCOHOLEMIA_ID = 214
 export const ArticuloData = ({ data }: Props) => {
   const { setValue, register, getValues, formState: { errors } } = useFormContext<IActaForm>() 
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
-  
+  const [seNego, setSeNego] = useState(false)
+
   const addArticulo = (articulo: IArticulo) => {
     if(!articulo) return
 
@@ -35,13 +36,10 @@ export const ArticuloData = ({ data }: Props) => {
 
   const handleAlcoholemiaChange = (e) => {
     const value = e.target.value
-  
     const cleanedValue = value.replace(/[^\d]/g, '')
   
     const maxLength = 3
-    if (cleanedValue.length > maxLength) {
-      return
-    }
+    if (cleanedValue.length > maxLength) return
   
     let formattedAlcoholemia = cleanedValue
     if (cleanedValue.length === 2) {
@@ -51,19 +49,23 @@ export const ArticuloData = ({ data }: Props) => {
     }
   
     setValue('grado_alcohol', formattedAlcoholemia)
+  
+    if (formattedAlcoholemia === '0,00' || formattedAlcoholemia === '0.00') {
+      setSeNego(true)
+    } else {
+      setSeNego(false)
+    }
   }
   
   const removeArticulo = (id: number) => {
     const updateInfracciones = infracciones.filter((infraccion: InfraccionActa) => infraccion.id !== id)
-   
     setInfracciones(updateInfracciones)
     setValue('infracciones_cometidas', updateInfracciones)
   }
 
-  // Buscardor de articulos
   const handleSearch = async (query: string) => articuloActions.getArticulosByFilter(query)
   const handleSelect = (articulo: IArticulo) => addArticulo(articulo)
-  
+
   const inputAlcoholemia = infracciones.find(infraccion => infraccion.id === ART_ALCOHOLEMIA_ID)
 
   return (
@@ -75,7 +77,7 @@ export const ArticuloData = ({ data }: Props) => {
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
         <SearchInput<IArticulo>
           label={<><span>Infracciones</span> <strong className='obligatorio'>(*)</strong></>}
-          placeholder="Codigo de la infracción"
+          placeholder="Código de la infracción"
           onSearch={handleSearch}
           onSelect={handleSelect}
           helperText={errors?.infracciones_cometidas?.message}
@@ -90,24 +92,38 @@ export const ArticuloData = ({ data }: Props) => {
           <CreateArticulo />
         </div>
 
-        {
-          inputAlcoholemia && 
-            <div className='mb-4'>
-              <div className='mb-2 block dark:text-white'>
-                <Label htmlFor='grado_alcohol' value='Alcoholemia' />
-                <strong className='obligatorio'>(*)</strong>
-              </div>
-              <TextInput
-                {...register('grado_alcohol')}
-                id='grado_alcohol'
-                placeholder='Ingrese el grado de alcoholemia'
-                helperText={errors?.grado_alcohol?.message}
-                color={errors?.grado_alcohol && 'failure'}
-                maxLength={4}
-                onChange={handleAlcoholemiaChange}
+        {inputAlcoholemia && (
+          <div className='mb-4'>
+            <div className='mb-6 flex items-center gap-2'>
+              <Checkbox
+                id='se_nego'
+                checked={seNego}
+                onChange={() => setSeNego(!seNego)}
               />
+              <Label htmlFor='se_nego' className='dark:text-white'>
+                Se negó al control de alcoholemia
+              </Label>
             </div>
-        }
+
+            {!seNego && (
+              <div>
+                <div className='mb-2 block dark:text-white'>
+                  <Label htmlFor='grado_alcohol' value='Alcoholemia' />
+                  <strong className='obligatorio'>(*)</strong>
+                </div>
+                <TextInput
+                  {...register('grado_alcohol')}
+                  id='grado_alcohol'
+                  placeholder='Ingrese el grado de alcoholemia'
+                  helperText={errors?.grado_alcohol?.message}
+                  color={errors?.grado_alcohol && 'failure'}
+                  maxLength={4}
+                  onChange={handleAlcoholemiaChange}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Tabla de infracciones */}
@@ -115,8 +131,8 @@ export const ArticuloData = ({ data }: Props) => {
         <div className='overflow-x-auto'>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell className='text-center bg-gray-300'>Descripcion</Table.HeadCell>
-              <Table.HeadCell className='text-center bg-gray-300'>Articulo</Table.HeadCell>
+              <Table.HeadCell className='text-center bg-gray-300'>Descripción</Table.HeadCell>
+              <Table.HeadCell className='text-center bg-gray-300'>Artículo</Table.HeadCell>
               <Table.HeadCell className='text-center bg-gray-300'>Unidades</Table.HeadCell>
               <Table.HeadCell className='text-center bg-gray-300'>Acciones</Table.HeadCell>
             </Table.Head>

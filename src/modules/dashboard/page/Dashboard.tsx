@@ -14,8 +14,10 @@ export const Dashboard = () => {
   })
 
   const [activeSection, setActiveSection] = useState<string>('Recaudacion')
-
-
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString('es-AR')
+  }
+  
   const toggleSection = (section: string) => {
     setActiveSection(prev => (prev === section ? null : section))
   }
@@ -97,8 +99,8 @@ export const Dashboard = () => {
                   <Table.Body className="divide-y dark:bg-gray-800">
                     {data?.facturacion ? (
                       <Table.Row>
-                        <Table.Cell>$ {data.facturacion[juzgado?.key]?.facturacion_diaria}</Table.Cell>
-                        <Table.Cell>$ {data.facturacion[juzgado?.key]?.facturacion_mensual}</Table.Cell>
+                        <Table.Cell>$ {formatNumber(data.facturacion[juzgado?.key]?.facturacion_diaria)}</Table.Cell>
+                        <Table.Cell>$ {formatNumber(data.facturacion[juzgado?.key]?.facturacion_mensual)}</Table.Cell>
                       </Table.Row>
                     ) : (
                       <tr>
@@ -124,8 +126,8 @@ export const Dashboard = () => {
               <Table.Body className="divide-y dark:bg-gray-800">
                 {data?.facturacion ? (
                   <Table.Row>
-                    <Table.Cell>$ {data?.facturacion?.total?.facturacion_diaria}</Table.Cell>
-                    <Table.Cell>$ {data?.facturacion?.total?.facturacion_mensual}</Table.Cell>
+                    <Table.Cell>$ {formatNumber(data?.facturacion?.total?.facturacion_diaria)}</Table.Cell>
+                    <Table.Cell>$ {formatNumber(data?.facturacion?.total?.facturacion_mensual)}</Table.Cell>
                   </Table.Row>
                 ) : (
                   <tr>

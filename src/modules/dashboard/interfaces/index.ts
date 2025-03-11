@@ -52,4 +52,6 @@ export interface Fecha {
     dia: string;
     mes: number;
     anio: number;
+    facturacion_diaria: number;
+    facturacion_mensual: number;
 }
