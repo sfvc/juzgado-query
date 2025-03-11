@@ -23,6 +23,7 @@ jobs:
             git fetch 
             git checkout main
             git pull 
+            npm install
             docker stop juzgado-query || true
             docker rm juzgado-query || true
             docker rmi municipalidad/juzgado-query:lastest -f
@@ -50,6 +51,7 @@ jobs:
             git fetch 
             git checkout development
             git pull 
+            npm install
             docker stop juzgado-query-dev
             docker rm juzgado-query-dev
             docker rmi municipalidad/juzgado-query-dev:latest -f
@@ -58,4 +60,3 @@ jobs:
             docker builder prune -f
             docker image prune -a -f
             exit
-
