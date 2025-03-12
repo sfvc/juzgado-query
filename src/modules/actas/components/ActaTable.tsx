@@ -27,9 +27,9 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
   const [activeItem, setActiveItem] = useState<string>('')
 
   const { pathname } = useLocation()
-  const colums = 
-    pathname === PATH.ACTA 
-      ? ActaColums 
+  const colums =
+    pathname === PATH.ACTA
+      ? ActaColums
       : pathname === PATH.NOTIFICATION
         ? NotificacionColums
         : AcumuladasColums
@@ -64,22 +64,24 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                     <Table.Row key={acta.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       {
                         (pathname === PATH.NOTIFICATION || pathname === PATH.ACUMULADAS) &&
-                        <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                          <Checkbox
-                            id={`${acta.id}`}
-                            name='acta'
-                            value={acta.id}
-                            onChange={(e) => checkingActa(e, acta.id)}
-                            className='
-                              h-5 w-5 rounded border-gray-400 dark:border-gray-600 
-                              focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 
-                              text-blue-700 dark:checked:bg-blue-600 dark:checked:border-blue-600 
-                              checked:bg-blue-500 checked:border-blue-500 
-                              hover:border-blue-700 transition-colors duration-200 
-                              disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
-                            '
-                          />
-                        </Table.Cell>
+                          <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
+                            {acta.estados[0]?.nombre !== 'Pagada' && (
+                              <Checkbox
+                                id={`${acta.id}`}
+                                name='acta'
+                                value={acta.id}
+                                onChange={(e) => checkingActa(e, acta.id)}
+                                className='
+                                  h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400 
+                                  focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300 
+                                  text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 
+                                  checked:bg-blue-600 checked:border-blue-600 
+                                  hover:border-blue-800 hover:shadow-md transition-all duration-200 
+                                  disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
+                                '
+                              />
+                            )}
+                          </Table.Cell>
                       }
                       <Table.Cell className='text-center dark:text-white underline hover:cursor-pointer' onClick={() => showActa(acta.id)}>{acta.numero_acta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta.numero_causa}</Table.Cell>
