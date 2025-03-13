@@ -65,7 +65,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                       {
                         (pathname === PATH.NOTIFICATION || pathname === PATH.ACUMULADAS) &&
                           <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                            {acta.estados[0]?.nombre !== 'Pagada' && (
+                            {acta.estados[0]?.nombre !== 'Pagada' && acta.estados[0]?.nombre !== 'Terminada' && (
                               <Checkbox
                                 id={`${acta.id}`}
                                 name='acta'
