@@ -90,7 +90,7 @@ export const Layout = () => {
                     </li>
 
                     <li>
-                      <NavItem to="/unidades">Ud de Multa</NavItem>
+                      <NavItem to="/unidades">Ud. de Multa</NavItem>
                     </li>
                   </div>
                 </RoleGuard>

@@ -54,11 +54,8 @@ export const SentenciaMultiple = () => {
   }
 
   const generateUUID = () => {
-    return typeof crypto?.randomUUID === 'function'
-      ? crypto.randomUUID()
-      : `uuid-${Date.now()}-${Math.random().toString(16).slice(2)}`
-  }
-  
+    return `uuid-${Date.now()}-${Math.random().toString(16).slice(2)}`
+  }  
   
   const handleDelete = () => {
     if(!activeItem) return 
