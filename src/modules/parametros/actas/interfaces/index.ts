@@ -49,6 +49,7 @@ export interface IEstado {
     id: number
     nombre: string
     color: string
+    descripcion: string
 }
 
 export interface FormEstado {

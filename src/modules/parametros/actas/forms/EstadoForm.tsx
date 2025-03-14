@@ -8,7 +8,8 @@ import { ColorPicker } from '../components/ColorPicker'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('El nombre es requerido'),
-  color: yup.string()
+  color: yup.string(),
+  descripcion: yup.string()
 })
 
 interface Props {
@@ -31,6 +32,7 @@ const EstadoForm = ({ estado, onSucces }: Props) => {
     defaultValues: {
       nombre: estado?.nombre || '',
       color: estado?.color || DEFAULT_COLOR,
+      descripcion: estado?.descripcion || '',
     },
     resolver: yupResolver(validationSchema)
   })
@@ -56,6 +58,18 @@ const EstadoForm = ({ estado, onSucces }: Props) => {
           placeholder='Nombre'
           helperText={errors?.nombre && errors?.nombre?.message}
           color={errors?.nombre && 'failure'}
+        />
+      </div>
+
+      <div className='mb-4'>
+        <div className='mb-2 block dark:text-white'>
+          <Label color='gray' htmlFor='descripcion' value='Descripción' />
+        </div>
+        <TextInput
+          {...register('descripcion')}
+          placeholder='Descripción'
+          helperText={errors?.descripcion && errors?.descripcion?.message}
+          color={errors?.descripcion && 'failure'}
         />
       </div>
 

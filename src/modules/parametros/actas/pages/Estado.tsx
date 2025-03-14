@@ -11,6 +11,7 @@ const colums: Column[] = [
   { key: 'id', label: 'Id' },
   { key: 'nombre', label: 'Nombre' },
   { key: 'color', label: 'Color' },
+  { key: 'descripcion', label: 'Descripción' },
   { key: 'acciones', label: 'Acciones' },
 ]
 
@@ -82,6 +83,7 @@ export const Estado = () => {
                       <Table.Cell className='text-center'>
                         <span className='mx-auto block rounded-xl w-10 h-6' style={{ backgroundColor: estado.color }} />
                       </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{estado.descripcion}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Editar'>
                           <Button color='success' onClick={() => onOpenModal(estado)} className='w-8 h-8 flex items-center justify-center'>

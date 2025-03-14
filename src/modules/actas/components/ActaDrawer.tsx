@@ -73,9 +73,12 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                 {acta?.infractores.map((infractor, index) => (
                   infractor.tipo_persona === TipoPersona.FISICA
                     ? (
-                      <div key={index} className="grid grid-cols-2 gap-2">
+                      <div key={index} className="grid grid-cols-3 gap-1">
                         <div className="text-base font-semibold text-gray-900 dark:text-white">
                           <strong>Nombre y apellido:</strong> {clearNames(infractor.apellido, infractor.nombre)}
+                        </div>
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          <strong>Responsable:</strong> {infractor.responsable === 1 ? 'Sí' : 'No'}
                         </div>
                         <div className="text-base font-semibold text-gray-900 dark:text-white">
                           <strong>Documento:</strong> {infractor.documento}
@@ -93,6 +96,7 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                       </div>
                     )
                 ))}
+
               </div>
 
               <div>

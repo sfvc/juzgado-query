@@ -61,6 +61,7 @@ export interface IActa {
     propiedades:            IPropiedad[]
     preventiva:             string
     estados:                Estado[]
+    acumulable:             boolean
 }
 
 export interface Comercio {
