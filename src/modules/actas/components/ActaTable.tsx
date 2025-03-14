@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Checkbox, Pagination, Table, Tooltip } from 'flowbite-react'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
@@ -25,6 +25,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<string>('')
+  const [activeFilter, setActiveFilter] = useState<boolean>(false)
 
   const { pathname } = useLocation()
   const colums =
@@ -38,6 +39,19 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
     setActiveItem(id.toString())
     setIsOpen(true)
   }
+
+  const verifyActiveFilters = () => {
+    const filters = Object.keys(filterParams)
+    if (filters.length > 2) {
+      setActiveFilter(true)
+    } else {
+      setActiveFilter(false)
+    }
+  }
+
+  useEffect(() => {
+    verifyActiveFilters()
+  }, [filterParams])
 
   return (
     <React.Fragment>
@@ -65,20 +79,20 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                       {
                         (pathname === PATH.NOTIFICATION || pathname === PATH.ACUMULADAS) &&
                           <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
-                            {acta.estados[0]?.nombre !== 'Pagada' && acta.estados[0]?.nombre !== 'Terminada' && (
+                            { (acta.estados[0]?.nombre !== 'Pagada' && acta.estados[0]?.nombre !== 'Terminada' && activeFilter) && (
                               <Checkbox
                                 id={`${acta.id}`}
                                 name='acta'
                                 value={acta.id}
                                 onChange={(e) => checkingActa(e, acta.id)}
                                 className='
-                                  h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400 
-                                  focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300 
-                                  text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 
-                                  checked:bg-blue-600 checked:border-blue-600 
-                                  hover:border-blue-800 hover:shadow-md transition-all duration-200 
-                                  disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
-                                '
+                                    h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400 
+                                    focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300 
+                                    text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 
+                                    checked:bg-blue-600 checked:border-blue-600 
+                                    hover:border-blue-800 hover:shadow-md transition-all duration-200 
+                                    disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
+                                  '
                               />
                             )}
                           </Table.Cell>

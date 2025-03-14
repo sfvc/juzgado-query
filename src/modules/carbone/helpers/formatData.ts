@@ -26,14 +26,16 @@ const matchMakeAndModel = (vehiculo: Vehiculo): string => {
 
 const formatAddress = (domicilio: Domicilio) => {
   if ( !domicilio ) return ''
-  const domicilioFormatedd = sanitizeData(domicilio)
+  /* const domicilioFormatedd = sanitizeData(domicilio)
 
   let newDomicilio = ''
   Object.entries(domicilioFormatedd).forEach(([key, value]) => {
     newDomicilio += value
   })
 
-  return newDomicilio
+  return newDomicilio */
+
+  return `${domicilio?.calle || ''} ${domicilio?.numero || ''}`.trim()
 }
 
 export const formatData = async (data: ActuacionResponse) => {

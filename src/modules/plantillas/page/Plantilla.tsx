@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Select, Table, Tooltip } from 'flowbite-react'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, InputTable, useLoading } from '../../../shared'
 import { usePlantilla } from '../hooks/usePlantilla'
 import PlantillaForm from '../forms/PlantillaForm'
@@ -12,7 +12,6 @@ import { useModals } from '../../../shared/hooks/useModals'
 import { icons } from '../../../shared'
 import type { Column } from '../../../shared/interfaces'
 import type { IPlantilla } from '../interfaces'
-// import { getPlantillasByJuzgado } from '../services/plantilla-actions'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -28,8 +27,6 @@ export const Plantilla = () => {
   const { isOpen, openModal, closeModal } = useModals()
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPlantilla | null>(null)
-  // const [filterJuzgadoId, setFilterJuzgadoId] = useState<number | null>(null)
-  // const [filteredPlantillas, setFilteredPlantillas] = useState<IPlantilla[] | null>(null)
 
   const useAction = useLoading()
 
@@ -81,41 +78,12 @@ export const Plantilla = () => {
     window.open(DICTIONARY_PATH, '_blank')
   }
 
-  // const fetchPlantillasByJuzgado = async (juzgadoId: number | null, page: number = 1) => {
-  //   if (!juzgadoId) {
-  //     setFilteredPlantillas(null)
-  //     return
-  //   }
-  //   try {
-  //     const data = await getPlantillasByJuzgado(juzgadoId, page)
-  //     setFilteredPlantillas(data)
-  //     updateFilter('page', page)
-  //   } catch (error) {
-  //     console.error('Error al obtener plantillas por juzgado:', error)
-  //   }
-  // }  
-
-  // const handleFilterByJuzgado = (juzgadoId: number | null) => {
-  //   setFilterJuzgadoId(juzgadoId)
-  //   fetchPlantillasByJuzgado(juzgadoId)
-  // }
- 
-  // const displayedPlantillas = filteredPlantillas || plantillas
-
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Plantillas</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-
-            {/* <Select onChange={(e) => handleFilterByJuzgado(Number(e.target.value) || null)} value={filterJuzgadoId || ''}>
-              <option value='' hidden>Plantillas por Juzgado</option>
-              <option value=''>Todos los juzgados</option>
-              <option value='1'>Juzgado 1</option>
-              <option value='2'>Juzgado 2</option>
-            </Select> */}
-
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
 
             <Button type='button' color="purple" onClick={renderDictionaryPDF}>Diccionario</Button>

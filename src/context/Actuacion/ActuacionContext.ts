@@ -2,6 +2,7 @@ import { createContext } from 'react'
 
 export interface IActuacionContext {
     selectedActas: number[],
+    clearSelectedActas: () => void
     plantillaId: number | null,
     tipoActuacion: string,
     setTipoActuacion: (tipoActuacion: string) => void
@@ -13,6 +14,7 @@ export interface IActuacionContext {
 
 const initialState: IActuacionContext = {
   selectedActas: [],
+  clearSelectedActas: () => {},
   plantillaId: null,
   setPlantillaId: () => {},
   tipoActuacion: '',

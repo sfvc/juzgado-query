@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button} from 'flowbite-react'
 import { AuthContext, UserContext } from '../../../context/Auth/AuthContext'
+import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { AdvanceFilter } from './AdvanceFilter'
 import { ActaTable } from './ActaTable'
 import { actaActions } from '..'
@@ -25,6 +26,7 @@ export const ActaFilter = () => {
   const [resetForm, setResetForm] = useState<boolean>(false) 
 
   const { user } = useContext<UserContext>(AuthContext)
+  const { clearSelectedActas } = useContext(ActuacionContext)
   const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa(filters)
 
   const { data, isSuccess }  = useQuery<DataFilters>({
@@ -45,6 +47,7 @@ export const ActaFilter = () => {
     resetFilter({ page: 1, juzgado: user!.juzgado.id }) // Resetear filtros internos
     setSkipNavigate(true) // Prevenir navegación en el useEffect
     navigate({ pathname, search: '',  }) // Limpiar la URL
+    clearSelectedActas() // Borrar actas seleccionadas
 
     setResetForm(true)
   }
@@ -122,7 +125,7 @@ export const ActaFilter = () => {
         isFetching={isFetching}
         pagination={pagination} 
         formFilter={formFilter} 
-        filterParams={filterParams} 
+        filterParams={filterParams}
       />
     </React.Fragment>
   )

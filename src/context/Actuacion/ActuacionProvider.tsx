@@ -27,11 +27,14 @@ export const ActuacionProvider = ({children}: Props) => {
     setSelectedActas((prev) => [ prev[0] ]) // Al resetear dejamos solo la primera que es el acta por default
     setPlantillaId(null)
   }
+
+  const clearSelectedActas = () => setSelectedActas([])
     
   return (
     <ActuacionContext.Provider 
       value={{ 
         selectedActas, 
+        clearSelectedActas,
         checkingActa, 
         resetProvider, 
         plantillaId, 
