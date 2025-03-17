@@ -17,10 +17,21 @@ export const Dashboard = () => {
   const formatNumber = (num: number): string => {
     return num.toLocaleString('es-AR')
   }
-  
+
   const toggleSection = (section: string) => {
     setActiveSection(prev => (prev === section ? null : section))
   }
+
+  const sesionesPorJuzgado = data?.sesiones?.users?.reduce((acc, login) => {
+    if (!acc[login.juzgado]) {
+      acc[login.juzgado] = {}
+    }
+    if (!acc[login.juzgado][login.username]) {
+      acc[login.juzgado][login.username] = { ...login, horarios: [] }
+    }
+    acc[login.juzgado][login.username].horarios.push(login.created_at)
+    return acc
+  }, {})
 
   if (isLoading) return <Loading />
 
@@ -67,10 +78,9 @@ export const Dashboard = () => {
           <Button
             key={section}
             onClick={() => toggleSection(section)}
-            className={`px-6 py-2 font-semibold rounded-lg shadow-md ${
-              activeSection === section
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-300 dark:bg-gray-700 dark:text-white text-black hover:text-white'
+            className={`px-6 py-2 font-semibold rounded-lg shadow-md ${activeSection === section
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-300 dark:bg-gray-700 dark:text-white text-black hover:text-white'
             }`}
           >
             {section}
@@ -147,10 +157,16 @@ export const Dashboard = () => {
       {/* Sección de Sesiones Iniciadas */}
       {activeSection === 'Sesiones Iniciadas' && (
         <section className="mt-4">
-          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">Sesiones Iniciadas</h3>
+          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">
+            Sesiones Iniciadas (
+            {Object.values(sesionesPorJuzgado).reduce((total, usuarios) => {
+              return total + Object.keys(usuarios).length
+            }, 0)}
+            )
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[26rem] overflow-y-auto">
-            {['Juzgado de Faltas N° 1', 'Juzgado de Faltas N° 2'].map((juzgado, index) => (
-              <div key={index}>
+            {sesionesPorJuzgado && Object.entries(sesionesPorJuzgado).map(([juzgado, usuarios]) => (
+              <div key={juzgado}>
                 <h4 className="text-lg font-semibold text-gray-200 bg-blue-600 rounded-md py-2 text-center mb-3">
                   {juzgado}
                 </h4>
@@ -158,24 +174,20 @@ export const Dashboard = () => {
                   <Table.Head>
                     <Table.HeadCell>Usuario</Table.HeadCell>
                     <Table.HeadCell>Nombre</Table.HeadCell>
-                    <Table.HeadCell>Fecha y Hora</Table.HeadCell>
+                    <Table.HeadCell>Horarios</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y dark:bg-gray-800">
-                    {data?.sesiones?.users?.length ? (
-                      data.sesiones.users
-                        .filter((login: User) => login.juzgado === juzgado)
-                        .map((login: User) => (
-                          <Table.Row key={login.username}>
-                            <Table.Cell>{login.username}</Table.Cell>
-                            <Table.Cell>{login.nombre}</Table.Cell>
-                            <Table.Cell>{login.created_at}</Table.Cell>
-                          </Table.Row>
-                        ))
-                    ) : (
-                      <tr>
-                        <td colSpan={3} className="text-center py-4">No se encontraron resultados</td>
-                      </tr>
-                    )}
+                    {Object.values(usuarios).map((usuario: any) => (
+                      <Table.Row key={usuario.username}>
+                        <Table.Cell>{usuario.username}</Table.Cell>
+                        <Table.Cell>{usuario.nombre}</Table.Cell>
+                        <Table.Cell>
+                          {usuario.horarios.map((hora, idx) => (
+                            <div key={idx}>{hora}</div>
+                          ))}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
                   </Table.Body>
                 </Table>
               </div>
