@@ -74,14 +74,15 @@ export const Dashboard = () => {
       </div>
 
       {/* Botones de Secciones */}
-      <div className="flex justify-center gap-4 mb-4 mt-4">
+      <div className="flex flex-wrap justify-center gap-4 mb-4 mt-4 sm:items-center">
         {['Recaudacion', 'Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
           <Button
             key={section}
             onClick={() => toggleSection(section)}
-            className={`px-6 py-2 font-semibold rounded-lg shadow-md ${activeSection === section
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-300 dark:bg-gray-700 dark:text-white text-black hover:text-white'
+            className={`min-w-[150px] px-6 py-2 font-semibold rounded-lg shadow-md text-center ${
+              activeSection === section
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 dark:bg-gray-700 dark:text-white text-black hover:text-white'
             }`}
           >
             {section}
