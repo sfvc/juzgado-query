@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { Card, Table, Button } from 'flowbite-react'
-import { CambioEstado, IDashboard, User } from '../interfaces'
+import { CambioEstado, IDashboard } from '../interfaces'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardActions } from '..'
 import { Loading } from '../../../shared'
