@@ -166,33 +166,34 @@ export const Dashboard = () => {
             )
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[26rem] overflow-y-auto">
-            {sesionesPorJuzgado && Object.entries(sesionesPorJuzgado).map(([juzgado, usuarios]) => (
-              <div key={juzgado}>
-                <h4 className="text-lg font-semibold text-gray-200 bg-blue-600 rounded-md py-2 text-center mb-3">
-                  {juzgado}
-                </h4>
-                <Table hoverable className="border rounded-lg shadow-lg">
-                  <Table.Head>
-                    <Table.HeadCell>Usuario</Table.HeadCell>
-                    <Table.HeadCell>Nombre</Table.HeadCell>
-                    <Table.HeadCell>Horarios</Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body className="divide-y dark:bg-gray-800">
-                    {Object.values(usuarios).map((usuario: any) => (
-                      <Table.Row key={usuario.username}>
-                        <Table.Cell>{usuario.username}</Table.Cell>
-                        <Table.Cell>{usuario.nombre}</Table.Cell>
-                        <Table.Cell>
-                          {usuario.horarios.map((hora, idx) => (
-                            <div key={idx}>{hora}</div>
-                          ))}
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </div>
-            ))}
+            {sesionesPorJuzgado &&
+              Object.entries(sesionesPorJuzgado).map(([juzgado, usuarios]) => (
+                <div key={juzgado}>
+                  <h4 className="text-lg font-semibold text-gray-200 bg-blue-600 rounded-md py-2 text-center mb-3">
+                    {juzgado} ({Object.keys(usuarios).length})
+                  </h4>
+                  <Table hoverable className="border rounded-lg shadow-lg">
+                    <Table.Head>
+                      <Table.HeadCell>Usuario</Table.HeadCell>
+                      <Table.HeadCell>Nombre</Table.HeadCell>
+                      <Table.HeadCell>Horarios</Table.HeadCell>
+                    </Table.Head>
+                    <Table.Body className="divide-y dark:bg-gray-800">
+                      {Object.values(usuarios).map((usuario: any) => (
+                        <Table.Row key={usuario.username}>
+                          <Table.Cell>{usuario.username}</Table.Cell>
+                          <Table.Cell>{usuario.nombre}</Table.Cell>
+                          <Table.Cell>
+                            {usuario.horarios.map((hora, idx) => (
+                              <div key={idx}>{hora}</div>
+                            ))}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </div>
+              ))}
           </div>
         </section>
       )}
