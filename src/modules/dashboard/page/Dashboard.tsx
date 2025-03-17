@@ -170,7 +170,7 @@ export const Dashboard = () => {
               Object.entries(sesionesPorJuzgado).map(([juzgado, usuarios]) => (
                 <div key={juzgado}>
                   <h4 className="text-lg font-semibold text-gray-200 bg-blue-600 rounded-md py-2 text-center mb-3">
-                    {juzgado} ({Object.keys(usuarios).length})
+                    {juzgado} <span className='text-green-300'>({Object.keys(usuarios).length})</span>
                   </h4>
                   <Table hoverable className="border rounded-lg shadow-lg">
                     <Table.Head>
