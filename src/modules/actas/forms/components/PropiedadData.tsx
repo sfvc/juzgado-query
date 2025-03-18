@@ -24,14 +24,14 @@ interface Props {
 export const PropiedadData = ({ data }: Props) => {
   const { setValue } = useFormContext<IActaForm>() 
   const [propiedades, setPropiedades] = useState<IPropiedad[]>(data || [])
+  const [matriculaInput, setMatriculaInput] = useState<string>('')
   
-  // Agregar propiedad al listado de propiedades
   const addPropiedad = (propiedad: IPropiedad) => {
     if(!propiedad) return
     const newPropiedades = [...propiedades, propiedad]
 
     setPropiedades(newPropiedades)
-    setValue('propiedades', newPropiedades) // Actualizar estado del formulario
+    setValue('propiedades', newPropiedades)
   }
 
   const removePropiedad = (id: number) => {
@@ -41,7 +41,26 @@ export const PropiedadData = ({ data }: Props) => {
     setValue('propiedades', propiedadesUpdate)
   }
 
-  // Buscardor de vehiculos
+  const formatMatriculaSearch = (value: string) => {
+    const cleanedValue = value.replace(/[^\d]/g, '')
+    if (cleanedValue.length <= 10) {
+      // Formato parcial basado en la longitud
+      if (cleanedValue.length > 2 && cleanedValue.length <= 4) {
+        return cleanedValue.replace(/^(\d{2})(\d*)$/, '$1-$2')
+      } else if (cleanedValue.length > 4 && cleanedValue.length <= 6) {
+        return cleanedValue.replace(/^(\d{2})(\d{2})(\d*)$/, '$1-$2-$3')
+      } else if (cleanedValue.length > 6) {
+        return cleanedValue.replace(/^(\d{2})(\d{2})(\d{2})(\d*)$/, '$1-$2-$3-$4')
+      }
+      return cleanedValue
+    }
+    return cleanedValue.slice(0, 10).replace(/^(\d{2})(\d{2})(\d{2})(\d{4})$/, '$1-$2-$3-$4')
+  }
+
+  const handleInputChange = (value: string) => {
+    setMatriculaInput(value)
+  }
+  
   const handleSearch = async (query: string) => propiedadActions.getPropiedadByFilter(query)
   const handleSelect = (propiedad: IPropiedad) => addPropiedad(propiedad)
   
@@ -53,14 +72,19 @@ export const PropiedadData = ({ data }: Props) => {
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
         <SearchInput<IPropiedad>
-          label="Numero de Matricula Catastral"
+          label="Número de Matricula Catastral"
           placeholder="Buscar por matricula"
           onSearch={handleSearch}
           onSelect={handleSelect}
+          formatInputValue={formatMatriculaSearch}
+          onInputChange={handleInputChange}
+          inputValue={matriculaInput}
           renderItem={(item) => (
             <div><strong>{formatMatricula(item.matricula_catastral)}</strong> - {item.propietario || 'SIN PROPIETARIO'}</div>
           )}
-          renderInput={(item) => { return `${formatMatricula(item.matricula_catastral)} - ${item.propietario || 'SIN PROPIETARIO'}`} }
+          renderInput={(item) => { 
+            return `${formatMatricula(item.matricula_catastral)} - ${item.propietario || 'SIN PROPIETARIO'}` 
+          }}
         />
 
         <div className='flex items-end mb-4'><CreatePropiedad /></div>

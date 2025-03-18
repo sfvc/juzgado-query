@@ -27,14 +27,14 @@ export const PersonaInput = ({ setValue, persona }: Props) => {
           {
             (item.tipo_persona === TipoPersona.FISICA) 
               ? <span><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DNI'}</span>
-              : <span><strong>{item.razon_social}</strong> - {item.cuit || 'SIN CUIT'}</span>
+              : <span><strong>{item?.razon_social || item?.nombre}</strong> - {item.cuit || 'SIN CUIT'}</span>
           }
         </div>
       )}
       renderInput={(item) => { 
         return (item.tipo_persona === TipoPersona.FISICA) 
           ? `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`
-          : `${item.razon_social} - ${item.razon_social|| 'SIN CUIT'}` }
+          : `${item?.razon_social || item?.nombre} - ${item?.cuit|| 'SIN CUIT'}` }
       }
       resetInput={() => setValue('persona_id', 0)}
       defaultValue={clearNames(persona?.apellido, persona?.nombre, true)}

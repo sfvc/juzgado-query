@@ -8,7 +8,7 @@ interface SearchItem {
 }
 
 interface SearchInputProps<T extends SearchItem> {
-  label?: React.ReactNode  // Cambiado de string a React.ReactNode
+  label?: React.ReactNode
   placeholder?: string
   onSearch: (query: string) => Promise<T[]>
   onSelect: (item: T) => void
@@ -19,7 +19,10 @@ interface SearchInputProps<T extends SearchItem> {
   resetForm?: boolean,
   defaultValue?: string,
   helperText?: string,
-  color?: string
+  color?: string,
+  formatInputValue?: (value: string) => string,
+  onInputChange?: (value: string) => void,
+  inputValue?: string
 }
 
 export function SearchInput<T extends SearchItem>({
@@ -34,12 +37,21 @@ export function SearchInput<T extends SearchItem>({
   resetForm,
   defaultValue,
   helperText,
-  color
+  color,
+  formatInputValue,
+  onInputChange,
+  inputValue
 }: SearchInputProps<T>) {
-  const [search, setSearch] = useState<string>(defaultValue || '')
+  const [search, setSearch] = useState<string>(inputValue !== undefined ? inputValue : (defaultValue || ''))
   const [data, setData] = useState<T[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [showResults, setShowResults] = useState(false)
+
+  useEffect(() => {
+    if (inputValue !== undefined) {
+      setSearch(inputValue)
+    }
+  }, [inputValue])
 
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
@@ -63,21 +75,45 @@ export function SearchInput<T extends SearchItem>({
   )
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setSearch(value)
+    let { value } = e.target
+  
+    if (formatInputValue) {
+      value = formatInputValue(value)
+    }
+    
+    if (onInputChange) {
+      onInputChange(value)
+    } else {
+      setSearch(value)
+    }
+    
     setShowResults(true)
     debouncedSearch(value)
   }
 
   const handleSelect = (item: T) => {
+    const inputValue = renderInput(item)
+    
+    if (onInputChange) {
+      onInputChange(inputValue)
+    } else {
+      setSearch(inputValue)
+    }
+    
     onSelect(item)
-    setSearch(renderInput(item))
     setShowResults(false)
     setData([])
   }
 
   const onFocusInput = () => {
-    setSearch('')
+    const emptyValue = ''
+    
+    if (onInputChange) {
+      onInputChange(emptyValue)
+    } else {
+      setSearch(emptyValue)
+    }
+    
     if (resetInput) resetInput()
   }
 
@@ -95,7 +131,7 @@ export function SearchInput<T extends SearchItem>({
           name="search"
           type="text"
           onChange={handleSearch}
-          value={search}
+          value={inputValue !== undefined ? inputValue : search}
           placeholder={placeholder}
           className={`${
             color === 'failure' ? 'text-red-500 bg-white border border-red-500 placeholder-red-500 rounded-lg' : ''
@@ -108,7 +144,7 @@ export function SearchInput<T extends SearchItem>({
         </div>
       </div>
 
-      {showResults && search.length >= 2 && (
+      {showResults && (inputValue || search).length >= 2 && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
           {data.length > 0 ? (
             data.map((item) => (
