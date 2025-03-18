@@ -5,7 +5,6 @@ import { apiJuzgado } from '../../../api/config'
 import { formatData } from '../helpers/formatData'
 import { cleanFileName } from '../helpers/cleanFileName'
 import { getFileExtension } from '../helpers/getFileExtension'
-import type { User } from '../../../auth/interfaces/auth'
 import type { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
 import { ActuacionResponse } from '../../actuaciones/interfaces/actuacion'
 
@@ -111,14 +110,14 @@ export const showFilePDF = async (data: any) => {
 }
     
 // Descarga el word con los datos inyectados
-export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, user: User) => { 
+export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, tipo: string) => { 
   const path = item?.plantilla?.path
   const itemId = item?.id
 
   try {
     // const actaFormated = await formatData(acta, user, itemId)
 
-    const { data: actuaciones } = await apiJuzgado.post('actuaciones-acumuladas', { actuacion_id: itemId })
+    const { data: actuaciones } = await apiJuzgado.post('actuaciones-acumuladas', { id: itemId, tipo })
     const data: ActuacionResponse = actuaciones.data
       
     const actaFormated = await formatData(data)

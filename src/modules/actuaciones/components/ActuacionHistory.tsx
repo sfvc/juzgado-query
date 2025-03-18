@@ -1,7 +1,6 @@
-import { useContext, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Alert, Button, FileInput, Label, Modal, Spinner, Table, Tooltip } from 'flowbite-react'
-import { AuthContext } from '../../../context/Auth/AuthContext'
 import { icons } from '../../../shared'
 import { usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
@@ -28,7 +27,6 @@ interface Props {
 }
 
 export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
-  const { user } = useContext(AuthContext)
   const { deleteActuacionHistory } = useActuacion()
   const { uploadFile, downloadWord } = useUploadFile()
   const { downloadWordS3, convertToPDF, useAction } = usePdf()
@@ -58,11 +56,16 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     const file = e.target.files![0]
     if (!file) return
 
-    await uploadFile.mutateAsync({ file, item: { ...actuacion, numero_acta: acta.numero_acta }, property: 'actuacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })  
+    await uploadFile.mutateAsync({ 
+      file, 
+      item: { ...actuacion, numero_acta: acta.numero_acta }, 
+      property: 'actuacion_id', 
+      queryKey: ['acta-actuacion',{id: acta.id}] 
+    })  
   }
 
   const onDownloadWord = async () => {
-    downloadWord.mutate({ item: actuacion, acta, user: user! })
+    downloadWord.mutate({ item: actuacion, acta, tipo: 'ACTUACION' })
   }
 
   const onDeleteActuacion = async () => {

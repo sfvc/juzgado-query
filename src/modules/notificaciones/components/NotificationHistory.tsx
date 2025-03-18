@@ -62,8 +62,12 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
     uploadFile.mutate({ file, item: { ...notificacion, numero_acta: acta.numero_acta }, property: 'notificacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
   }
 
+  // const onDownloadWord = async () => {
+  //   downloadWord.mutate({ item: notificacion, acta, user: user! })
+  // }
+
   const onDownloadWord = async () => {
-    downloadWord.mutate({ item: notificacion, acta, user: user! })
+    downloadWord.mutate({ item: notificacion, acta, tipo: 'NOTIFICACION' })
   }
 
   const onDeleteNotificacion = async () => {

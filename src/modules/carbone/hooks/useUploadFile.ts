@@ -2,7 +2,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { carboneActions } from '..'
 import { toast } from 'react-toastify'
-import { User } from '../../../auth/interfaces/auth'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 
@@ -12,8 +11,8 @@ export const useUploadFile = () => {
 
   /* Descargar archivo word desde carbone */
   const downloadWord = useMutation({
-    mutationFn: ({ item, acta, user }: { item: any, acta: any, user: User }) => 
-      carboneActions.downloadWordFile(item, acta, user),
+    mutationFn: ({ item, acta, tipo }: { item: any, acta: any, tipo: string }) => 
+      carboneActions.downloadWordFile(item, acta, tipo),
     onError: (error) => {
       toast.error('Error al descargar el archivo')
       console.log(error)
