@@ -11,6 +11,7 @@ import { ACTUACION } from '../../../shared/constants'
 import { ConceptoForm } from './ConceptoForm'
 import type { Concepto, ISentenciaForm, ITotal } from '../interfaces/sentencia'
 import type { InfraccionesCometida } from '../interfaces'
+import { toast } from 'react-toastify'
 
 const DISCOUNT = 40
 const SURCHARGE = 0
@@ -86,11 +87,18 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
   }
 
   const onSubmit = async () => {
+    const invalidConcepto = entries.some(concepto => !concepto || !concepto.concepto || concepto.monto === null)
+  
+    if (invalidConcepto) {
+      toast.error('Terminá de asignar el concepto.')
+      return
+    }
+  
     if (!user) {
       console.error('No se encontro el usuario.')
       return
     }
-
+  
     const form: ISentenciaForm = {
       sub_total,
       total,
@@ -102,9 +110,9 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
       tipo_actuacion: ACTUACION.SENTENCIA,
       user_id: user.id,
       conceptos: entries,
-      ...( actas.length === 1 && { infracciones } ) // Si la actuación es simple agrega los articulos, si es multiple no agrega. 
+      ...( actas.length === 1 && { infracciones } ) 
     }
-
+  
     await createSentencia.mutateAsync(form)
   }
 

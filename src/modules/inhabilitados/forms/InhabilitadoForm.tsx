@@ -8,16 +8,31 @@ import { PersonaInput } from '../components/PersonaInput'
 import { icons } from '../../../shared'
 import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado, IInhabilitado } from '../interfaces'
+import { CreatePersona } from '../../actas/forms/integrations/CreatePersona'
+import { useState } from 'react'
 
 
 const validationSchema = yup.object().shape({
   persona_id: yup.number().transform(value => (isNaN(value) || !value) ? null : value).required('La persona es requerida.'),
-  juzgado_id: yup.number().transform(value => isNaN(value) ? null : value).required('El juzgado es requerido'),
+  juzgado_id: yup.mixed().required('El juzgado es requerido'),
+  entidad: yup.string().when('juzgado_id', {
+    is: 'otros',
+    then: (schema) => schema.required('Debe ingresar la entidad'),
+    otherwise: (schema) => schema.notRequired()
+  }),
   fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
   fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
-  numero_acta: yup.string().required('El número del acta es requerido'),
+  numero_acta: yup.string().when('juzgado_id', {
+    is: (val: string) => val !== 'otros',
+    then: (schema) => schema.required('El número del acta es requerido'),
+    otherwise: (schema) => schema.notRequired()
+  }),
   instrumento: yup.string(),
-  causa: yup.string().required('La causa es requerida')
+  causa: yup.string().when('juzgado_id', {
+    is: (val: string) => val !== 'otros',
+    then: (schema) => schema.required('La causa es requerida'),
+    otherwise: (schema) => schema.notRequired()
+  })
 })
 
 interface Props {
@@ -28,6 +43,8 @@ interface Props {
 const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
   const { juzgados, isFetching } = useJuzgado()
   const { createInhabilitado, updateInhabilitado } = useInhabilitado()
+  const [mostrarEntidad, setMostrarEntidad] = useState(false)
+  const [mostrarCausa, setMostrarCausa] = useState(true)
 
   const {
     register,
@@ -38,6 +55,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
     defaultValues: {
       persona_id: inhabilitado?.persona.id,
       juzgado_id: inhabilitado?.juzgado.id,
+      entidad: inhabilitado?.entidad,
       fecha_desde: inhabilitado?.fecha_desde || '',
       fecha_hasta: inhabilitado?.fecha_hasta || '',
       numero_acta: inhabilitado?.acta?.numero_acta || '',
@@ -58,7 +76,16 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-        <PersonaInput setValue={setValue} persona={inhabilitado?.persona}/>
+        <div className='mb-4'>
+          <div className='flex gap-2'>
+            <div className='flex-grow'>
+              <PersonaInput setValue={setValue} persona={inhabilitado?.persona} />
+            </div>
+            <div className='mt-8'>
+              <CreatePersona />
+            </div>
+          </div>
+        </div>
 
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
@@ -89,20 +116,43 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
             <Label htmlFor='juzgado_id' value='Juzgado' /><strong className='obligatorio'>(*)</strong>
           </div>
           <Select
-            {...register('juzgado_id', { valueAsNumber: true })}
-            helperText={errors?.juzgado_id && errors.juzgado_id.message}
+            {...register('juzgado_id')}
+            onChange={(e) => {
+              const value = e.target.value
+              setValue('juzgado_id', value)
+              setMostrarEntidad(value === 'otros')
+              setMostrarCausa(value !== 'otros')
+            }}
+            helperText={errors?.juzgado_id?.message}
             color={errors?.juzgado_id && 'failure'}
           >
             <option value='' hidden>Seleccione el juzgado</option>
             {juzgados?.map((juzgado: IJuzgado) => (
               <option key={juzgado.id} value={juzgado.id}>{juzgado.nombre}</option>
             ))}
+            {/* <option value='otros'>Otros</option> */}
           </Select>
         </div>
 
+        {mostrarEntidad && (
+          <div className='mb-4'>
+            <div className='mb-2 block'>
+              <Label htmlFor='entidad' value='Nombre de la entidad' /><strong className='obligatorio'>(*)</strong>
+            </div>
+            <TextInput
+              {...register('entidad')}
+              type='text'
+              placeholder='Ingrese el nombre de la entidad'
+              helperText={errors?.entidad?.message}
+              color={errors?.entidad && 'failure'}
+            />
+          </div>
+        )}
+
         <div className='mb-4'>
           <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='numero_acta' value='Nro. de Acta' /><strong className='obligatorio'>(*)</strong>
+            <Label color='gray' htmlFor='numero_acta' value='Nro. de Acta' />
+            {!mostrarEntidad && <strong className='obligatorio'>(*)</strong>}
           </div>
           <TextInput
             {...register('numero_acta')}
@@ -126,17 +176,20 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           />
         </div>
 
-        <div className='mb-4'>
-          <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='causa' value='Causa de inhabilitación' /><strong className='obligatorio'>(*)</strong>
+        {mostrarCausa && (
+          <div className='mb-4'>
+            <div className='mb-2 block dark:text-white'>
+              <Label color='gray' htmlFor='causa' value='Causa de inhabilitación' />
+              <strong className='obligatorio'>(*)</strong>
+            </div>
+            <Textarea
+              {...register('causa')}
+              placeholder='Ingrese la causa'
+              helperText={errors?.causa && errors?.causa?.message} 
+              color={errors?.causa && 'failure'}
+            />
           </div>
-          <Textarea
-            {...register('causa')}
-            placeholder='Ingrese la causa'
-            helperText={errors?.causa && errors?.causa?.message} 
-            color={errors?.causa && 'failure'}
-          />
-        </div>  
+        )}
       </div>
 
       {
