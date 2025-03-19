@@ -6,15 +6,12 @@ import type {
   Vehiculo,
   Domicilio
 } from '../../actuaciones/interfaces/actuacion'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 const f = new Date()
 const añoActual = f.getFullYear()
-const fechaActual = f.toLocaleDateString('es-AR')
-const horaActual = f.toLocaleTimeString('es-AR', {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false
-})
+const fechaActual = f.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+const horaActual = f.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false })
 
 const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   if (!vehiculo) return ''
@@ -62,13 +59,13 @@ export const formatData = async (data: ActuacionResponse) => {
 
   const numeroActa = actas.map(acta => acta.numero_acta).join(', ')
   const numeroCausa = actas.map(acta => acta.numero_causa).join(', ')
-  const fechaActa = actas.map(acta => acta.fecha).join(', ')
+  const fechaActa = actas.map(acta => formatDate(acta?.fecha || '-')).join(', ')
   const actaHs = actas.map(acta => acta.hora).join(', ')
   const actaObservaciones = actas.map(acta => acta.observaciones).join(', ')
   const lugar = actas.map(acta => acta.lugar).join(', ')
 
   const infractorNombreApellido = infractores?.map(infractor => clearNames(infractor.apellido, infractor.nombre)).join(', ')
-  const infractorDocumento = infractores?.map(infractor => infractor.documento).join(', ')
+  const infractorDocumento = infractores?.map(infractor => infractor.documento || infractor.cuit).join(', ')
   const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
   const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
   
