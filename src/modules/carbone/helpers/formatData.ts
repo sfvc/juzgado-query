@@ -72,11 +72,11 @@ export const formatData = async (data: ActuacionResponse) => {
   const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
   const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
   
+  // const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
+  // const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
+  // const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre).join(', ')
+  // const color = vehiculos?.map(vehiculo => vehiculo?.color?.nombre).join(', ')
   const patente = vehiculos?.map(vehiculo => vehiculo.dominio).join(', ')
-  const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
-  const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
-  const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre).join(', ')
-  const color = vehiculos?.map(vehiculo => vehiculo?.color?.nombre).join(', ')
   const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo.numero_taxi_remis).join(', ')
   const vehiculoFormatted = vehiculos?.map(vehiculo => matchMakeAndModel(vehiculo)).join(', ')
 
@@ -124,11 +124,11 @@ export const formatData = async (data: ActuacionResponse) => {
     infractorDomicilioCompleto,                 //** Formato de domicilio [Calle - Numero, Barrio, Localidad, Departamento] */
 
     // Vehichulo
+    // chasis,
+    // motor,
+    // tipo,
+    // color,
     patente,
-    chasis,
-    motor,
-    tipo,
-    color,
     numeroTaxiRemis,
     vehiculo: vehiculoFormatted,                //** Formato de vehiculo [Marca - Modelo] */
 
@@ -155,6 +155,10 @@ export const formatData = async (data: ActuacionResponse) => {
 
     // Notificaciones
     fechaNotificacion
+
+    // TODO: Agregar las variables
+    // fechaSentencia,
+    // titular
   }
 
   return sanitizeData(dataFormatted) 
