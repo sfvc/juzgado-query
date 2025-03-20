@@ -16,6 +16,7 @@ const colums: Column[] = [
   { key: 'razon_social', label: 'Razon Social' },
   { key: 'numero_documento', label: 'Documento' },
   { key: 'correo', label: 'Correo' },
+  { key: 'telefono', label: 'Teléfono' },
   { key: 'tipo_persona', label: 'Tipo Persona' },
   { key: 'acciones', label: 'Acciones' },
 ]
@@ -82,6 +83,7 @@ export const Persona = () => {
                       <Table.Cell className='text-center dark:text-white'>{persona.razon_social || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.numero_documento|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.email|| '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{persona.telefono|| '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{persona.tipo_persona}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Editar'>

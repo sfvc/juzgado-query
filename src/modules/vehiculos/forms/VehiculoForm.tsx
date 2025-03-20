@@ -32,7 +32,7 @@ interface Props {
 const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
   const { createVehiculo, updateVehiculo } = useVehiculo()
-  const [showInputTaxi, setShowInputTaxi] = useState<boolean>(false)
+  const [showInputTaxi, setShowInputTaxi] = useState<boolean>(vehiculo?.tipo?.id === SERVICIO_PUBLICO_ID)
   
   const { data, isLoading } = useQuery({
     queryKey: ['vehiculos-data'],
