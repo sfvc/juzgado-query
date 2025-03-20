@@ -159,7 +159,7 @@ export const PrivateRoute = [
 
       {
         path: '/acta/obrasparticulares/editar/:id',
-        element: <ActaBromatologia />
+        element: <ActaObrasParticulares />
       },
 
       // Estados
