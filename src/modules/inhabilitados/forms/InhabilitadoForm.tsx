@@ -9,27 +9,27 @@ import { icons } from '../../../shared'
 import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado, IInhabilitado } from '../interfaces'
 import { CreatePersona } from '../../actas/forms/integrations/CreatePersona'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 const validationSchema = yup.object().shape({
   persona_id: yup.number().transform(value => (isNaN(value) || !value) ? null : value).required('La persona es requerida.'),
   juzgado_id: yup.mixed().required('El juzgado es requerido'),
   entidad: yup.string().when('juzgado_id', {
-    is: 'otros',
+    is: '3',
     then: (schema) => schema.required('Debe ingresar la entidad'),
     otherwise: (schema) => schema.notRequired()
   }),
   fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
   fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
   numero_acta: yup.string().when('juzgado_id', {
-    is: (val: string) => val !== 'otros',
+    is: (val: string) => val !== '3',
     then: (schema) => schema.required('El número del acta es requerido'),
     otherwise: (schema) => schema.notRequired()
   }),
   instrumento: yup.string(),
   causa: yup.string().when('juzgado_id', {
-    is: (val: string) => val !== 'otros',
+    is: (val: string) => val !== '3',
     then: (schema) => schema.required('La causa es requerida'),
     otherwise: (schema) => schema.notRequired()
   })
@@ -70,6 +70,16 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
     else await createInhabilitado.mutateAsync(data)
     onSucces()
   }
+
+  useEffect(() => {
+    if (inhabilitado?.juzgado.id === 3) {
+      setMostrarEntidad(true)
+      setMostrarCausa(false)
+    } else {
+      setMostrarEntidad(false)
+      setMostrarCausa(true)
+    }
+  }, [inhabilitado?.juzgado.id])
 
   if (isFetching) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
@@ -120,8 +130,8 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
             onChange={(e) => {
               const value = e.target.value
               setValue('juzgado_id', value)
-              setMostrarEntidad(value === 'otros')
-              setMostrarCausa(value !== 'otros')
+              setMostrarEntidad(value === '3')
+              setMostrarCausa(value !== '3')
             }}
             helperText={errors?.juzgado_id?.message}
             color={errors?.juzgado_id && 'failure'}
@@ -130,7 +140,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
             {juzgados?.map((juzgado: IJuzgado) => (
               <option key={juzgado.id} value={juzgado.id}>{juzgado.nombre}</option>
             ))}
-            {/* <option value='otros'>Otros</option> */}
+            <option value='3'>Otros</option>
           </Select>
         </div>
 

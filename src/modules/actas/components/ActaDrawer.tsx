@@ -1,4 +1,3 @@
-
 import { Drawer } from 'flowbite-react'
 import { useActaById } from '../hooks/useActaById'
 import { clearNames } from '../../../shared'
@@ -110,34 +109,66 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                 ))}
               </div>
 
-              <div>
-                <h4 className="text-xl font-semibold text-blue-500 mb-4">Vehículo</h4>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Titular:</strong> {clearNames(acta?.vehiculo?.titular?.apellido, acta?.vehiculo?.titular?.nombre)}
-                  </div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Dominio:</strong> {acta?.vehiculo?.dominio || '-'}
-                  </div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Marca:</strong> {acta?.vehiculo?.marca?.nombre || '-'}
-                  </div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Modelo:</strong> {acta?.vehiculo?.modelo || '-'}
-                  </div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Tipo:</strong> {acta?.vehiculo?.tipo?.nombre || '-'}
-                  </div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">
-                    <strong>Color:</strong> {acta?.vehiculo?.color?.nombre || '-'}
+              {acta?.tipo_acta === 'TRANSITO' && (
+                <div>
+                  <h4 className="text-xl font-semibold text-blue-500 mb-4">Vehículo</h4>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Titular:</strong> {clearNames(acta?.vehiculo?.titular?.apellido, acta?.vehiculo?.titular?.nombre)}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Dominio:</strong> {acta?.vehiculo?.dominio || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Marca:</strong> {acta?.vehiculo?.marca?.nombre || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Modelo:</strong> {acta?.vehiculo?.modelo || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Tipo:</strong> {acta?.vehiculo?.tipo?.nombre || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Color:</strong> {acta?.vehiculo?.color?.nombre || '-'}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {acta?.tipo_acta === 'BROMATOLOGIA' && (
+                <div>
+                  <h4 className="text-xl font-semibold text-blue-500 mb-4">Comercio</h4>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Nombre de Fantasia:</strong> {acta?.comercio?.nombre_fantasia || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Rubro:</strong> {acta?.comercio?.rubros?.[0]?.nombre || '-'}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {(acta?.tipo_acta === 'INSPECCION' || acta?.tipo_acta === 'OBRAS PARTICULARES') && (
+                <div>
+                  <h4 className="text-xl font-semibold text-blue-500 mb-4">Propiedad o Inmueble</h4>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Matrícula Catastral:</strong> {acta?.propiedades?.[0]?.matricula_catastral || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Propietario:</strong> {acta?.propiedades?.[0]?.propietario || '-'}
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <strong>Domicilio:</strong> {acta?.propiedades?.[0]?.domicilio || '-'}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </Drawer.Items>
       </Drawer>
-
     </>
   )
 }

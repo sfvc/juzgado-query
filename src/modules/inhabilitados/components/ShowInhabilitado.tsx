@@ -77,12 +77,21 @@ export const ShowInhabilitado = ({inhabilitado, closeModal}: Props) => {
             </span>
           </li>
 
-          <li className='flex items-center space-x-1'>
-            <icons.Check />
-            <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
-              <strong>Causa de Inhabilitación:</strong> {inhabilitado?.causa}
-            </span>
-          </li>
+          {inhabilitado?.entidad ? (
+            <li className='flex items-center space-x-1'>
+              <icons.Check />
+              <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+                <strong>Entidad:</strong> {inhabilitado.entidad}
+              </span>
+            </li>
+          ) : (
+            <li className='flex items-center space-x-1'>
+              <icons.Check />
+              <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+                <strong>Causa de Inhabilitación:</strong> {inhabilitado?.causa}
+              </span>
+            </li>
+          )}
 
           <li className='flex items-center space-x-1'>
             <icons.Check />
