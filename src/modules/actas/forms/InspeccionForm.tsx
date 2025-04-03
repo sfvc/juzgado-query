@@ -9,6 +9,7 @@ import { ACTAS } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
 import type { IActaForm } from '../interfaces/form-interfaces'
 import type { IActa } from '../interfaces'
+import { ComercioData } from './components/ComercioData'
 
 interface Props {
   acta: IActa | null | undefined
@@ -36,6 +37,8 @@ export const InspeccionForm = ({ acta }: Props) => {
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
       propiedades: acta?.propiedades || [],
+      tipo_rubros: acta?.comercio?.rubros || [],
+      nombre_fantasia: acta?.comercio?.nombre_fantasia || ''
     },
     resolver: yupResolver(transitoSchema),
   })
@@ -54,6 +57,7 @@ export const InspeccionForm = ({ acta }: Props) => {
           <ActaData tipoActa={ACTAS.INSPECCION}/>
           <InfractorData data={acta?.infractores} />
           <PropiedadData data={acta?.propiedades} />
+          <ComercioData data={acta?.comercio} />
           <InfraccionData />
           <ArticuloData data={acta?.infracciones_cometidas} />
 

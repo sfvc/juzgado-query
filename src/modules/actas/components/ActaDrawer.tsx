@@ -135,7 +135,7 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                 </div>
               )}
 
-              {acta?.tipo_acta === 'BROMATOLOGIA' && (
+              {(acta?.tipo_acta === 'BROMATOLOGIA' || acta?.tipo_acta === 'INSPECCION') && (
                 <div>
                   <h4 className="text-xl font-semibold text-blue-500 mb-4">Comercio</h4>
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -143,7 +143,9 @@ export const ActaDrawer = ({ id, isOpen, setIsOpen }: Props) => {
                       <strong>Nombre de Fantasia:</strong> {acta?.comercio?.nombre_fantasia || '-'}
                     </div>
                     <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      <strong>Rubro:</strong> {acta?.comercio?.rubros?.[0]?.nombre || '-'}
+                      <strong>Rubros:</strong> {acta?.comercio?.rubros?.length > 0
+                        ? acta.comercio.rubros.map((rubro) => rubro.nombre).join(', ')
+                        : '-'}
                     </div>
                   </div>
                 </div>
