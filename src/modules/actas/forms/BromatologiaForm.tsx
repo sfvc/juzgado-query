@@ -36,7 +36,7 @@ export const BromatologiaForm = ({ acta }: Props) => {
 
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
-      rubros: acta?.comercio?.rubros || [],
+      tipo_rubros: acta?.comercio?.rubros || [],
       nombre_fantasia: acta?.comercio?.nombre_fantasia || ''
     },
     resolver: yupResolver(transitoSchema),

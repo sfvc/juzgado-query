@@ -23,14 +23,14 @@ export const ComercioData = ({ data }: Props) => {
     const rubrosUpdate = [...rubros, rubro]
 
     setRubros(rubrosUpdate)
-    setValue('rubros', rubrosUpdate) // Actualizar estado del formulario
+    setValue('tipo_rubros', rubrosUpdate) // Actualizar estado del formulario
   }
 
   const removeRubro = (id: number) => {
     const rubrosUpdate = rubros.filter((rubro: IRubro) => rubro.id !== id)
     
     setRubros(rubrosUpdate)
-    setValue('rubros', rubrosUpdate)
+    setValue('tipo_rubros', rubrosUpdate)
   }
 
   // Buscardor de vehiculos

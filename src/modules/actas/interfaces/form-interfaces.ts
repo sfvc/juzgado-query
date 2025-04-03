@@ -23,7 +23,7 @@ export interface IActaForm {
     infracciones_cometidas?: InfraccionActa[]
     vehiculo_id?: number | null
     propiedades?: IPropiedad[]
-    rubros?: IRubro[]
+    tipo_rubros?: IRubro[]
 
     // Infracción Data
     calle: string
