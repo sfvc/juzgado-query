@@ -61,7 +61,11 @@ export const PropiedadData = ({ data }: Props) => {
     setMatriculaInput(value)
   }
   
-  const handleSearch = async (query: string) => propiedadActions.getPropiedadByFilter(query)
+  const cleanMatricula = (value: string) => value.replace(/[^\d]/g, '')
+  const handleSearch = async (query: string) => {
+    const cleanQuery = cleanMatricula(query)
+    return propiedadActions.getPropiedadByFilter(cleanQuery)
+  }
   const handleSelect = (propiedad: IPropiedad) => addPropiedad(propiedad)
   
   return (

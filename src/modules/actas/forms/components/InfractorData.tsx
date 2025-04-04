@@ -17,7 +17,8 @@ import type { Column } from '../../../../shared/interfaces'
 
 const columns: Column[] = [
   { key: 'nombre', label: 'Nombre' },
-  { key: 'numero_documento', label: 'DNI/CUIT' },
+  { key: 'numero_documento', label: 'DNI' },
+  { key: 'cuit', label: 'CUIT/CUIL' },
   { key: 'responsable', label: 'Responsable' },
   { key: 'email', label: 'Email' },
   { key: 'telefono', label: 'Teléfono' },
@@ -171,7 +172,10 @@ export const InfractorData = ({ data }: Props) => {
                   <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>
                     {infractor?.nombre || '-'}
                   </Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{infractor?.documento || infractor.cuit}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{infractor?.documento || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>
+                    {infractor?.cuil ? infractor.cuil : infractor?.cuit ? infractor.cuit : '-'}
+                  </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.responsable ? 'Si' : 'No' }
                   </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{infractor?.email || '-'}</Table.Cell>

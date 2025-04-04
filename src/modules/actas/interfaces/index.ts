@@ -127,6 +127,7 @@ export interface InfractorActa {
     razon_social: string
     documento:    string
     cuit:         string
+    cuil:         string
     email:        string
     telefono:     string
     responsable:  number
