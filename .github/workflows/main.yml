@@ -27,7 +27,7 @@ jobs:
             docker stop juzgado-query || true
             docker rm juzgado-query || true
             docker rmi municipalidad/juzgado-query:lastest -f
-            docker build --no-cache --build-arg VITE_API_URL='http://137.184.53.136:80/api/v1' --build-arg VITE_TEMPLATE_URL='http://137.184.4.18:7000/templateFiles' --build-arg VITE_CARBONE_URL='http://137.184.4.18:7000/carbone' --tag municipalidad/juzgado-query:lastest .
+            docker build --no-cache --build-arg VITE_API_URL='http://137.184.53.136:5533/api/v1' --build-arg VITE_TEMPLATE_URL='http://137.184.4.18:7000/templateFiles' --build-arg VITE_CARBONE_URL='http://137.184.4.18:7000/carbone' --tag municipalidad/juzgado-query:lastest .
             docker run --restart=always --name juzgado-query -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query:lastest
             docker builder prune -f
             docker image prune -a -f
