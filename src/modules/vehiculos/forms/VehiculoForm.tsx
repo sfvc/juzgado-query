@@ -26,10 +26,11 @@ const validationSchema = yup.object({
 
 interface Props {
   vehiculo: IVehiculo | null
+  updateVehiculos: (vehiculo: IVehiculo) => void
   onSucces: () => void
 }
   
-const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
+const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
   const { createVehiculo, updateVehiculo } = useVehiculo()
   const [showInputTaxi, setShowInputTaxi] = useState<boolean>(vehiculo?.tipo?.id === SERVICIO_PUBLICO_ID)
@@ -74,11 +75,18 @@ const VehiculoForm = ({ vehiculo, onSucces }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormVehiculo> = async (form: FormVehiculo) => {
-    if (vehiculo) await updateVehiculo.mutateAsync({id: vehiculo.id, vehiculo: form})
-    else await createVehiculo.mutateAsync(form)
+    try {
+      if (!vehiculo) return
   
-    onSucces()
+      const vehiculoActualizado = await updateVehiculo.mutateAsync({ id: vehiculo.id, vehiculo: form })
+  
+      updateVehiculos(vehiculoActualizado)
+      onSucces()
+    } catch (error) {
+      console.error('Error al actualizar vehículo:', error)
+    }
   }
+  
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   

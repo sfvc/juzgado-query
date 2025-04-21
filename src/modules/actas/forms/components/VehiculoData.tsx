@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Table, Tooltip } from 'flowbite-react'
+import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { icons } from '../../../../shared'
@@ -11,6 +11,7 @@ import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { VehiculoActa } from '../../interfaces'
 import type { IVehiculo } from '../../../vehiculos/interfaces'
 import type { Column } from '../../../../shared/interfaces'
+import VehiculoForm from '../../../vehiculos/forms/VehiculoForm'
 
 const columns: Column[] = [
   { key: 'titular', label: 'Titular' },
@@ -30,16 +31,19 @@ interface Props {
 }
 
 export const VehiculoData = ({ data }: Props) => {
-  const { setValue } = useFormContext<IActaForm>() 
+  const { setValue } = useFormContext<IActaForm>()
   const [vehiculo, setVehiculo] = useState<VehiculoActa | null>(data)
-  
+
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [editVehiculo, SetEditVehiculo] = useState<IVehiculo | null>(null)
+
   // Agregar vehiculo al listado de vehiculos
   const addVehiculo = (vehiculo: IVehiculo) => {
-    if(!vehiculo) return
+    if (!vehiculo) return
     const newVehiculo = formatVehiculo(vehiculo)
 
     setVehiculo(newVehiculo)
-    setValue('vehiculo_id', newVehiculo?.id) // Actualizar estado del formulario
+    setValue('vehiculo_id', newVehiculo?.id)
   }
 
   const removeVehiculo = () => {
@@ -50,11 +54,33 @@ export const VehiculoData = ({ data }: Props) => {
   // Buscardor de vehiculos
   const handleSearch = async (query: string) => vehiculoActions.getVehiculosByFilter(query)
   const handleSelect = (vehiculo: IVehiculo) => addVehiculo(vehiculo)
+
+  const onOpenModal = async (vehiculoId: number) => {
+    try {
+      const vehiculo: IVehiculo = await vehiculoActions.getVehiculoById(vehiculoId)
+
+      SetEditVehiculo(vehiculo)
+      setOpenModal(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onCloseModal = async () => {
+    SetEditVehiculo(null)
+    setOpenModal(false)
+  }
+
+  const updateVehiculos = (vehiculoActualizado: IVehiculo) => {
+    const nuevoVehiculo = formatVehiculo(vehiculoActualizado)
+    setVehiculo(nuevoVehiculo)
+    setValue('vehiculo_id', nuevoVehiculo?.id)
+  }
   
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center'>
-        <h3 className='text-xl font-semibold text-white'>Datos del vehiculo</h3>
+        <h3 className='text-xl font-semibold text-white'>Datos del Vehículo</h3>
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
@@ -66,7 +92,7 @@ export const VehiculoData = ({ data }: Props) => {
           renderItem={(item) => (
             <div><strong>{item.dominio}</strong> - {clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}</div>
           )}
-          renderInput={(item) => { return `${item.dominio} - ${clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}`} }
+          renderInput={(item) => { return `${item.dominio} - ${clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}` }}
         />
 
         <div className='flex items-end mb-4'><CreateVehiculo /></div>
@@ -93,7 +119,13 @@ export const VehiculoData = ({ data }: Props) => {
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.numero_chasis}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.numero_motor}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{vehiculo.numero_taxi_remis}</Table.Cell>
-                  <Table.Cell className='text-center flex items-center justify-center'>
+                  <Table.Cell className='text-center flex items-center gap-2 justify-center'>
+                    <Tooltip content='Editar'>
+                      <Button color='success' onClick={() => onOpenModal(vehiculo.id)} className='w-8 h-8 flex items-center justify-center'>
+                        <icons.Pencil />
+                      </Button>
+                    </Tooltip>
+
                     <Tooltip content='Eliminar'>
                       <Button color='failure' onClick={removeVehiculo} className='w-8 h-8 flex items-center justify-center'>
                         <icons.Trash />
@@ -106,6 +138,20 @@ export const VehiculoData = ({ data }: Props) => {
           </Table>
         </div>
       )}
+
+      {
+        editVehiculo &&
+        <Modal show={openModal} onClose={onCloseModal} size='5xl'>
+          <Modal.Header>Editar Vehículo</Modal.Header>
+          <Modal.Body>
+            <VehiculoForm
+              vehiculo={editVehiculo}
+              onSucces={onCloseModal}
+              updateVehiculos={(vehiculo: IVehiculo) => updateVehiculos(vehiculo)}
+            />
+          </Modal.Body>
+        </Modal>
+      }
     </React.Fragment>
   )
 }

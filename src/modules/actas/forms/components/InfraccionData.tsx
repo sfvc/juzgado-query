@@ -9,7 +9,7 @@ export const InfraccionData = () => {
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center'>
-        <h3 className='text-xl font-semibold text-white'>Datos de la Infracción</h3>
+        <h3 className='text-xl font-semibold text-white'>Datos del Lugar de la Infracción</h3>
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>

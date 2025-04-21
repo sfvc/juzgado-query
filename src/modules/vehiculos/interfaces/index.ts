@@ -46,6 +46,7 @@ export interface Titular {
 }
 
 export interface IVehiculo {
+    map(arg0: (vehiculo: { id: unknown }) => { id: unknown }): unknown
     id: number
     dominio: string
     numero_motor: string
