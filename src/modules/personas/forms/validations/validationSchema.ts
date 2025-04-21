@@ -52,38 +52,3 @@ export const domicilioSchema = yup.object({
   lote_dpto: yup.string().notRequired(),
   manzana_piso: yup.string().notRequired()
 })
-
-/* export const domicilioSchema = yup.object({
-  pais_id: yup.number()
-    .when('$showDomicilio', {
-      is: true,
-      then: (schema) => schema.transform((value) => (isNaN(value) ? null : value)).required('El país es requerido'),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-  provincia_id: yup.number()
-    .when('$showDomicilio', {
-      is: true,
-      then: (schema) => schema.transform((value) => (isNaN(value) ? null : value)).required('La provincia es requerida'),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-  departamento_id: yup.number()
-    .transform((value) => (isNaN(value) ? null : value))
-    .notRequired(),
-  localidad_id: yup.number()
-    .transform((value) => (isNaN(value) ? null : value))
-    .notRequired(),
-  barrio_id: yup.number()
-    .transform((value) => (isNaN(value) ? null : value))
-    .notRequired(),
-  calle: yup.string()
-    .when('$showDomicilio', {
-      is: true,
-      then: (schema) => schema.required('La calle es requerida'),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-  numero: yup.number()
-    .transform((value) => (isNaN(value) ? null : value))
-    .notRequired(),
-  lote_dpto: yup.string().notRequired(),
-  manzana_piso: yup.string().notRequired()
-}) */

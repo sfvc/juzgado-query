@@ -32,7 +32,7 @@ interface Props {
   
 const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
-  const { createVehiculo, updateVehiculo } = useVehiculo()
+  const { updateVehiculo } = useVehiculo()
   const [showInputTaxi, setShowInputTaxi] = useState<boolean>(vehiculo?.tipo?.id === SERVICIO_PUBLICO_ID)
   
   const { data, isLoading } = useQuery({
@@ -87,7 +87,6 @@ const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
     }
   }
   
-
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
   
   return (
@@ -212,7 +211,6 @@ const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
         }
       </div>
 
-      {/* Buttons */}
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
 

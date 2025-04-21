@@ -6,6 +6,7 @@ export const formatPersona = (persona: IPersona, responsable: number): Infractor
     id: persona.id,
     documento: persona.numero_documento,
     cuit: persona.cuit || '',
+    cuil: persona.cuil || '',
     nombre: persona.nombre,
     apellido: persona.apellido,
     telefono: persona.telefono,

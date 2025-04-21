@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Button, Modal, Table, Tooltip } from 'flowbite-react'
+import { Button, Label, Modal, Table, Textarea, ToggleSwitch, Tooltip } from 'flowbite-react'
 import { icons, SearchInput } from '../../../shared'
 import { Column } from '../../../shared/interfaces'
 import { articuloActions } from '../../parametros/actas'
@@ -20,6 +20,8 @@ const colums: Column[] = [
 export const Sentencia = () => {
   const { state: { acta, plantillaId } } = useLocation()
   const [openModal, setOpenModal] = useState({ create: false, delete: false })
+  const [sinValorMonetario, setSinValorMonetario] = useState(false)
+  const [observacion, setObservacion] = useState('')
   const [activeItem, setActiveItem] = useState<InfraccionesCometida | null>(null)
 
   const [infracciones, setInfracciones] = useState<InfraccionesCometida[]>(() => {
@@ -50,14 +52,14 @@ export const Sentencia = () => {
 
   const editUnidad = (id: number) => {
     const infraccion = infracciones.find((inf: InfraccionesCometida) => inf.id === id)
-    if(!infraccion) return
+    if (!infraccion) return
 
     setActiveItem(infraccion)
     onOpenModal('create', infraccion)
   }
 
   const handleDelete = () => {
-    if(!activeItem) return 
+    if (!activeItem) return
     const updateInfracciones = infracciones.filter((inf: InfraccionesCometida) => inf.id !== activeItem.id)
     setInfracciones(updateInfracciones)
     onCloseModal('delete')
@@ -81,32 +83,75 @@ export const Sentencia = () => {
   }
 
   const onCloseModal = (action: string) => {
-    setOpenModal((prev) => { return {...prev, [action]: false} })
+    setOpenModal((prev) => { return { ...prev, [action]: false } })
     setActiveItem(null)
   }
 
   const onOpenModal = (action: string, item: InfraccionesCometida) => {
-    setOpenModal((prev) => { return {...prev, [action]: true} })
+    setOpenModal((prev) => { return { ...prev, [action]: true } })
     setActiveItem(item)
   }
-  
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center mb-6'>
         <h3 className='text-xl font-semibold text-white'>Agregar Resolución</h3>
       </div>
 
-      <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2 mb-4 '>
-        <SearchInput<InfraccionesCometida>
-          label="Articulo"
-          placeholder="Buscar articulo"
-          onSearch={searchArticulo}
-          onSelect={selectArticulo}
-          renderItem={(item) => (
-            <div><strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}</div>
-          )}
-          renderInput={(item) => { return `${item.numero}`} }
-        />
+      <div className="flex flex-col md:flex-row gap-2 mt-2 mb-4">
+        <div className="md:flex-[2]">
+          <SearchInput<InfraccionesCometida>
+            label="Artículo"
+            placeholder="Buscar artículo"
+            onSearch={searchArticulo}
+            onSelect={selectArticulo}
+            renderItem={(item) => (
+              <div>
+                <strong>{item.numero}</strong> - {item?.detalle || 'SIN DETALLE'}
+              </div>
+            )}
+            renderInput={(item) => `${item.numero}`}
+          />
+        </div>
+
+        {/* <div className="md:flex-[1]">
+          <div className="flex flex-col gap-2 md:mt-10 ml-5">
+            <ToggleSwitch
+              checked={sinValorMonetario}
+              label="Sin Valor Monetario"
+              onChange={(nuevoEstado) => {
+                setSinValorMonetario(nuevoEstado)
+
+                if (nuevoEstado) {
+                  setInfracciones((prev) =>
+                    prev.map((i) => ({ ...i, importe: 0 }))
+                  )
+                } else {
+                  setInfracciones((prev) =>
+                    prev.map((i) => ({
+                      ...i,
+                      importe: i.unidad * +acta.unidadMulta,
+                    }))
+                  )
+                }
+              }}
+            />
+          </div>
+        </div> */}
+
+        {sinValorMonetario && (
+          <div className='mb-4 md:flex-[1.5]'>
+            <div className='mb-2 block w-full dark:text-white'>
+              <Label htmlFor='observaciones' value='Observaciones' />
+              <strong className='obligatorio'>(*)</strong>
+            </div>
+            <Textarea
+              value={observacion}
+              onChange={(e) => setObservacion(e.target.value)}
+              placeholder='Observacion'
+            />
+          </div>
+        )}
       </div>
 
       <div className='overflow-x-auto'>
@@ -129,8 +174,8 @@ export const Sentencia = () => {
                     <Table.Cell className='text-center  dark:text-white'>$ {infraccion.importe}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
-                        <Button 
-                          color='success' 
+                        <Button
+                          color='success'
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => editUnidad(infraccion.id)}
                         >
@@ -155,22 +200,22 @@ export const Sentencia = () => {
       </div>
 
       {/* Sección de importe total */}
-      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[acta.id]}/>
+      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[acta.id]} />
 
       {/* Modal para editar unidad tributaria de articulo */}
       <Modal show={openModal.create} onClose={() => onCloseModal('create')}>
         <Modal.Header>Editar importe</Modal.Header>
         <Modal.Body>
-          <UnidadForm 
+          <UnidadForm
             activeItem={activeItem}
-            onCloseModal= {() => onCloseModal('create')}
+            onCloseModal={() => onCloseModal('create')}
             updateImporte={updateImporte}
           />
         </Modal.Body>
       </Modal>
 
       {/* Modal para eliminar articulo de listado */}
-      { activeItem && 
+      {activeItem &&
         <Modal show={openModal.delete} onClose={() => onCloseModal('delete')}>
           <Modal.Header>Eliminar articulo</Modal.Header>
           <Modal.Body>
@@ -179,7 +224,7 @@ export const Sentencia = () => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar el articulos del listado?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => onCloseModal('delete')}>Cancelar</Button>
                 <Button color="failure" onClick={handleDelete}> Sí, eliminar</Button>
