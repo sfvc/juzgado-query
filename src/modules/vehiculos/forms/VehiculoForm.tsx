@@ -32,7 +32,7 @@ interface Props {
   
 const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
-  const { updateVehiculo } = useVehiculo()
+  const { createVehiculo, updateVehiculo } = useVehiculo()
   const [showInputTaxi, setShowInputTaxi] = useState<boolean>(vehiculo?.tipo?.id === SERVICIO_PUBLICO_ID)
   
   const { data, isLoading } = useQuery({
@@ -75,16 +75,15 @@ const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormVehiculo> = async (form: FormVehiculo) => {
-    try {
-      if (!vehiculo) return
-  
-      const vehiculoActualizado = await updateVehiculo.mutateAsync({ id: vehiculo.id, vehiculo: form })
-  
-      updateVehiculos(vehiculoActualizado)
-      onSucces()
-    } catch (error) {
-      console.error('Error al actualizar vehículo:', error)
+    if (vehiculo) {
+      await updateVehiculo.mutateAsync({ id: vehiculo.id, vehiculo: form })
+      updateVehiculos({ ...vehiculo, ...form })
+    } else {
+      const nuevoVehiculo = await createVehiculo.mutateAsync(form)
+      updateVehiculos(nuevoVehiculo)
     }
+  
+    onSucces()
   }
   
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
