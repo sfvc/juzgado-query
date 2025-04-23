@@ -10,7 +10,7 @@ import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import type { Column } from '../../../shared/interfaces'
 import type { IVehiculo } from '../interfaces'
 
-const colums: Column[] = [
+const columns: Column[] = [
   { key: 'id', label: 'Id' },
   { key: 'dominio', label: 'Dominio' },
   { key: 'titular', label: 'Titular' },
@@ -18,7 +18,7 @@ const colums: Column[] = [
   { key: 'modelo', label: 'Modelo' },
   { key: 'tipo', label: 'Tipo' },
   { key: 'color', label: 'Color' },
-  { key: 'acciones', label: 'Acciones' },
+  { key: 'acciones', label: 'Acciones' }
 ]
 
 export const Vehiculo = () => {
@@ -34,111 +34,118 @@ export const Vehiculo = () => {
     deleteVehiculo 
   } = useVehiculo()
 
-  /* Modal crear/editar */
-  const onOpenModal = (vehiculo: IVehiculo) => {
-    setActiveItem(vehiculo)
-    setOpenModal(true)
-  }
-
-  const onCloseModal = async () => {
+  const handleSaveVehiculo = (vehiculo: IVehiculo) => {
     setActiveItem(null)
     setOpenModal(false)
   }
 
-  /* Modal eliminar */
-  const openDelteModal = (vehiculo: IVehiculo) => {
+  const onOpenModal = (vehiculo?: IVehiculo) => {
+    setActiveItem(vehiculo || null)
+    setOpenModal(true)
+  }
+
+  const onCloseModal = () => {
+    setActiveItem(null)
+    setOpenModal(false)
+  }
+
+  const openDeletModal = (vehiculo: IVehiculo) => {
     setActiveItem(vehiculo)
     setOpenDeleteModal(true)
   }
-
   const closeDeleteModal = () => {
     setActiveItem(null)
     setOpenDeleteModal(false)
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Vehiculos</h1>
-        <div className='flex flex-col justify-start'>
-          <div className='flex md:justify-end gap-4'>
-            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
-            
-            <Button type='button' onClick={() => setOpenModal(true)} >Agregar</Button>
-          </div>
+        <h1 className='text-2xl font-semibold dark:text-white mb-4 md:mb-0'>Listado de Vehículos</h1>
+        <div className='flex gap-4'>
+          <InputTable onSearch={(value: string) => updateFilter('query', value)} />
+          <Button onClick={() => onOpenModal()}>
+            Agregar
+          </Button>
         </div>
       </div>
 
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
-            {colums.map((column: Column) => (
-              <Table.HeadCell key={column.key} className='text-center bg-gray-300'>{column.label}</Table.HeadCell>
+            {columns.map(col => (
+              <Table.HeadCell key={col.key} className='text-center bg-gray-300'>
+                {col.label}
+              </Table.HeadCell>
             ))}
           </Table.Head>
 
           <Table.Body className='divide-y'>
-            {
-              isFetching
-                ? <TableSkeleton colums={colums.length}/>
-                :(vehiculos.length > 0)
-                  ? (vehiculos.map((vehiculo: IVehiculo) => (
-                    <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.id || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.dominio || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{clearNames(vehiculo?.titular?.apellido, vehiculo?.titular?.nombre) || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.marca?.nombre || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.modelo || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.tipo?.nombre || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{vehiculo?.color?.nombre || '-'}</Table.Cell>
-                      <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                        <Tooltip content='Editar'>
-                          <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Pencil />
-                          </Button>
-                        </Tooltip>
-
-                        <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
-                          <Tooltip content='Eliminar'>
-                            <Button color='failure' onClick={() => openDelteModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Trash />
-                            </Button>
-                          </Tooltip>
-                        </RoleGuard>
-                      </Table.Cell>
-                    </Table.Row>
-                  )))
-                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
-            }
+            {isFetching ? (
+              <TableSkeleton colums={columns.length} />
+            ) : vehiculos.length > 0 ? (
+              vehiculos.map((vehiculo) => (
+                <Table.Row key={vehiculo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.id}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.dominio}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>
+                    {clearNames(vehiculo.titular?.apellido, vehiculo.titular?.nombre) || '-'}
+                  </Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.marca?.nombre || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.modelo || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.tipo?.nombre || '-'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{vehiculo.color?.nombre || '-'}</Table.Cell>
+                  <Table.Cell className='flex gap-2 justify-center'>
+                    <Tooltip content='Editar'>
+                      <Button color='success' onClick={() => onOpenModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
+                        <icons.Pencil />
+                      </Button>
+                    </Tooltip>
+                    <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                      <Tooltip content='Eliminar'>
+                        <Button color='failure' onClick={() => openDeletModal(vehiculo)} className='w-8 h-8 flex items-center justify-center'>
+                          <icons.Trash />
+                        </Button>
+                      </Tooltip>
+                    </RoleGuard>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length} className='text-center py-4 dark:bg-gray-800'>
+                  No se encontraron resultados
+                </td>
+              </tr>
+            )}
           </Table.Body>
         </Table>
       </div>
 
-      <div className='flex overflow-x-auto sm:justify-center mt-4'>
-        <Pagination
-          currentPage={pagination.currentPage}
-          totalPages={pagination.lastPage}
-          onPageChange={(page: number) => updateFilter('page', page)}
-          previousLabel='Anterior'
-          nextLabel='Siguiente'
-          showIcons
-        />
-      </div>
+      <Pagination
+        className='mt-4 flex justify-center'
+        currentPage={pagination.currentPage}
+        totalPages={pagination.lastPage}
+        onPageChange={(page) => updateFilter('page', page)}
+        previousLabel='Anterior'
+        nextLabel='Siguiente'
+        showIcons
+      />
 
-      {/* Modal crear/editar */} 
+      {/* Modal crear/editar */}
       <Modal show={openModal} onClose={onCloseModal} size='4xl'>
-        <Modal.Header>{!activeItem ? 'Agregar Vehiculo' : 'Editar Vehiculo'}</Modal.Header>
+        <Modal.Header>{activeItem ? 'Editar Vehículo' : 'Agregar Vehículo'}</Modal.Header>
         <Modal.Body>
-          <VehiculoForm 
-            vehiculo={activeItem} 
-            onSucces={onCloseModal}
+          <VehiculoForm
+            vehiculo={activeItem}
+            updateVehiculos={handleSaveVehiculo}
+            onSuccess={handleSaveVehiculo}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
-      {
-        activeItem && 
+      {/* Modal eliminar */}
+      {activeItem && (
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
@@ -146,9 +153,9 @@ export const Vehiculo = () => {
           isLoading={deleteVehiculo.isPending}
           onClose={closeDeleteModal}
         />
-      }
+      )}
 
       <ToastContainer containerId="custom" className="custom-toast-container" />
-    </React.Fragment>
+    </>
   )
 }
