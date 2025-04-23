@@ -8,6 +8,11 @@ interface Props {
 
 export const FisicaForm = ({ data }: Props) => {
   const { register, formState: { errors } } = useFormContext<PersonaFisica>()
+
+  const soloNumeros = (e: React.FormEvent<HTMLInputElement>) => {
+    const input = e.currentTarget
+    input.value = input.value.replace(/[^\d]/g, '')
+  }
     
   return (
     <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
@@ -60,9 +65,10 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <TextInput
           {...register('numero_documento')}
-          type='number'
+          type='text'
           placeholder='Numero de Documento'
-          helperText={errors?.numero_documento && errors?.numero_documento?.message} 
+          onInput={soloNumeros}
+          helperText={errors?.numero_documento && errors?.numero_documento?.message}
           color={errors?.numero_documento && 'failure'}
         />
       </div>
@@ -104,8 +110,9 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <TextInput
           {...register('cuil')}
-          type='number'
+          type='text'
           placeholder='C.U.I.L'
+          onInput={soloNumeros}
         />
       </div>
 

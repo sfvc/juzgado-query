@@ -37,13 +37,16 @@ export const VehiculoData = ({ data }: Props) => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [editVehiculo, SetEditVehiculo] = useState<IVehiculo | null>(null)
 
-  // Agregar vehiculo al listado de vehiculos
+  const handleSearch = async (query: string) => vehiculoActions.getVehiculosByFilter(query)
+  const handleSelect = (vehiculo: IVehiculo) => addVehiculo(vehiculo)
+
   const addVehiculo = (vehiculo: IVehiculo) => {
     if (!vehiculo) return
     const newVehiculo = formatVehiculo(vehiculo)
 
     setVehiculo(newVehiculo)
     setValue('vehiculo_id', newVehiculo?.id)
+    setOpenModal(false)
   }
 
   const removeVehiculo = () => {
@@ -51,14 +54,17 @@ export const VehiculoData = ({ data }: Props) => {
     setValue('vehiculo_id', null)
   }
 
-  // Buscardor de vehiculos
-  const handleSearch = async (query: string) => vehiculoActions.getVehiculosByFilter(query)
-  const handleSelect = (vehiculo: IVehiculo) => addVehiculo(vehiculo)
+  const updateVehiculos = (vehiculoActualizado: IVehiculo) => {
+    const nuevoVehiculo = formatVehiculo(vehiculoActualizado)
+    setVehiculo(nuevoVehiculo)
+    setValue('vehiculo_id', nuevoVehiculo?.id)
+    setOpenModal(false)
+    SetEditVehiculo(null)
+  }
 
   const onOpenModal = async (vehiculoId: number) => {
     try {
       const vehiculo: IVehiculo = await vehiculoActions.getVehiculoById(vehiculoId)
-
       SetEditVehiculo(vehiculo)
       setOpenModal(true)
     } catch (error) {
@@ -69,12 +75,6 @@ export const VehiculoData = ({ data }: Props) => {
   const onCloseModal = async () => {
     SetEditVehiculo(null)
     setOpenModal(false)
-  }
-
-  const updateVehiculos = (vehiculoActualizado: IVehiculo) => {
-    const nuevoVehiculo = formatVehiculo(vehiculoActualizado)
-    setVehiculo(nuevoVehiculo)
-    setValue('vehiculo_id', nuevoVehiculo?.id)
   }
   
   return (
@@ -145,9 +145,9 @@ export const VehiculoData = ({ data }: Props) => {
           <Modal.Header>Editar Vehículo</Modal.Header>
           <Modal.Body>
             <VehiculoForm
+              updateVehiculos={(vehiculo: IVehiculo) => updateVehiculos(vehiculo)}
               vehiculo={editVehiculo}
               onSucces={onCloseModal}
-              updateVehiculos={(vehiculo: IVehiculo) => updateVehiculos(vehiculo)}
             />
           </Modal.Body>
         </Modal>

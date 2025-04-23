@@ -151,4 +151,5 @@ export interface VehiculoActa {
     numero_chasis: string;
     numero_motor: string;
     numero_taxi_remis: string;
+    deleted_at?:      null
 }

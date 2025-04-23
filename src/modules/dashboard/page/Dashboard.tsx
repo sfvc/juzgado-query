@@ -38,14 +38,9 @@ export const Dashboard = () => {
 
   return (
     <div className="dark:bg-gray-800 min-h-screen">
-      <div className="text-center mb-4">
-        <h3 className="text-2xl font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 py-3 rounded-lg shadow-md">
-          Dashboard
-        </h3>
-      </div>
 
       {/* Cards de Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
         <Card className="p-6 shadow-xl rounded-2xl bg-gradient-to-r from-red-500 to-red-700">
           <h5 className="text-lg font-semibold text-white">Uso</h5>
           <p className="mt-4 text-5xl font-bold text-white">
