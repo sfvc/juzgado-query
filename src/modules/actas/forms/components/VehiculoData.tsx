@@ -57,9 +57,6 @@ export const VehiculoData = ({ data }: Props) => {
   const updateVehiculos = (vehiculoActualizado: IVehiculo) => {
     const nuevoVehiculo = formatVehiculo(vehiculoActualizado)
     setVehiculo(nuevoVehiculo)
-    setValue('vehiculo_id', nuevoVehiculo?.id)
-    setOpenModal(false)
-    SetEditVehiculo(null)
   }
 
   const onOpenModal = async (vehiculoId: number) => {
@@ -95,10 +92,9 @@ export const VehiculoData = ({ data }: Props) => {
           renderInput={(item) => { return `${item.dominio} - ${clearNames(item.titular?.apellido, item.titular?.nombre) || 'SIN TITULAR'}` }}
         />
 
-        <div className='flex items-end mb-4'><CreateVehiculo /></div>
+        <div className='flex items-end mb-4'><CreateVehiculo updateVehiculos={addVehiculo} /></div>
       </div>
 
-      {/* Tabla de vehiculo */}
       {vehiculo && (
         <div className='overflow-x-auto'>
           <Table hoverable>
@@ -147,7 +143,7 @@ export const VehiculoData = ({ data }: Props) => {
             <VehiculoForm
               updateVehiculos={(vehiculo: IVehiculo) => updateVehiculos(vehiculo)}
               vehiculo={editVehiculo}
-              onSucces={onCloseModal}
+              onSuccess={onCloseModal}
             />
           </Modal.Body>
         </Modal>

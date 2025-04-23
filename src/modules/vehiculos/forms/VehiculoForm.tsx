@@ -27,10 +27,10 @@ const validationSchema = yup.object({
 interface Props {
   vehiculo: IVehiculo | null
   updateVehiculos: (vehiculo: IVehiculo) => void
-  onSucces: () => void
+  onSuccess: () => void
 }
   
-const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
+const VehiculoForm = ({ vehiculo, onSuccess, updateVehiculos }: Props) => {
   const [ editTitular, setEditTitular ] = useState<boolean>(false)
   const { createVehiculo, updateVehiculo } = useVehiculo()
   const [showInputTaxi, setShowInputTaxi] = useState<boolean>(vehiculo?.tipo?.id === SERVICIO_PUBLICO_ID)
@@ -83,7 +83,7 @@ const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
       updateVehiculos(nuevoVehiculo)
     }
   
-    onSucces()
+    onSuccess()
   }
   
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
@@ -211,7 +211,7 @@ const VehiculoForm = ({ vehiculo, onSucces, updateVehiculos }: Props) => {
       </div>
 
       <div className='flex justify-end gap-2'>
-        <Button color="failure" onClick={onSucces}>Cancelar</Button>
+        <Button color="failure" onClick={onSuccess}>Cancelar</Button>
 
         <Button 
           size='md'
