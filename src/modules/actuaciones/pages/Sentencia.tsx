@@ -114,7 +114,7 @@ export const Sentencia = () => {
           />
         </div>
 
-        {/* <div className="md:flex-[1]">
+        <div className="md:flex-[1]">
           <div className="flex flex-col gap-2 md:mt-10 ml-5">
             <ToggleSwitch
               checked={sinValorMonetario}
@@ -137,7 +137,7 @@ export const Sentencia = () => {
               }}
             />
           </div>
-        </div> */}
+        </div>
 
         {sinValorMonetario && (
           <div className='mb-4 md:flex-[1.5]'>
