@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Button, Label, Modal, Table, Textarea, ToggleSwitch, Tooltip } from 'flowbite-react'
+import { Button, Modal, Table, Tooltip } from 'flowbite-react'
 import { icons, SearchInput } from '../../../shared'
 import { Column } from '../../../shared/interfaces'
 import { articuloActions } from '../../parametros/actas'
@@ -20,8 +20,6 @@ const colums: Column[] = [
 export const Sentencia = () => {
   const { state: { acta, plantillaId } } = useLocation()
   const [openModal, setOpenModal] = useState({ create: false, delete: false })
-  const [sinValorMonetario, setSinValorMonetario] = useState(false)
-  const [observacion, setObservacion] = useState('')
   const [activeItem, setActiveItem] = useState<InfraccionesCometida | null>(null)
 
   const [infracciones, setInfracciones] = useState<InfraccionesCometida[]>(() => {
@@ -34,7 +32,6 @@ export const Sentencia = () => {
     } else return []
   })
 
-  // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: InfraccionesCometida) => {
     const existeItem = infracciones.find((infraccion) => infraccion.id === articulo.id)
@@ -113,45 +110,6 @@ export const Sentencia = () => {
             renderInput={(item) => `${item.numero}`}
           />
         </div>
-
-        <div className="md:flex-[1]">
-          <div className="flex flex-col gap-2 md:mt-10 ml-5">
-            <ToggleSwitch
-              checked={sinValorMonetario}
-              label="Sin Valor Monetario"
-              onChange={(nuevoEstado) => {
-                setSinValorMonetario(nuevoEstado)
-
-                if (nuevoEstado) {
-                  setInfracciones((prev) =>
-                    prev.map((i) => ({ ...i, importe: 0 }))
-                  )
-                } else {
-                  setInfracciones((prev) =>
-                    prev.map((i) => ({
-                      ...i,
-                      importe: i.unidad * +acta.unidadMulta,
-                    }))
-                  )
-                }
-              }}
-            />
-          </div>
-        </div>
-
-        {sinValorMonetario && (
-          <div className='mb-4 md:flex-[1.5]'>
-            <div className='mb-2 block w-full dark:text-white'>
-              <Label htmlFor='observaciones' value='Observaciones' />
-              <strong className='obligatorio'>(*)</strong>
-            </div>
-            <Textarea
-              value={observacion}
-              onChange={(e) => setObservacion(e.target.value)}
-              placeholder='Observacion'
-            />
-          </div>
-        )}
       </div>
 
       <div className='overflow-x-auto'>

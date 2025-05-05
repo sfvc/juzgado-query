@@ -15,12 +15,15 @@ import { toast } from 'react-toastify'
 
 const DISCOUNT = 40
 const SURCHARGE = 0
+const SIN_VALOR = 100
 
 const initialValues = {
   sub_total: 0,
   total: 0,
   descuento: DISCOUNT,
   recargo: SURCHARGE,
+  sinValor: SIN_VALOR,
+  observacion: '',
   observaciones: ''
 }
 
@@ -51,6 +54,9 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
     case ACTIONS.RECARGO:
       applySurcharge()
       break
+    case ACTIONS.SIN_VALOR:
+      applySinValor()
+      break
     default:
       calculateTotal()
       break
@@ -66,8 +72,27 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
     setFormState({ ...formState, descuento: 0, sub_total, recargo: surcharge, total })
   }
 
+  const applySinValor = () => {
+    setFormState((prev) => ({
+      ...prev,
+      sub_total: 0,
+      total: 0,
+      descuento: 0,
+      recargo: 0
+    }))
+  }  
+
   const calculateTotal = () => {
     const conceptoTotal = entries.reduce((acc, concepto) => acc + (concepto.monto || 0), 0)
+
+    if (action === ACTIONS.SIN_VALOR) {
+      setFormState((prev) => ({
+        ...prev,
+        sub_total: 0,
+        total: 0
+      }))
+      return
+    }    
   
     setFormState((prev) => {
       const nuevoSubTotal = infracciones.reduce((acc, infraccion) => acc + (infraccion.importe || 0), 0)
@@ -99,19 +124,21 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
       return
     }
   
-    const form: ISentenciaForm = {
+    const form: ISentenciaForm & { observacion: string, sinValor: boolean } = {
       sub_total,
       total,
       descuento,
       recargo,
-      observaciones,
       actas,
       plantilla_id: plantillaId,
       tipo_actuacion: ACTUACION.SENTENCIA,
       user_id: user.id,
       conceptos: entries,
-      ...( actas.length === 1 && { infracciones } ) 
-    }
+      sinValor: action === ACTIONS.SIN_VALOR,
+      observaciones: action !== ACTIONS.SIN_VALOR ? observaciones.trim() : '',
+      observacion: action === ACTIONS.SIN_VALOR ? observaciones.trim() : '',
+      ...(actas.length === 1 && { infracciones })
+    }      
   
     await createSentencia.mutateAsync(form)
   }
@@ -146,6 +173,11 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
             <div className='flex items-center gap-2'>
               <Radio id='recargo' name='acciones' value={ACTIONS.RECARGO} checked={action === ACTIONS.RECARGO} onChange={(e) => handleAction(e.target.value)} />
               <Label htmlFor='recargo'>Recargo</Label>
+            </div>
+
+            <div className='flex items-center gap-2'>
+              <Radio id='sin_valor' name='acciones' value={ACTIONS.SIN_VALOR} checked={action === ACTIONS.SIN_VALOR} onChange={(e) => handleAction(e.target.value)} />
+              <Label htmlFor='sin_valor'>Sin Valor</Label>
             </div>
           </div>
         </div>

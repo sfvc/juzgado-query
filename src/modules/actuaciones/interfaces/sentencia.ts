@@ -9,7 +9,9 @@ export interface ITotal {
     total: number,
     descuento: number,
     recargo: number,
+    sinValor: boolean,
     observaciones: string
+    observacion: string,
 }
   
 export interface ISentenciaForm extends ITotal{
@@ -21,7 +23,9 @@ export interface ISentenciaForm extends ITotal{
     total: number,
     descuento: number,
     recargo: number,
+    sinValor: boolean,
     observaciones: string,
+    observacion: string,
     user_id: number,
     conceptos: Concepto[]
 }
