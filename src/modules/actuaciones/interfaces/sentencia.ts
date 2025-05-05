@@ -23,6 +23,8 @@ export interface ISentenciaForm extends ITotal{
     recargo: number,
     observaciones: string,
     user_id: number,
+    sinValor: boolean,
+    observacion: string,
     conceptos: Concepto[]
 }
 

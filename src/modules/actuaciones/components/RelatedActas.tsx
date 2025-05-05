@@ -5,8 +5,8 @@ import { useContext, useEffect } from 'react'
 import { ActuacionContext, IActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 
 const colums: Column[] = [
-  { key: 'numero_causa', label: 'Nro. Causa' },
   { key: 'numero_acta', label: 'Nro. de acta' },
+  { key: 'numero_causa', label: 'Nro. Causa' },
   { key: 'fecha', label: 'Fecha' }
 ]
   

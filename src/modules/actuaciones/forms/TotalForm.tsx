@@ -28,15 +28,26 @@ interface Props {
   plantillaId: number,
   actas: number[]
   infracciones: InfraccionesCometida[]
+  sinValor?: boolean
+  observacion?: string 
 }
 
-export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
+export const TotalForm = ({ infracciones, plantillaId, actas, sinValor = false, observacion = '' }: Props) => {
   const { user } = useContext(AuthContext)
   const { createSentencia } = useSentencia()
   const [action, setAction] = useState<string>('NINGUNA')
   const [formState, setFormState] = useState<ITotal>(initialValues)
   const { sub_total, total, descuento, recargo, observaciones } = formState
   const [entries, setEntries] = useState<Concepto[]>([])
+
+  useEffect(() => {
+    if (observacion) {
+      setFormState(prev => ({
+        ...prev,
+        observacion: observacion
+      }))
+    }
+  }, [observacion])
 
   const handleAction = (value: string) => {
     setAction(value)
@@ -110,6 +121,8 @@ export const TotalForm = ({ infracciones, plantillaId, actas }: Props) => {
       tipo_actuacion: ACTUACION.SENTENCIA,
       user_id: user.id,
       conceptos: entries,
+      sinValor,
+      observacion,
       ...( actas.length === 1 && { infracciones } ) 
     }
   

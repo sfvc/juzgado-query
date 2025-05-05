@@ -20,7 +20,7 @@ const colums: Column[] = [
 export const Sentencia = () => {
   const { state: { acta, plantillaId } } = useLocation()
   const [openModal, setOpenModal] = useState({ create: false, delete: false })
-  const [sinValorMonetario, setSinValorMonetario] = useState(false)
+  const [sinValor, setSinValor] = useState(false)
   const [observacion, setObservacion] = useState('')
   const [activeItem, setActiveItem] = useState<InfraccionesCometida | null>(null)
 
@@ -34,7 +34,6 @@ export const Sentencia = () => {
     } else return []
   })
 
-  // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: InfraccionesCometida) => {
     const existeItem = infracciones.find((infraccion) => infraccion.id === articulo.id)
@@ -114,13 +113,13 @@ export const Sentencia = () => {
           />
         </div>
 
-        {/* <div className="md:flex-[1]">
+        <div className="md:flex-[1]">
           <div className="flex flex-col gap-2 md:mt-10 ml-5">
             <ToggleSwitch
-              checked={sinValorMonetario}
+              checked={sinValor}
               label="Sin Valor Monetario"
               onChange={(nuevoEstado) => {
-                setSinValorMonetario(nuevoEstado)
+                setSinValor(nuevoEstado)
 
                 if (nuevoEstado) {
                   setInfracciones((prev) =>
@@ -130,19 +129,19 @@ export const Sentencia = () => {
                   setInfracciones((prev) =>
                     prev.map((i) => ({
                       ...i,
-                      importe: i.unidad * +acta.unidadMulta,
+                      importe: i.unidad * +acta?.unidadMulta,
                     }))
                   )
                 }
               }}
             />
           </div>
-        </div> */}
+        </div>
 
-        {sinValorMonetario && (
+        {sinValor && (
           <div className='mb-4 md:flex-[1.5]'>
             <div className='mb-2 block w-full dark:text-white'>
-              <Label htmlFor='observaciones' value='Observaciones' />
+              <Label htmlFor='observacion' value='Observacion' />
               <strong className='obligatorio'>(*)</strong>
             </div>
             <Textarea
@@ -200,7 +199,13 @@ export const Sentencia = () => {
       </div>
 
       {/* Sección de importe total */}
-      <TotalForm infracciones={infracciones} plantillaId={plantillaId} actas={[acta.id]} />
+      <TotalForm 
+        infracciones={infracciones} 
+        plantillaId={plantillaId} 
+        actas={[acta.id]}
+        sinValor={sinValor}  // Passing sinValor to the TotalForm
+        observacion={observacion}  // Passing observacion to the TotalForm
+      />
 
       {/* Modal para editar unidad tributaria de articulo */}
       <Modal show={openModal.create} onClose={() => onCloseModal('create')}>
