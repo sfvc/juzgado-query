@@ -20,7 +20,7 @@ const SIN_VALOR = 100
 const initialValues = {
   sub_total: 0,
   total: 0,
-  descuento: DISCOUNT,
+  descuento: 0,
   recargo: SURCHARGE,
   sinValor: SIN_VALOR,
   observacion: '',
