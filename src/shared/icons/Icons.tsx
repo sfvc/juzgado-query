@@ -271,7 +271,7 @@ export const Reset = () => {
 export const Check = () => {
   return (
     <svg
-      className="h-5 w-5 shrink-0 text-cyan-600 dark:text-cyan-500"
+      className="h-5 w-5 shrink-0 text-white dark:text-white"
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
@@ -319,6 +319,18 @@ export const Dashboard = () => {
       <path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
       <path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" />
       <path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" />
+    </svg>
+  )
+}
+
+export const Auditoria = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icon-tabler-file-search">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+      <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+      <circle cx="11" cy="14" r="2" />
+      <path d="M13 16l1.5 1.5" />
     </svg>
   )
 }

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
   const { theme } = useContext(ThemeContext)
-  
+
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
       <ToastContainer />
@@ -19,15 +19,15 @@ export const Layout = () => {
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
 
         <NavItem to="/">
-          <img src={ theme === 'light' ? logoLight : logoDark} 
-            alt='Logo Juzgado' 
-            className='w-48 md:w-40 inline-block mx-auto pointer-events-none' 
+          <img src={ theme === 'light' ? logoLight : logoDark}
+            alt='Logo Juzgado'
+            className='w-48 md:w-40 inline-block mx-auto pointer-events-none'
           />
         </NavItem>
 
         {/* <NavItem to="/">
           <h1 className="text-xl font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-2xl shadow-lg transition-transform transform group-hover:scale-105">
-            Sistema de Prueba 
+            Sistema de Prueba
           </h1>
         </NavItem> */}
 
@@ -47,6 +47,8 @@ export const Layout = () => {
           <NavItem to="/inhabilitados">Inhabilitados</NavItem>
 
           <NavItem to="/plantillas">Plantillas</NavItem>
+
+          {/* <NavItem to="/libre-deuda">Libre Deuda</NavItem> */}
 
           <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             <MegaMenu.Dropdown toggle={<>Parámetros</>}>
@@ -135,7 +137,7 @@ export const Layout = () => {
           </RoleGuard>
         </Navbar.Collapse>
       </Navbar>
-      
+
       <main className='flex-grow w-10/12 m-auto dark:bg-dark'>
         <Outlet />
       </main>

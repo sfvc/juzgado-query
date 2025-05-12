@@ -1,6 +1,6 @@
 import { apiJuzgado } from '../../../../api/config'
 import { setUrlParams } from '../../../../shared/helpers/setUrlParams'
-import { FormPassword, FormUsuario } from '../interfaces'
+import { FormPassword, FormUsuario, IUsuario } from '../interfaces'
 
 export const getUsuarios = async (filters: object) => {
   const params = setUrlParams(filters)
@@ -9,6 +9,12 @@ export const getUsuarios = async (filters: object) => {
   const { data, meta } = response.data
   return { data, meta }
 }
+
+export const getUsuariosSinPaginar = async (): Promise<IUsuario[]> => {
+  const response = await apiJuzgado.get('/usuarios-sin-paginar')
+  return response.data.data
+}
+
 
 export const getUsuarioById = async (id: number) => {
   const response = await apiJuzgado.get(`/usuarios/${id}`)

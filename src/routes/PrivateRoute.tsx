@@ -5,18 +5,20 @@ import { Articulo, Estado, Propiedad, Rubro } from '../modules/parametros/actas'
 import { Juzgado, Profile, Unidad, Usuario } from '../modules/parametros/globales'
 import { Vehiculo } from '../modules/vehiculos'
 import { Plantilla } from '../modules/plantillas'
+import { LibreDeuda } from '../modules/libreDeuda'
 import { Persona } from '../modules/personas'
 import { EstadoActa } from '../modules/estados'
 import { Notificacion, NotificacionActa } from '../modules/notificaciones'
 import { Actuacion, Acumuladas, Sentencia, SentenciaMultiple } from '../modules/actuaciones'
 import { Inhabilitado } from '../modules/inhabilitados'
 import { Dashboard } from '../modules/dashboard'
-import { 
-  Acta, 
-  ActaBromatologia, 
+import { Auditoria } from '../modules/auditoria'
+import {
+  Acta,
+  ActaBromatologia,
   ActaInspeccion,
-  ActaObrasParticulares, 
-  ActaTransito 
+  ActaObrasParticulares,
+  ActaTransito
 } from '../modules/actas'
 
 
@@ -35,22 +37,22 @@ export const PrivateRoute = [
         path: '/paises',
         element: <Pais />
       },
-  
+
       {
         path: '/provincias',
         element: <Provincia />
       },
-  
+
       {
         path: '/departamentos',
         element: <Departamento />
       },
-  
+
       {
         path: '/localidades',
         element: <Localidad />
       },
-  
+
       {
         path: '/barrios',
         element: <Barrio />
@@ -104,6 +106,11 @@ export const PrivateRoute = [
       {
         path: '/plantillas',
         element: <Plantilla />
+      },
+
+      {
+        path: '/libre-deuda',
+        element: <LibreDeuda />
       },
 
       {
@@ -212,6 +219,12 @@ export const PrivateRoute = [
         path: '/dashboard',
         element: <Dashboard />
       },
+
+      {
+        path: '/auditoria',
+        element: <Auditoria />
+      },
+
 
       {
         path: '*',

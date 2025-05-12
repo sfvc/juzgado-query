@@ -38,7 +38,13 @@ export const DropdownHeader = () => {
             <span className='text-sm flex gap-2'><icons.Dashboard /> Dashboard</span>
           </Dropdown.Item>
         </RoleGuard>
-        
+
+        <RoleGuard roles={[UserRole.ADMIN, UserRole.JUEZ]}>
+          <Dropdown.Item onClick={() => navigate('/auditoria')}>
+            <span className='text-sm flex gap-2'><icons.Auditoria /> Auditoria</span>
+          </Dropdown.Item>
+        </RoleGuard>
+
         <Dropdown.Item onClick={() => navigate('/profile')}>
           <span className='text-sm flex gap-2'><icons.Reset /> Cambiar contraseña</span>
         </Dropdown.Item>

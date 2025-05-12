@@ -157,31 +157,31 @@ export const Plantilla = () => {
         />
       </div>
 
-      {/* Modal crear */} 
+      {/* Modal crear */}
       <Modal show={isOpen.create} onClose={() => closeModal('create')} size='4xl'>
         <Modal.Header>Agregar Plantilla</Modal.Header>
         <Modal.Body>
-          <PlantillaForm 
-            plantilla={activeItem} 
+          <PlantillaForm
+            plantilla={activeItem}
             onSucces={() => closeModal('create')}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal editar */} 
+      {/* Modal editar */}
       <Modal show={isOpen.edit} onClose={() => closeModal('edit')} size='4xl'>
         <Modal.Header>Editar Plantilla</Modal.Header>
         <Modal.Body>
-          <EditPlantilla 
-            plantilla={activeItem} 
+          <EditPlantilla
+            plantilla={activeItem}
             onCloseModal={closeEditModal}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
+      {/* Modal eliminar */}
       {
-        activeItem && 
+        activeItem &&
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}
