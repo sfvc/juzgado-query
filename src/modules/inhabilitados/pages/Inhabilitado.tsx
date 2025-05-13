@@ -24,19 +24,19 @@ const colums: Column[] = [
 ]
 
 export const Inhabilitado = () => {
-  const { 
+  const {
     isOpen,
     openModal,
     closeModal
   } = useModals()
   const [activeItem, setActiveItem] = useState<IInhabilitado | null>(null)
 
-  const { 
+  const {
     inhabilitados,
     pagination,
     isFetching,
     updateFilter,
-    deleteInhabilitado 
+    deleteInhabilitado
   } = useInhabilitado()
 
   /* Modal crear/editar */
@@ -89,8 +89,8 @@ export const Inhabilitado = () => {
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Inhabilitados</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
-            <InputTable onSearch={(value: string) => updateFilter('query', value)} />            
-            
+            <InputTable onSearch={(value: string) => updateFilter('query', value)} />
+
             <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
               <Button type='button' onClick={() => onOpenModal(null)} >Agregar</Button>
             </RoleGuard>
@@ -119,14 +119,14 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         {
-                          inhabilitado?.tiempo_transcurrido_dias 
-                            ? `${inhabilitado?.tiempo_transcurrido_dias}` 
+                          inhabilitado?.tiempo_transcurrido_dias
+                            ? `${inhabilitado?.tiempo_transcurrido_dias}`
                             : '-'
                         }
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
-                        <span 
-                          className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white  
+                        <span
+                          className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white
                           ${ inhabilitado.tiempo_transcurrido_dias ? 'bg-green-500' : 'bg-red-500' }
                         `}
                         >
@@ -143,19 +143,19 @@ export const Inhabilitado = () => {
                             </Button>
                           </Tooltip>
                         </RoleGuard>
-                        
+
                         <Tooltip content='Ver más'>
                           <Button onClick={() => onOpenShowModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Show  />
                           </Button>
                         </Tooltip>
-                        
+
                         <Tooltip content='Historial'>
                           <Button color='purple' onClick={() => onOpenHistoryModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.History />
                           </Button>
                         </Tooltip>
-                      
+
                         <RoleGuard roles={[UserRole.ADMIN]}>
                           <Tooltip content='Eliminar'>
                             <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
@@ -183,7 +183,7 @@ export const Inhabilitado = () => {
         />
       </div>
 
-      {/* Modal crear */} 
+      {/* Modal crear */}
       <Modal show={isOpen.create} onClose={onCloseModal} size='5xl'>
         <Modal.Header>Agregar Inhabilitado</Modal.Header>
         <Modal.Body>
@@ -191,7 +191,7 @@ export const Inhabilitado = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Modal ver más */} 
+      {/* Modal ver más */}
       <Modal show={isOpen.show} onClose={onCloseShowModal} size='5xl'>
         <Modal.Header>Datos de inhabilitación</Modal.Header>
         <Modal.Body>
@@ -199,9 +199,9 @@ export const Inhabilitado = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
+      {/* Modal eliminar */}
       {
-        activeItem && 
+        activeItem &&
         <DeleteModal
           item={activeItem.id}
           openModal={isOpen.delete}
@@ -211,13 +211,13 @@ export const Inhabilitado = () => {
         />
       }
 
-      {/* Modal de historial */} 
+      {/* Modal de historial */}
       <Modal show={isOpen.history} onClose={onCloseHistoryModal} size='5xl'>
         <Modal.Header>Agregar Inhabilitado</Modal.Header>
         <Modal.Body>
-          <InhabilitadoHistory 
-            dni={activeItem?.persona?.numero_documento} 
-            isOpen={isOpen.history!} 
+          <InhabilitadoHistory
+            dni={activeItem?.persona?.numero_documento}
+            isOpen={isOpen.history!}
             closeModal={onCloseHistoryModal}
           />
         </Modal.Body>

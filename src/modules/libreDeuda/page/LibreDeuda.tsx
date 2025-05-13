@@ -1,70 +1,55 @@
 import React, { useState } from 'react'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
-import { DeleteModal, InputTable, useLoading } from '../../../shared'
-import { LoadingOverlay } from '../../../layout'
+import { ToastContainer } from 'react-toastify'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
+import { clearNames, icons, InputTable } from '../../../shared'
 import { RoleGuard, UserRole } from '../../../auth'
 import { useModals } from '../../../shared/hooks/useModals'
-import { icons } from '../../../shared'
 import type { Column } from '../../../shared/interfaces'
-import type { ILibreDeuda } from '../interfaces'
 import { useLibreDeuda } from '../hooks/useLibreDeuda'
-import { ConfirmLibreDeuda } from '../components/ConfirmLibreDeuda'
-import { libreDeudaActions } from '..'
+import { ILibreDeuda } from '../interfaces'
+import { ShowLibreDeuda } from '../components/ShowLibreDeuda'
 
 const colums: Column[] = [
-  { key: 'id', label: 'Id' },
-  { key: 'nombre', label: 'Nombre' },
-  { key: 'apellido', label: 'Apellido' },
+  { key: 'id', label: 'ID libre deuda' },
+  { key: 'nombre', label: 'Apellido y Nombre' },
+  { key: 'dni', label: 'DNI' },
   { key: 'dominio', label: 'Patente' },
-  { key: 'estado', label: 'Estado' },
+  { key: 'fecha', label: 'Fecha' },
+  { key: 'verificado', label: 'Estado' },
   { key: 'acciones', label: 'Acciones' },
 ]
 
 export const LibreDeuda = () => {
-  const { isOpen, openModal, closeModal } = useModals()
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
+  const {
+    isOpen,
+    openModal,
+    closeModal
+  } = useModals()
   const [activeItem, setActiveItem] = useState<ILibreDeuda | null>(null)
-  const useAction = useLoading()
 
   const {
     libreDeuda,
     pagination,
     isFetching,
     updateFilter,
-    deleteLibreDeuda,
+    confirmLibreDeuda
   } = useLibreDeuda()
 
-  const onEditModal = (libreDeuda: ILibreDeuda) => {
+  const onOpenShowModal = (libreDeuda: ILibreDeuda) => {
     setActiveItem(libreDeuda)
-    openModal('confirm')
+    openModal('show')
   }
 
-  const openDelteModal = (libreDeuda: ILibreDeuda) => {
-    setActiveItem(libreDeuda)
-    setOpenDeleteModal(true)
-  }
-
-  const closeConfirmModal = () => {
+  const onCloseShowModal = () => {
     setActiveItem(null)
-    closeModal('confirm')
-  }
-
-  const closeDeleteModal = () => {
-    setActiveItem(null)
-    setOpenDeleteModal(false)
-  }
-
-  const confirmLibreDeuda = (id: number) => {
-    useAction.actionFn(async () => {
-      await libreDeudaActions.confirmLibreDeuda(id)
-    })
+    closeModal('show')
   }
 
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
-        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de libre Deuda</h1>
+        <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Libre Deuda</h1>
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
@@ -83,44 +68,51 @@ export const LibreDeuda = () => {
           <Table.Body className='divide-y'>
             {
               isFetching
-                ? <TableSkeleton colums={colums.length} />
+                ? <TableSkeleton colums={colums.length}/>
                 : (libreDeuda.length > 0)
                   ? (libreDeuda.map((libreDeuda: ILibreDeuda) => (
                     <Table.Row key={libreDeuda.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda.id}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda.nombre}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda.apellido}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda.dominio}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.numero_libre_deuda || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.persona_numero_documento || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo_dominio || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.fecha || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span
                           className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white
-                                                ${libreDeuda.titular ? 'bg-green-500' : 'bg-red-500'}
-                                              `}
+                          ${ libreDeuda.verificado ? 'bg-green-500' : 'bg-red-500' }
+                        `}
                         >
-                          {libreDeuda.titular ? 'CHEQUEADO' : 'INCHEQUEADO'}
+                          {libreDeuda.verificado ? 'CHEQUEADO' : 'INCHEQUEADO'}
                         </span>
                       </Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
 
-                        <Tooltip content='Ver'>
-                          <Button color='blue' onClick={() => onEditModal(libreDeuda)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Show />
-                          </Button>
-                        </Tooltip>
-
-                        <Tooltip content='Confirmar'>
-                          <Button color='success' onClick={() => confirmLibreDeuda(libreDeuda.id)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Check />
-                          </Button>
-                        </Tooltip>
-
-                        <RoleGuard roles={[UserRole.ADMIN]}>
-                          <Tooltip content='Eliminar'>
-                            <Button color='failure' onClick={() => openDelteModal(libreDeuda)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Trash />
+                        {libreDeuda.vehiculo_dominio && (
+                          <Tooltip content='Ver Documentación'>
+                            <Button onClick={() => onOpenShowModal(libreDeuda)} className='w-8 h-8 flex items-center justify-center'>
+                              <icons.Show  />
                             </Button>
                           </Tooltip>
-                        </RoleGuard>
+                        )}
+
+                        {!libreDeuda.verificado && libreDeuda.vehiculo_dominio && (
+                          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+                            <Tooltip content='Confirmar'>
+                              <Button
+                                onClick={() => confirmLibreDeuda.mutateAsync({
+                                  libre_deuda_id: libreDeuda?.id,
+                                  persona_id: libreDeuda?.persona_id,
+                                  vehiculo_id: libreDeuda?.vehiculo_id
+                                })}
+                                color='success'
+                                className='w-8 h-8 flex items-center justify-center'
+                              >
+                                <icons.Check/>
+                              </Button>
+                            </Tooltip>
+                          </RoleGuard>
+                        )}
                       </Table.Cell>
                     </Table.Row>
                   )))
@@ -141,28 +133,16 @@ export const LibreDeuda = () => {
         />
       </div>
 
-      <Modal show={isOpen.edit} onClose={() => closeModal('edit')} size='4xl'>
-        <Modal.Header>Editar libre deuda</Modal.Header>
-        <Modal.Body>
-          <ConfirmLibreDeuda
-            libreDeuda={activeItem}
-            onCloseModal={closeConfirmModal}
-          />
-        </Modal.Body>
-      </Modal>
+      {activeItem && (
+        <Modal show={isOpen.show} onClose={onCloseShowModal} size='5xl'>
+          <Modal.Header>Verificación de Libre Deuda</Modal.Header>
+          <Modal.Body>
+            <ShowLibreDeuda libreDeuda={activeItem} closeModal={onCloseShowModal} />
+          </Modal.Body>
+        </Modal>
+      )}
 
-      {
-        activeItem &&
-        <DeleteModal
-          item={activeItem.id}
-          openModal={openDeleteModal}
-          onDelete={(id) => deleteLibreDeuda.mutateAsync(id)}
-          isLoading={deleteLibreDeuda.isPending}
-          onClose={closeDeleteModal}
-        />
-      }
-
-      {useAction.loading && <LoadingOverlay />}
+      <ToastContainer containerId="custom" className="custom-toast-container" />
     </React.Fragment>
   )
 }

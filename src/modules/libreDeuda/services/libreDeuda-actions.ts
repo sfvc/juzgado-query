@@ -15,14 +15,14 @@ export const getLibreDeudaById = async (id: number) => {
   return data
 }
 
-export const deleteLibreDeuda = async (id: number) => {
-  const response = await apiJuzgado.delete(`/libre-deuda/${id}`)
-  const { data: libreDeuda } = response.data
-  return libreDeuda
-}
-
-export const confirmLibreDeuda = async (id: number ) => {
-  const response = await apiJuzgado.post(`/libre-deuda/${id}`)
-  const { data: plantilla } = response.data
-  return plantilla
+export const confirmLibreDeuda = async (data: {
+  libre_deuda_id: number
+  persona_id: number
+  vehiculo_id: number
+}) => {
+  const response = await apiJuzgado.post('/libre-deuda/verificar', {
+    ...data,
+    verificado: true,
+  })
+  return response.data.data
 }
