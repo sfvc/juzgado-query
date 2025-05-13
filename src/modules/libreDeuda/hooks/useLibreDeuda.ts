@@ -24,26 +24,18 @@ export const useLibreDeuda = () => {
     filterParams
   })
 
-  const deleteLibreDeuda = useMutation({
-    mutationFn: (id: number) => libreDeudaActions.deleteLibreDeuda(id),
-    onSuccess: () => {
-      toast.success('Titular eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar al titular')
-      console.log(error)
-    }
-  })
-
   const confirmLibreDeuda = useMutation({
-    mutationFn: (id: number) => libreDeudaActions.confirmLibreDeuda(id),
+    mutationFn: (data: {
+    libre_deuda_id: number
+    persona_id: number
+    vehiculo_id: number
+  }) => libreDeudaActions.confirmLibreDeuda(data),
     onSuccess: () => {
-      toast.success('Titular editada con exito')
+      toast.success('Titular confirmada con éxito')
       queryClient.clear()
     },
     onError: (error) => {
-      toast.error('Error al editar al titular')
+      toast.error('Error al confirmar al titular')
       console.log(error)
     }
   })
@@ -56,7 +48,6 @@ export const useLibreDeuda = () => {
     updateFilter,
 
     // Mutations
-    deleteLibreDeuda,
     confirmLibreDeuda
   }
 }

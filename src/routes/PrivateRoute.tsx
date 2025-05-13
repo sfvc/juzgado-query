@@ -109,11 +109,6 @@ export const PrivateRoute = [
       },
 
       {
-        path: '/libre-deuda',
-        element: <LibreDeuda />
-      },
-
-      {
         path: '/personas',
         element: <Persona />
       },
@@ -225,6 +220,10 @@ export const PrivateRoute = [
         element: <Auditoria />
       },
 
+      {
+        path: '/libre-deuda',
+        element: <LibreDeuda />
+      },
 
       {
         path: '*',
