@@ -14,4 +14,5 @@ export interface ILibreDeuda {
     libre_deuda_id?: number
     persona_id?: number
     vehiculo_id?: number
+    path_file?: string
 }

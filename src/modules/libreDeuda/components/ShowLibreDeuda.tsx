@@ -30,7 +30,7 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
                 <img
                   src={libreDeuda.vehiculo_cedula_frente}
                   alt="Cédula Frente"
-                  className="w-full h-48 object-cover rounded-lg shadow-sm border"
+                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
                 />
               </div>
             )}
@@ -40,7 +40,7 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
                 <img
                   src={libreDeuda.vehiculo_cedula_dorso}
                   alt="Cédula Dorso"
-                  className="w-full h-48 object-cover rounded-lg shadow-sm border"
+                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
                 />
               </div>
             )}
@@ -50,7 +50,7 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
                 <img
                   src={libreDeuda.vehiculo_marbete}
                   alt="Marbete"
-                  className="w-full h-48 object-cover rounded-lg shadow-sm border"
+                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
                 />
               </div>
             )}

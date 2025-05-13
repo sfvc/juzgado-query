@@ -96,6 +96,17 @@ export const LibreDeuda = () => {
                           </Tooltip>
                         )}
 
+                        <Tooltip content='Ver Libre Deuda'>
+                          <Button
+                            onClick={() => libreDeuda.path_file && window.open(libreDeuda.path_file, '_blank')}
+                            className='w-8 h-8 flex items-center justify-center'
+                            color='warning'
+                          >
+                            <icons.World />
+                          </Button>
+                        </Tooltip>
+
+
                         {!libreDeuda.verificado && libreDeuda.vehiculo_dominio && (
                           <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
                             <Tooltip content='Confirmar'>
