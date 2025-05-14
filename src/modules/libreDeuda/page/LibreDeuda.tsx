@@ -96,7 +96,7 @@ export const LibreDeuda = () => {
                           ${libreDeuda.verificado ? 'bg-green-500' : 'bg-red-500'}
                         `}
                         >
-                          {libreDeuda.verificado ? 'CHEQUEADO' : 'INCHEQUEADO'}
+                          {libreDeuda.verificado ? 'CHEQUEADO' : 'SIN CHEQUEAR'}
                         </span>
                       </Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>

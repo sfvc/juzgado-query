@@ -5,7 +5,7 @@ import { clearNames } from '../../../shared'
 interface Props {
   libreDeuda: ILibreDeuda
   closeModal: () => void
-  onConfirm: () => void // <-- NUEVO
+  onConfirm: () => void
 }
 
 export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => {
@@ -59,15 +59,19 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
         </section>
       )}
 
+
       <div className="flex justify-end gap-4">
-        <Button color="success" onClick={() => {
-          onConfirm()
-          closeModal()
-        }}>
-          Confirmar Titular
-        </Button>
+        {libreDeuda?.verificado === 0 && (
+          <Button color="success" onClick={() => {
+            onConfirm()
+            closeModal()
+          }}>
+            Confirmar Titular
+          </Button>
+        )}
         <Button color="gray" onClick={closeModal}>Cerrar</Button>
       </div>
+
     </div>
   )
 }
