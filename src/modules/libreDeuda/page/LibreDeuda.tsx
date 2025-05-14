@@ -3,7 +3,6 @@ import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { ToastContainer } from 'react-toastify'
 import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import { clearNames, icons, InputTable } from '../../../shared'
-import { RoleGuard, UserRole } from '../../../auth'
 import { useModals } from '../../../shared/hooks/useModals'
 import type { Column } from '../../../shared/interfaces'
 import { useLibreDeuda } from '../hooks/useLibreDeuda'
@@ -110,24 +109,6 @@ export const LibreDeuda = () => {
                           </Tooltip>
                         )}
 
-                        {!libreDeuda.verificado && libreDeuda.vehiculo_dominio && (
-                          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
-                            <Tooltip content='Confirmar'>
-                              <Button
-                                onClick={() => confirmLibreDeuda.mutateAsync({
-                                  libre_deuda_id: libreDeuda?.id,
-                                  persona_id: libreDeuda?.persona_id,
-                                  vehiculo_id: libreDeuda?.vehiculo_id
-                                })}
-                                color='success'
-                                className='w-8 h-8 flex items-center justify-center'
-                              >
-                                <icons.Check />
-                              </Button>
-                            </Tooltip>
-                          </RoleGuard>
-                        )}
-
                         <Tooltip content='Ver Libre Deuda'>
                           <Button
                             onClick={() => libreDeuda.path_file && window.open(libreDeuda.path_file, '_blank')}
@@ -162,7 +143,15 @@ export const LibreDeuda = () => {
         <Modal show={isOpen.show} onClose={onCloseShowModal} size='5xl'>
           <Modal.Header>Verificación de Libre Deuda</Modal.Header>
           <Modal.Body>
-            <ShowLibreDeuda libreDeuda={activeItem} closeModal={onCloseShowModal} />
+            <ShowLibreDeuda
+              libreDeuda={activeItem}
+              closeModal={onCloseShowModal}
+              onConfirm={() => confirmLibreDeuda.mutateAsync({
+                libre_deuda_id: activeItem.id,
+                persona_id: activeItem.persona_id,
+                vehiculo_id: activeItem.vehiculo_id
+              })}
+            />
           </Modal.Body>
         </Modal>
       )}

@@ -5,27 +5,24 @@ import { clearNames } from '../../../shared'
 interface Props {
   libreDeuda: ILibreDeuda
   closeModal: () => void
+  onConfirm: () => void // <-- NUEVO
 }
 
-export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
-
+export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-
     const padZero = (num: number) => String(num).padStart(2, '0')
-
     const day = padZero(date.getDate())
     const month = padZero(date.getMonth() + 1)
     const year = date.getFullYear()
     const hours = padZero(date.getHours())
     const minutes = padZero(date.getMinutes())
-
     return `${day}/${month}/${year}, ${hours}:${minutes}`
   }
 
   return (
     <div className="space-y-6 p-4">
-      <section className="bg-white dark:bg-gray-700  rounded-xl shadow-md p-6">
+      <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">Datos del Vehículo</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
           <p><span className="font-medium">Nombre:</span> {clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</p>
@@ -43,41 +40,33 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
             {libreDeuda.vehiculo_cedula_frente && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Cédula Frente</p>
-                <img
-                  src={libreDeuda.vehiculo_cedula_frente}
-                  alt="Cédula Frente"
-                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
-                />
+                <img src={libreDeuda.vehiculo_cedula_frente} alt="Cédula Frente" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
             {libreDeuda.vehiculo_cedula_dorso && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Cédula Dorso</p>
-                <img
-                  src={libreDeuda.vehiculo_cedula_dorso}
-                  alt="Cédula Dorso"
-                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
-                />
+                <img src={libreDeuda.vehiculo_cedula_dorso} alt="Cédula Dorso" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
             {libreDeuda.vehiculo_marbete && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Marbete</p>
-                <img
-                  src={libreDeuda.vehiculo_marbete}
-                  alt="Marbete"
-                  className="w-full h-64 object-cover rounded-lg shadow-sm border"
-                />
+                <img src={libreDeuda.vehiculo_marbete} alt="Marbete" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
           </div>
         </section>
       )}
 
-      <div className="flex justify-end">
-        <Button color="gray" onClick={closeModal}>
-          Cerrar
+      <div className="flex justify-end gap-4">
+        <Button color="success" onClick={() => {
+          onConfirm()
+          closeModal()
+        }}>
+          Confirmar Titular
         </Button>
+        <Button color="gray" onClick={closeModal}>Cerrar</Button>
       </div>
     </div>
   )
