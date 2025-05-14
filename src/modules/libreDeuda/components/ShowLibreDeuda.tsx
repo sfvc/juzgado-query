@@ -1,5 +1,6 @@
 import { Button } from 'flowbite-react'
 import { ILibreDeuda } from '../interfaces'
+import { clearNames } from '../../../shared'
 
 interface Props {
   libreDeuda: ILibreDeuda
@@ -7,16 +8,31 @@ interface Props {
 }
 
 export const ShowLibreDeuda = ({ libreDeuda, closeModal }: Props) => {
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+
+    const padZero = (num: number) => String(num).padStart(2, '0')
+
+    const day = padZero(date.getDate())
+    const month = padZero(date.getMonth() + 1)
+    const year = date.getFullYear()
+    const hours = padZero(date.getHours())
+    const minutes = padZero(date.getMinutes())
+
+    return `${day}/${month}/${year}, ${hours}:${minutes}`
+  }
+
   return (
     <div className="space-y-6 p-4">
       <section className="bg-white dark:bg-gray-700  rounded-xl shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">Datos del Vehículo</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
-          <p><span className="font-medium">Nombre:</span> {libreDeuda.persona_nombre}</p>
-          <p><span className="font-medium">DNI:</span> {libreDeuda.persona_numero_documento}</p>
-          <p><span className="font-medium">Dominio:</span> {libreDeuda.vehiculo_dominio}</p>
-          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda.numero_libre_deuda}</p>
-          <p><span className="font-medium">Fecha:</span> {libreDeuda.fecha}</p>
+          <p><span className="font-medium">Nombre:</span> {clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</p>
+          <p><span className="font-medium">DNI:</span> {libreDeuda?.persona_numero_documento || '-'}</p>
+          <p><span className="font-medium">Dominio:</span> {libreDeuda?.vehiculo_dominio || '-'}</p>
+          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda?.numero_libre_deuda || '-'}</p>
+          <p><span className="font-medium">Fecha:</span> {formatDate(libreDeuda?.fecha || '-')}</p>
         </div>
       </section>
 

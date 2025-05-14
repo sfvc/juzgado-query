@@ -46,6 +46,20 @@ export const LibreDeuda = () => {
     closeModal('show')
   }
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+
+    const padZero = (num: number) => String(num).padStart(2, '0')
+
+    const day = padZero(date.getDate())
+    const month = padZero(date.getMonth() + 1)
+    const year = date.getFullYear()
+    const hours = padZero(date.getHours())
+    const minutes = padZero(date.getMinutes())
+
+    return `${day}/${month}/${year}, ${hours}:${minutes}`
+  }
+
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
@@ -68,7 +82,7 @@ export const LibreDeuda = () => {
           <Table.Body className='divide-y'>
             {
               isFetching
-                ? <TableSkeleton colums={colums.length}/>
+                ? <TableSkeleton colums={colums.length} />
                 : (libreDeuda.length > 0)
                   ? (libreDeuda.map((libreDeuda: ILibreDeuda) => (
                     <Table.Row key={libreDeuda.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
@@ -76,11 +90,11 @@ export const LibreDeuda = () => {
                       <Table.Cell className='text-center dark:text-white'>{clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.persona_numero_documento || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo_dominio || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.fecha || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{formatDate(libreDeuda?.fecha || '-')}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span
                           className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white
-                          ${ libreDeuda.verificado ? 'bg-green-500' : 'bg-red-500' }
+                          ${libreDeuda.verificado ? 'bg-green-500' : 'bg-red-500'}
                         `}
                         >
                           {libreDeuda.verificado ? 'CHEQUEADO' : 'INCHEQUEADO'}
@@ -91,21 +105,10 @@ export const LibreDeuda = () => {
                         {libreDeuda.vehiculo_dominio && (
                           <Tooltip content='Ver Documentación'>
                             <Button onClick={() => onOpenShowModal(libreDeuda)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Show  />
+                              <icons.Show />
                             </Button>
                           </Tooltip>
                         )}
-
-                        <Tooltip content='Ver Libre Deuda'>
-                          <Button
-                            onClick={() => libreDeuda.path_file && window.open(libreDeuda.path_file, '_blank')}
-                            className='w-8 h-8 flex items-center justify-center'
-                            color='warning'
-                          >
-                            <icons.World />
-                          </Button>
-                        </Tooltip>
-
 
                         {!libreDeuda.verificado && libreDeuda.vehiculo_dominio && (
                           <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
@@ -119,11 +122,22 @@ export const LibreDeuda = () => {
                                 color='success'
                                 className='w-8 h-8 flex items-center justify-center'
                               >
-                                <icons.Check/>
+                                <icons.Check />
                               </Button>
                             </Tooltip>
                           </RoleGuard>
                         )}
+
+                        <Tooltip content='Ver Libre Deuda'>
+                          <Button
+                            onClick={() => libreDeuda.path_file && window.open(libreDeuda.path_file, '_blank')}
+                            className='w-8 h-8 flex items-center justify-center'
+                            color='warning'
+                          >
+                            <icons.World />
+                          </Button>
+                        </Tooltip>
+
                       </Table.Cell>
                     </Table.Row>
                   )))
