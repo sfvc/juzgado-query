@@ -10,15 +10,22 @@ interface Props {
 
 export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => {
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const padZero = (num: number) => String(num).padStart(2, '0')
-    const day = padZero(date.getDate())
-    const month = padZero(date.getMonth() + 1)
-    const year = date.getFullYear()
-    const hours = padZero(date.getHours())
-    const minutes = padZero(date.getMinutes())
-    return `${day}/${month}/${year}, ${hours}:${minutes}`
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleString('es-AR', {
+        timeZone: 'America/Argentina/Buenos_Aires',
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    } catch (e) {
+      return dateString
+    }
   }
+
 
   return (
     <div className="space-y-6 p-4">
