@@ -46,17 +46,20 @@ export const LibreDeuda = () => {
   }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-
-    const padZero = (num: number) => String(num).padStart(2, '0')
-
-    const day = padZero(date.getDate())
-    const month = padZero(date.getMonth() + 1)
-    const year = date.getFullYear()
-    const hours = padZero(date.getHours())
-    const minutes = padZero(date.getMinutes())
-
-    return `${day}/${month}/${year}, ${hours}:${minutes}`
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleString('es-AR', {
+        timeZone: 'America/Argentina/Buenos_Aires',
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    } catch (e) {
+      return dateString
+    }
   }
 
   return (
@@ -87,7 +90,11 @@ export const LibreDeuda = () => {
                     <Table.Row key={libreDeuda.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.numero_libre_deuda || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.persona_numero_documento || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        {libreDeuda?.persona_numero_documento === 1 || !libreDeuda?.persona_numero_documento
+                          ? '-'
+                          : libreDeuda.persona_numero_documento}
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo_dominio || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{formatDate(libreDeuda?.fecha || '-')}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
