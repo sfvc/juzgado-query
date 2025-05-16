@@ -9,7 +9,7 @@ import { IUsuario } from '../../parametros/globales/interfaces'
 import { getUsuariosSinPaginar } from '../../parametros/globales/services/usuario-actions'
 
 const columns: Column[] = [
-  { key: 'usuario_nombre', label: 'Nombre de Usuario' },
+  { key: 'usuario_nombre', label: 'Nombre y Apellido' },
   { key: 'dni', label: 'DNI' },
   { key: 'usuario_username', label: 'Username' },
   { key: 'juzgado_id', label: 'Juzgado' },
@@ -17,6 +17,8 @@ const columns: Column[] = [
   { key: 'evento', label: 'Acción' },
   { key: 'entidad_tipo', label: 'Tipo Entidad' },
   { key: 'entidad_id', label: 'ID Entidad' },
+  { key: 'old_values', label: 'Valores Anteriores' },
+  { key: 'new_values', label: 'Nuevos Valores' },
 ]
 
 export const Auditoria = () => {
@@ -37,6 +39,53 @@ export const Auditoria = () => {
       return new Date(dateTimeString).toLocaleString('es-AR')
     } catch (e) {
       return dateTimeString
+    }
+  }
+
+  const formatEvent = (event: string | null): string => {
+    if (!event) return 'N/A'
+    switch (event) {
+    case 'login':
+      return 'Inicio de sesión'
+    case 'created':
+      return 'Creación'
+    case 'updated':
+      return 'Actualización'
+    case 'deleted':
+      return 'Eliminación'
+    default:
+      return event
+    }
+  }
+
+  const renderKeyValueJson = (jsonString: string) => {
+    try {
+      const parsed = JSON.parse(jsonString)
+      if (Array.isArray(parsed)) {
+        return parsed.length ? (
+          <ul className='list-disc list-inside'>
+            {parsed.map((item, idx) => (
+              <li key={idx}>{JSON.stringify(item)}</li>
+            ))}
+          </ul>
+        ) : (
+          <span className='italic text-gray-500'>Sin datos</span>
+        )
+      }
+
+      return Object.entries(parsed).length ? (
+        <ul className='list-disc list-inside'>
+          {Object.entries(parsed).map(([key, value]) => (
+            <li key={key}>
+              <strong>{key}:</strong> {String(value)}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <span className='italic text-gray-500'>Sin datos</span>
+      )
+    } catch (e) {
+      return <span className='italic text-red-500'>Error de formato</span>
     }
   }
 
@@ -87,11 +136,15 @@ export const Auditoria = () => {
                   <Table.Cell className='text-center dark:text-white'>{auditItem.user?.nombre ?? 'N/A'}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{auditItem.user?.dni ?? 'N/A'}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{auditItem.user?.username ?? 'N/A'}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{auditItem.user?.juzgado_id ?? 'N/A'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>
+                    {auditItem.user?.juzgado_id ? `N° ${auditItem.user.juzgado_id}` : 'N/A'}
+                  </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{formatDateTime(auditItem.created_at || 'N/A')}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{auditItem.event || 'N/A'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{formatEvent(auditItem.event)}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{formatAuditableType(auditItem.auditable_type || 'N/A')}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{auditItem.auditable_id || 'N/A'}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{renderKeyValueJson(auditItem.old_values)}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{renderKeyValueJson(auditItem.new_values)}</Table.Cell>
                 </Table.Row>
               ))
             ) : (
