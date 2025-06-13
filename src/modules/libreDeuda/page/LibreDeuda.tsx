@@ -91,11 +91,9 @@ export const LibreDeuda = () => {
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.numero_libre_deuda || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
-                        {libreDeuda?.persona_numero_documento === 1 || !libreDeuda?.persona_numero_documento
-                          ? '-'
-                          : libreDeuda.persona_numero_documento}
+                        {libreDeuda?.persona_numero_documento || '-'}
                       </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo_dominio || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo?.dominio || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{formatDate(libreDeuda?.fecha || '-')}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span

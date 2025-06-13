@@ -26,7 +26,6 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
     }
   }
 
-
   return (
     <div className="space-y-6 p-4">
       <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
@@ -34,9 +33,17 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
           <p><span className="font-medium">Nombre:</span> {clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</p>
           <p><span className="font-medium">DNI:</span> {libreDeuda?.persona_numero_documento || '-'}</p>
-          <p><span className="font-medium">Dominio:</span> {libreDeuda?.vehiculo_dominio || '-'}</p>
-          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda?.numero_libre_deuda || '-'}</p>
           <p><span className="font-medium">Fecha:</span> {formatDate(libreDeuda?.fecha || '-')}</p>
+          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda?.numero_libre_deuda || '-'}</p>
+          <p><span className="font-medium">Dominio:</span> {libreDeuda?.vehiculo_dominio || '-'}</p>
+          <p><span className="font-medium">Tipo de Vehículo:</span> {libreDeuda?.vehiculo?.tipo || '-'}</p>
+          <p><span className="font-medium">Marca:</span> {libreDeuda?.vehiculo?.marca || '-'}</p>
+          <p><span className="font-medium">Modelo:</span> {libreDeuda?.vehiculo?.modelo || '-'}</p>
+          <p><span className="font-medium">Número de Chasis:</span> {libreDeuda?.vehiculo?.numero_chasis || '-'}</p>
+          <p><span className="font-medium">Número de Motor:</span> {libreDeuda?.vehiculo?.numero_motor || '-'}</p>
+          {libreDeuda?.vehiculo?.tipo_id === 50067 && (
+            <p><span className="font-medium">Número de Taxi o Remis:</span> {libreDeuda?.vehiculo?.numero_taxi_remis || '-'}</p>
+          )}
         </div>
       </section>
 
@@ -66,16 +73,13 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
         </section>
       )}
 
-
       <div className="flex justify-end gap-4">
-        {libreDeuda?.verificado === 0 && (
-          <Button color="success" onClick={() => {
-            onConfirm()
-            closeModal()
-          }}>
+        <Button color="success" onClick={() => {
+          onConfirm()
+          closeModal()
+        }}>
             Confirmar Titular
-          </Button>
-        )}
+        </Button>
         <Button color="gray" onClick={closeModal}>Cerrar</Button>
       </div>
 
