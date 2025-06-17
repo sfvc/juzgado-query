@@ -2,6 +2,7 @@ import { Label, Select } from 'flowbite-react'
 
 const SURCHARGES_AVALABLES = [
   { label: 'Sin recargo', value: 0 },
+  { label: '10%', value: 10 },
   { label: '25%', value: 25 },
   { label: '50%', value: 50 },
   { label: '75%', value: 75 },
@@ -12,7 +13,7 @@ interface Props {
     recargo: number
     applySurcharge: (value: number) => void
 }
-  
+
 export const Surcharge = ({recargo, applySurcharge}: Props) => {
   return (
     <div className='mb-4 relative'>
