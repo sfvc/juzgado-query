@@ -1,27 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Pagination, Table, Tooltip } from 'flowbite-react'
+import { Button, Pagination, Table } from 'flowbite-react'
 import { useRecaudacion } from '../hooks/useRecaudacion'
 import type { Column } from '../../../shared/interfaces'
+import { icons, useLoading } from '../../../shared'
+import { formatReport } from '../helpers/formatReport'
+import { carboneActions } from '../../carbone'
 import { IRecaudacion }
   from '../interfaces'
-import { icons, useLoading } from '../../../shared'
-import { carboneActions } from '../../carbone'
 import { useState } from 'react'
 
 const columns: Column[] = [
-  { key: 'fecha', label: 'FECHA' },
-  { key: 'acciones', label: 'Acciones' },
+  { key: 'nro_comprobante_rentas', label: 'NÚMERO DE COMPROBANTE' },
+  { key: 'numero_acta', label: 'NÚMERO DE ACTA' },
+  { key: 'monto_multa_original', label: 'MONTO ORIGINAL' },
+  { key: 'monto_conceptos_original', label: 'MONTO CONCEPTOS' },
+  { key: 'monto_abonado', label: 'MONTO ABONADO' },
+  { key: 'fecha_pago', label: 'FECHA DE PAGO' },
+  { key: 'juzgado', label: 'JUZGADO N°' },
+  { key: 'estado', label: 'ESTADO' },
 ]
 
 export const Recaudacion = () => {
-  const { recaudacionFiltrada, isFetching, pagination, updateFilter } = useRecaudacion()
   const useAction = useLoading()
+  const { recaudacionFiltrada, isFetching, pagination, updateFilter } = useRecaudacion()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
-  const downloadRecaudacion = (path: string) => {
+  const RECAUDACION_TEMPLATE: string = 'recaudacion.xlsx'
+
+  const renderRecaudacion = async () => {
     useAction.actionFn(async () => {
-      await carboneActions.downloadRecaudacion(path)
+      const form = formatReport(recaudacionFiltrada, undefined)
+
+      const data = {
+        convertTo: 'pdf',
+        data: form,
+        template: RECAUDACION_TEMPLATE
+      }
+
+      await carboneActions.showFilePDF(data)
     })
   }
 
@@ -50,6 +67,10 @@ export const Recaudacion = () => {
     <>
       <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4'>
         <h1 className='text-2xl font-semibold dark:text-white'>Listado de Recaudación</h1>
+
+        <Button color='warning' onClick={renderRecaudacion} isProcessing={useAction.loading} disabled={useAction.loading}>
+          <icons.Print/>&#160; Imprimir
+        </Button>
 
         <div className='flex items-center gap-2'>
           <input
@@ -90,14 +111,14 @@ export const Recaudacion = () => {
             ) : recaudacionFiltrada && recaudacionFiltrada.length > 0 ? (
               recaudacionFiltrada.map((recaudacionItems: IRecaudacion) => (
                 <Table.Row key={recaudacionItems.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.nro_comprobante_rentas || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.numero_acta || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_multa_original || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_conceptos_original || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_abonado || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{formatDateTime(recaudacionItems?.fecha_pago || '')}</Table.Cell>
-                  <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-                    <Tooltip content='Descargar'>
-                      <Button color='warning' onClick={() => downloadRecaudacion(recaudacionItems?.path)} className='w-8 h-8 flex items-center justify-center'>
-                        <icons.Download />
-                      </Button>
-                    </Tooltip>
-                  </Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.juzgado?.nombre || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.estado || ''}</Table.Cell>
                 </Table.Row>
               ))
             ) : (

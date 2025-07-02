@@ -1,8 +1,8 @@
 import { numberToWords } from './numberToWords'
 import { clearNames } from '../../../shared'
 import { sanitizeData } from './sanitizeData'
-import type { 
-  ActuacionResponse, 
+import type {
+  ActuacionResponse,
   Vehiculo,
   Domicilio
 } from '../../actuaciones/interfaces/actuacion'
@@ -36,11 +36,11 @@ const formatAddress = (domicilio: Domicilio) => {
 }
 
 export const formatData = async (data: ActuacionResponse) => {
-  const { 
+  const {
     actas,
-    notificaciones, 
-    infractores, 
-    vehiculos, 
+    notificaciones,
+    infractores,
+    vehiculos,
     articulos,
     total,
     descuento,
@@ -48,8 +48,25 @@ export const formatData = async (data: ActuacionResponse) => {
     conceptos,
     fecha: fechaSentencia,
     sub_total: subTotal,
-    usuario
+    usuario,
+    recaudacion,
+    estadisticas
   } = data
+
+  const pagos = estadisticas?.comprobantes_pagados || {}
+
+  const numeroJuzgado = recaudacion.numero_juzgado || ''
+  const numeroActaRecaudacion = recaudacion?.numero_acta || ''
+  const fechaComprobante = recaudacion?.fecha_pago || ''
+  const nroComprobanteRentas = recaudacion?.nro_comprobante_rentas || ''
+  const montoMulta = recaudacion?.monto_multa_original || ''
+  const montoMultaTotal = pagos.monto_multas?.toString() || '0'
+  const montoConceptos = recaudacion?.monto_conceptos_original || ''
+  const montoConceptosTotal = pagos.monto_conceptos?.toString() || '0'
+  const montoAbonado = recaudacion?.monto_total_original || ''
+  const montoAbonadoTotal = pagos.monto_total_abonado?.toString() || '0'
+  const montoJuzgadoUno = recaudacion?.monto_juzgado || ''
+  const montoJuzgadoDos = recaudacion?.monto_juzgado || ''
 
   const juzgadoNombre = usuario.juzgado.nombre
   const juzgadoDomicilio = usuario.juzgado?.direccion || ''
@@ -68,7 +85,7 @@ export const formatData = async (data: ActuacionResponse) => {
   const infractorDocumento = infractores?.map(infractor => infractor.documento || infractor.cuit).join(', ')
   const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
   const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
-  
+
   // const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
   // const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
   // const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre).join(', ')
@@ -92,7 +109,7 @@ export const formatData = async (data: ActuacionResponse) => {
   const importeLetrasConDescuento = numberToWords(+total)
   const importeInfraccionMultiple = numberToWords(+total)
   const totalLetrasSinConceptos = numberToWords(+totalSinConceptos)
-  
+
   const dataFormatted = {
     // Fecha actual
     añoActual,
@@ -105,6 +122,20 @@ export const formatData = async (data: ActuacionResponse) => {
     juzgadoTelefono,
     nombreJuez,
     nombreSecretario,
+
+    // Recaudacion
+    numeroJuzgado,
+    numeroActaRecaudacion,
+    fechaComprobante,
+    nroComprobanteRentas,
+    montoMulta,
+    montoMultaTotal,
+    montoConceptos,
+    montoConceptosTotal,
+    montoAbonado,
+    montoAbonadoTotal,
+    montoJuzgadoUno,
+    montoJuzgadoDos,
 
     // Acta
     acta: numeroActa,
@@ -158,5 +189,5 @@ export const formatData = async (data: ActuacionResponse) => {
     // titular
   }
 
-  return sanitizeData(dataFormatted) 
+  return sanitizeData(dataFormatted)
 }
