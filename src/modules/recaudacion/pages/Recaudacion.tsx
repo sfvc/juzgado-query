@@ -30,7 +30,7 @@ export const Recaudacion = () => {
 
   const renderRecaudacion = async () => {
     useAction.actionFn(async () => {
-      const form = formatReport(recaudacionFiltrada, undefined)
+      const form = formatReport(recaudacionFiltrada)
 
       const data = {
         convertTo: 'pdf',
