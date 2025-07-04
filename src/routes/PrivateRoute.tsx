@@ -13,6 +13,7 @@ import { Actuacion, Acumuladas, Sentencia, SentenciaMultiple } from '../modules/
 import { Inhabilitado } from '../modules/inhabilitados'
 import { Dashboard } from '../modules/dashboard'
 import { Auditoria } from '../modules/auditoria'
+import { Recaudacion } from '../modules/recaudacion'
 import {
   Acta,
   ActaBromatologia,
@@ -20,7 +21,6 @@ import {
   ActaObrasParticulares,
   ActaTransito
 } from '../modules/actas'
-
 
 export const PrivateRoute = [
   {
@@ -32,7 +32,6 @@ export const PrivateRoute = [
         element: <Navigate to='/actas' />
       },
 
-      // Parametros
       {
         path: '/paises',
         element: <Pais />
@@ -118,7 +117,6 @@ export const PrivateRoute = [
         element: <Unidad />
       },
 
-      // Actas
       {
         path: '/actas',
         element: <Acta />
@@ -164,13 +162,11 @@ export const PrivateRoute = [
         element: <ActaObrasParticulares />
       },
 
-      // Estados
       {
         path: '/acta/:id/estados',
         element: <EstadoActa />
       },
 
-      // Notificaciones
       {
         path: '/acta/:id/notificaciones',
         element: <NotificacionActa />
@@ -181,7 +177,6 @@ export const PrivateRoute = [
         element: <Notificacion />
       },
 
-      // Actuaciones
       {
         path: '/acta/:id/actuaciones',
         element: <Actuacion />
@@ -192,7 +187,6 @@ export const PrivateRoute = [
         element: <Acumuladas />
       },
 
-      // Sentencia
       {
         path: '/acta/:id/actuaciones/sentencia',
         element: <Sentencia />
@@ -203,13 +197,11 @@ export const PrivateRoute = [
         element: <SentenciaMultiple />
       },
 
-      // Inhabilitados
       {
         path: '/inhabilitados',
         element: <Inhabilitado />
       },
 
-      // Dashboard
       {
         path: '/dashboard',
         element: <Dashboard />
@@ -218,6 +210,11 @@ export const PrivateRoute = [
       {
         path: '/auditoria',
         element: <Auditoria />
+      },
+
+      {
+        path: '/recaudacion',
+        element: <Recaudacion />
       },
 
       {

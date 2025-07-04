@@ -45,6 +45,12 @@ export const DropdownHeader = () => {
           </Dropdown.Item>
         </RoleGuard>
 
+        <RoleGuard roles={[UserRole.ADMIN, UserRole.JUEZ]}>
+          <Dropdown.Item onClick={() => navigate('/recaudacion')}>
+            <span className='text-sm flex gap-2'><icons.Recaudacion /> Recaudación</span>
+          </Dropdown.Item>
+        </RoleGuard>
+
         <Dropdown.Item onClick={() => navigate('/profile')}>
           <span className='text-sm flex gap-2'><icons.Reset /> Cambiar contraseña</span>
         </Dropdown.Item>

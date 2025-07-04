@@ -22,9 +22,9 @@ export const EditPlantilla = ({ plantilla, onCloseModal }: Props) => {
     const file = refFile.current?.files ? refFile.current.files[0] : null
 
     if(!file) return setErrorMessage('Debe seleccionar un archivo')
-    
+
     if(!plantilla?.path) return toast.error('Error al subir el archivo')
-    
+
     const path = await editPlantilla.mutateAsync({ file, path: plantilla?.path })
     if (path) onCloseModal()
   }
@@ -34,7 +34,7 @@ export const EditPlantilla = ({ plantilla, onCloseModal }: Props) => {
       await carboneActions.downloadPlantilla(path)
     })
   }
-    
+
   return (
     <div>
       <div className='mb-4 relative'>
@@ -58,27 +58,27 @@ export const EditPlantilla = ({ plantilla, onCloseModal }: Props) => {
       <footer className='flex flex-col'>
         <Alert color='failure' className='mt-4' icon={icons.Warning}>
           <span>
-            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>   
+            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>
             <span className='text-blue-600'>Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.</span>
             <br />
-            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>   
+            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>
             <span className='text-blue-600'>El tamaño maximo del archivo tiene que ser menor a 2MB.</span>
           </span>
         </Alert>
 
         <div className='flex justify-end gap-4 mt-4'>
           <Button color='gray' type='button' className='px-4' onClick={() => dowloadPlantilla(plantilla!.path)}>
-            <icons.Dowloand size={18}/> 
+            <icons.Download size={18}/>
             &#160; Descargar Plantilla
           </Button>
-        
+
           <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
 
-          <Button 
-            type='button' 
-            className='px-4' 
-            onClick={onUploadFile} 
-            disabled={editPlantilla.isPending} 
+          <Button
+            type='button'
+            className='px-4'
+            onClick={onUploadFile}
+            disabled={editPlantilla.isPending}
             isProcessing={editPlantilla.isPending}
           >
             Guardar

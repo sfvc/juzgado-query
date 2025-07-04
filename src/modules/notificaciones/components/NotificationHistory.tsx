@@ -33,7 +33,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
   const { convertToPDF, downloadWordS3, useAction } = usePdf()
   const { user } = useContext(AuthContext)
   const refFile = useRef<HTMLInputElement | null>(null)
-  
+
   const [ openDeleteModal, setOpenDeleteModal ] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<INotificationHistory | null>(null)
 
@@ -72,13 +72,13 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
 
   const onDeleteNotificacion = async () => {
     if (!activeItem) return
-    
+
     const response = await deleteNotificationHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: notificacion.id}]})
     if (response.status === 200) onCloseModalHistory()
   }
 
   const cleanInputFile = () => {
-    if (refFile.current) 
+    if (refFile.current)
       refFile.current.value = ''
   }
 
@@ -87,7 +87,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
       await convertToPDF(url)
     })
   }
-    
+
   return (
     <div>
       <div className='mb-4 relative'>
@@ -111,7 +111,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
       {
         isLoading
           ? <div className='flex justify-center items-center'><Spinner size='xl' /></div>
-          : 
+          :
           <Table className='shadow-md'>
             <Table.Head>
               {colums.map((column: Column) => (
@@ -137,7 +137,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
 
                         <Tooltip content='Descargar' placement='top'>
                           <Button color='success' onClick={() => downloadWordS3(notificacion.url)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Dowloand />
+                            <icons.Download />
                           </Button>
                         </Tooltip>
 
@@ -160,23 +160,23 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
       <footer className='flex flex-col'>
         <Alert color='failure' className='mt-4' icon={icons.Warning}>
           <span>
-            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>   
+            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>
             <span className='text-blue-600'>Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.</span>
             <br />
-            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>   
+            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>
             <span className='text-blue-600'>El tamaño maximo del archivo tiene que ser menor a 2MB.</span>
           </span>
         </Alert>
 
         <div className='flex justify-end gap-4 mt-4'>
           {
-            !history?.length && 
+            !history?.length &&
             <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
-              <icons.Dowloand size={18}/> 
+              <icons.Download size={18}/>
               &#160; Descargar Notificación
             </Button>
           }
-        
+
           <Button color='red' type='button' className='px-4' onClick={() => onCloseModal()}>Cerrar</Button>
         </div>
       </footer>
@@ -184,7 +184,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
       { (uploadFile.isPending || downloadWord.isPending || useAction.loading) && <LoadingOverlay /> }
 
       {/* Modal para eliminar notificación del historial */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={openDeleteModal} onClose={onCloseModalHistory}>
           <Modal.Header>Eliminar notificación</Modal.Header>
           <Modal.Body>
@@ -193,15 +193,15 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar la notificacion del historial?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={onCloseModalHistory}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={onDeleteNotificacion} 
+                <Button
+                  color="failure"
+                  onClick={onDeleteNotificacion}
                   isProcessing={deleteNotificationHistory.isPending}
                   disabled={deleteNotificationHistory.isPending}
-                > 
+                >
                   Sí, eliminar
                 </Button>
               </div>

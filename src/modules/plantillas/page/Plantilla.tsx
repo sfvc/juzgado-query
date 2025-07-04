@@ -114,7 +114,7 @@ export const Plantilla = () => {
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Descargar'>
                           <Button color='warning' onClick={() => dowloadPlantilla(plantilla.path)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Dowloand />
+                            <icons.Download />
                           </Button>
                         </Tooltip>
 

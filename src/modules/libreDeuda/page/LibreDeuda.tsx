@@ -91,11 +91,9 @@ export const LibreDeuda = () => {
                       <Table.Cell className='text-center dark:text-white'>{libreDeuda?.numero_libre_deuda || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
-                        {libreDeuda?.persona_numero_documento === 1 || !libreDeuda?.persona_numero_documento
-                          ? '-'
-                          : libreDeuda.persona_numero_documento}
+                        {libreDeuda?.persona_numero_documento || '-'}
                       </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo_dominio || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{libreDeuda?.vehiculo?.dominio || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{formatDate(libreDeuda?.fecha || '-')}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span
@@ -103,7 +101,7 @@ export const LibreDeuda = () => {
                           ${libreDeuda.verificado ? 'bg-green-500' : 'bg-red-500'}
                         `}
                         >
-                          {libreDeuda.verificado ? 'CHEQUEADO' : 'SIN CHEQUEAR'}
+                          {libreDeuda.verificado ? 'VALIDADO' : 'SIN VALIDAR'}
                         </span>
                       </Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>

@@ -31,27 +31,27 @@ export const uploadFilePlantilla = async (file: File, path?: string):  Promise<s
     // Agrego el archivo al formData
     const formData = new FormData()
     formData.append('file', renamedFile)
-        
+
     // Subo el archivo al servidor de carbone
     const response = await axios.post(TEMPLATE_URL, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-        
+
     if (response?.data.message === 'File uploaded successfully') return pathName
     else throw new Error('Error al subir el archivo')
-  
+
   } catch (error) {
     console.error(error)
   }
 }
-  
+
 // Descarga la plantilla original con las variables
 export const downloadPlantilla = async (path: string): Promise<void> => {
   try {
     const response = await axios.get(`${TEMPLATE_URL}/download?fileName=${path}`, {
       responseType: 'blob' // Indica que esperamos una respuesta binaria
     })
-  
+
     // Crea un enlace temporal para descargar el archivo
     const url = window.URL.createObjectURL(new Blob([response.data]))
     const link = document.createElement('a')
@@ -64,26 +64,26 @@ export const downloadPlantilla = async (path: string): Promise<void> => {
     console.error('Error al descargar la plantilla:', error)
   }
 }
-  
+
 // Renderiza la plantilla original con las variables en el navegador
 export const showPlantilla = async (path: string): Promise<void> => {
   try {
     const diccionario = dictionary() // Obtener los datos para visualizar plantillas
-  
+
     const data = {
       convertTo: 'pdf',
       data: diccionario,
       template: `${path}`
     }
-  
+
     const response = await axios.post(CARBONE_URL, data, {
       responseType: 'blob'
     })
-  
+
     const fileBlob = response.data
     const file = new Blob([fileBlob], { type: 'application/pdf' })
     const fileURL = URL.createObjectURL(file)
-  
+
     // Abre una nueva ventana del navegador para mostrar el PDF
     window.open(fileURL, '_blank')
   } catch (error) {
@@ -97,20 +97,20 @@ export const showFilePDF = async (data: any) => {
     const response = await axios.post(CARBONE_URL, data, {
       responseType: 'blob'
     })
-  
+
     const fileBlob = response.data
     const file = new Blob([fileBlob], { type: 'application/pdf' })
     const fileURL = URL.createObjectURL(file)
-  
+
     window.open(fileURL, '_blank')
-    
+
   } catch (error) {
     console.log(error)
   }
 }
-    
+
 // Descarga el word con los datos inyectados
-export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, tipo: string) => { 
+export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, tipo: string) => {
   const path = item?.plantilla?.path
   const itemId = item?.id
 
@@ -119,7 +119,7 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
 
     const { data: actuaciones } = await apiJuzgado.post('actuaciones-acumuladas', { id: itemId, tipo })
     const data: ActuacionResponse = actuaciones.data
-      
+
     const actaFormated = await formatData(data)
 
     const body = {
@@ -161,7 +161,7 @@ export const uploadFilePDF = async (file: File, item: any, property: string, use
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')
 
-  const name =  `${ item.numero_acta }-${ cleanFileName(item?.plantilla?.path) }` 
+  const name =  `${ item.numero_acta }-${ cleanFileName(item?.plantilla?.path) }`
 
   const data = {
     file,

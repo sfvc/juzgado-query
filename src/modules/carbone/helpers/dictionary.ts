@@ -1,31 +1,49 @@
 export const dictionary = () => {
-  const data = {
+  return {
     // Fecha actual
     añoActual: '{d.añoActual}',
     fecha: '{d.fechaActual}',
     horaActual: '{d.horaActual}',
-  
+
     // Juzgado
     juzgadoNombre: '{d.juzgadoNombre}',
     juzgadoDomicilio: '{d.juzgadoDomicilio}',
     juzgadoTelefono: '{d.juzgadoTelefono}',
     nombreJuez: '{d.nombreJuez}',
     nombreSecretario: '{d.nombreSecretario}',
-  
+
+    // Recaudación
+    numeroJuzgado: '{d.numeroJuzgado}',
+    numeroActaRecaudacion: '{d.numeroActaRecaudacion}',
+    fechaComprobante: '{d.fechaComprobante}',
+    nroComprobanteRentas: '{d.nroComprobanteRentas}',
+    montoMulta: '{d.montoMulta}',
+    montoMultasTotal: '{d.montoMultasTotal}',
+    montoConceptos: '{d.montoConceptos}',
+    montoConceptosTotal: '{d.montoConceptosTotal}',
+    montoAbonado: '{d.montoAbonado}',
+    montoAbonadoTotal: '{d.montoAbonadoTotal}',
+    montoJuzgadoUno: '{d.montoJuzgadoUno}',
+    montoJuzgadoDos: '{d.montoJuzgadoDos}',
+
     // Acta
     causa: '{d.causa}',
     acta: '{d.acta}',
+
+    // Infractores
     infractorNombreApellido: '{d.infractorNombreApellido}',
     infractorDocumento: '{d.infractorDocumento}',
     infractorDomicilio: '{d.infractorDomicilio}',
     infractorDomicilioCompleto: '{d.infractorDomicilioCompleto}',
+
+    // Acta detallada
     fechaActa: '{d.fechaActa}',
     actaHs: '{d.actaHs}',
     actaObservaciones: '{d.actaObservaciones}',
     lugar: '{d.lugar}',
     numeroArticulo: '{d.numeroArticulo}',
 
-    // Vehiculo
+    // Vehículo
     patente: '{d.patente}',
     modelo: '{d.modelo}',
     chasis: '{d.chasis}',
@@ -34,10 +52,12 @@ export const dictionary = () => {
     numeroTaxiRemis: '{d.numeroTaxiRemis}',
     vehiculo: '{d.vehiculo}',
 
-    // Actuaciones
+    // Actuaciones e infracciones
     actuaciones: '{d.actuaciones}',
-    infracciones: '{d.infracciones}', //** Formato de infracciones [Codigo - Detalle] */
-    codigo_infracciones: '{d.codigo_infracciones}', //** Formato de infracciones [Detalle - Unidad Tributaria] */
+    infracciones: '{d.infracciones}',
+    codigo_infracciones: '{d.codigo_infracciones}',
+
+    // Totales y montos
     total: '{d.total}',
     importe: '{d.importe}',
     subTotal: '{d.subTotal}',
@@ -52,10 +72,8 @@ export const dictionary = () => {
     // Notificaciones
     fechaNotificacion: '{d.fechaNotificacion}',
 
-    // Variables solicitadas
+    // Variables adicionales
     totalSinConceptos: '{d.totalSinConceptos}',
     totalLetrasSinConceptos: '{d.totalLetrasSinConceptos}'
   }
-  
-  return data
 }

@@ -31,7 +31,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   const { uploadFile, downloadWord } = useUploadFile()
   const { downloadWordS3, convertToPDF, useAction } = usePdf()
   const refFile = useRef<HTMLInputElement | null>(null)
-  
+
   const [ openDeleteModal, setOpenDeleteModal ] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IActuacionHistory | null>(null)
 
@@ -56,12 +56,12 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     const file = e.target.files![0]
     if (!file) return
 
-    await uploadFile.mutateAsync({ 
-      file, 
-      item: { ...actuacion, numero_acta: acta.numero_acta }, 
-      property: 'actuacion_id', 
-      queryKey: ['acta-actuacion',{id: acta.id}] 
-    })  
+    await uploadFile.mutateAsync({
+      file,
+      item: { ...actuacion, numero_acta: acta.numero_acta },
+      property: 'actuacion_id',
+      queryKey: ['acta-actuacion',{id: acta.id}]
+    })
   }
 
   const onDownloadWord = async () => {
@@ -70,13 +70,13 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
 
   const onDeleteActuacion = async () => {
     if (!activeItem) return
-    
+
     const response = await deleteActuacionHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: actuacion.id}]})
     if (response.status === 200) onCloseModalHistory()
   }
 
   const cleanInputFile = () => {
-    if (refFile.current) 
+    if (refFile.current)
       refFile.current.value = ''
   }
 
@@ -85,7 +85,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
       await convertToPDF(url)
     })
   }
-    
+
   return (
     <div>
       <div className='mb-4 relative'>
@@ -109,7 +109,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
       {
         isLoading
           ? <div className='flex justify-center items-center'><Spinner size='xl' /></div>
-          : 
+          :
           <Table className='shadow-md'>
             <Table.Head>
               {colums.map((column: Column) => (
@@ -131,13 +131,13 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                             <icons.Print />
                           </Button>
                         </Tooltip>
-                        
+
                         <Tooltip content='Descargar' placement='top'>
                           <Button color='success' onClick={() => downloadWordS3(actuacion.url)} className='w-8 h-8 flex items-center justify-center'>
-                            <icons.Dowloand />
+                            <icons.Download />
                           </Button>
                         </Tooltip>
-                        
+
                         <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
                           <Tooltip content='Eliminar' placement='top'>
                             <Button color='failure' onClick={() => onOpenModalHistory(actuacion)} className='w-8 h-8 flex items-center justify-center'>
@@ -157,23 +157,23 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
       <footer className='flex flex-col'>
         <Alert color='failure' className='mt-4' icon={icons.Warning}>
           <span>
-            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>   
+            <span className='mr-1 text-blue-700 font-bold'>Instrucciones de uso: </span>
             <span className='text-blue-600'>Descargue el archivo, modifique el contenido y luego seleccione el archivo actualizado para guardarlo.</span>
             <br />
-            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>   
+            <span className='mr-1 text-blue-700 font-bold'>¡Importante!</span>
             <span className='text-blue-600'>El tamaño maximo del archivo tiene que ser menor a 2MB.</span>
           </span>
         </Alert>
-                
+
         <div className='flex justify-end gap-4 mt-4'>
           {
-            !history?.length && 
+            !history?.length &&
             <Button color='gray' type='button' className='px-4' onClick={onDownloadWord}>
-              <icons.Dowloand size={18}/> 
+              <icons.Download size={18}/>
               &#160; Descargar Actuación
             </Button>
           }
-        
+
           <Button color='red' type='button' className='px-4' onClick={onCloseModal}>Cerrar</Button>
         </div>
       </footer>
@@ -181,7 +181,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
       { (uploadFile.isPending || downloadWord.isPending || useAction.loading) && <LoadingOverlay /> }
 
       {/* Modal para eliminar actuación del historial */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={openDeleteModal} onClose={onCloseModalHistory}>
           <Modal.Header>Eliminar actuación</Modal.Header>
           <Modal.Body>
@@ -190,15 +190,15 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar la actuación del historial?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={onCloseModalHistory}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={onDeleteActuacion} 
+                <Button
+                  color="failure"
+                  onClick={onDeleteActuacion}
                   isProcessing={deleteActuacionHistory.isPending}
                   disabled={deleteActuacionHistory.isPending}
-                > 
+                >
                   Sí, eliminar
                 </Button>
               </div>

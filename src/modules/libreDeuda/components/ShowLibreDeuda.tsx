@@ -26,7 +26,6 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
     }
   }
 
-
   return (
     <div className="space-y-6 p-4">
       <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
@@ -34,48 +33,53 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
           <p><span className="font-medium">Nombre:</span> {clearNames(libreDeuda?.persona_apellido, libreDeuda?.persona_nombre) || '-'}</p>
           <p><span className="font-medium">DNI:</span> {libreDeuda?.persona_numero_documento || '-'}</p>
-          <p><span className="font-medium">Dominio:</span> {libreDeuda?.vehiculo_dominio || '-'}</p>
-          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda?.numero_libre_deuda || '-'}</p>
           <p><span className="font-medium">Fecha:</span> {formatDate(libreDeuda?.fecha || '-')}</p>
+          <p><span className="font-medium">Número Libre Deuda:</span> {libreDeuda?.numero_libre_deuda || '-'}</p>
+          <p><span className="font-medium">Dominio:</span> {libreDeuda?.vehiculo_dominio || '-'}</p>
+          <p><span className="font-medium">Tipo de Vehículo:</span> {libreDeuda?.vehiculo?.tipo?.nombre || '-'}</p>
+          <p><span className="font-medium">Marca:</span> {libreDeuda?.vehiculo?.marca?.nombre || '-'}</p>
+          <p><span className="font-medium">Modelo:</span> {libreDeuda?.vehiculo?.modelo || '-'}</p>
+          <p><span className="font-medium">Número de Chasis:</span> {libreDeuda?.vehiculo?.numero_chasis || '-'}</p>
+          <p><span className="font-medium">Número de Motor:</span> {libreDeuda?.vehiculo?.numero_motor || '-'}</p>
+          {libreDeuda?.vehiculo?.tipo?.id === 50067 && (
+            <p><span className="font-medium">Número de Taxi o Remis:</span> {libreDeuda?.vehiculo?.numero_taxi_remis || '-'}</p>
+          )}
         </div>
       </section>
 
-      {(libreDeuda.vehiculo_cedula_frente || libreDeuda.vehiculo_cedula_dorso || libreDeuda.vehiculo_marbete) && (
+      {(libreDeuda?.vehiculo_cedula_frente || libreDeuda?.vehiculo_cedula_dorso || libreDeuda?.vehiculo_marbete) && (
         <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 dark:text-white">Imágenes</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {libreDeuda.vehiculo_cedula_frente && (
+            {libreDeuda?.vehiculo_cedula_frente && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Cédula Frente</p>
-                <img src={libreDeuda.vehiculo_cedula_frente} alt="Cédula Frente" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
+                <img src={libreDeuda?.vehiculo_cedula_frente} alt="Cédula Frente" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
-            {libreDeuda.vehiculo_cedula_dorso && (
+            {libreDeuda?.vehiculo_cedula_dorso && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Cédula Dorso</p>
-                <img src={libreDeuda.vehiculo_cedula_dorso} alt="Cédula Dorso" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
+                <img src={libreDeuda?.vehiculo_cedula_dorso} alt="Cédula Dorso" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
-            {libreDeuda.vehiculo_marbete && (
+            {libreDeuda?.vehiculo_marbete && (
               <div>
                 <p className="text-sm text-gray-600 dark:text-white mb-2">Marbete</p>
-                <img src={libreDeuda.vehiculo_marbete} alt="Marbete" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
+                <img src={libreDeuda?.vehiculo_marbete} alt="Marbete" className="w-full h-64 object-cover rounded-lg shadow-sm border" />
               </div>
             )}
           </div>
         </section>
       )}
 
-
       <div className="flex justify-end gap-4">
-        {libreDeuda?.verificado === 0 && (
-          <Button color="success" onClick={() => {
-            onConfirm()
-            closeModal()
-          }}>
+        <Button color="success" onClick={() => {
+          onConfirm()
+          closeModal()
+        }}>
             Confirmar Titular
-          </Button>
-        )}
+        </Button>
         <Button color="gray" onClick={closeModal}>Cerrar</Button>
       </div>
 
