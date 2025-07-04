@@ -23,7 +23,7 @@ export const useRecaudacion = () => {
 
   const isFilteringByDate = !!filterParams.start_date && !!filterParams.end_date
 
-  const { data: recaudacionFiltrada, pagination, isFetching, isLoading } = usePagination<IRecaudacion, FilterParams>({
+  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } = usePagination<IRecaudacion, FilterParams>({
     queryKey: ['recaudacion', filterParams],
     fetchData: () =>
       isFilteringByDate
@@ -42,6 +42,7 @@ export const useRecaudacion = () => {
     updateFilter,
     pagination,
     isFetching,
-    isLoading
+    isLoading,
+    estadisticas //TODO: Eliminar propiedad
   }
 }

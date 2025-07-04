@@ -33,6 +33,8 @@ export const Recaudacion = () => {
     useAction.actionFn(async () => {
       const form = formatReport(recaudacionFiltrada)
       const resumen = formatEstadisticas(estadisticas)
+      console.log(estadisticas)
+      console.log(resumen)
 
       const data = {
         convertTo: 'pdf',

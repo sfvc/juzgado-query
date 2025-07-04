@@ -11,6 +11,9 @@ interface Meta {
 interface Response<T> {
   data: T[]
   meta: Meta
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  estadisticas?: any
 }
 
 interface Page {
@@ -58,11 +61,15 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     total: response?.meta.total || 1
   } 
 
+  // TODO: Eliminar estadisticas y agregar dentro de data
+  const estadisticas = response?.estadisticas || {}
+
   return {
     data,
     pagination,
     isLoading,
     isFetching,
-    refetchData
+    refetchData,
+    estadisticas
   }
 }
