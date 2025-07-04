@@ -9,6 +9,7 @@ import { carboneActions } from '../../carbone'
 import { IRecaudacion }
   from '../interfaces'
 import { useState } from 'react'
+import { formatDatos } from '../helpers/formatDatos'
 
 const columns: Column[] = [
   { key: 'nro_comprobante_rentas', label: 'NÚMERO DE COMPROBANTE' },
@@ -33,14 +34,14 @@ export const Recaudacion = () => {
     useAction.actionFn(async () => {
       const form = formatReport(recaudacionFiltrada)
       const resumen = formatEstadisticas(estadisticas)
-      console.log(estadisticas)
-      console.log(resumen)
+      const datos = formatDatos(recaudacionFiltrada)
 
       const data = {
         convertTo: 'pdf',
         data: {
           lista: form,
-          resumen: resumen || {}
+          resumen: resumen,
+          datos: datos
         },
         template: RECAUDACION_TEMPLATE
       }
@@ -68,6 +69,15 @@ export const Recaudacion = () => {
     } catch (e) {
       return dateTimeString
     }
+  }
+
+  const formatMonto = (valor: string | number | null | undefined) => {
+    const numero = Number(valor)
+    if (isNaN(numero)) return ''
+    return numero.toLocaleString('es-AR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
   }
 
   return (
@@ -120,9 +130,9 @@ export const Recaudacion = () => {
                 <Table.Row key={recaudacionItems.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.nro_comprobante_rentas || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.numero_acta || ''}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_multa_original || ''}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_conceptos_original || ''}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.monto_abonado || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_multa_original)}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_conceptos_original)}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_abonado)}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{formatDateTime(recaudacionItems?.fecha_pago || '')}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.juzgado?.nombre || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.estado || ''}</Table.Cell>

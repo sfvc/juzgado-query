@@ -52,5 +52,7 @@ export interface Estadisticas {
 export interface Juzgado {
   id?: string;
   nombre?: string
+  juez?: string
+  secretario?: string
 }
 
