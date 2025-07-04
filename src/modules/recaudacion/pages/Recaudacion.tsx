@@ -4,6 +4,7 @@ import { useRecaudacion } from '../hooks/useRecaudacion'
 import type { Column } from '../../../shared/interfaces'
 import { icons, useLoading } from '../../../shared'
 import { formatReport } from '../helpers/formatReport'
+import { formatEstadisticas } from '../helpers/formatEstadistics'
 import { carboneActions } from '../../carbone'
 import { IRecaudacion }
   from '../interfaces'
@@ -22,7 +23,7 @@ const columns: Column[] = [
 
 export const Recaudacion = () => {
   const useAction = useLoading()
-  const { recaudacionFiltrada, isFetching, pagination, updateFilter } = useRecaudacion()
+  const { recaudacionFiltrada, estadisticas, isFetching, pagination, updateFilter } = useRecaudacion()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
@@ -31,10 +32,14 @@ export const Recaudacion = () => {
   const renderRecaudacion = async () => {
     useAction.actionFn(async () => {
       const form = formatReport(recaudacionFiltrada)
+      const resumen = formatEstadisticas(estadisticas)
 
       const data = {
         convertTo: 'pdf',
-        data: form,
+        data: {
+          lista: form,
+          resumen: resumen || {}
+        },
         template: RECAUDACION_TEMPLATE
       }
 

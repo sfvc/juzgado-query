@@ -7,11 +7,12 @@ export const getRecaudacionDiaria = async (filters: object) => {
     const params = setUrlParams(filters)
 
     const response = await apiJuzgado.get(`/comprobantes/resumen-diario?fecha=${today}`, { params })
-    const { data, meta } = response.data
-    return { data, meta }
+    const { data, meta, estadisticas } = response.data
+
+    return { data, meta, estadisticas }
   } catch (error) {
     console.error('Error fetching recaudación:', error)
-    return []
+    return { data: [], meta: null, estadisticas: null }
   }
 }
 
@@ -21,11 +22,11 @@ export const getRecaudacionFiltrada = async (filters: any) => {
     const params = setUrlParams(rest)
 
     const response = await apiJuzgado.get(`/comprobantes/resumen-periodo?fecha_desde=${desde}&fecha_hasta=${hasta}`, { params })
-    const { data, meta } = response.data
-    return { data, meta }
+    const { data, meta, estadisticas } = response.data
+
+    return { data, meta, estadisticas }
   } catch (error) {
     console.error('Error fetching recaudación filtrada:', error)
-    return []
+    return { data: [], meta: null, estadisticas: null }
   }
 }
-

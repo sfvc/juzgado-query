@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, QueryKey } from '@tanstack/react-query'
 import { Pagination } from '../interfaces'
 
-// TODO: Crear interfaces globales 
+// TODO: Crear interfaces globales
 interface Meta {
   current_page: number
   last_page: number
@@ -13,7 +13,7 @@ interface Response<T> {
   meta: Meta
 }
 
-interface Page { 
+interface Page {
   page: number
 }
 
@@ -28,8 +28,8 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
 
   // Hook para obtener los datos paginados
   const { data: response, isLoading, isFetching } = useQuery({
-    queryKey: [...queryKey], 
-    queryFn: () => fetchData(filterParams),  
+    queryKey: [...queryKey],
+    queryFn: () => fetchData(filterParams),
     staleTime: 1000 * 60 * 5,
     placeholderData: (previousData) => {
       if (!previousData) return

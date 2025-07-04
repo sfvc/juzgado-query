@@ -18,18 +18,35 @@ export interface IRecaudacion {
   es_acumulada?: boolean;
   cantidad_actas_acumuladas?: number;
   monto_juzgado?: string;
-  estadisticas?: Estadisticas;
   juzgado?: Juzgado
 }
 
 export interface Estadisticas {
-  comprobantes_pagados: {
-    id?: string;
+  fecha_generacion?: string;
+
+  totales_generales?: {
+    total_comprobantes?: string;
+    monto_total_procesado?: string;
+  };
+
+  comprobantes_pagados?: {
+    cantidad?: string;
+    monto_total_abonado?: string;
     monto_multas?: string;
     monto_conceptos?: string;
-    monto_total_abonado?: string;
-    monto_juzgado?: string;
-  }
+  };
+
+  comprobantes_anulados?: {
+    cantidad?: string;
+    monto_total_anulado?: string;
+    monto_multas_anuladas?: string;
+    monto_conceptos_anulados?: string;
+  };
+
+  periodo?: {
+    desde?: string;
+    hasta?: string;
+  };
 }
 
 export interface Juzgado {
