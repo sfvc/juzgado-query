@@ -55,16 +55,16 @@ export const formatData = async (data: ActuacionResponse) => {
 
   const pagos = estadisticas?.comprobantes_pagados || {}
 
-  const numeroJuzgado = recaudacion.numero_juzgado || ''
+  const numeroJuzgado = recaudacion?.numero_juzgado || ''
   const numeroActaRecaudacion = recaudacion?.numero_acta || ''
   const fechaComprobante = recaudacion?.fecha_pago || ''
   const nroComprobanteRentas = recaudacion?.nro_comprobante_rentas || ''
   const montoMulta = recaudacion?.monto_multa_original || ''
   const montoMultaTotal = pagos.monto_multas?.toString() || '0'
   const montoConceptos = recaudacion?.monto_conceptos_original || ''
-  const montoConceptosTotal = pagos.monto_conceptos?.toString() || '0'
+  const montoConceptosTotal = pagos?.monto_conceptos?.toString() || '0'
   const montoAbonado = recaudacion?.monto_total_original || ''
-  const montoAbonadoTotal = pagos.monto_total_abonado?.toString() || '0'
+  const montoAbonadoTotal = pagos?.monto_total_abonado?.toString() || '0'
   const montoJuzgadoUno = recaudacion?.monto_juzgado || ''
   const montoJuzgadoDos = recaudacion?.monto_juzgado || ''
 
