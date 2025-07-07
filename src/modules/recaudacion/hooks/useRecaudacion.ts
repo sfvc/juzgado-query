@@ -1,6 +1,8 @@
 import { recaudacionActions } from '..'
 import { useFilter, usePagination } from '../../../shared'
 import { IRecaudacion } from '../interfaces'
+import { useContext } from 'react'
+import { AuthContext } from '../../../context/Auth/AuthContext'
 
 interface FilterParams {
   query: string
@@ -8,6 +10,7 @@ interface FilterParams {
   user_id?: number | null
   start_date?: string
   end_date?: string
+  juzgado_id?: number
 }
 
 const initialValues: FilterParams = {
@@ -19,22 +22,29 @@ const initialValues: FilterParams = {
 }
 
 export const useRecaudacion = () => {
+  const { user } = useContext(AuthContext)
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const isFilteringByDate = !!filterParams.start_date && !!filterParams.end_date
 
-  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } = usePagination<IRecaudacion, FilterParams>({
-    queryKey: ['recaudacion', filterParams],
-    fetchData: () =>
-      isFilteringByDate
-        ? recaudacionActions.getRecaudacionFiltrada({
-          'fecha_desde': filterParams.start_date,
-          'fecha_hasta': filterParams.end_date,
-          ...filterParams
-        })
-        : recaudacionActions.getRecaudacionDiaria(filterParams),
-    filterParams
-  })
+  const enrichedFilterParams = {
+    ...filterParams,
+    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id
+  }
+
+  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } =
+    usePagination<IRecaudacion, FilterParams>({
+      queryKey: ['recaudacion', enrichedFilterParams],
+      fetchData: () =>
+        isFilteringByDate
+          ? recaudacionActions.getRecaudacionFiltrada({
+            ...enrichedFilterParams,
+            fecha_desde: enrichedFilterParams.start_date,
+            fecha_hasta: enrichedFilterParams.end_date
+          })
+          : recaudacionActions.getRecaudacionDiaria(enrichedFilterParams),
+      filterParams: enrichedFilterParams
+    })
 
   return {
     recaudacionFiltrada,
@@ -43,6 +53,6 @@ export const useRecaudacion = () => {
     pagination,
     isFetching,
     isLoading,
-    estadisticas //TODO: Eliminar propiedad
+    estadisticas // TODO: Eliminar propiedad
   }
 }

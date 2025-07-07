@@ -10,6 +10,7 @@ import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado, IInhabilitado } from '../interfaces'
 import { CreatePersona } from '../../actas/forms/integrations/CreatePersona'
 import { useEffect, useState } from 'react'
+import { CustomSelect } from '../../actas/forms/components/CustomSelect'
 
 
 const validationSchema = yup.object().shape({
@@ -39,7 +40,7 @@ interface Props {
   inhabilitado: IInhabilitado | null
   onSucces: () => void
 }
-  
+
 const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
   const { juzgados, isFetching } = useJuzgado()
   const { createInhabilitado, updateInhabilitado } = useInhabilitado()
@@ -82,7 +83,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
   }, [inhabilitado?.juzgado.id])
 
   if (isFetching) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
@@ -104,7 +105,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           <TextInput
             {...register('fecha_desde')}
             type='date'
-            helperText={errors?.fecha_desde && errors?.fecha_desde?.message} 
+            helperText={errors?.fecha_desde && errors?.fecha_desde?.message}
             color={errors?.fecha_desde && 'failure'}
           />
         </div>
@@ -116,7 +117,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           <TextInput
             {...register('fecha_hasta')}
             type='date'
-            helperText={errors?.fecha_hasta && errors?.fecha_hasta?.message} 
+            helperText={errors?.fecha_hasta && errors?.fecha_hasta?.message}
             color={errors?.fecha_hasta && 'failure'}
           />
         </div>
@@ -167,7 +168,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           <TextInput
             {...register('numero_acta')}
             type='text'
-            helperText={errors?.numero_acta && errors?.numero_acta?.message} 
+            helperText={errors?.numero_acta && errors?.numero_acta?.message}
             color={errors?.numero_acta && 'failure'}
             placeholder='Número de acta'
           />
@@ -181,7 +182,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
             {...register('instrumento')}
             type='text'
             placeholder='Instrumento'
-            helperText={errors?.instrumento && errors?.instrumento?.message} 
+            helperText={errors?.instrumento && errors?.instrumento?.message}
             color={errors?.instrumento && 'failure'}
           />
         </div>
@@ -195,11 +196,13 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
             <Textarea
               {...register('causa')}
               placeholder='Ingrese la causa'
-              helperText={errors?.causa && errors?.causa?.message} 
+              helperText={errors?.causa && errors?.causa?.message}
               color={errors?.causa && 'failure'}
             />
           </div>
         )}
+
+        <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} />
       </div>
 
       {
@@ -211,9 +214,9 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
 
       <div className='flex justify-end gap-2 mt-4'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >
