@@ -48,7 +48,7 @@ export const Layout = () => {
 
           <NavItem to="/plantillas">Plantillas</NavItem>
 
-          {/* <NavItem to="/libre-deuda">Libre Deuda</NavItem> */}
+          <NavItem to="/libre-deuda">Libre Deuda</NavItem>
 
           <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             <MegaMenu.Dropdown toggle={<>Parámetros</>}>

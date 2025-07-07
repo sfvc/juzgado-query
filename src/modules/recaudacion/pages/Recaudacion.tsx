@@ -6,9 +6,11 @@ import { icons, useLoading } from '../../../shared'
 import { formatReport } from '../helpers/formatReport'
 import { formatEstadisticas } from '../helpers/formatEstadistics'
 import { carboneActions } from '../../carbone'
+import { useContext } from 'react'
+import { AuthContext } from '../../../context/Auth/AuthContext'
 import { IRecaudacion }
   from '../interfaces'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatDatos } from '../helpers/formatDatos'
 
 const columns: Column[] = [
@@ -24,9 +26,9 @@ const columns: Column[] = [
 
 export const Recaudacion = () => {
   const useAction = useLoading()
+  const { user } = useContext(AuthContext)
   const { recaudacionFiltrada, estadisticas, isFetching, pagination, updateFilter } = useRecaudacion()
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [fecha, setFecha] = useState('')
 
   const RECAUDACION_TEMPLATE: string = 'recaudacion.xlsx'
 
@@ -51,9 +53,11 @@ export const Recaudacion = () => {
   }
 
   const handleFilter = () => {
-    if (startDate) updateFilter('start_date', startDate)
-    if (endDate) updateFilter('end_date', endDate)
-    updateFilter('page', 1)
+    if (fecha && user?.juzgado?.id) {
+      updateFilter('fecha', fecha)
+      updateFilter('juzgado_id', user?.juzgado?.id)
+      updateFilter('page', 1)
+    }
   }
 
   const formatDateTime = (dateTimeString: string) => {
@@ -80,27 +84,27 @@ export const Recaudacion = () => {
     })
   }
 
+  useEffect(() => {
+    const ayer = new Date()
+    ayer.setDate(ayer.getDate() - 1)
+    const fechaAyer = ayer.toISOString().split('T')[0]
+    setFecha(fechaAyer)
+  }, [])
+
   return (
     <>
       <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4'>
         <h1 className='text-2xl font-semibold dark:text-white'>Listado de Recaudación</h1>
 
         <Button color='warning' onClick={renderRecaudacion} isProcessing={useAction.loading} disabled={useAction.loading}>
-          <icons.Print/>&#160; Imprimir
+          <icons.Print />&#160; Imprimir
         </Button>
 
         <div className='flex items-center gap-2'>
           <input
             type='date'
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm px-3 py-2 text-gray-900 dark:text-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all'
-          />
-          <span className='text-sm text-gray-600 dark:text-gray-300'>a</span>
-          <input
-            type='date'
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
             className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm px-3 py-2 text-gray-900 dark:text-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all'
           />
           <Button onClick={handleFilter} size='sm'>

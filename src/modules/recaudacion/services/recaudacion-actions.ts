@@ -18,10 +18,15 @@ export const getRecaudacionDiaria = async (filters: object) => {
 
 export const getRecaudacionFiltrada = async (filters: any) => {
   try {
-    const { 'fecha_desde': desde, 'fecha_hasta': hasta, ...rest } = filters
-    const params = setUrlParams(rest)
+    const fecha = filters?.fecha || new Date().toISOString().split('T')[0]
+    const juzgadoId = filters?.juzgado_id
+    const params = setUrlParams(filters)
 
-    const response = await apiJuzgado.get(`/comprobantes/resumen-periodo?fecha_desde=${desde}&fecha_hasta=${hasta}`, { params })
+    const response = await apiJuzgado.get(
+      `/comprobantes/resumen-periodo?fecha_desde=${fecha}&fecha_hasta=${fecha}&juzgado_id=${juzgadoId}`,
+      { params }
+    )
+
     const { data, meta, estadisticas } = response.data
 
     return { data, meta, estadisticas }
