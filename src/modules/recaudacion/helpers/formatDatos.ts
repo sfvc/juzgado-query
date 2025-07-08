@@ -1,7 +1,9 @@
 import { IRecaudacion } from '../interfaces'
+import { User } from '../../../auth/interfaces/auth'
 
 export const formatDatos = (
-  recaudaciones: IRecaudacion[] | undefined
+  recaudaciones: IRecaudacion[] | undefined,
+  user: User | null
 ) => {
   if (!recaudaciones) throw new Error('Error al renderizar reporte de recaudacion')
 
@@ -14,6 +16,8 @@ export const formatDatos = (
       numeroJuzgado: recaudacion?.juzgado?.id,
       nombreJuez: recaudacion?.juzgado?.juez,
       nombreSecretario: recaudacion?.juzgado?.secretario,
+      usuario: user?.nombre,
+      rol: user?.role?.name,
     }
   })
 
