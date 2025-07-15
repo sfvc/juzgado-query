@@ -11,6 +11,7 @@ interface FilterParams {
   start_date?: string
   end_date?: string
   juzgado_id?: number
+  fecha?: string
 }
 
 const initialValues: FilterParams = {
@@ -18,18 +19,21 @@ const initialValues: FilterParams = {
   page: 1,
   user_id: null,
   start_date: '',
-  end_date: ''
+  end_date: '',
+  fecha: ''
 }
 
 export const useRecaudacion = () => {
   const { user } = useContext(AuthContext)
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
-  const isFilteringByDate = !!filterParams.start_date && !!filterParams.end_date
+  const today = new Date().toISOString().split('T')[0]
+  const isFilteringByDate = filterParams.fecha && filterParams.fecha !== today
 
   const enrichedFilterParams = {
     ...filterParams,
-    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id
+    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id,
+    paginate: isFilteringByDate ? 'false' : 'true'
   }
 
   const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } =
@@ -37,11 +41,7 @@ export const useRecaudacion = () => {
       queryKey: ['recaudacion', enrichedFilterParams],
       fetchData: () =>
         isFilteringByDate
-          ? recaudacionActions.getRecaudacionFiltrada({
-            ...enrichedFilterParams,
-            fecha_desde: enrichedFilterParams.start_date,
-            fecha_hasta: enrichedFilterParams.end_date
-          })
+          ? recaudacionActions.getRecaudacionFiltrada(enrichedFilterParams)
           : recaudacionActions.getRecaudacionDiaria(enrichedFilterParams),
       filterParams: enrichedFilterParams
     })
@@ -53,6 +53,6 @@ export const useRecaudacion = () => {
     pagination,
     isFetching,
     isLoading,
-    estadisticas // TODO: Eliminar propiedad
+    estadisticas
   }
 }

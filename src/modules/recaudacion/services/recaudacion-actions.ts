@@ -1,12 +1,12 @@
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
 
-export const getRecaudacionDiaria = async (filters: object) => {
+export const getRecaudacionDiaria = async (filters: any) => {
   try {
-    const today = new Date().toISOString().split('T')[0]
+    const fecha = filters?.fecha || new Date().toISOString().split('T')[0]
     const params = setUrlParams(filters)
 
-    const response = await apiJuzgado.get(`/comprobantes/resumen-diario?fecha=${today}`, { params })
+    const response = await apiJuzgado.get(`/comprobantes/resumen-diario?fecha=${fecha}`, { params })
     const { data, meta, estadisticas } = response.data
 
     return { data, meta, estadisticas }
@@ -34,3 +34,4 @@ export const getRecaudacionFiltrada = async (filters: any) => {
     return { data: [], meta: null, estadisticas: null }
   }
 }
+
