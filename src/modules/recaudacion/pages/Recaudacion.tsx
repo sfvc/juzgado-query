@@ -62,13 +62,18 @@ export const Recaudacion = () => {
 
   const formatDateTime = (dateTimeString: string) => {
     try {
-      return new Date(dateTimeString).toLocaleString('es-AR', {
+      const [datePart, timePart] = dateTimeString.split(' ')
+      const [year, month, day] = datePart.split('-').map(Number)
+      const [hour, minute, second] = timePart.split(':').map(Number)
+      const utcDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second))
+
+      return utcDate.toLocaleString('es-AR', {
         hour12: false,
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
     } catch (e) {
       return dateTimeString

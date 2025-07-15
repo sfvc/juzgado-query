@@ -16,9 +16,12 @@ export const getLibreDeudaById = async (id: number) => {
 }
 
 export const confirmLibreDeuda = async (data: {
-  libre_deuda_id: number
-  persona_id: number
-  vehiculo_id: number
+    libre_deuda_id: number
+    id: number
+    fuente: string
+    cuit: string
+    persona_id: number
+    vehiculo_id: number
 }) => {
   const response = await apiJuzgado.post('/libre-deuda/verificar', {
     ...data,

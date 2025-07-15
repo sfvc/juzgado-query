@@ -27,6 +27,9 @@ export const useLibreDeuda = () => {
   const confirmLibreDeuda = useMutation({
     mutationFn: (data: {
     libre_deuda_id: number
+    id: number,
+    cuit: string
+    fuente: string,
     persona_id: number
     vehiculo_id: number
   }) => libreDeudaActions.confirmLibreDeuda(data),

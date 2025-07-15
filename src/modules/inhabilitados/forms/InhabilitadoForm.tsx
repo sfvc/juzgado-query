@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Alert, Button, Label, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -10,31 +11,50 @@ import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado, IInhabilitado } from '../interfaces'
 import { CreatePersona } from '../../actas/forms/integrations/CreatePersona'
 import { useEffect, useState } from 'react'
-import { CustomSelect } from '../../actas/forms/components/CustomSelect'
-
+// import { CustomSelect } from '../../actas/forms/components/CustomSelect'
 
 const validationSchema = yup.object().shape({
-  persona_id: yup.number().transform(value => (isNaN(value) || !value) ? null : value).required('La persona es requerida.'),
+  persona_id: yup
+    .number()
+    .transform(value => (isNaN(value) || !value) ? null : value)
+    .required('La persona es requerida.'),
+
   juzgado_id: yup.mixed().required('El juzgado es requerido'),
+
   entidad: yup.string().when('juzgado_id', {
     is: '3',
     then: (schema) => schema.required('Debe ingresar la entidad'),
     otherwise: (schema) => schema.notRequired()
   }),
-  fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
-  fecha_hasta: yup.string().required('La fecha de vencimiento requerida'),
+
+  fecha_desde: yup
+    .string()
+    .required('La fecha de inhabilitación es requerida'),
+
+  fecha_hasta: yup
+    .string()
+    .required('La fecha de vencimiento requerida')
+    .test('fecha-desde-menor-o-igual', 'La fecha de inhabilitación no puede ser mayor que la fecha de vencimiento', function (fecha_hasta) {
+      const { fecha_desde } = this.parent
+      if (!fecha_desde || !fecha_hasta) return true
+      return new Date(fecha_desde) <= new Date(fecha_hasta)
+    }),
+
   numero_acta: yup.string().when('juzgado_id', {
     is: (val: string) => val !== '3',
     then: (schema) => schema.required('El número del acta es requerido'),
     otherwise: (schema) => schema.notRequired()
   }),
+
   instrumento: yup.string(),
+
   causa: yup.string().when('juzgado_id', {
     is: (val: string) => val !== '3',
     then: (schema) => schema.required('La causa es requerida'),
     otherwise: (schema) => schema.notRequired()
-  })
+  }),
 })
+
 
 interface Props {
   inhabilitado: IInhabilitado | null
@@ -202,7 +222,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           </div>
         )}
 
-        <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} />
+        {/* <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} /> */}
       </div>
 
       {

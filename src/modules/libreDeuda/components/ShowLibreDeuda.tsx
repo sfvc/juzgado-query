@@ -74,12 +74,14 @@ export const ShowLibreDeuda = ({ libreDeuda, closeModal, onConfirm }: Props) => 
       )}
 
       <div className="flex justify-end gap-4">
-        <Button color="success" onClick={() => {
-          onConfirm()
-          closeModal()
-        }}>
-            Confirmar Titular
-        </Button>
+        {!libreDeuda?.verificado && (
+          <Button color="success" onClick={() => {
+            onConfirm()
+            closeModal()
+          }}>
+      Confirmar Titular
+          </Button>
+        )}
         <Button color="gray" onClick={closeModal}>Cerrar</Button>
       </div>
 

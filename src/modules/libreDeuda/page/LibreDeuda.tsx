@@ -152,9 +152,12 @@ export const LibreDeuda = () => {
               libreDeuda={activeItem}
               closeModal={onCloseShowModal}
               onConfirm={() => confirmLibreDeuda.mutateAsync({
-                libre_deuda_id: activeItem.id,
-                persona_id: activeItem.persona_id,
-                vehiculo_id: activeItem.vehiculo_id
+                libre_deuda_id: activeItem?.id,
+                persona_id: activeItem?.persona_id,
+                id: activeItem?.id,
+                cuit: activeItem?.cuit,
+                fuente: activeItem?.fuente,
+                vehiculo_id: activeItem?.vehiculo_id
               })}
             />
           </Modal.Body>
