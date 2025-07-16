@@ -36,15 +36,22 @@ export const useRecaudacion = () => {
     paginate: isFilteringByDate ? 'false' : 'true'
   }
 
-  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } =
-    usePagination<IRecaudacion, FilterParams>({
-      queryKey: ['recaudacion', enrichedFilterParams],
-      fetchData: () =>
-        isFilteringByDate
-          ? recaudacionActions.getRecaudacionFiltrada(enrichedFilterParams)
-          : recaudacionActions.getRecaudacionDiaria(enrichedFilterParams),
-      filterParams: enrichedFilterParams
-    })
+  const {
+    data: recaudacionFiltrada,
+    estadisticas,
+    pagination: paginacionResult,
+    isFetching,
+    isLoading
+  } = usePagination<IRecaudacion, FilterParams>({
+    queryKey: ['recaudacion', enrichedFilterParams],
+    fetchData: () =>
+      isFilteringByDate
+        ? recaudacionActions.getRecaudacionFiltrada(enrichedFilterParams)
+        : recaudacionActions.getRecaudacionDiaria(enrichedFilterParams),
+    filterParams: enrichedFilterParams
+  })
+
+  const pagination = isFilteringByDate ? null : paginacionResult
 
   return {
     recaudacionFiltrada,
