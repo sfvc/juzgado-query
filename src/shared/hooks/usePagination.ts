@@ -47,11 +47,17 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
 
   const data = response?.data || []
 
-  const pagination: Pagination = {
-    currentPage: response?.meta?.current_page ?? 1,
-    lastPage: response?.meta?.last_page ?? 1,
-    total: response?.meta?.total ?? data.length
-  }
+  const pagination: Pagination = response?.meta
+    ? {
+      currentPage: response.meta.current_page,
+      lastPage: response.meta.last_page,
+      total: response.meta.total
+    }
+    : {
+      currentPage: 1,
+      lastPage: 1,
+      total: data.length
+    }
 
   const estadisticas = response?.estadisticas || {}
 
