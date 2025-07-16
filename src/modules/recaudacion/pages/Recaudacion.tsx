@@ -27,14 +27,7 @@ const columns: Column[] = [
 export const Recaudacion = () => {
   const useAction = useLoading()
   const { user } = useContext(AuthContext)
-  const {
-    recaudacionFiltrada,
-    estadisticas,
-    isFetching,
-    pagination,
-    updateFilter,
-    hasPagination
-  } = useRecaudacion()
+  const { recaudacionFiltrada, estadisticas, isFetching, pagination, updateFilter } = useRecaudacion()
   const [fecha, setFecha] = useState('')
 
   const RECAUDACION_TEMPLATE: string = 'recaudacion.xlsx'
@@ -165,18 +158,16 @@ export const Recaudacion = () => {
         </Table>
       </div>
 
-      {hasPagination && (
-        <div className='flex overflow-x-auto sm:justify-center mt-4'>
-          <Pagination
-            currentPage={pagination?.currentPage || 1}
-            totalPages={pagination?.lastPage || 1}
-            onPageChange={(page: number) => updateFilter('page', page)}
-            previousLabel='Anterior'
-            nextLabel='Siguiente'
-            showIcons
-          />
-        </div>
-      )}
+      <div className='flex overflow-x-auto sm:justify-center mt-4'>
+        <Pagination
+          currentPage={pagination.currentPage || 1}
+          totalPages={pagination.lastPage || 1}
+          onPageChange={(page: number) => updateFilter('page', page)}
+          previousLabel='Anterior'
+          nextLabel='Siguiente'
+          showIcons
+        />
+      </div>
     </>
   )
 }

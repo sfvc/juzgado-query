@@ -30,19 +30,13 @@ export const useRecaudacion = () => {
   const today = new Date().toISOString().split('T')[0]
   const isFilteringByDate = filterParams.fecha && filterParams.fecha !== today
 
-  let enrichedFilterParams = {
+  const enrichedFilterParams = {
     ...filterParams,
-    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id,
-    paginate: isFilteringByDate ? 'false' : 'true'
+    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id
+    // paginate: isFilteringByDate ? 'false' : 'true'
   }
 
-  // Eliminar paginate si es false para que no se envíe al backend
-  if (enrichedFilterParams.paginate === 'false') {
-    const { paginate, ...paramsWithoutPaginate } = enrichedFilterParams
-    enrichedFilterParams = paramsWithoutPaginate
-  }
-
-  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading, hasPagination } =
+  const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } =
     usePagination<IRecaudacion, FilterParams>({
       queryKey: ['recaudacion', enrichedFilterParams],
       fetchData: () =>
@@ -59,8 +53,6 @@ export const useRecaudacion = () => {
     pagination,
     isFetching,
     isLoading,
-    estadisticas,
-    hasPagination, // Puedes usar esto para mostrar/ocultar la paginación en el componente
-    isFilteringByDate
+    estadisticas
   }
 }
