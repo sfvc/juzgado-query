@@ -10,8 +10,8 @@ interface Meta {
 
 interface Response<T> {
   data: T[]
-  meta: Meta
-  
+  meta?: Meta // Hacer meta opcional ya que no siempre viene del backend
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   estadisticas?: any
 }
@@ -29,7 +29,6 @@ interface Options<T, K extends Page> {
 export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterParams }: Options<T, K>) => {
   const queryClient = useQueryClient()
 
-  // Hook para obtener los datos paginados
   const { data: response, isLoading, isFetching } = useQuery({
     queryKey: [...queryKey],
     queryFn: () => fetchData(filterParams),
@@ -37,31 +36,34 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     placeholderData: (previousData) => {
       if (!previousData) return
 
-      // Mantenemos los datos anteriores mientras se carga la nueva página
       return {
         ...previousData,
-        meta: {
+        meta: previousData.meta ? {
           ...previousData.meta,
           current_page: filterParams.page
-        }
+        } : undefined
       }
     },
   })
 
-  // Función para refrescar la data
   const refetchData = () => {
     queryClient.invalidateQueries({ queryKey: [...queryKey] })
   }
 
   const data = response?.data || []
+  const hasPagination = Boolean(response?.meta)
 
-  const pagination: Pagination = {
-    currentPage:  response?.meta.current_page || 1,
-    lastPage: response?.meta.last_page || 1,
-    total: response?.meta.total || 1
-  } 
+  // Si no hay paginación, crear valores por defecto
+  const pagination: Pagination = hasPagination ? {
+    currentPage: response!.meta!.current_page,
+    lastPage: response!.meta!.last_page,
+    total: response!.meta!.total
+  } : {
+    currentPage: 1,
+    lastPage: 1,
+    total: data.length
+  }
 
-  // TODO: Eliminar estadisticas y agregar dentro de data
   const estadisticas = response?.estadisticas || {}
 
   return {
@@ -70,6 +72,7 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     isLoading,
     isFetching,
     refetchData,
-    estadisticas
+    estadisticas,
+    hasPagination // Información adicional para saber si hay paginación
   }
 }
