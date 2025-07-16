@@ -32,8 +32,8 @@ export const useRecaudacion = () => {
 
   const enrichedFilterParams = {
     ...filterParams,
-    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id
-    // paginate: isFilteringByDate ? 'false' : 'true'
+    juzgado_id: filterParams.juzgado_id ?? user?.juzgado?.id,
+    paginate: isFilteringByDate ? 'true' : 'true'
   }
 
   const { data: recaudacionFiltrada, estadisticas, pagination, isFetching, isLoading } =
