@@ -21,7 +21,7 @@ const columns: Column[] = [
   { key: 'monto_abonado', label: 'MONTO ABONADO' },
   { key: 'fecha_pago', label: 'FECHA DE PAGO' },
   { key: 'juzgado', label: 'JUZGADO N°' },
-  { key: 'estado', label: 'ESTADO' },
+  { key: 'estado', label: 'ESTADOO' },
 ]
 
 export const Recaudacion = () => {
