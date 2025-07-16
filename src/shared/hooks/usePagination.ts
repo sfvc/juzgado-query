@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useQueryClient, QueryKey } from '@tanstack/react-query'
 import { Pagination } from '../interfaces'
 
@@ -10,9 +11,7 @@ interface Meta {
 
 interface Response<T> {
   data: T[]
-  meta: Meta
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta?: Meta
   estadisticas?: any
 }
 
@@ -35,9 +34,8 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     queryFn: () => fetchData(filterParams),
     staleTime: 1000 * 60 * 5,
     placeholderData: (previousData) => {
-      if (!previousData) return
+      if (!previousData || !previousData.meta) return previousData
 
-      // Mantenemos los datos anteriores mientras se carga la nueva página
       return {
         ...previousData,
         meta: {
@@ -48,20 +46,20 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     },
   })
 
-  // Función para refrescar la data
-  const refetchData = () => {
-    queryClient.invalidateQueries({ queryKey: [...queryKey] })
-  }
-
   const data = response?.data || []
 
-  const pagination: Pagination = {
-    currentPage:  response?.meta.current_page || 1,
-    lastPage: response?.meta.last_page || 1,
-    total: response?.meta.total || 1
-  } 
+  const pagination: Pagination = response?.meta
+    ? {
+      currentPage: response.meta.current_page,
+      lastPage: response.meta.last_page,
+      total: response.meta.total
+    }
+    : {
+      currentPage: 1,
+      lastPage: 1,
+      total: data.length
+    }
 
-  // TODO: Eliminar estadisticas y agregar dentro de data
   const estadisticas = response?.estadisticas || {}
 
   return {
@@ -69,7 +67,7 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
     pagination,
     isLoading,
     isFetching,
-    refetchData,
+    refetchData: () => queryClient.invalidateQueries({ queryKey: [...queryKey] }),
     estadisticas
   }
 }
