@@ -16,12 +16,13 @@ import { formatDatos } from '../helpers/formatDatos'
 const columns: Column[] = [
   { key: 'nro_comprobante_rentas', label: 'NÚMERO DE COMPROBANTE' },
   { key: 'numero_acta', label: 'NÚMERO DE ACTA' },
+  { key: 'tipo_acta', label: 'TIPO DE ACTA' },
   { key: 'monto_multa_original', label: 'MONTO ORIGINAL' },
   { key: 'monto_conceptos_original', label: 'MONTO CONCEPTOS' },
   { key: 'monto_abonado', label: 'MONTO ABONADO' },
   { key: 'fecha_pago', label: 'FECHA DE PAGO' },
   { key: 'juzgado', label: 'JUZGADO N°' },
-  { key: 'estado', label: 'ESTADOO' },
+  { key: 'estado', label: 'ESTADO' },
 ]
 
 export const Recaudacion = () => {
@@ -139,6 +140,7 @@ export const Recaudacion = () => {
                 <Table.Row key={recaudacionItems.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.nro_comprobante_rentas || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.numero_acta || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.tipo_acta || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_multa_original)}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_conceptos_original)}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_abonado)}</Table.Cell>
