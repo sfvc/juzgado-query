@@ -158,7 +158,10 @@ export const Recaudacion = () => {
         </Table>
       </div>
 
-      {pagination.total > 1 && (
+      {pagination &&
+        pagination.currentPage > 0 &&
+        pagination.lastPage > 0 &&
+        pagination.total > 1 && (
         <div className='flex overflow-x-auto sm:justify-center mt-4'>
           <Pagination
             currentPage={pagination.currentPage}
