@@ -94,7 +94,9 @@ export const showPlantilla = async (path: string): Promise<void> => {
 // Renderiza el pdf en el navegador con los datos enviados a carbone para inhabilitados
 export const showFilePDF = async (data: any) => {
   try {
-    const response = await axios.post(CARBONE_URL, data, {
+    const { reportName = 'documento.pdf', ...body } = data
+
+    const response = await axios.post(CARBONE_URL, body, {
       responseType: 'blob'
     })
 
@@ -102,12 +104,21 @@ export const showFilePDF = async (data: any) => {
     const file = new Blob([fileBlob], { type: 'application/pdf' })
     const fileURL = URL.createObjectURL(file)
 
-    window.open(fileURL, '_blank')
+    // Crear un enlace temporal para forzar la descarga
+    const a = document.createElement('a')
+    a.href = fileURL
+    a.download = reportName
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
 
+    // Limpiar el objeto URL
+    URL.revokeObjectURL(fileURL)
   } catch (error) {
     console.log(error)
   }
 }
+
 
 // Descarga el word con los datos inyectados
 export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, tipo: string) => {

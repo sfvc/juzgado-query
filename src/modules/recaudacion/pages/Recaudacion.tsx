@@ -12,6 +12,7 @@ import { IRecaudacion }
   from '../interfaces'
 import { useEffect, useState } from 'react'
 import { formatDatos } from '../helpers/formatDatos'
+import { RoleGuard, UserRole } from '../../../auth'
 
 const columns: Column[] = [
   { key: 'nro_comprobante_rentas', label: 'NÚMERO DE COMPROBANTE' },
@@ -30,6 +31,8 @@ export const Recaudacion = () => {
   const { user } = useContext(AuthContext)
   const { recaudacionFiltrada, estadisticas, isFetching, pagination, updateFilter } = useRecaudacion()
   const [fecha, setFecha] = useState('')
+  const [selectedJuzgadoId, setSelectedJuzgadoId] = useState<number>(user?.juzgado?.id ?? 1)
+  const [showPrintButton, setShowPrintButton] = useState(false)
 
   const RECAUDACION_TEMPLATE: string = 'recaudacion.xlsx'
 
@@ -39,8 +42,16 @@ export const Recaudacion = () => {
       const resumen = formatEstadisticas(estadisticas)
       const datos = formatDatos(recaudacionFiltrada, user)
 
+      const [year, month, day] = fecha.split('-').map(Number)
+      const fechaLocal = new Date(year, month - 1, day)
+      const fechaFormateada = fechaLocal.toLocaleDateString('es-AR')
+      const fechaArchivo = fechaFormateada.replace(/\//g, '-')
+
+      const juzgadoNombre = selectedJuzgadoId === 1 ? 'JUZGADO N°1' : 'JUZGADO N°2'
+
       const data = {
         convertTo: 'pdf',
+        reportName: `PLANILLA DIARIA ${juzgadoNombre} ${fechaArchivo}.pdf`,
         data: {
           lista: form,
           resumen: resumen,
@@ -54,10 +65,11 @@ export const Recaudacion = () => {
   }
 
   const handleFilter = () => {
-    if (fecha && user?.juzgado?.id) {
+    if (fecha && selectedJuzgadoId) {
       updateFilter('fecha', fecha)
-      updateFilter('juzgado_id', user?.juzgado?.id)
+      updateFilter('juzgado_id', selectedJuzgadoId)
       updateFilter('page', 1)
+      setShowPrintButton(true)
     }
   }
 
@@ -102,9 +114,11 @@ export const Recaudacion = () => {
       <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4'>
         <h1 className='text-2xl font-semibold dark:text-white'>Listado de Recaudación</h1>
 
-        <Button color='warning' onClick={renderRecaudacion} isProcessing={useAction.loading} disabled={useAction.loading}>
-          <icons.Print />&#160; Imprimir
-        </Button>
+        {showPrintButton && (
+          <Button color='warning' onClick={renderRecaudacion} isProcessing={useAction.loading} disabled={useAction.loading}>
+            <icons.Print />&#160; Imprimir
+          </Button>
+        )}
 
         <div className='flex items-center gap-2'>
           <input
@@ -113,6 +127,18 @@ export const Recaudacion = () => {
             onChange={(e) => setFecha(e.target.value)}
             className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm px-3 py-2 text-gray-900 dark:text-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all'
           />
+
+          <RoleGuard roles={[UserRole.ADMIN]}>
+            <select
+              value={selectedJuzgadoId}
+              onChange={(e) => setSelectedJuzgadoId(Number(e.target.value))}
+              className='rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm px-3 py-2 text-gray-900 dark:text-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all'
+            >
+              <option value={1}>Juzgado N°1</option>
+              <option value={2}>Juzgado N°2</option>
+            </select>
+          </RoleGuard>
+
           <Button onClick={handleFilter} size='sm'>
             Filtrar
           </Button>

@@ -3,13 +3,14 @@ import { ActasInfractor, ActuacionActa } from '../interfaces'
 import { Column } from '../../../shared/interfaces'
 import { useContext, useEffect } from 'react'
 import { ActuacionContext, IActuacionContext } from '../../../context/Actuacion/ActuacionContext'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 const colums: Column[] = [
   { key: 'numero_acta', label: 'Nro. de acta' },
   { key: 'numero_causa', label: 'Nro. Causa' },
   { key: 'fecha', label: 'Fecha' }
 ]
-  
+
 export const RelatedActas = ({acta}: {acta: ActuacionActa}) => {
   const { selectedActas, setDefalutSeleted } = useContext<IActuacionContext>(ActuacionContext)
 
@@ -44,7 +45,7 @@ export const RelatedActas = ({acta}: {acta: ActuacionActa}) => {
                   <Table.Row key={index} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{acta.fecha}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{formatDate(acta.fecha)}</Table.Cell>
                   </Table.Row>
                 ))
                 : <tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>

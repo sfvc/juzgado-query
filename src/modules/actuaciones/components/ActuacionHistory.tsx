@@ -86,6 +86,16 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     })
   }
 
+  const restarTresHoras = (hora: string) => {
+    const [hh, mm, ss] = hora.split(':').map(Number)
+    const fecha = new Date()
+    fecha.setHours(hh)
+    fecha.setMinutes(mm)
+    fecha.setSeconds(ss || 0)
+    fecha.setHours(fecha.getHours() - 3)
+    return fecha.toTimeString().slice(0, 5)
+  }
+
   return (
     <div>
       <div className='mb-4 relative'>
@@ -123,7 +133,9 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
                     <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{actuacion.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white px-2'>{actuacion?.hora || '-'} hs</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white px-2'>
+                        {actuacion?.hora ? `${restarTresHoras(actuacion.hora)} hs` : '-'}
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='PDF' placement='top'>
