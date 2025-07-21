@@ -45,7 +45,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
   const handleDeleteActuacion = async () => {
     if(!activeItem) return
     const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId: activeItem.id })
-    
+
     if(!response) return
     toggleModal('delete', false)
   }
@@ -54,7 +54,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
     await useAction.actionFn( async () => {
       const file =  await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id, 'ACTUACION')
       if (!file) return
-    
+
       const url = await carboneActions.uploadFilePDF( file, { ...actuacion , numero_acta: acta.numero_acta }, 'actuacion_id', user!.id )
       if (url) convertToPDF(url)
     })
@@ -91,22 +91,22 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_acta}</Table.Cell>
                     <Table.Cell className='text-center dark:text-white'>{acta.numero_causa}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{actuacion?.total ? `$ ${actuacion.total}` : '-'}</Table.Cell>
-                    <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || '-'}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{actuacion?.fecha || 'Plantilla Vieja (civitas)'}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{actuacion?.total ? `$ ${actuacion.total}` : 'Plantilla Vieja (civitas)'}</Table.Cell>
+                    <Table.Cell className='text-center dark:text-white'>{actuacion?.usuario || 'Plantilla Vieja (civitas)'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Ver'>
-                        <Button color='warning' 
+                        <Button color='warning'
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(actuacion?.url)
                               handleconvertToPDF(actuacion.url)
-                            else 
+                            else
                               onGeneratePDF(actuacion)
-                          }} 
+                          }}
                           disabled={!actuacion?.url && !actuacion?.plantilla?.path}
                         >
-                          <icons.Print /> 
+                          <icons.Print />
                         </Button>
                       </Tooltip>
 
@@ -115,7 +115,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                           <icons.Pencil />
                         </Button>
                       </Tooltip>
-                      
+
                       <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
                         <Tooltip content='Eliminar'>
                           <Button color='failure' onClick={() => toggleModal('delete', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
@@ -143,7 +143,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
       </Modal>
 
       {/* Modal para eliminar actuación de listado */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={modal.delete} onClose={() => toggleModal('delete', false)}>
           <Modal.Header>Eliminar actuación</Modal.Header>
           <Modal.Body>
@@ -152,15 +152,15 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar la actuación del listado?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => toggleModal('delete', false)}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={handleDeleteActuacion} 
+                <Button
+                  color="failure"
+                  onClick={handleDeleteActuacion}
                   isProcessing={deleteActuacion.isPending}
                   disabled={deleteActuacion.isPending}
-                > 
+                >
                   Sí, eliminar
                 </Button>
               </div>

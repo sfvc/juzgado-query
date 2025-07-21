@@ -60,7 +60,7 @@ export const formatData = async (data: ActuacionResponse) => {
   const fechaComprobante = recaudacion?.fecha_pago || ''
   const nroComprobanteRentas = recaudacion?.nro_comprobante_rentas || ''
   const montoMulta = recaudacion?.monto_multa_original || ''
-  const montoMultaTotal = pagos.monto_multas?.toString() || '0'
+  const montoMultaTotal = pagos?.monto_multas?.toString() || '0'
   const montoConceptos = recaudacion?.monto_conceptos_original || ''
   const montoConceptosTotal = pagos?.monto_conceptos?.toString() || '0'
   const montoAbonado = recaudacion?.monto_total_original || ''
@@ -68,21 +68,21 @@ export const formatData = async (data: ActuacionResponse) => {
   const montoJuzgadoUno = recaudacion?.monto_juzgado || ''
   const montoJuzgadoDos = recaudacion?.monto_juzgado || ''
 
-  const juzgadoNombre = usuario.juzgado.nombre
-  const juzgadoDomicilio = usuario.juzgado?.direccion || ''
-  const juzgadoTelefono = usuario.juzgado?.telefono || ''
-  const nombreJuez = usuario.juzgado?.juez || ''
-  const nombreSecretario = usuario.juzgado?.secretario || ''
+  const juzgadoNombre = usuario?.juzgado?.nombre
+  const juzgadoDomicilio = usuario?.juzgado?.direccion || ''
+  const juzgadoTelefono = usuario?.juzgado?.telefono || ''
+  const nombreJuez = usuario?.juzgado?.juez || ''
+  const nombreSecretario = usuario?.juzgado?.secretario || ''
 
-  const numeroActa = actas.map(acta => acta.numero_acta).join(', ')
-  const numeroCausa = actas.map(acta => acta.numero_causa).join(', ')
+  const numeroActa = actas.map(acta => acta?.numero_acta).join(', ')
+  const numeroCausa = actas.map(acta => acta?.numero_causa).join(', ')
   const fechaActa = actas.map(acta => formatDate(acta?.fecha || '-')).join(', ')
-  const actaHs = actas.map(acta => acta.hora).join(', ')
-  const actaObservaciones = actas.map(acta => acta.observaciones).join(', ')
-  const lugar = actas.map(acta => acta.lugar).join(', ')
+  const actaHs = actas.map(acta => acta?.hora).join(', ')
+  const actaObservaciones = actas.map(acta => acta?.observaciones).join(', ')
+  const lugar = actas.map(acta => acta?.lugar).join(', ')
 
-  const infractorNombreApellido = infractores?.map(infractor => clearNames(infractor.apellido, infractor.nombre)).join(', ')
-  const infractorDocumento = infractores?.map(infractor => infractor.documento || infractor.cuit).join(', ')
+  const infractorNombreApellido = infractores?.map(infractor => clearNames(infractor?.apellido, infractor?.nombre)).join(', ')
+  const infractorDocumento = infractores?.map(infractor => infractor?.documento || infractor?.cuit).join(', ')
   const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
   const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
 
@@ -90,18 +90,18 @@ export const formatData = async (data: ActuacionResponse) => {
   // const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
   // const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre).join(', ')
   // const color = vehiculos?.map(vehiculo => vehiculo?.color?.nombre).join(', ')
-  const patente = vehiculos?.map(vehiculo => vehiculo.dominio).join(', ')
-  const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo.numero_taxi_remis).join(', ')
+  const patente = vehiculos?.map(vehiculo => vehiculo?.dominio).join(', ')
+  const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo?.numero_taxi_remis).join(', ')
   const vehiculoFormatted = vehiculos?.map(vehiculo => matchMakeAndModel(vehiculo)).join(', ')
 
-  const numeroArticulo = articulos.map(articulo => articulo.numero).join(', ')
-  const detalleArticulos = articulos.map(articulo => articulo.detalle).join(' ')
-  const codigoInfracciones = articulos.map(articulo => `${articulo.numero} - ${articulo.detalle}`).join(' ')
+  const numeroArticulo = articulos.map(articulo => articulo?.numero).join(', ')
+  const detalleArticulos = articulos.map(articulo => articulo?.detalle).join(' ')
+  const codigoInfracciones = articulos.map(articulo => `${articulo?.numero} - ${articulo?.detalle}`).join(' ')
 
-  const conceptosActuacion = conceptos?.map(item => `${item.concepto} de $${item.monto}`).join(', ')
+  const conceptosActuacion = conceptos?.map(item => `${item?.concepto} de $${item?.monto}`).join(', ')
   const totalConceptos = conceptos?.reduce((sum, item) => sum + +item.monto, 0)
 
-  const fechaNotificacion = notificaciones?.map(notificacion => notificacion.created_at).join(', ')
+  const fechaNotificacion = notificaciones?.map(notificacion => notificacion?.created_at).join(', ')
 
   const totalSinConceptos = +total - totalConceptos
 
