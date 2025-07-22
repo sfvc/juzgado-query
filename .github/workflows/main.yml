@@ -26,9 +26,9 @@ jobs:
             npm install
             docker stop juzgado-query || true
             docker rm juzgado-query || true
-            docker rmi municipalidad/juzgado-query:lastest -f
-            docker build --no-cache --build-arg VITE_API_URL='https://api-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query:lastest .
-            docker run --restart=always --name juzgado-query -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query:lastest
+            docker rmi municipalidad/juzgado-query:latest -f
+            docker build --no-cache --build-arg VITE_API_URL='https://api-juzgado.cc.gob.ar/api/v1' --build-arg VITE_TEMPLATE_URL='https://reportes.cc.gob.ar/templateFiles' --build-arg VITE_CARBONE_URL='https://reportes.cc.gob.ar/carbone' --tag municipalidad/juzgado-query:latest .
+            docker run --restart=always --name juzgado-query -d -p 0.0.0.0:5009:80 municipalidad/juzgado-query:latest
             docker builder prune -f
             docker image prune -a -f
             exit
