@@ -51,3 +51,15 @@ export const deleteActuacionHistory = async (actuacionId: number) => {
   const response = await apiJuzgado.delete(`actuacion-detalle/${actuacionId}`) 
   return response
 }
+
+// Generar comprobante
+export const generateComprobante = async (actuacionId: number) => {
+  const response = await apiJuzgado.post(`actuaciones/${actuacionId}/comprobantes`) 
+  return response
+}
+
+// Eliminar comprobante
+export const deleteComprobante = async (actuacionId: number) => {
+  const response = await apiJuzgado.post(`actuaciones/${actuacionId}/comprobantes/eliminar`) 
+  return response
+}

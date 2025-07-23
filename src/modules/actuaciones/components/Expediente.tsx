@@ -10,6 +10,7 @@ import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
 import type { Column } from '../../../shared/interfaces'
 import type { Actuacion, ActuacionActa } from '../interfaces'
+import { ACTUACION } from '../../../shared/constants'
 
 const colums: Column[] = [
   { key: 'id', label: 'id' },
@@ -22,15 +23,19 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' },
 ]
 
+const ESTADO_RESOLUCION = 7
+
 export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuaciones: Actuacion[]}) => {
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
-  const { deleteActuacion } = useActuacion()
+  const { deleteActuacion, generateComprobante, deleteComprobante } = useActuacion()
 
-  const [modal, setModal] = useState({ delete: false, history: false }) // Actions: delete | history
+  const [modal, setModal] = useState({ delete: false, history: false, comprobante: false }) // Actions: delete | history
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
+
+  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION) 
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
     if (actuacion) {
@@ -69,6 +74,22 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
     })
   }
 
+  const handleGenerateComprobante = async () => {
+    if(!activeItem) return
+    const response = await generateComprobante.mutateAsync(activeItem.id)
+
+    if(!response) return
+    toggleModal('delete', false)
+  }
+
+  const handleDeleteComprobante = async () => {
+    if(!activeItem) return
+    const response = await deleteComprobante.mutateAsync(activeItem.id)
+
+    if(!response) return
+    toggleModal('delete', false)
+  }
+
   return (
     <>
       <div className='titulos rounded-md py-2 text-center mb-6'>
@@ -85,7 +106,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
           <Table.Body className='divide-y'>
             {
               actuaciones?.length
-                ? actuaciones.map((actuacion: Actuacion) => (
+                ? actuaciones.map((actuacion: Actuacion, index: number) => (
                   <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='text-center dark:text-white'>{actuacion.id}</Table.Cell>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>
@@ -123,6 +144,31 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                           </Button>
                         </Tooltip>
                       </RoleGuard>
+
+                      {
+                        (
+                          (actuaciones?.length === index + 1) && 
+                          validateStatus && 
+                          actuacion.tipo === ACTUACION.SENTENCIA
+                        ) &&
+                        (
+                          !actuacion?.estado_pago
+                            ? (
+                              <Tooltip content='Generar Comprobante'>
+                                <Button color='purple' onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
+                                  <icons.ReportMoney />
+                                </Button>
+                              </Tooltip>
+                            )
+                            : (
+                              <Tooltip content='Eliminar Comprobante'>
+                                <Button  onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center bg-slate-600'>
+                                  <icons.ReportMoney />
+                                </Button>
+                              </Tooltip>
+                            )
+                        )
+                      }
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -162,6 +208,47 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                   disabled={deleteActuacion.isPending}
                 >
                   Sí, eliminar
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      }
+
+      {/* Modal para crear comprobante */}
+      { activeItem &&
+        <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
+          <Modal.Header>Crear comprobante</Modal.Header>
+          <Modal.Body>
+            <div className="text-center">
+              <icons.Warning />
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                {
+                  !activeItem.estado_pago
+                    ? 'Confirma para generar el comprobante de pago'
+                    : '¿Desea eliminar el comprobante?'
+                }
+                
+              </h3>
+
+              <div className="flex justify-center gap-4">
+                <Button color="gray" onClick={() => toggleModal('comprobante', false)}>Cancelar</Button>
+                <Button
+                  onClick={
+                    !activeItem.estado_pago
+                      ? handleGenerateComprobante
+                      : handleDeleteComprobante
+                  }
+                  isProcessing={generateComprobante.isPending}
+                  disabled={generateComprobante.isPending}
+                  color={ !activeItem.estado_pago ? 'default' : 'failure'}
+                >
+                  {
+                    !activeItem.estado_pago
+                      ? 'Sí, generar'
+                      : 'Sí, eliminar'
+                  }
+                  
                 </Button>
               </div>
             </div>

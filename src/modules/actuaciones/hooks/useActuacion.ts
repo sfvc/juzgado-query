@@ -9,7 +9,7 @@ import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 export const useActuacion= () => {
   const { resetProvider } = useContext(ActuacionContext)
   const queryClient = useQueryClient()
-  const { id } = useParams()
+  const { id } = useParams() // Id de acta
 
   /* Mutations */
   const createActuacion = useMutation({
@@ -51,10 +51,38 @@ export const useActuacion= () => {
       console.log(error)
     }
   }) 
+
+  // Generar comprobante de actuación
+  const generateComprobante = useMutation({
+    mutationFn: (id: number) => actuacionActions.generateComprobante(id), // Recibe el Id de actuacion
+    onSuccess: () => {
+      toast.success('Comprobante generado correctamente')
+      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
+    },
+    onError: (error) => {
+      toast.error('Error al generar el comprobante')
+      console.log(error)
+    }
+  }) 
+
+  // Generar comprobante de actuación
+  const deleteComprobante = useMutation({
+    mutationFn: (id: number) => actuacionActions.deleteComprobante(id), // Recibe el Id de actuacion
+    onSuccess: () => {
+      toast.success('Comprobante eliminado correctamente')
+      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
+    },
+    onError: (error) => {
+      toast.error('Error al eliminado el comprobante')
+      console.log(error)
+    }
+  }) 
   
   return { 
     createActuacion,
     deleteActuacion,
-    deleteActuacionHistory
+    deleteActuacionHistory,
+    generateComprobante,
+    deleteComprobante
   }
 }

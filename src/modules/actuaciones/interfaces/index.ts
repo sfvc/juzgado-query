@@ -55,6 +55,7 @@ export interface Actuacion {
     plantilla:     Plantilla | null
     url:           string | null
     usuario:       string
+    estado_pago:   boolean
 }
 
 export interface Plantilla {

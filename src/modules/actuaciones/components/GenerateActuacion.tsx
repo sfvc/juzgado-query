@@ -56,20 +56,6 @@ export const GenerateActuacion = ({acta}: {acta: ActuacionActa}) => {
           </Select>
         </div>
 
-        {/* <div className='mb-4'>
-          <div className='mb-2 block dark:text-white'>
-            <Label color='gray' htmlFor='plantilla' value='Plantilla' /><strong className='obligatorio'>(*)</strong>
-          </div>
-          <Select disabled={!plantillas.length} onChange={(e) => setSelectedPlantilla(+e.target.value)}>
-            <option value='' hidden>Seleccione la plantilla</option>
-            {
-              plantillas?.map((plantilla: IPlantilla) => (
-                <option key={plantilla.id} value={plantilla.id}>{plantilla.denominacion}</option>
-              ))
-            }
-          </Select>
-        </div> */}
-
         <SearchableSelect<IPlantilla>
           label="Plantilla"
           placeholder="Buscar plantilla"
