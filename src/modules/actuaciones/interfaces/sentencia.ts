@@ -27,8 +27,6 @@ export interface ISentenciaForm extends ITotal{
     observaciones: string,
     observacion: string,
     user_id: number,
-    sinValor: boolean,
-    observacion: string,
     conceptos: Concepto[]
 }
 

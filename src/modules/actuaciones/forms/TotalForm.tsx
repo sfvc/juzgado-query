@@ -21,7 +21,7 @@ const initialValues = {
   sub_total: 0,
   total: 0,
   descuento: 0,
-  recargo: SURCHARGE,
+  recargo: 0,
   sinValor: SIN_VALOR,
   observacion: '',
   observaciones: ''
@@ -97,13 +97,17 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
     const conceptoTotal = entries.reduce((acc, concepto) => acc + (concepto.monto || 0), 0)
 
     if (action === ACTIONS.SIN_VALOR) {
+      applySinValor()
+      return
+    }
+
+    if (action === ACTIONS.NINGUNA) {
       setFormState((prev) => ({
         ...prev,
-        sub_total: 0,
-        total: 0
+        recargo: 0,
+        descuento: 0,
       }))
-      return
-    }    
+    }
   
     setFormState((prev) => {
       const nuevoSubTotal = infracciones.reduce((acc, infraccion) => acc + (infraccion.importe || 0), 0)
