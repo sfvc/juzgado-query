@@ -56,24 +56,24 @@ export const useActuacion= () => {
   const generateComprobante = useMutation({
     mutationFn: (id: number) => actuacionActions.generateComprobante(id), // Recibe el Id de actuacion
     onSuccess: () => {
-      toast.success('Comprobante generado correctamente')
+      toast.success('Enviado a bandeja correctamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
     onError: (error) => {
-      toast.error('Error al generar el comprobante')
+      toast.error('Error al enviar')
       console.log(error)
     }
   }) 
 
-  // Generar comprobante de actuación
+  // Eliminar comprobante de actuación
   const deleteComprobante = useMutation({
     mutationFn: (id: number) => actuacionActions.deleteComprobante(id), // Recibe el Id de actuacion
     onSuccess: () => {
-      toast.success('Comprobante eliminado correctamente')
+      toast.success('Eliminado de la bandeja correctamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
     onError: (error) => {
-      toast.error('Error al eliminado el comprobante')
+      toast.error('Error al eliminar')
       console.log(error)
     }
   }) 

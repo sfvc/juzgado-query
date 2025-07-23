@@ -154,14 +154,14 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                         (
                           !actuacion?.estado_pago
                             ? (
-                              <Tooltip content='Generar Comprobante'>
+                              <Tooltip content='Enviar a bandeja'>
                                 <Button color='purple' onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
                                   <icons.ReportMoney />
                                 </Button>
                               </Tooltip>
                             )
                             : (
-                              <Tooltip content='Eliminar Comprobante'>
+                              <Tooltip content='Eliminar de bandeja'>
                                 <Button  onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center bg-slate-600'>
                                   <icons.ReportMoney />
                                 </Button>
@@ -215,18 +215,18 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
         </Modal>
       }
 
-      {/* Modal para crear comprobante */}
+      {/* Modal para enviar a bandeja de cobro */}
       { activeItem &&
         <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
-          <Modal.Header>Crear comprobante</Modal.Header>
+          <Modal.Header>Enviar a bandeja de cobro</Modal.Header>
           <Modal.Body>
             <div className="text-center">
               <icons.Warning />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 {
                   !activeItem.estado_pago
-                    ? 'Confirma para generar el comprobante de pago'
-                    : '¿Desea eliminar el comprobante?'
+                    ? 'Confirma para enviar a bandeja de cobro'
+                    : '¿Desea eliminar de la bandeja de cobro?'
                 }
                 
               </h3>
@@ -241,11 +241,11 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                   }
                   isProcessing={generateComprobante.isPending}
                   disabled={generateComprobante.isPending}
-                  color={ !activeItem.estado_pago ? 'default' : 'failure'}
+                  color={ !activeItem.estado_pago ? 'success' : 'failure'}
                 >
                   {
                     !activeItem.estado_pago
-                      ? 'Sí, generar'
+                      ? 'Sí, enviar'
                       : 'Sí, eliminar'
                   }
                   
