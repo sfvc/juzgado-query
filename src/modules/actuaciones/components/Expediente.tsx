@@ -233,23 +233,29 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
 
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => toggleModal('comprobante', false)}>Cancelar</Button>
-                <Button
-                  onClick={
-                    !activeItem.estado_pago
-                      ? handleGenerateComprobante
-                      : handleDeleteComprobante
-                  }
-                  isProcessing={generateComprobante.isPending}
-                  disabled={generateComprobante.isPending}
-                  color={ !activeItem.estado_pago ? 'success' : 'failure'}
-                >
-                  {
-                    !activeItem.estado_pago
-                      ? 'Sí, enviar'
-                      : 'Sí, eliminar'
-                  }
-                  
-                </Button>
+                {
+                  !activeItem.estado_pago
+                    ? (
+                      <Button
+                        onClick={handleGenerateComprobante}
+                        isProcessing={generateComprobante.isPending}
+                        disabled={generateComprobante.isPending}
+                        color='success'
+                      >
+                        Sí, enviar
+                      </Button>
+                    )
+                    : (
+                      <Button
+                        onClick={handleDeleteComprobante}
+                        isProcessing={deleteComprobante.isPending}
+                        disabled={deleteComprobante.isPending}
+                        color='failure'
+                      >
+                        Sí, eliminar
+                      </Button>
+                    )
+                }
               </div>
             </div>
           </Modal.Body>
