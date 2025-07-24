@@ -11,6 +11,7 @@ import { ActuacionHistory } from './ActuacionHistory'
 import type { Column } from '../../../shared/interfaces'
 import type { Actuacion, ActuacionActa } from '../interfaces'
 import { ACTUACION } from '../../../shared/constants'
+import { ultimaSentencia } from '../helpers/ultimaSentencia'
 
 const colums: Column[] = [
   { key: 'id', label: 'id' },
@@ -29,13 +30,14 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
+  const sentencia = ultimaSentencia(actuaciones)
+  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION) 
+
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
   const { deleteActuacion, generateComprobante, deleteComprobante } = useActuacion()
 
-  const [modal, setModal] = useState({ delete: false, history: false, comprobante: false }) // Actions: delete | history
+  const [modal, setModal] = useState({ delete: false, history: false, comprobante: false }) // Actions: delete | history | comprobante
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
-
-  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION) 
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
     if (actuacion) {
@@ -106,7 +108,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
           <Table.Body className='divide-y'>
             {
               actuaciones?.length
-                ? actuaciones.map((actuacion: Actuacion, index: number) => (
+                ? actuaciones.map((actuacion: Actuacion) => (
                   <Table.Row key={actuacion.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell className='text-center dark:text-white'>{actuacion.id}</Table.Cell>
                     <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{actuacion.tipo}</Table.Cell>
@@ -146,11 +148,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                       </RoleGuard>
 
                       {
-                        (
-                          (actuaciones?.length === index + 1) && 
-                          validateStatus && 
-                          actuacion.tipo === ACTUACION.SENTENCIA
-                        ) &&
+                        (actuacion.id === sentencia?.id && validateStatus) &&
                         (
                           !actuacion?.estado_pago
                             ? (
