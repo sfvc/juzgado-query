@@ -87,11 +87,11 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                               value={acta.id}
                               onChange={(e) => checkingActa(e, acta.id)}
                               className='
-                                h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400 
-                                focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300 
-                                text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 
-                                checked:bg-blue-600 checked:border-blue-600 
-                                hover:border-blue-800 hover:shadow-md transition-all duration-200 
+                                h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400
+                                focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300
+                                text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500
+                                checked:bg-blue-600 checked:border-blue-600
+                                hover:border-blue-800 hover:shadow-md transition-all duration-200
                                 disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
                             '/>
                           )}
@@ -107,11 +107,11 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                             value={acta.id}
                             onChange={(e) => checkingActa(e, acta.id)}
                             className='
-                              h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400 
-                              focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300 
-                              text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 
-                              checked:bg-blue-600 checked:border-blue-600 
-                              hover:border-blue-800 hover:shadow-md transition-all duration-200 
+                              h-6 w-6 rounded-md border-2 border-gray-500 dark:border-gray-400
+                              focus:ring-4 focus:ring-blue-500 dark:focus:ring-blue-300
+                              text-blue-700 dark:checked:bg-blue-500 dark:checked:border-blue-500
+                              checked:bg-blue-600 checked:border-blue-600
+                              hover:border-blue-800 hover:shadow-md transition-all duration-200
                               disabled:bg-gray-300 disabled:dark:bg-gray-700 disabled:cursor-not-allowed
                             '/>
                         </Table.Cell>
@@ -136,7 +136,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                         </span>
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{clearNames(acta?.infractores[0]?.apellido, acta?.infractores[0]?.nombre)}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta?.infractores[0]?.documento || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white hidden lg:table-cell'>{acta?.infractores[0]?.documento || acta?.infractores[0]?.cuit || '-'}</Table.Cell>
 
                       <Table.Cell className='text-center dark:text-white'>
                         {
