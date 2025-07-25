@@ -104,7 +104,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
 
   useEffect(() => {
     if (inhabilitado?.acta?.retencion_licencia !== undefined) {
-      setValue('retencion_licencia', Boolean(inhabilitado.acta.retencion_licencia))
+      setValue('retencion_licencia', String(inhabilitado.acta.retencion_licencia))
     }
   }, [inhabilitado, setValue])
 
