@@ -85,6 +85,8 @@ export const formatData = async (data: ActuacionResponse) => {
   const infractorDocumento = infractores?.map(infractor => infractor?.documento || infractor?.cuit).join(', ')
   const infractorDomicilio = infractores?.map(infractor => (`${infractor?.domicilio?.calle || ''} ` + `${infractor?.domicilio?.numero || ''}`).trim()).join(', ')
   const infractorDomicilioCompleto = infractores?.map(infractor => formatAddress(infractor?.domicilio)).join(', ')
+  const infractorTelefono = infractores?.map(infractor => infractor?.telefono || '').join(', ')
+  const infractorCorreo = infractores?.map(infractor => infractor?.email || '').join(', ')
 
   // const chasis = vehiculos?.map(vehiculo => vehiculo.numero_chasis).join(', ')
   // const motor = vehiculos?.map(vehiculo => vehiculo.numero_motor).join(', ')
@@ -150,6 +152,8 @@ export const formatData = async (data: ActuacionResponse) => {
     infractorDocumento,
     infractorDomicilio,                         //** Formato de domicilio [Calle - Numero] */
     infractorDomicilioCompleto,                 //** Formato de domicilio [Calle - Numero, Barrio, Localidad, Departamento] */
+    infractorTelefono,
+    infractorCorreo,
 
     // Vehichulo
     // chasis,

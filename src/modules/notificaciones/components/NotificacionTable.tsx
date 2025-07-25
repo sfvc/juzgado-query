@@ -54,7 +54,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
 
   const deleteNotificacion = async () => {
     if (!activeItem) return
-    
+
     const response = await deleteNotification.mutateAsync({id: activeItem.id, queryKey: ['acta-notificacion', {id: activeItem.id}]})
     if (response.status === 200) onDeleteModal()
   }
@@ -63,10 +63,10 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
     await useAction.actionFn( async () => {
       const file =  await generarPDFGotenberg(notificacion.plantilla?.path, notificacion.id, 'NOTIFICACION')
       if (!file) return
-  
+
       const url = await carboneActions.uploadFilePDF( file, { ...notificacion , numero_acta: acta.numero_acta }, 'notificacion_id', user!.id )
       if (url) convertToPDF(url)
-  
+
     })
 
     queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
@@ -105,17 +105,17 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
                     <Table.Cell className='text-center dark:text-white'>{notificacion.usuario || '-'}</Table.Cell>
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Ver notificación'>
-                        <Button color='warning' 
+                        <Button color='warning'
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
                             if(notificacion?.url)
                               handleconvertToPDF(notificacion.url)
-                            else 
+                            else
                               onGeneratePDF(notificacion)
-                          }} 
+                          }}
                           disabled={!notificacion?.url && !notificacion?.plantilla?.path}
                         >
-                          <icons.Print /> 
+                          <icons.Print />
                         </Button>
                       </Tooltip>
 
@@ -148,24 +148,24 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
       </Modal>
 
       {/* Modal para eliminar notificacion */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={openDeleteModal} onClose={onDeleteModal}>
-          <Modal.Header>Eliminar actuación</Modal.Header>
+          <Modal.Header>Eliminar notificación</Modal.Header>
           <Modal.Body>
             <div className="text-center">
               <icons.Warning />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                ¿Estás seguro de que deseas eliminar la actuación del historial?
+                ¿Estás seguro de que deseas eliminar la notificación del historial?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => onDeleteModal()}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={deleteNotificacion} 
+                <Button
+                  color="failure"
+                  onClick={deleteNotificacion}
                   isProcessing={deleteNotification.isPending}
                   disabled={deleteNotification.isPending}
-                > 
+                >
                   Sí, eliminar
                 </Button>
               </div>

@@ -74,6 +74,8 @@ export interface Infractor {
     responsable: null
     antecedentes: null
     domicilio: Domicilio
+    email: string
+    telefono: string
 }
 
 export interface Domicilio {

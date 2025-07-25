@@ -35,6 +35,8 @@ export const dictionary = () => {
     infractorDocumento: '{d.infractorDocumento}',
     infractorDomicilio: '{d.infractorDomicilio}',
     infractorDomicilioCompleto: '{d.infractorDomicilioCompleto}',
+    infractorTelefono: '{d.infractorTelefono}',
+    infractorCorreo: '{d.infractorCorreo}',
 
     // Acta detallada
     fechaActa: '{d.fechaActa}',
