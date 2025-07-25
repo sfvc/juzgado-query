@@ -16,6 +16,7 @@ export interface IRecaudacion {
   numero_acta?: string;
   tipo_acta?: string;
   es_acumulada?: boolean;
+  actas_acumuladas?: string;
   cantidad_actas_acumuladas?: number;
   monto_juzgado?: string;
   juzgado?: Juzgado

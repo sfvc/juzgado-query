@@ -13,7 +13,9 @@ export const formatReport = (
 
   const data = recaudaciones.map((recaudacion) => {
     return {
-      numeroActa: recaudacion.numero_acta || '',
+      numeroActa: Array.isArray(recaudacion.actas_acumuladas)
+        ? recaudacion.actas_acumuladas.join(', ')
+        : '',
       nroComprobanteRentas: recaudacion.nro_comprobante_rentas || '',
       montoMulta: formatMonto(recaudacion.monto_multa_original),
       montoAbonado: formatMonto(recaudacion.monto_total_original),

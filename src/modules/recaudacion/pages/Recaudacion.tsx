@@ -165,7 +165,11 @@ export const Recaudacion = () => {
               recaudacionFiltrada.map((recaudacionItems: IRecaudacion) => (
                 <Table.Row key={recaudacionItems.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.nro_comprobante_rentas || ''}</Table.Cell>
-                  <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.numero_acta || ''}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>
+                    {Array.isArray(recaudacionItems?.actas_acumuladas)
+                      ? recaudacionItems.actas_acumuladas.join(', ')
+                      : ''}
+                  </Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>{recaudacionItems?.tipo_acta || ''}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_multa_original)}</Table.Cell>
                   <Table.Cell className='text-center dark:text-white'>$ {formatMonto(recaudacionItems?.monto_conceptos_original)}</Table.Cell>

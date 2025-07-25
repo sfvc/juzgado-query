@@ -11,7 +11,6 @@ import type { IJuzgado } from '../../parametros/globales/interfaces'
 import type { FormInhabilitado, IInhabilitado } from '../interfaces'
 import { CreatePersona } from '../../actas/forms/integrations/CreatePersona'
 import { useEffect, useState } from 'react'
-// import { CustomSelect } from '../../actas/forms/components/CustomSelect'
 
 const validationSchema = yup.object().shape({
   persona_id: yup
@@ -81,7 +80,8 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
       fecha_hasta: inhabilitado?.fecha_hasta || '',
       numero_acta: inhabilitado?.acta?.numero_acta || '',
       instrumento: inhabilitado?.instrumento || '',
-      causa: inhabilitado?.causa || ''
+      causa: inhabilitado?.causa || '',
+      retencion_licencia: Boolean(inhabilitado?.acta?.retencion_licencia)
     },
     resolver: yupResolver(validationSchema)
   })
@@ -101,6 +101,12 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
       setMostrarCausa(true)
     }
   }, [inhabilitado?.juzgado.id])
+
+  useEffect(() => {
+    if (inhabilitado?.acta?.retencion_licencia !== undefined) {
+      setValue('retencion_licencia', Boolean(inhabilitado.acta.retencion_licencia))
+    }
+  }, [inhabilitado, setValue])
 
   if (isFetching) return <div className='flex justify-center'><Spinner size='lg'/></div>
 
@@ -222,7 +228,16 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           </div>
         )}
 
-        {/* <CustomSelect label='¿Se retuvo la licencia?' register={register('retencion_licencia')} /> */}
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label color='gray' htmlFor='causa' value='¿Se retuvo la licencia?' />
+            <strong className='obligatorio'>(*)</strong>
+          </div>
+          <Select {...register('retencion_licencia')}>
+            <option value='1'>Sí</option>
+            <option value='0'>No</option>
+          </Select>
+        </div>
       </div>
 
       {
