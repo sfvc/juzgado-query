@@ -2,7 +2,7 @@ import { IPropiedad, IRubro } from '../../parametros/actas/interfaces'
 import { IPlantilla } from '../../plantillas/interfaces'
 import { IVehiculo, Titular } from '../../vehiculos/interfaces'
 
-//** Interfaces de filtro */ 
+//** Interfaces de filtro */
 export interface ActaFilterForm {
     persona_id?: string
     numero_acta?: string

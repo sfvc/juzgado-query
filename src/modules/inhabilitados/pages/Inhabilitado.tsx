@@ -11,11 +11,15 @@ import { RoleGuard, UserRole } from '../../../auth'
 import { useModals } from '../../../shared/hooks/useModals'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
+// import { carboneActions } from '../../carbone'
+// import { formatReport } from '../helpers/formatReport'
+// import { useRecaudacion } from '../../recaudacion/hooks/useRecaudacion'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
   { key: 'documento', label: 'Dni' },
   { key: 'numero_acta', label: 'Número de Acta' },
+  { key: 'retencion_licencia', label: '¿Se retuvo licencia?' },
   { key: 'periodo_inhabilitacion', label: 'Periodo de inhabilitación' },
   { key: 'tiempo_tanscurrido', label: 'Tiempo transcurrido' },
   { key: 'estado', label: 'Estado' },
@@ -30,6 +34,26 @@ export const Inhabilitado = () => {
     closeModal
   } = useModals()
   const [activeItem, setActiveItem] = useState<IInhabilitado | null>(null)
+  // const useAction = useLoading()
+  // const { recaudacionFiltrada } = useRecaudacion()
+  // const INHABILITADO_TEMPLATE: string = 'inhabilitado.xlsx'
+
+  // const renderInhabilitados = async () => {
+  //   useAction.actionFn(async () => {
+  //     const form = formatReport(recaudacionFiltrada)
+
+  //     const data = {
+  //       convertTo: 'pdf',
+  //       reportName: 'INHABILITADO.pdf',
+  //       data: {
+  //         lista: form
+  //       },
+  //       template: INHABILITADO_TEMPLATE
+  //     }
+
+  //     await carboneActions.showFilePDF(data)
+  //   })
+  // }
 
   const {
     inhabilitados,
@@ -87,6 +111,11 @@ export const Inhabilitado = () => {
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Inhabilitados</h1>
+
+        {/* <Button color='warning' onClick={renderInhabilitados} isProcessing={useAction.loading} disabled={useAction.loading}>
+          <icons.Print />&#160; Imprimir
+        </Button> */}
+
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
@@ -116,6 +145,9 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>{clearNames(inhabilitado?.persona?.apellido, inhabilitado?.persona?.nombre) || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.persona?.numero_documento || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.acta?.numero_acta || '-'}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        {inhabilitado?.acta?.retencion_licencia === 1 ? 'Sí' : 'No'}
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         {

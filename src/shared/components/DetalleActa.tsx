@@ -3,7 +3,7 @@ import { Label, TextInput, Tooltip } from 'flowbite-react'
 import { clearNames, icons } from '..'
 import { NotificationActa } from '../../modules/notificaciones/interfaces'
 import { ActuacionActa } from '../../modules/actuaciones/interfaces'
-import { AntecedentesList } from '../../modules/actas/forms/integrations/AntecedentesList'
+import { Antecedentes } from '../../modules/antecedentes'
 
 interface Props {
   acta: NotificationActa | ActuacionActa
@@ -133,12 +133,12 @@ export const DetalleActa = ({ acta, title }: Props) => {
                 disabled
               />
             </div>
-            
+
             <Tooltip content='Ver antecedentes'>
-              <button 
-                type='button' 
+              <button
+                type='button'
                 onClick={() => toggleModal(acta?.infractores[0]?.id)}
-                className='flex items-center rounded-md border border-gray-300 h-9 w-9 hover:bg-gray-200 
+                className='flex items-center rounded-md border border-gray-300 h-9 w-9 hover:bg-gray-200
                 hover:border-gray-200 dark:hover:bg-gray-500'
               >
                 <icons.Antecedente />
@@ -148,7 +148,7 @@ export const DetalleActa = ({ acta, title }: Props) => {
         </div>
       </div>
 
-      <AntecedentesList
+      <Antecedentes
         id={activeItem}
         isOpen={isOpen}
         toggleModal={toggleModal}

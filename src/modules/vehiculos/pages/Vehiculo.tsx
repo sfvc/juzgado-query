@@ -26,15 +26,15 @@ export const Vehiculo = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IVehiculo | null>(null)
 
-  const { 
+  const {
     vehiculos,
     pagination,
     isFetching,
     updateFilter,
-    deleteVehiculo 
+    deleteVehiculo
   } = useVehiculo()
 
-  const handleSaveVehiculo = (vehiculo: IVehiculo) => {
+  const handleSaveVehiculo = () => {
     setActiveItem(null)
     setOpenModal(false)
   }

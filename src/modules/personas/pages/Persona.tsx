@@ -9,6 +9,7 @@ import { TableSkeleton } from '../../../shared/components/TableSkeleton'
 import { clearNames } from '../../../shared/helpers/clearNames'
 import type { Column } from '../../../shared/interfaces'
 import type { IPersona } from '../interfaces'
+import { Antecedentes } from '../../antecedentes'
 
 const colums: Column[] = [
   { key: 'id', label: 'Id' },
@@ -26,12 +27,22 @@ export const Persona = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IPersona | null>(null)
 
-  const { 
+  // Modal de antecedentes
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const toggleModal = (id?: number) => {
+    setIsOpen(!isOpen)
+
+    if (id) setActiveItem(id)
+    else setActiveItem(null)
+  }
+
+  const {
     personas,
     pagination,
     isFetching,
     updateFilter,
-    deletePersona 
+    deletePersona
   } = usePersona()
 
   /* Modal crear/editar */
@@ -57,7 +68,7 @@ export const Persona = () => {
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
             <InputTable onSearch={(value: string) => updateFilter('query', value)} />
-            
+
             <Button type='submit' onClick={() => setOpenModal(true)} >Agregar</Button>
           </div>
         </div>
@@ -91,6 +102,15 @@ export const Persona = () => {
                             <icons.Pencil />
                           </Button>
                         </Tooltip>
+                        <Tooltip content='Ver Antecedentes'>
+                          <button
+                            type='button'
+                            className='rounded-md border flex items-center justify-center border-gray-300 w-8 h-8 hover:bg-gray-200 hover:border-gray-200 dark:hover:bg-gray-500'
+                            onClick={() => toggleModal(persona.id)}
+                          >
+                            <icons.Antecedente />
+                          </button>
+                        </Tooltip>
                       </Table.Cell>
                     </Table.Row>
                   )))
@@ -111,20 +131,26 @@ export const Persona = () => {
         />
       </div>
 
-      {/* Modal crear/editar */} 
+      <Antecedentes
+        id={activeItem}
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+      />
+
+      {/* Modal crear/editar */}
       <Modal show={openModal} onClose={onCloseModal} size='5xl'>
         <Modal.Header>{!activeItem ? 'Agregar Persona' : 'Editar Persona'}</Modal.Header>
         <Modal.Body>
           <PersonaForm
-            persona={activeItem} 
+            persona={activeItem}
             onSucces={onCloseModal}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
+      {/* Modal eliminar */}
       {
-        activeItem && 
+        activeItem &&
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}

@@ -33,6 +33,7 @@ export const Recaudacion = () => {
   const [fecha, setFecha] = useState('')
   const [selectedJuzgadoId, setSelectedJuzgadoId] = useState<number>(user?.juzgado?.id ?? 1)
   const [showPrintButton, setShowPrintButton] = useState(false)
+  const [totalAbonado, setTotalAbonado] = useState(0)
 
   const RECAUDACION_TEMPLATE: string = 'recaudacion.xlsx'
 
@@ -109,10 +110,24 @@ export const Recaudacion = () => {
     setFecha(fechaAyer)
   }, [])
 
+  useEffect(() => {
+    if (recaudacionFiltrada && recaudacionFiltrada.length > 0) {
+      const total = recaudacionFiltrada.reduce((acc, item) => {
+        const monto = Number(item?.monto_abonado ?? 0)
+        return acc + (isNaN(monto) ? 0 : monto)
+      }, 0)
+      setTotalAbonado(total)
+    } else {
+      setTotalAbonado(0)
+    }
+  }, [recaudacionFiltrada])
+
   return (
     <>
       <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4'>
-        <h1 className='text-2xl font-semibold dark:text-white'>Listado de Recaudación</h1>
+        <h1 className='text-2xl font-semibold dark:text-white'>
+          Listado de Recaudación (${formatMonto(totalAbonado)})
+        </h1>
 
         {showPrintButton && (
           <Button color='warning' onClick={renderRecaudacion} isProcessing={useAction.loading} disabled={useAction.loading}>

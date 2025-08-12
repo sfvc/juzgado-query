@@ -21,7 +21,6 @@ interface Props {
 }
 
 export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
-  
   const { data: antecedentes, isLoading } = useQuery<IActa[]>({
     queryKey: ['antecedentes', {id}],
     queryFn: () => personaActions.getAntecedentesByPersona(id!),
@@ -36,7 +35,7 @@ export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
         {
           isLoading
             ? <div className='flex justify-center items-center'><Spinner size='xl' /></div>
-            : 
+            :
             <Table hoverable className='text-center'>
               <Table.Head>
                 {colums.map((column: Column) => (
@@ -61,7 +60,7 @@ export const AntecedentesList = ({id, isOpen, toggleModal}: Props) => {
                     : <tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>
                 }
               </Table.Body>
-            </Table> 
+            </Table>
         }
 
         <div className='flex justify-end mt-4'>

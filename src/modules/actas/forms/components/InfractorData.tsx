@@ -6,7 +6,7 @@ import { personaActions } from '../../../personas'
 import { formatPersona } from '../../helpers/formatPersona'
 import { CreatePersona } from '../integrations/CreatePersona'
 import { clearNames } from '../../../../shared'
-import { AntecedentesList } from '../integrations/AntecedentesList'
+// import { AntecedentesList } from '../integrations/AntecedentesList'
 import { RESPONSABLE } from '../../../../shared/constants'
 import { TipoPersona } from '../../../personas/forms/helpers'
 import { PersonaForm } from '../../../personas/forms/PersonaForm'
@@ -14,6 +14,7 @@ import type { IPersona } from '../../../personas/interfaces'
 import type { InfractorActa } from '../../interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
 import type { Column } from '../../../../shared/interfaces'
+import { Antecedentes } from '../../../antecedentes'
 
 const columns: Column[] = [
   { key: 'nombre', label: 'Nombre' },
@@ -242,7 +243,7 @@ export const InfractorData = ({ data }: Props) => {
         </div>
       )}
 
-      <AntecedentesList
+      <Antecedentes
         id={activeItem}
         isOpen={isOpen}
         toggleModal={toggleModal}
