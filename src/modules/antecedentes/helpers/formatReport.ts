@@ -22,7 +22,7 @@ export const formatReport = (
     })
     .map((antecedente) => ({
       numeroActa: antecedente?.numero_acta || '',
-      nroComprobanteRentas: antecedente?.nro_comprobante_rentas || '',
+      nroComprobanteRentas: antecedente?.nro_comprobante || '',
       numeroCausa: antecedente?.numero_causa || '',
       fecha: antecedente?.fecha || '',
       estados: antecedente?.estados?.[0]?.nombre || '',

@@ -1,6 +1,7 @@
 import { Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { DataPersona, INacionalidad, PersonaFisica } from '../../interfaces'
+import { CustomSelect } from '../../../actas/forms/components/CustomSelect'
 
 interface Props {
   data: DataPersona
@@ -13,7 +14,7 @@ export const FisicaForm = ({ data }: Props) => {
     const input = e.currentTarget
     input.value = input.value.replace(/[^\d]/g, '')
   }
-    
+
   return (
     <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
       <div className='mb-4'>
@@ -23,7 +24,7 @@ export const FisicaForm = ({ data }: Props) => {
         <TextInput
           {...register('apellido')}
           placeholder='Apellido'
-          helperText={errors?.apellido && errors?.apellido?.message} 
+          helperText={errors?.apellido && errors?.apellido?.message}
           color={errors?.apellido && 'failure'}
         />
       </div>
@@ -36,7 +37,7 @@ export const FisicaForm = ({ data }: Props) => {
           {...register('nombre')}
           type='text'
           placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
+          helperText={errors?.nombre && errors?.nombre?.message}
           color={errors?.nombre && 'failure'}
         />
       </div>
@@ -99,7 +100,7 @@ export const FisicaForm = ({ data }: Props) => {
           {...register('fecha_nacimiento')}
           type='date'
           placeholder='Fecha de Nacimiento'
-          helperText={errors?.fecha_nacimiento && errors?.fecha_nacimiento?.message} 
+          helperText={errors?.fecha_nacimiento && errors?.fecha_nacimiento?.message}
           color={errors?.fecha_nacimiento && 'failure'}
         />
       </div>
@@ -122,7 +123,7 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <Select
           {...register('sexo')}
-          helperText={errors?.sexo && errors?.sexo?.message} 
+          helperText={errors?.sexo && errors?.sexo?.message}
           color={errors?.sexo && 'failure'}
         >
           <option value='' hidden>Seleccione el sexo</option>
@@ -141,7 +142,7 @@ export const FisicaForm = ({ data }: Props) => {
         </div>
         <Select
           {...register('nacionalidad_id', { valueAsNumber: true })}
-          helperText={errors?.nacionalidad_id && errors?.nacionalidad_id?.message} 
+          helperText={errors?.nacionalidad_id && errors?.nacionalidad_id?.message}
           color={errors?.nacionalidad_id && 'failure'}
         >
           <option value='' hidden>Seleccione la nacionalidad</option>
@@ -161,7 +162,7 @@ export const FisicaForm = ({ data }: Props) => {
           {...register('email')}
           type='email'
           placeholder='Email'
-          helperText={errors?.email && errors?.email?.message} 
+          helperText={errors?.email && errors?.email?.message}
           color={errors?.email && 'failure'}
         />
       </div>
@@ -174,9 +175,13 @@ export const FisicaForm = ({ data }: Props) => {
           {...register('telefono')}
           type='text'
           placeholder='Telefono'
-          helperText={errors?.telefono && errors?.telefono?.message} 
+          helperText={errors?.telefono && errors?.telefono?.message}
           color={errors?.telefono && 'failure'}
         />
+      </div>
+
+      <div className='mb-4'>
+        <CustomSelect label='¿Debe cuota alimentaria?' register={register('cuota_alimentaria')} />
       </div>
     </div>
   )

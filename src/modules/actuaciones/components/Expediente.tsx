@@ -31,7 +31,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
   const { user } = useContext(AuthContext)
 
   const sentencia = ultimaSentencia(actuaciones)
-  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION) 
+  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION)
 
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
   const { deleteActuacion, generateComprobante, deleteComprobante } = useActuacion()
@@ -167,6 +167,18 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                             )
                         )
                       }
+
+                      {actuacion?.path_comprobante && (
+                        <Tooltip content='Ver comprobante'>
+                          <Button
+                            color='blue'
+                            onClick={() => window.open(actuacion.path_comprobante, '_blank')}
+                            className='w-8 h-8 flex items-center justify-center'
+                          >
+                            <icons.World />
+                          </Button>
+                        </Tooltip>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -226,7 +238,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                     ? 'Confirma para enviar a bandeja de cobro'
                     : '¿Desea eliminar de la bandeja de cobro?'
                 }
-                
+
               </h3>
 
               <div className="flex justify-center gap-4">

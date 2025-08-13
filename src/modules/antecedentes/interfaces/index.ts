@@ -7,7 +7,7 @@ export interface IAntecedente {
   estados?: Estado[]
   dni?: string;
   dominio?: string;
-  nro_comprobante_rentas?: string;
+  nro_comprobante?: string;
   juzgado_id?: string
   infractores: InfractorActa[]
   vehiculo: IVehiculo[]

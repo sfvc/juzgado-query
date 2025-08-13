@@ -7,7 +7,7 @@ import logoDark from '../../assets/images/logo-capital-dark.webp'
 import { ThemeContext } from '../../context/Theme/ThemeContext'
 
 export const Login = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
 
   return (
     <>
@@ -26,9 +26,9 @@ export const Login = () => {
           <div className='right-column relative bg-gray-100 dark:bg-dark'>
             <div className='inner-content h-full flex flex-col'>
               <div className='auth-box h-full flex flex-col justify-center'>
-                <img src={theme === 'light' ? logoLight :  logoDark} 
-                  alt='Logo del Juzgado' 
-                  className='w-48 md:w-64 pb-6 inline-block mx-auto pointer-events-none' 
+                <img src={theme === 'light' ? logoLight :  logoDark}
+                  alt='Logo del Juzgado'
+                  className='w-48 md:w-64 pb-6 inline-block mx-auto pointer-events-none'
                 />
                 <div className='text-center 2xl:mb-10 mb-4'>
                   <h4 className='font-bold dark:text-white'>Iniciar Sesión</h4>

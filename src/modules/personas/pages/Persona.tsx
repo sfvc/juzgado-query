@@ -25,7 +25,8 @@ const colums: Column[] = [
 export const Persona = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [activeItem, setActiveItem] = useState<IPersona | null>(null)
+  const [editPersona, setEditPersona] = useState<IPersona | null>(null)
+  const [activeItem, setActiveItem] = useState<number | null>(null)
 
   // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -47,17 +48,17 @@ export const Persona = () => {
 
   /* Modal crear/editar */
   const onOpenModal = (persona: IPersona) => {
-    setActiveItem(persona)
+    setEditPersona(persona)
     setOpenModal(true)
   }
 
   const onCloseModal = async () => {
-    setActiveItem(null)
+    setEditPersona(null)
     setOpenModal(false)
   }
 
   const closeDeleteModal = () => {
-    setActiveItem(null)
+    setEditPersona(null)
     setOpenDeleteModal(false)
   }
 
@@ -142,7 +143,7 @@ export const Persona = () => {
         <Modal.Header>{!activeItem ? 'Agregar Persona' : 'Editar Persona'}</Modal.Header>
         <Modal.Body>
           <PersonaForm
-            persona={activeItem}
+            persona={editPersona}
             onSucces={onCloseModal}
           />
         </Modal.Body>
@@ -150,9 +151,9 @@ export const Persona = () => {
 
       {/* Modal eliminar */}
       {
-        activeItem &&
+        editPersona &&
         <DeleteModal
-          item={activeItem.id}
+          item={editPersona.id}
           openModal={openDeleteModal}
           onDelete={(id) => deletePersona.mutateAsync(id)}
           isLoading={deletePersona.isPending}

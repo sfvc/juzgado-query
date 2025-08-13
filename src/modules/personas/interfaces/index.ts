@@ -27,7 +27,7 @@ export interface IDomicilio {
     barrio: IBarrio | null
     deleted_at?: string | null
 }
- 
+
 export interface IPersona {
     id: number
     nombre: string
@@ -60,22 +60,27 @@ export interface DataPersona {
 
 // types.ts
 export interface PersonaFisica {
+    nombre: string
     apellido: string
+    tipo_documento: string
     numero_documento: number
     estado_civil?: string
     fecha_nacimiento?: string
     cuil: number
     sexo: string
     nacionalidad_id: number | null
+    email: string
+    telefono: string
+    cuota_alimentaria: string
 }
-  
+
 export interface PersonaJuridica {
     razon_social: string
     cuit: number
     numero_inscripcion?: string
     tipo_sociedad_id?: number | null
 }
-  
+
 export interface Domicilio {
     calle: string
     numero: number | null
@@ -87,7 +92,7 @@ export interface Domicilio {
     departamento_id: number | null
     localidad_id: number | null
 }
-  
+
 export type FormValues = {
     tipo_persona: string
     nombre: string
@@ -95,4 +100,3 @@ export type FormValues = {
     email?: string
 } & (PersonaFisica | PersonaJuridica) & Domicilio
 
-   

@@ -57,6 +57,7 @@ export interface Actuacion {
   url: string | null;
   usuario: string;
   estado_pago: boolean;
+  path_comprobante: string
 }
 
 export interface Plantilla {
