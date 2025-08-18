@@ -5,7 +5,6 @@ import { CambioEstado, IDashboard } from '../interfaces'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardActions } from '..'
 import { Loading } from '../../../shared'
-import { formatDate } from '../../../shared/helpers/formatDate'
 
 export const Dashboard = () => {
   const { data, isLoading } = useQuery<IDashboard>({
@@ -14,10 +13,7 @@ export const Dashboard = () => {
     staleTime: 1000 * 60,
   })
 
-  const [activeSection, setActiveSection] = useState<string>('Recaudacion')
-  const formatNumber = (num: number): string => {
-    return num.toLocaleString('es-AR')
-  }
+  const [activeSection, setActiveSection] = useState<string>('Sesiones Iniciadas')
 
   const toggleSection = (section: string) => {
     setActiveSection(prev => (prev === section ? null : section))
@@ -70,7 +66,7 @@ export const Dashboard = () => {
 
       {/* Botones de Secciones */}
       <div className="flex flex-wrap justify-center gap-4 mb-4 mt-4 sm:items-center">
-        {['Recaudacion', 'Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
+        {['Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
           <Button
             key={section}
             onClick={() => toggleSection(section)}
@@ -84,72 +80,6 @@ export const Dashboard = () => {
           </Button>
         ))}
       </div>
-
-      {/* Sección de Recaudación */}
-      {activeSection === 'Recaudacion' && (
-        <section className="mt-4">
-          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4">Recaudación</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { nombre: 'Juzgado de Faltas N° 1', key: 'juzgado_1' },
-              { nombre: 'Juzgado de Faltas N° 2', key: 'juzgado_2' },
-            ].map((juzgado, index) => (
-              <div key={index}>
-                <h4 className="text-lg font-semibold text-gray-200 bg-blue-800 rounded-md py-2 text-center mb-3">
-                  {juzgado.nombre}
-                </h4>
-                <Table hoverable className="border rounded-lg shadow-lg">
-                  <Table.Head>
-                    <Table.HeadCell>Recaudación Diaria</Table.HeadCell>
-                    <Table.HeadCell>Recaudación Mensual</Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body className="divide-y dark:bg-gray-800">
-                    {data?.facturacion ? (
-                      <Table.Row>
-                        <Table.Cell>$ {formatNumber(data.facturacion[juzgado?.key]?.facturacion_diaria)}</Table.Cell>
-                        <Table.Cell>$ {formatNumber(data.facturacion[juzgado?.key]?.facturacion_mensual)}</Table.Cell>
-                      </Table.Row>
-                    ) : (
-                      <tr>
-                        <td colSpan={2} className="text-center py-4">No se encontraron datos</td>
-                      </tr>
-                    )}
-                  </Table.Body>
-                </Table>
-              </div>
-            ))}
-          </div>
-
-          {/* Recaudación Total */}
-          <div className="mt-4">
-            <h4 className="text-lg font-semibold text-gray-200 bg-green-600 rounded-md py-2 text-center mb-3">
-              Recaudación Total
-            </h4>
-            <Table hoverable className="border rounded-lg shadow-lg">
-              <Table.Head>
-                <Table.HeadCell>Recaudación Diaria</Table.HeadCell>
-                <Table.HeadCell>Recaudación Mensual</Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y dark:bg-gray-800">
-                {data?.facturacion ? (
-                  <Table.Row>
-                    <Table.Cell>$ {formatNumber(data?.facturacion?.total?.facturacion_diaria)}</Table.Cell>
-                    <Table.Cell>$ {formatNumber(data?.facturacion?.total?.facturacion_mensual)}</Table.Cell>
-                  </Table.Row>
-                ) : (
-                  <tr>
-                    <td colSpan={2} className="text-center py-4">No se encontraron datos</td>
-                  </tr>
-                )}
-              </Table.Body>
-            </Table>
-          </div>
-
-          <p className="text-sm text-gray-500 mt-4 text-center">
-            Datos actualizados el día {data?.facturacion?.fecha_consulta?.dia ? formatDate(data.facturacion.fecha_consulta.dia) : 'Fecha no disponible'}
-          </p>
-        </section>
-      )}
 
       {/* Sección de Sesiones Iniciadas */}
       {activeSection === 'Sesiones Iniciadas' && (

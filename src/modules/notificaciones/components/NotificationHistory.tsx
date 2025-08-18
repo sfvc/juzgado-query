@@ -86,16 +86,6 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
     })
   }
 
-  const restarTresHoras = (hora: string) => {
-    const [hh, mm, ss] = hora.split(':').map(Number)
-    const fecha = new Date()
-    fecha.setHours(hh)
-    fecha.setMinutes(mm)
-    fecha.setSeconds(ss || 0)
-    fecha.setHours(fecha.getHours() - 3)
-    return fecha.toTimeString().slice(0, 5)
-  }
-
   return (
     <div>
       <div className='mb-4 relative'>
@@ -134,7 +124,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
                       <Table.Cell className='text-center dark:text-white'>{notificacion.nombre}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion?.fecha || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white px-2'>
-                        {notificacion?.hora ? `${restarTresHoras(notificacion.hora)} hs` : '-'}
+                        {notificacion?.hora || '-'}
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{notificacion?.usuario || '-'}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>

@@ -9,7 +9,7 @@ export const formatDatos = (
 
   const data = recaudaciones.map((recaudacion) => {
     const fecha = new Date(recaudacion?.fecha_pago)
-    const fechaFormateada = `${String(fecha.getDate()).padStart(2, '0')}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${fecha.getFullYear()}`
+    const fechaFormateada = `${String(fecha.getDate()).padStart(2, '0')}/${String(fecha.getMonth() + 1).padStart(2, '0')}/${fecha.getFullYear()}`
 
     return {
       fechaComprobante: fechaFormateada || '',
