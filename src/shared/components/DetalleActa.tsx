@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Label, TextInput, Tooltip } from 'flowbite-react'
 import { clearNames, icons } from '..'
 import { NotificationActa } from '../../modules/notificaciones/interfaces'
@@ -14,13 +14,19 @@ export const DetalleActa = ({ acta, title }: Props) => {
   // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<number | null>(null)
+  const [showCuotaWarning, setShowCuotaWarning] = useState(false)
 
   const toggleModal = (id?: number) => {
     setIsOpen(!isOpen)
-
-    if (id) setActiveItem(id)
-    else setActiveItem(null)
+    setActiveItem(id ?? null)
   }
+
+  useEffect(() => {
+    if (acta?.infractores?.length) {
+      const hayCuota = acta.infractores.some(infractor => infractor.cuota_alimentaria === true)
+      setShowCuotaWarning(hayCuota)
+    }
+  }, [acta])
 
   return (
     <div>
@@ -31,6 +37,12 @@ export const DetalleActa = ({ acta, title }: Props) => {
       <div className='titulos rounded-md py-2 text-center mb-6'>
         <h3 className='text-xl font-semibold text-white'>Datos del Acta</h3>
       </div>
+
+      {showCuotaWarning && (
+        <div className="bg-yellow-100 text-yellow-700 text-lg font-semibold text-center p-4 rounded-lg shadow-md">
+          Esta persona debe cuota alimentaria.
+        </div>
+      )}
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1 mt-2'>
         <div className='mb-4 relative'>

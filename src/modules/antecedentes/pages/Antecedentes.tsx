@@ -37,6 +37,7 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
 
   const [tipoFiltro, setTipoFiltro] = useState<string>('')
   const ANTECEDENTE_TEMPLATE: string = 'antecedentes.docx'
+  const ANTECEDENTE_TEMPLATE_AREA: string = 'antecedentesAreas.docx'
 
   const tiposDisponibles = [...new Set(antecedentes?.map(a => a.tipo_acta) ?? [])]
 
@@ -53,6 +54,10 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
         antecedentesFiltrados?.[0]?.infractores?.[0]?.nombre
       )
 
+      const template = antecedentesFiltrados?.some(a => a.tipo_acta === 'TRANSITO')
+        ? ANTECEDENTE_TEMPLATE
+        : ANTECEDENTE_TEMPLATE_AREA
+
       const data = {
         convertTo: 'pdf',
         reportName: `ANTECEDENTES ${nombre}.pdf`,
@@ -60,7 +65,7 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
           data: form,
           persona: persona
         },
-        template: ANTECEDENTE_TEMPLATE
+        template
       }
 
       await carboneActions.showFilePDF(data)

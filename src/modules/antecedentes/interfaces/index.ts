@@ -1,4 +1,5 @@
 export interface IAntecedente {
+  tipo_acta: string;
   id?: string;
   numero_acta?: number;
   numero_causa?: string;

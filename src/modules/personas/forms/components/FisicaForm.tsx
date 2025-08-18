@@ -1,6 +1,7 @@
 import { Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { DataPersona, INacionalidad, PersonaFisica } from '../../interfaces'
+import { RoleGuard, UserRole } from '../../../../auth'
 
 interface Props {
   data: DataPersona
@@ -179,17 +180,19 @@ export const FisicaForm = ({ data }: Props) => {
         />
       </div>
 
-      <div className='mb-4'>
-        <div className='mb-2 block dark:text-white'>
-          <Label htmlFor='cuota_alimentaria' value='¿Debe cuota alimentaria?' />
+      <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+        <div className='mb-4'>
+          <div className='mb-2 block dark:text-white'>
+            <Label htmlFor='cuota_alimentaria' value='¿Debe cuota alimentaria?' />
+          </div>
+          <Select
+            {...register('cuota_alimentaria')}
+          >
+            <option value='1'>Sí</option>
+            <option value='0'>No</option>
+          </Select>
         </div>
-        <Select
-          {...register('cuota_alimentaria')}
-        >
-          <option value='1'>Sí</option>
-          <option value='0'>No</option>
-        </Select>
-      </div>
+      </RoleGuard>
     </div>
   )
 }
