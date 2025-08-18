@@ -121,6 +121,7 @@ export interface InfraccionesCometidaPivot {
 }
 
 export interface InfractorActa {
+    cuota_alimentaria: any
     id:           number
     nombre:       string
     apellido:     string

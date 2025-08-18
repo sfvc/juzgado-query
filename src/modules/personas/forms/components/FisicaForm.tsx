@@ -1,7 +1,6 @@
 import { Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { DataPersona, INacionalidad, PersonaFisica } from '../../interfaces'
-import { CustomSelect } from '../../../actas/forms/components/CustomSelect'
 
 interface Props {
   data: DataPersona
@@ -181,7 +180,15 @@ export const FisicaForm = ({ data }: Props) => {
       </div>
 
       <div className='mb-4'>
-        <CustomSelect label='¿Debe cuota alimentaria?' register={register('cuota_alimentaria')} />
+        <div className='mb-2 block dark:text-white'>
+          <Label htmlFor='cuota_alimentaria' value='¿Debe cuota alimentaria?' />
+        </div>
+        <Select
+          {...register('cuota_alimentaria')}
+        >
+          <option value='1'>Sí</option>
+          <option value='0'>No</option>
+        </Select>
       </div>
     </div>
   )

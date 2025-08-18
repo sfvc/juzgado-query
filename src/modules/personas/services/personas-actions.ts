@@ -5,31 +5,31 @@ import { PersonaFisica, PersonaJuridica } from '../interfaces'
 
 export const getPersonas = async (filters: object) => {
   const params = setUrlParams(filters)
-  
+
   const response = await apiJuzgado.get('/personas', { params })
   const { data, meta } = response.data
   return { data, meta }
 }
-  
+
 export const getPersonaById = async (id: number) => {
   const response = await apiJuzgado.get(`/personas/${id}`)
   const { data } = response.data
   return data
 }
-  
+
 export const createPersona = async (form: PersonaFisica | PersonaJuridica) => {
   const data = setKeyParams(form)
   const response = await apiJuzgado.post('/personas', data)
   const { data: persona } = response.data
   return persona
 }
-  
+
 export const updatePersona = async (id: number, data: PersonaFisica | PersonaJuridica) => {
   const response = await apiJuzgado.put(`/personas/${id}`, data)
   const { data: persona } = response.data
   return persona
 }
-  
+
 export const deletePersona = async (id: number) => {
   const response = await apiJuzgado.delete(`/personas/${id}`)
   const { data: persona } = response.data
@@ -49,9 +49,14 @@ export const getDataPersona = async () => {
 
 export const getAntecedentesByPersona = async (id: number) => {
   if (!id) return []
-  
-  const response = await apiJuzgado.get(`actas/filtrar?persona_id=${id}`)
+
+  const response = await apiJuzgado.get('actas/filtrar', {
+    params: {
+      persona_id: id,
+      per_page: 50
+    }
+  })
+
   const { data: antecedentes } = response.data
   return antecedentes
 }
-  

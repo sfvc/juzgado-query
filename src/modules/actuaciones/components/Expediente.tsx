@@ -10,7 +10,6 @@ import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
 import type { Column } from '../../../shared/interfaces'
 import type { Actuacion, ActuacionActa } from '../interfaces'
-import { ACTUACION } from '../../../shared/constants'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
 
 const colums: Column[] = [
@@ -24,14 +23,16 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' },
 ]
 
-const ESTADO_RESOLUCION = 7
+const ESTADO_RESOLUCION_PENDIENTE = 7
+const ESTADO_RESOLUCION_PAGADA = 5
 
-export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuaciones: Actuacion[]}) => {
+export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaciones: Actuacion[] }) => {
   const queryClient = useQueryClient()
   const { user } = useContext(AuthContext)
 
   const sentencia = ultimaSentencia(actuaciones)
-  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION)
+  const validateStatus = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION_PENDIENTE)
+  const validateFinalizado = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION_PAGADA)
 
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
   const { deleteActuacion, generateComprobante, deleteComprobante } = useActuacion()
@@ -45,50 +46,50 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
       setModal((prevState) => ({ ...prevState, [action]: value }))
     } else {
       setActiveItem(null)
-      setModal((prevState) => ({ ...prevState, [action]: value  }))
+      setModal((prevState) => ({ ...prevState, [action]: value }))
     }
   }
 
   const handleDeleteActuacion = async () => {
-    if(!activeItem) return
+    if (!activeItem) return
     const response = await deleteActuacion.mutateAsync({ actaId: acta.id, actuacionId: activeItem.id })
 
-    if(!response) return
+    if (!response) return
     toggleModal('delete', false)
   }
 
   const onGeneratePDF = async (actuacion: Actuacion) => {
-    await useAction.actionFn( async () => {
-      const file =  await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id, 'ACTUACION')
+    await useAction.actionFn(async () => {
+      const file = await generarPDFGotenberg(actuacion.plantilla?.path, actuacion.id, 'ACTUACION')
       if (!file) return
 
-      const url = await carboneActions.uploadFilePDF( file, { ...actuacion , numero_acta: acta.numero_acta }, 'actuacion_id', user!.id )
+      const url = await carboneActions.uploadFilePDF(file, { ...actuacion, numero_acta: acta.numero_acta }, 'actuacion_id', user!.id)
       if (url) convertToPDF(url)
     })
 
-    queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id: String(acta.id)}] })
-    queryClient.invalidateQueries({ queryKey: ['history', {id: actuacion.id}] })
+    queryClient.invalidateQueries({ queryKey: ['acta-actuacion', { id: String(acta.id) }] })
+    queryClient.invalidateQueries({ queryKey: ['history', { id: actuacion.id }] })
   }
 
   const handleconvertToPDF = async (url: string) => {
-    useAction.actionFn( async () => {
+    useAction.actionFn(async () => {
       await convertToPDF(url)
     })
   }
 
   const handleGenerateComprobante = async () => {
-    if(!activeItem) return
+    if (!activeItem) return
     const response = await generateComprobante.mutateAsync(activeItem.id)
 
-    if(!response) return
+    if (!response) return
     toggleModal('delete', false)
   }
 
   const handleDeleteComprobante = async () => {
-    if(!activeItem) return
+    if (!activeItem) return
     const response = await deleteComprobante.mutateAsync(activeItem.id)
 
-    if(!response) return
+    if (!response) return
     toggleModal('delete', false)
   }
 
@@ -122,7 +123,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                         <Button color='warning'
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => {
-                            if(actuacion?.url)
+                            if (actuacion?.url)
                               handleconvertToPDF(actuacion.url)
                             else
                               onGeneratePDF(actuacion)
@@ -153,17 +154,26 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
                           !actuacion?.estado_pago
                             ? (
                               <Tooltip content='Enviar a bandeja'>
-                                <Button color='purple' onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center'>
+                                <Button
+                                  color='purple'
+                                  onClick={() => toggleModal('comprobante', true, actuacion)}
+                                  className='w-8 h-8 flex items-center justify-center'
+                                >
                                   <icons.ReportMoney />
                                 </Button>
                               </Tooltip>
                             )
                             : (
-                              <Tooltip content='Eliminar de bandeja'>
-                                <Button  onClick={() => toggleModal('comprobante', true, actuacion)} className='w-8 h-8 flex items-center justify-center bg-slate-600'>
-                                  <icons.ReportMoney />
-                                </Button>
-                              </Tooltip>
+                              !validateFinalizado && (
+                                <Tooltip content='Eliminar de bandeja'>
+                                  <Button
+                                    onClick={() => toggleModal('comprobante', true, actuacion)}
+                                    className='w-8 h-8 flex items-center justify-center bg-slate-600'
+                                  >
+                                    <icons.ReportMoney />
+                                  </Button>
+                                </Tooltip>
+                              )
                             )
                         )
                       }
@@ -188,18 +198,18 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
         </Table>
       </div>
 
-      { (useAction.loading) && <LoadingOverlay /> }
+      {(useAction.loading) && <LoadingOverlay />}
 
       {/* Modal para actualizar actuación */}
       <Modal size='4xl' show={modal.history} onClose={() => toggleModal('history', false)}>
         <Modal.Header>Editar Actuacion</Modal.Header>
         <Modal.Body>
-          { activeItem && <ActuacionHistory acta={acta} actuacion={activeItem} onCloseModal={() => toggleModal('history', false)} /> }
+          {activeItem && <ActuacionHistory acta={acta} actuacion={activeItem} onCloseModal={() => toggleModal('history', false)} />}
         </Modal.Body>
       </Modal>
 
       {/* Modal para eliminar actuación de listado */}
-      { activeItem &&
+      {activeItem &&
         <Modal show={modal.delete} onClose={() => toggleModal('delete', false)}>
           <Modal.Header>Eliminar actuación</Modal.Header>
           <Modal.Body>
@@ -226,7 +236,7 @@ export const Expediente = ({ acta, actuaciones }: {acta: ActuacionActa, actuacio
       }
 
       {/* Modal para enviar a bandeja de cobro */}
-      { activeItem &&
+      {activeItem &&
         <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
           <Modal.Header>Enviar a bandeja de cobro</Modal.Header>
           <Modal.Body>

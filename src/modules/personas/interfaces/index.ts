@@ -41,6 +41,7 @@ export interface IPersona {
     fecha_creacion: string | null
     fecha_nacimiento: string | null
     numero_inscripcion: string
+    cuota_alimentaria: string
     cuit: string
     sexo: string
     cuil: number
@@ -76,8 +77,13 @@ export interface PersonaFisica {
 
 export interface PersonaJuridica {
     razon_social: string
+    nombre: string,
+    tipo_documento: string,
+    email: string,
+    telefono: string,
     cuit: number
     numero_inscripcion?: string
+    cuota_alimentaria: string,
     tipo_sociedad_id?: number | null
 }
 

@@ -1,54 +1,57 @@
+// helpers/setDefaulValues.ts
 import { IPersona } from '../../interfaces'
 import { TipoPersona } from './personaEnum'
 
+type CuotaStr = '0' | '1'
+const toCuotaStr = (value: unknown): CuotaStr =>
+  value === true || value === '1' || value === 1 ? '1' : '0'
+
 interface DefaultValues {
-    nombre: string;
-    tipo_documento: string;
-    email: string;
-    telefono: string;
-    tipo_persona: string;
-  
-    pais_id: number | null;
-    provincia_id: number | null;
-    departamento_id: number | null;
-    localidad_id: number | null;
-    barrio_id: number | null;
-    calle: string;
-    numero: number | null;
-    lote_dpto: string | null;
-    manzana_piso: string | null;
-  
-    // Campos para Persona Física
-    apellido?: string;
-    numero_documento?: string;
-    estado_civil?: string;
-    fecha_nacimiento?: string;
-    cuil?: string;
-    sexo?: string;
-    nacionalidad_id?: number | null;
-  
-    // Campos para Persona Jurídica
-    razon_social?: string;
-    cuit?: string;
-    numero_inscripcion?: string;
-    tipo_sociedad_id?: number | null;
+  nombre: string;
+  tipo_documento: string;
+  email: string;
+  telefono: string;
+  tipo_persona: string;
+  cuota_alimentaria: CuotaStr;
+
+  pais_id: number | null;
+  provincia_id: number | null;
+  departamento_id: number | null;
+  localidad_id: number | null;
+  barrio_id: number | null;
+  calle: string;
+  numero: number | null;
+  lote_dpto: string | null;
+  manzana_piso: string | null;
+
+  apellido?: string;
+  numero_documento?: string;
+  estado_civil?: string;
+  fecha_nacimiento?: string;
+  cuil?: string;
+  sexo?: string;
+  nacionalidad_id?: number | null;
+
+  razon_social?: string;
+  cuit?: string;
+  numero_inscripcion?: string;
+  tipo_sociedad_id?: number | null;
 }
 
-export const setDefaulValues = (persona: IPersona | null, tipoPersona: string) => {
+export const setDefaulValues = (persona: IPersona | null, tipoPersona: string): DefaultValues => {
   let defaultValues: DefaultValues = {
     nombre: persona?.nombre || '',
     tipo_documento: persona?.tipo_documento || '',
     email: persona?.email || '',
     telefono: persona?.telefono || '',
     tipo_persona: persona?.tipo_persona || tipoPersona,
+    cuota_alimentaria: toCuotaStr(persona?.cuota_alimentaria),
 
-    // Domicilio
     pais_id: persona?.domicilio?.pais_id || null,
     provincia_id: persona?.domicilio?.provincia_id || null,
     departamento_id: persona?.domicilio?.departamento_id || null,
     localidad_id: persona?.domicilio?.localidad?.id || null,
     barrio_id: persona?.domicilio?.barrio?.id || null,
-    // barrio_id: persona?.domicilio?.barrio_id || null,
     calle: persona?.domicilio?.calle || '',
     numero: persona?.domicilio?.numero || null,
     lote_dpto: persona?.domicilio?.lote_dpto || null,

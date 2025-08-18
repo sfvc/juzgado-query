@@ -32,6 +32,7 @@ interface Props {
 
 export const InfractorData = ({ data }: Props) => {
   const { setValue, getValues } = useFormContext<IActaForm>()
+  const [showCuotaWarning, setShowCuotaWarning] = useState(false)
 
   const [infractores, setInfractores] = useState<InfractorActa[]>([])
   const [responsable, setResponsable] = useState<number>(RESPONSABLE.SI)
@@ -67,6 +68,12 @@ export const InfractorData = ({ data }: Props) => {
     } else {
       setShowWarning(false)
     }
+
+    if (persona.cuota_alimentaria) {
+      setShowCuotaWarning(true)
+    } else {
+      setShowCuotaWarning(false)
+    }
   }
 
   const removeInfractor = (id: number) => {
@@ -86,6 +93,12 @@ export const InfractorData = ({ data }: Props) => {
           setShowWarning(true)
         } else {
           setShowWarning(false)
+        }
+
+        if (personaUpdate.cuota_alimentaria) {
+          setShowCuotaWarning(true)
+        } else {
+          setShowCuotaWarning(false)
         }
 
         return personaUpdate
@@ -128,8 +141,10 @@ export const InfractorData = ({ data }: Props) => {
       const hayPersonaFisicaSinCuil = data.some(
         (p) => p.tipo_persona === TipoPersona.FISICA && !p.cuil
       )
-
       setShowWarning(hayPersonaFisicaSinCuil)
+
+      const hayCuotaAlimentaria = data.some((p) => p.cuota_alimentaria === true)
+      setShowCuotaWarning(hayCuotaAlimentaria)
     }
   }, [data])
 
@@ -185,6 +200,12 @@ export const InfractorData = ({ data }: Props) => {
       {showWarning && (
         <div className="bg-red-100 text-red-600 text-lg font-semibold text-center p-4 rounded-lg shadow-md">
           La persona seleccionada no tiene CUIL. Por favor, completalo antes de continuar.
+        </div>
+      )}
+
+      {showCuotaWarning && (
+        <div className="bg-yellow-100 text-yellow-700 text-lg font-semibold text-center p-4 rounded-lg shadow-md mt-2">
+          Esta persona debe cuota alimentaria.
         </div>
       )}
 

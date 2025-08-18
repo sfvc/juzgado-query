@@ -27,11 +27,11 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
     staleTime: 1000 * 60 * 5
   })
 
-  const validationSchema = 
+  const validationSchema =
     tipoPersona === TipoPersona.FISICA
       ? personaFisicaSchema.concat( domicilioSchema )
       : personaJuridicaSchema.concat( domicilioSchema )
-    
+
   const methods = useForm<FormValues>({
     defaultValues: setDefaulValues(persona, tipoPersona),
     resolver: yupResolver(validationSchema)
@@ -39,7 +39,7 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
 
   const changeTypePersona = (e: React.ChangeEvent<HTMLSelectElement>) => {
     methods.reset()
-    
+
     setTipoPersona(e.target.value)
     methods.setValue('tipo_persona', e.target.value)
   }
@@ -64,7 +64,7 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <div>
       <div className='mb-4'>
@@ -103,9 +103,9 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
           <div className='flex justify-end gap-2'>
             <Button color="failure" onClick={onSucces}>Cancelar</Button>
 
-            <Button 
-              type='button' 
-              disabled={methods.formState.isSubmitting} 
+            <Button
+              type='button'
+              disabled={methods.formState.isSubmitting}
               isProcessing={methods.formState.isSubmitting}
               onClick={() => methods.handleSubmit(onSubmit)()}
             >

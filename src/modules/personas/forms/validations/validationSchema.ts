@@ -6,6 +6,7 @@ export const personaFisicaSchema = yup.object().shape({
   tipo_documento: yup.string().required('El tipo de documento es requerido'),
   numero_documento: yup.string().required('El número de documento es requerido'),
   fecha_nacimiento: yup.string().notRequired(),
+  cuota_alimentaria: yup.string().notRequired(),
   estado_civil:  yup.string().notRequired(),
   sexo: yup.string().required('El sexo es requerido'),
   email: yup.string().email('Email no válido').notRequired(),
@@ -23,6 +24,7 @@ export const personaJuridicaSchema = yup.object().shape({
   email: yup.string().email('Email no válido').notRequired(),
   telefono: yup.string().notRequired(),
   numero_inscripcion: yup.string().notRequired(),
+  cuota_alimentaria: yup.string().notRequired(),
   tipo_sociedad_id: yup.number()
     .transform((value) => (isNaN(value) ? null : value))
     .notRequired(),
