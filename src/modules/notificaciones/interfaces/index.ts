@@ -34,6 +34,7 @@ export interface Pivot {
 }
 
 export interface Infractor {
+    cuota_alimentaria: boolean
     id:           number
     nombre:       string
     apellido:     string

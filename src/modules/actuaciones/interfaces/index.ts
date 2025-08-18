@@ -124,6 +124,7 @@ export interface Infractor {
   responsable: number;
   antecedentes: number;
   domicilio: Domicilio | null;
+  cuota_alimentaria: string
 }
 
 export interface Domicilio {
