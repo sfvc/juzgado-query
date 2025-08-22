@@ -2,6 +2,7 @@ import { Label, Select, TextInput } from 'flowbite-react'
 import { useFormContext } from 'react-hook-form'
 import { DataPersona, INacionalidad, PersonaFisica } from '../../interfaces'
 import { RoleGuard, UserRole } from '../../../../auth'
+import { soloNumeros } from '../../../../shared/helpers/formatNumber'
 
 interface Props {
   data: DataPersona
@@ -9,11 +10,6 @@ interface Props {
 
 export const FisicaForm = ({ data }: Props) => {
   const { register, formState: { errors } } = useFormContext<PersonaFisica>()
-
-  const soloNumeros = (e: React.FormEvent<HTMLInputElement>) => {
-    const input = e.currentTarget
-    input.value = input.value.replace(/[^\d]/g, '')
-  }
 
   return (
     <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>

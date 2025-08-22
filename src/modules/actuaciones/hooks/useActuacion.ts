@@ -50,7 +50,7 @@ export const useActuacion= () => {
       toast.error('Error al eliminar registro')
       console.log(error)
     }
-  }) 
+  })
 
   // Generar comprobante de actuación
   const generateComprobante = useMutation({
@@ -63,7 +63,7 @@ export const useActuacion= () => {
       toast.error('Error al enviar')
       console.log(error)
     }
-  }) 
+  })
 
   // Eliminar comprobante de actuación
   const deleteComprobante = useMutation({
@@ -76,13 +76,28 @@ export const useActuacion= () => {
       toast.error('Error al eliminar')
       console.log(error)
     }
-  }) 
-  
-  return { 
+  })
+
+  // Crear las cuotas de la actuación
+  const createCuota = useMutation({
+    mutationFn: ({ actuacionId, entrega, cuotas }: { actuacionId: number, entrega: string, cuotas: number }) =>
+      actuacionActions.createCuota(actuacionId, entrega, cuotas),
+    onSuccess: () => {
+      toast.success('Cuotas generadas correctamente')
+      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', { id }] })
+    },
+    onError: (error) => {
+      toast.error('Error al generar cuotas')
+      console.log(error)
+    }
+  })
+
+  return {
     createActuacion,
     deleteActuacion,
     deleteActuacionHistory,
     generateComprobante,
-    deleteComprobante
+    deleteComprobante,
+    createCuota
   }
 }

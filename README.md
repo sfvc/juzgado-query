@@ -1,32 +1,50 @@
-<p align="center">
-  <a href="https://es.react.dev/" target="blank">
-    <img src="https://vite.dev/logo.svg" width="120" atl="Logo Vite">
-  </a>
-</p>
+# ⚖️ Juzgado de Faltas
 
-# Juzgado de Faltas
+Aplicación web diseñada para **gestionar de manera eficiente los procesos del Juzgado de Faltas Municipal**.
 
-Esta aplicación está diseñada para gestionar de manera eficiente los procesos del Juzgado de Faltas Municipal. Facilita el registro, seguimiento y resolución de infracciones municipales, como las relacionadas con tránsito, bromatologia, inspección y obras públicas. Incluye módulos para la administracion de actas, notificaciones, actuaciones y generación de documentacion. Su objetivo es optimizar los flujos de trabajo del juzgado, garantizar el cumplimiento normativo y mejorar la atención ciudadana.
+Permite el **registro, seguimiento y resolución de infracciones municipales**, abarcando áreas como:
 
-Stack utilizado:
+- 🚦 **Tránsito**
+- 🍽️ **Bromatología**
+- 🏗️ **Obras públicas**
+- 🔍 **Inspecciones**
 
-- React 18 + TypeScript
-- Tailwind CSS
-- Flowbite
-- Tan Stack Query
+### ✨ Funcionalidades principales
+- Administración de **actas**
+- Gestión de **notificaciones**
+- Registro de **actuaciones**
+- Generación de **documentación**
+- Optimización de **flujos de trabajo**
+- Mejora en la **atención ciudadana**
 
-## Instalación
+---
 
-- Clonar repositorio
+## 🚀 Tecnologías utilizadas
 
-- Instalar dependencias:
+- ⚛️ **React 18** + **TypeScript**
+- 🎨 **Tailwind CSS**
+- 🧩 **Flowbite** (componentes UI)
+- 🔗 **TanStack Query** (manejo de datos)
 
-```
-npm install
-```
+---
 
-- Ejecutar la aplicación:
+## 📦 Instalación y ejecución
 
-```
-npm run dev
-```
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/sfvc/juzgado-query.git
+
+2. **Instalar las dependencias**
+   ```bash
+   npm install
+
+3. **Declarar variables de entorno**
+   ```bash
+   VITE_API_URL={secret}
+   VITE_API_URL_GRAFICS={secret}
+   VITE_TEMPLATE_URL={secret}
+   VITE_CARBONE_URL={secret}
+
+4. **Correr el servidor**
+   ```bash
+   npm run dev

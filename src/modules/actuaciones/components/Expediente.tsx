@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { AuthContext } from '../../../context/Auth/AuthContext'
@@ -11,6 +12,8 @@ import { ActuacionHistory } from './ActuacionHistory'
 import type { Column } from '../../../shared/interfaces'
 import type { Actuacion, ActuacionActa } from '../interfaces'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
+import { soloNumeros } from '../../../shared/helpers/formatNumber'
+import { formatDate } from '../../../shared/helpers/formatDate'
 
 const colums: Column[] = [
   { key: 'id', label: 'id' },
@@ -35,10 +38,13 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
   const validateFinalizado = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION_PAGADA)
 
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
-  const { deleteActuacion, generateComprobante, deleteComprobante } = useActuacion()
+  const { deleteActuacion, generateComprobante, deleteComprobante, createCuota } = useActuacion()
 
-  const [modal, setModal] = useState({ delete: false, history: false, comprobante: false }) // Actions: delete | history | comprobante
+  const [modal, setModal] = useState({ delete: false, history: false, comprobante: false, cuotas: false })
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
+
+  const [entrega, setEntrega] = useState('')
+  const [cantidadCuotas, setCantidadCuotas] = useState(1)
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
     if (actuacion) {
@@ -93,13 +99,31 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
     toggleModal('delete', false)
   }
 
+  const handleSaveCuotas = async () => {
+    if (!activeItem) return
+    try {
+      await createCuota.mutateAsync({
+        actuacionId: activeItem.id,
+        entrega,
+        cuotas: cantidadCuotas
+      })
+
+      await generateComprobante.mutateAsync(activeItem.id)
+      toggleModal('cuotas', false)
+      setEntrega('')
+      setCantidadCuotas(1)
+    } catch (error) {
+      console.error('Error al guardar y enviar:', error)
+    }
+  }
+
   return (
     <>
       <div className='titulos rounded-md py-2 text-center mb-6'>
         <h3 className='text-xl font-semibold text-white'>Expedientes</h3>
       </div>
 
-      <div className='overflow-x-auto'>
+      <div className=''>
         <Table>
           <Table.Head>
             {colums.map((colum: Column) => (
@@ -149,7 +173,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                       </RoleGuard>
 
                       {
-                        (actuacion.id === sentencia?.id && validateStatus) &&
+                        (actuacion.id === sentencia?.id && validateStatus && !actuacion?.planPago) &&
                         (
                           !actuacion?.estado_pago
                             ? (
@@ -181,7 +205,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                       {actuacion?.path_comprobante && (
                         <Tooltip content='Ver comprobante'>
                           <Button
-                            color='blue'
+                            color='purple'
                             onClick={() => window.open(actuacion.path_comprobante, '_blank')}
                             className='w-8 h-8 flex items-center justify-center'
                           >
@@ -189,6 +213,23 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                           </Button>
                         </Tooltip>
                       )}
+
+                      {
+                        (actuacion.id === sentencia?.id && validateStatus) &&
+                        (
+                          (!actuacion?.estado_pago || !validateFinalizado || actuacion?.planPago) && (
+                            <Tooltip content='Cuotas'>
+                              <Button
+                                color='blue'
+                                onClick={() => toggleModal('cuotas', true, actuacion)}
+                                className='w-8 h-8 flex items-center justify-center'
+                              >
+                                <icons.Cuotas />
+                              </Button>
+                            </Tooltip>
+                          )
+                        )
+                      }
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -281,6 +322,177 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
           </Modal.Body>
         </Modal>
       }
+
+      {/* Modal para elegir la cantidad de cuotas */}
+      {activeItem && (
+        <Modal show={modal.cuotas} onClose={() => toggleModal('cuotas', false)} size="xl">
+          <Modal.Header>Plan de Pago</Modal.Header>
+          <Modal.Body>
+            {activeItem?.planPago ? (
+              <div className="space-y-4">
+                {/* Resumen del plan */}
+                <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                    Resumen
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Total:</span> ${activeItem.planPago.total}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Entrega:</span> ${activeItem.planPago.entrega}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Restante:</span>{' '}
+                      ${Number(activeItem.planPago.total) - Number(activeItem.planPago.entrega)}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      <span className="font-medium">Cuotas:</span> {activeItem.planPago.cuotas}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Detalle de cuotas */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                    Detalle de Cuotas
+                  </h3>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {activeItem?.planPago?.detalle_cuotas?.map((cuota: any, index: number) => (
+                      <div
+                        key={cuota.id}
+                        className={`p-3 rounded-xl shadow-sm border text-sm ${cuota.pagado
+                          ? 'bg-green-100 border-green-300 dark:bg-green-800/40 dark:border-green-600'
+                          : 'bg-yellow-100 border-yellow-300 dark:bg-yellow-800/40 dark:border-yellow-600'
+                        }`}
+                      >
+                        <p className="font-medium text-gray-800 dark:text-gray-100">
+                          Cuota {index + 1}: ${cuota.importe}
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                          Vencimiento:{' '}
+                          <span className="font-medium">{formatDate(cuota.fecha_vencimiento)}</span>
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                          Estado:{' '}
+                          <span className={cuota.pagado ? 'text-green-600 dark:text-green-400' : 'text-yellow-700 dark:text-yellow-300'}>
+                            {cuota.pagado ? 'Pagado' : 'Pendiente'}
+                          </span>
+                        </p>
+
+                        {/* Botón enviar a caja dentro de cada cuota */}
+                        {!cuota.pagado && (
+                          <div className="mt-3 flex justify-end">
+                            <Button
+                              color="purple"
+                              size="xs"
+                              onClick={() => {
+                                setActiveItem({
+                                  ...activeItem
+                                })
+                                toggleModal('comprobante', true, activeItem)
+                              }}
+                            >
+                              <icons.ReportMoney/> <span className='mt-1'>Enviar a caja</span>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <form
+                className="flex flex-col gap-4"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleSaveCuotas()
+                }}
+              >
+                {activeItem?.total && (
+                  <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm shadow-sm">
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">Monto total:</span> ${activeItem.total}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">Entrega:</span> ${entrega || 0}
+                    </p>
+                    {Number(entrega || 0) > Number(activeItem.total) && (
+                      <p className="text-red-600 font-medium">La entrega no puede superar el monto total</p>
+                    )}
+                    {Number(entrega || 0) < 100000 && (
+                      <p className="text-red-600 font-medium">La entrega mínima es de $100.000</p>
+                    )}
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">Saldo:</span>{' '}
+                      ${Math.max(Number(activeItem.total) - Number(entrega || 0), 0)}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-200">
+                      <span className="font-medium">Valor de cada cuota:</span>{' '}
+                      {cantidadCuotas > 0
+                        ? (
+                          Math.max(Number(activeItem.total) - Number(entrega || 0), 0) /
+                          cantidadCuotas
+                        ).toFixed(2)
+                        : 0}
+                    </p>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Entrega
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ingrese entrega"
+                    value={entrega}
+                    onChange={(e) => setEntrega(e.target.value)}
+                    onInput={soloNumeros}
+                    className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Cantidad de Cuotas
+                  </label>
+                  <select
+                    value={cantidadCuotas}
+                    onChange={(e) => setCantidadCuotas(Number(e.target.value))}
+                    className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  >
+                    {[2, 3, 4].map((cuotas) => (
+                      <option key={cuotas} value={cuotas}>
+                        {cuotas}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex justify-end gap-4 mt-4">
+                  <Button color="gray" onClick={() => toggleModal('cuotas', false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    color="success"
+                    type="submit"
+                    isProcessing={createCuota.isPending}
+                    disabled={
+                      createCuota.isPending ||
+                      Number(entrega || 0) > Number(activeItem.total) ||
+                      Number(entrega || 0) < 100000
+                    }
+                  >
+                    Guardar
+                  </Button>
+                </div>
+              </form>
+            )}
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   )
 }

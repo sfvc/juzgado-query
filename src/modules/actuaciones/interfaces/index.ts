@@ -51,13 +51,32 @@ export interface Actuacion {
   tipo: string;
   observaciones: null;
   total: null | number;
-  // fecha: string;
   fecha: string | null;
   plantilla: Plantilla | null;
   url: string | null;
   usuario: string;
   estado_pago: boolean;
   path_comprobante: string
+  planPago: PlanPago
+}
+
+export interface PlanPago {
+  id: number
+  monto: string
+  cuotas: number
+  entrega: string
+  total: string
+
+  detalle_cuotas?: {
+    id?: number
+    importe?: string
+    cuota?: string
+    entrega?: string
+    fecha_vencimiento?: string
+    pagado?: string
+    fecha_pago?: string
+    observaciones?: string
+  }[];
 }
 
 export interface Plantilla {
