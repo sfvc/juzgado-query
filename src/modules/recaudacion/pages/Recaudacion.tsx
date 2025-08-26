@@ -79,9 +79,8 @@ export const Recaudacion = () => {
       const [datePart, timePart] = dateTimeString.split(' ')
       const [year, month, day] = datePart.split('-').map(Number)
       const [hour, minute, second] = timePart.split(':').map(Number)
-      const utcDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second))
-
-      return utcDate.toLocaleString('es-AR', {
+      const localDate = new Date(year, month - 1, day, hour, minute, second)
+      return localDate.toLocaleString('es-AR', {
         hour12: false,
         year: 'numeric',
         month: '2-digit',

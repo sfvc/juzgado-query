@@ -214,7 +214,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         </Tooltip>
                       )}
 
-                      {
+                      {/* {
                         (actuacion.id === sentencia?.id && validateStatus) &&
                         (
                           (!actuacion?.estado_pago || !validateFinalizado || actuacion?.planPago) && (
@@ -229,7 +229,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                             </Tooltip>
                           )
                         )
-                      }
+                      } */}
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -289,7 +289,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                     ? 'Confirma para enviar a bandeja de cobro'
                     : '¿Desea eliminar de la bandeja de cobro?'
                 }
-
               </h3>
 
               <div className="flex justify-center gap-4">
@@ -399,7 +398,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         )}
                       </div>
                     ))}
-
                   </div>
                 </div>
               </div>
@@ -454,6 +452,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                     className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
+
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Cantidad de Cuotas
