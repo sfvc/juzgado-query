@@ -123,7 +123,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         <h3 className='text-xl font-semibold text-white'>Expedientes</h3>
       </div>
 
-      <div className=''>
+      <div>
         <Table>
           <Table.Head>
             {colums.map((colum: Column) => (
@@ -214,7 +214,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         </Tooltip>
                       )}
 
-                      {/* {
+                      {
                         (actuacion.id === sentencia?.id && validateStatus) &&
                         (
                           (!actuacion?.estado_pago || !validateFinalizado || actuacion?.planPago) && (
@@ -229,7 +229,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                             </Tooltip>
                           )
                         )
-                      } */}
+                      }
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -386,11 +386,14 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                               color="purple"
                               size="xs"
                               onClick={() => {
-                                setActiveItem({
-                                  ...activeItem
-                                })
+                                setActiveItem({ ...activeItem })
                                 toggleModal('comprobante', true, activeItem)
                               }}
+                              disabled={
+                                activeItem?.planPago?.detalle_cuotas?.some(
+                                  (c: any) => !c.pagado && c.id < cuota.id
+                                )
+                              }
                             >
                               <icons.ReportMoney/> <span className='mt-1'>Enviar a caja</span>
                             </Button>

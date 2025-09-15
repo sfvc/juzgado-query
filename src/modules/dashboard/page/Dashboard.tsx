@@ -66,7 +66,7 @@ export const Dashboard = () => {
 
       {/* Botones de Secciones */}
       <div className="flex flex-wrap justify-center gap-4 mb-4 mt-4 sm:items-center">
-        {['Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
+        {['Sesiones Iniciadas', 'Cambios de Estado', 'Recaudación'].map((section) => (
           <Button
             key={section}
             onClick={() => toggleSection(section)}
@@ -127,7 +127,9 @@ export const Dashboard = () => {
       {/* Sección de Cambios de Estado */}
       {activeSection === 'Cambios de Estado' && (
         <section className="mt-6">
-          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4 max-h-[26rem] overflow-y-auto">Cambios de Estados</h3>
+          <h3 className="text-2xl font-semibold text-black dark:text-white mb-4 max-h-[26rem] overflow-y-auto">
+            Cambios de Estados
+          </h3>
           <Table hoverable className="border rounded-lg shadow-lg">
             <Table.Head>
               <Table.HeadCell>Estado</Table.HeadCell>
@@ -148,6 +150,18 @@ export const Dashboard = () => {
               )}
             </Table.Body>
           </Table>
+        </section>
+      )}
+
+      {/* Sección de Recaudación */}
+      {activeSection === 'Recaudación' && (
+        <section className="mt-6 flex justify-center">
+          <iframe
+            src="https://dashboard.apps.cc.gob.ar/proyectos/juzgado-de-faltas"
+            width="1600"
+            height="2200"
+            title="Recaudación"
+          ></iframe>
         </section>
       )}
     </div>
