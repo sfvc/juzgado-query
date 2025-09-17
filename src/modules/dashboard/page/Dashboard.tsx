@@ -66,7 +66,7 @@ export const Dashboard = () => {
 
       {/* Botones de Secciones */}
       <div className="flex flex-wrap justify-center gap-4 mb-4 mt-4 sm:items-center">
-        {['Sesiones Iniciadas', 'Cambios de Estado', 'Recaudación'].map((section) => (
+        {['Sesiones Iniciadas', 'Cambios de Estado'].map((section) => (
           <Button
             key={section}
             onClick={() => toggleSection(section)}
