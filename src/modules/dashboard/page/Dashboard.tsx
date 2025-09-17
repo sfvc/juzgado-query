@@ -13,7 +13,7 @@ export const Dashboard = () => {
     staleTime: 1000 * 60,
   })
 
-  const [activeSection, setActiveSection] = useState<string>('Sesiones Iniciadas')
+  const [activeSection, setActiveSection] = useState<string | null>('Sesiones Iniciadas')
 
   const toggleSection = (section: string) => {
     setActiveSection(prev => (prev === section ? null : section))
@@ -154,7 +154,7 @@ export const Dashboard = () => {
       )}
 
       {/* Sección de Recaudación */}
-      {activeSection === 'Recaudación' && (
+      {/* {activeSection === 'Recaudación' && (
         <section className="mt-6 flex justify-center">
           <iframe
             src="https://dashboard.apps.cc.gob.ar/proyectos/juzgado-de-faltas"
@@ -163,7 +163,7 @@ export const Dashboard = () => {
             title="Recaudación"
           ></iframe>
         </section>
-      )}
+      )} */}
     </div>
   )
 }

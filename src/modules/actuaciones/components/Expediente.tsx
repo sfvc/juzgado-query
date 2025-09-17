@@ -45,6 +45,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
 
   const [entrega, setEntrega] = useState('')
   const [cantidadCuotas, setCantidadCuotas] = useState(1)
+  const [selectedCuota, setSelectedCuota] = useState<any | null>(null)
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
     if (actuacion) {
@@ -202,7 +203,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         )
                       }
 
-                      {actuacion?.path_comprobante && (
+                      {actuacion?.path_comprobante && !actuacion?.planPago && (
                         <Tooltip content='Ver comprobante'>
                           <Button
                             color='purple'
@@ -284,38 +285,51 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
             <div className="text-center">
               <icons.Warning />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                {
-                  !activeItem.estado_pago
+                {selectedCuota
+                  ? `Confirma para enviar la cuota N°${selectedCuota.cuota} a caja`
+                  : !activeItem.estado_pago
                     ? 'Confirma para enviar a bandeja de cobro'
-                    : '¿Desea eliminar de la bandeja de cobro?'
-                }
+                    : '¿Desea eliminar de la bandeja de cobro?'}
               </h3>
 
               <div className="flex justify-center gap-4">
-                <Button color="gray" onClick={() => toggleModal('comprobante', false)}>Cancelar</Button>
-                {
-                  !activeItem.estado_pago
-                    ? (
-                      <Button
-                        onClick={handleGenerateComprobante}
-                        isProcessing={generateComprobante.isPending}
-                        disabled={generateComprobante.isPending}
-                        color='success'
-                      >
-                        Sí, enviar
-                      </Button>
-                    )
-                    : (
-                      <Button
-                        onClick={handleDeleteComprobante}
-                        isProcessing={deleteComprobante.isPending}
-                        disabled={deleteComprobante.isPending}
-                        color='failure'
-                      >
-                        Sí, eliminar
-                      </Button>
-                    )
-                }
+                <Button color="gray" onClick={() => {
+                  setSelectedCuota(null)
+                  toggleModal('comprobante', false)
+                }}>Cancelar</Button>
+
+                {selectedCuota ? (
+                  <Button
+                    color="success"
+                    onClick={async () => {
+                      await generateComprobante.mutateAsync(activeItem.id)
+                      setSelectedCuota(null)
+                      toggleModal('comprobante', false)
+                    }}
+                    isProcessing={generateComprobante.isPending}
+                    disabled={generateComprobante.isPending}
+                  >
+                    Sí, enviar
+                  </Button>
+                ) : !activeItem.estado_pago ? (
+                  <Button
+                    onClick={handleGenerateComprobante}
+                    isProcessing={generateComprobante.isPending}
+                    disabled={generateComprobante.isPending}
+                    color='success'
+                  >
+                    Sí, enviar
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleDeleteComprobante}
+                    isProcessing={deleteComprobante.isPending}
+                    disabled={deleteComprobante.isPending}
+                    color='failure'
+                  >
+                    Sí, eliminar
+                  </Button>
+                )}
               </div>
             </div>
           </Modal.Body>
@@ -378,6 +392,27 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                             {cuota.pagado ? 'Pagado' : 'Pendiente'}
                           </span>
                         </p>
+                        {cuota?.path_comprobante && (
+                          <div className="mt-3 flex justify-end">
+                            <Button
+                              color="blue"
+                              size="xs"
+                              onClick={() => window.open(cuota.path_comprobante, '_blank')}
+                            >
+                              <icons.World /> <span className='mt-1 ml-1'>Comprobante</span>
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* <div className="mt-3 flex justify-end">
+                          <Button
+                            color="blue"
+                            size="xs"
+                            onClick={() => window.open(cuota.path_comprobante, '_blank')}
+                          >
+                            <icons.World /> <span className='mt-1 ml-1'>Comprobante</span>
+                          </Button>
+                        </div> */}
 
                         {/* Botón enviar a caja dentro de cada cuota */}
                         {!cuota.pagado && (
@@ -387,6 +422,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                               size="xs"
                               onClick={() => {
                                 setActiveItem({ ...activeItem })
+                                setSelectedCuota(cuota)
                                 toggleModal('comprobante', true, activeItem)
                               }}
                               disabled={
@@ -395,7 +431,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                                 )
                               }
                             >
-                              <icons.ReportMoney/> <span className='mt-1'>Enviar a caja</span>
+                              <icons.ReportMoney /> <span className='mt-1'>Enviar a caja</span>
                             </Button>
                           </div>
                         )}
