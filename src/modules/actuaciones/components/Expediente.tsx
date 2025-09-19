@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Column } from '../../../shared/interfaces'
+import type { Actuacion, ActuacionActa } from '../interfaces'
 import { useContext, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { AuthContext } from '../../../context/Auth/AuthContext'
@@ -9,8 +11,6 @@ import { RoleGuard, UserRole } from '../../../auth'
 import { carboneActions, usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
-import type { Column } from '../../../shared/interfaces'
-import type { Actuacion, ActuacionActa } from '../interfaces'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
 import { soloNumeros } from '../../../shared/helpers/formatNumber'
 import { formatDate } from '../../../shared/helpers/formatDate'
@@ -44,7 +44,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
 
   const [entrega, setEntrega] = useState('')
-  const [cantidadCuotas, setCantidadCuotas] = useState(1)
+  const [cantidadCuotas, setCantidadCuotas] = useState(2)
   const [selectedCuota, setSelectedCuota] = useState<any | null>(null)
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
@@ -109,12 +109,19 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         cuotas: cantidadCuotas
       })
 
-      await generateComprobante.mutateAsync(activeItem.id)
-      toggleModal('cuotas', false)
+      const updated = await queryClient.fetchQuery({
+        queryKey: ['acta-actuacion', { id: String(acta.id) }]
+      })
+
+      const refreshed = updated?.actuaciones?.find((a: Actuacion) => a.id === activeItem.id)
+      if (refreshed) setActiveItem(refreshed)
+
       setEntrega('')
-      setCantidadCuotas(1)
+      setCantidadCuotas(2)
+
+      toggleModal('cuotas', true, refreshed)
     } catch (error) {
-      console.error('Error al guardar y enviar:', error)
+      console.error('Error al guardar cuotas:', error)
     }
   }
 
@@ -242,7 +249,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
 
       {(useAction.loading) && <LoadingOverlay />}
 
-      {/* Modal para actualizar actuación */}
       <Modal size='4xl' show={modal.history} onClose={() => toggleModal('history', false)}>
         <Modal.Header>Editar Actuacion</Modal.Header>
         <Modal.Body>
@@ -250,7 +256,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         </Modal.Body>
       </Modal>
 
-      {/* Modal para eliminar actuación de listado */}
       {activeItem &&
         <Modal show={modal.delete} onClose={() => toggleModal('delete', false)}>
           <Modal.Header>Eliminar actuación</Modal.Header>
@@ -277,7 +282,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         </Modal>
       }
 
-      {/* Modal para enviar a bandeja de cobro */}
       {activeItem &&
         <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
           <Modal.Header>Enviar a bandeja de cobro</Modal.Header>
@@ -336,14 +340,12 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         </Modal>
       }
 
-      {/* Modal para elegir la cantidad de cuotas */}
       {activeItem && (
         <Modal show={modal.cuotas} onClose={() => toggleModal('cuotas', false)} size="xl">
           <Modal.Header>Plan de Pago</Modal.Header>
           <Modal.Body>
             {activeItem?.planPago ? (
               <div className="space-y-4">
-                {/* Resumen del plan */}
                 <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-sm">
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
                     Resumen
@@ -365,7 +367,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                   </div>
                 </div>
 
-                {/* Detalle de cuotas */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
                     Detalle de Cuotas
@@ -392,6 +393,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                             {cuota.pagado ? 'Pagado' : 'Pendiente'}
                           </span>
                         </p>
+
                         {cuota?.path_comprobante && (
                           <div className="mt-3 flex justify-end">
                             <Button
@@ -404,17 +406,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                           </div>
                         )}
 
-                        {/* <div className="mt-3 flex justify-end">
-                          <Button
-                            color="blue"
-                            size="xs"
-                            onClick={() => window.open(cuota.path_comprobante, '_blank')}
-                          >
-                            <icons.World /> <span className='mt-1 ml-1'>Comprobante</span>
-                          </Button>
-                        </div> */}
-
-                        {/* Botón enviar a caja dentro de cada cuota */}
                         {!cuota.pagado && (
                           <div className="mt-3 flex justify-end">
                             <Button
