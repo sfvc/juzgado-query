@@ -409,12 +409,22 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         {!cuota.pagado && (
                           <div className="mt-3 flex justify-end">
                             <Button
-                              color="purple"
+                              color={cuota.caja ? 'failure' : 'purple'}
                               size="xs"
-                              onClick={() => {
+                              onClick={async () => {
                                 setActiveItem({ ...activeItem })
                                 setSelectedCuota(cuota)
-                                toggleModal('comprobante', true, activeItem)
+
+                                if (cuota.caja) {
+                                  await handleDeleteComprobante()
+                                  const updated = await queryClient.fetchQuery({
+                                    queryKey: ['acta-actuacion', { id: String(acta.id) }]
+                                  })
+                                  const refreshed = updated?.actuaciones?.find((a: Actuacion) => a.id === activeItem.id)
+                                  if (refreshed) setActiveItem(refreshed)
+                                } else {
+                                  toggleModal('comprobante', true, activeItem)
+                                }
                               }}
                               disabled={
                                 activeItem?.planPago?.detalle_cuotas?.some(
@@ -422,7 +432,8 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                                 )
                               }
                             >
-                              <icons.ReportMoney /> <span className='mt-1'>Enviar a caja</span>
+                              <icons.ReportMoney />
+                              <span className='mt-1 ml-1'>{cuota.caja ? 'Retirar de caja' : 'Enviar a caja'}</span>
                             </Button>
                           </div>
                         )}
