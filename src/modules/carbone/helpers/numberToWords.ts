@@ -15,7 +15,7 @@ export const numberToWords = (num: number): string => {
   ]
 
   const hundreds = [
-    '', 'cien', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 
+    '', 'cien', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos',
     'seiscientos', 'setecientos', 'ochocientos', 'novecientos'
   ]
 
@@ -35,7 +35,7 @@ export const numberToWords = (num: number): string => {
     if (num < 100) return getTens(num)
     const hundred = Math.floor(num / 100)
     const remainder = num % 100
-    if (hundred === 1 && remainder === 0) return 'cien'
+    if (hundred === 1 && remainder === 0) return 'ciento'
     return hundreds[hundred] + (remainder > 0 ? ' ' + getTens(remainder) : '')
   }
 
