@@ -5,17 +5,18 @@ export const numberToWords = (num: number): string => {
   const units = [
     '', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'
   ]
-
   const teens = [
     'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'
   ]
-
+  const twenties = [
+    'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco',
+    'veintiséis', 'veintisiete', 'veintiocho', 'veintinueve'
+  ]
   const tens = [
     '', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'
   ]
-
   const hundreds = [
-    '', 'cien', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos',
+    '', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos',
     'seiscientos', 'setecientos', 'ochocientos', 'novecientos'
   ]
 
@@ -26,6 +27,8 @@ export const numberToWords = (num: number): string => {
   const getTens = (num: number): string => {
     if (num < 10) return getUnits(num)
     if (num < 20) return teens[num - 10]
+    if (num < 30) return twenties[num - 20]
+
     const ten = Math.floor(num / 10)
     const unit = num % 10
     return tens[ten] + (unit > 0 ? ' y ' + getUnits(unit) : '')
@@ -35,7 +38,7 @@ export const numberToWords = (num: number): string => {
     if (num < 100) return getTens(num)
     const hundred = Math.floor(num / 100)
     const remainder = num % 100
-    if (hundred === 1 && remainder === 0) return 'ciento'
+    if (hundred === 1 && remainder === 0) return 'cien'
     return hundreds[hundred] + (remainder > 0 ? ' ' + getTens(remainder) : '')
   }
 
