@@ -325,7 +325,10 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                   <>
                     {activeItem.caja === false ? (
                       <Button
-                        onClick={() => generateComprobante.mutateAsync(activeItem.id)}
+                        onClick={async () => {
+                          await generateComprobante.mutateAsync(activeItem.id)
+                          toggleModal('comprobante', false)
+                        }}
                         isProcessing={generateComprobante.isPending}
                         color='success'
                       >
@@ -333,7 +336,10 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                       </Button>
                     ) : (
                       <Button
-                        onClick={() => deleteComprobante.mutateAsync(activeItem.id)}
+                        onClick={async () => {
+                          await deleteComprobante.mutateAsync(activeItem.id)
+                          toggleModal('comprobante', false)
+                        }}
                         isProcessing={deleteComprobante.isPending}
                         color='failure'
                       >
