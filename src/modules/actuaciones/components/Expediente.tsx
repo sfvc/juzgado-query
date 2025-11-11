@@ -84,22 +84,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
     })
   }
 
-  const handleGenerateComprobante = async () => {
-    if (!activeItem) return
-    const response = await generateComprobante.mutateAsync(activeItem.id)
-
-    if (!response) return
-    toggleModal('delete', false)
-  }
-
-  const handleDeleteComprobante = async () => {
-    if (!activeItem) return
-    const response = await deleteComprobante.mutateAsync(activeItem.id)
-
-    if (!response) return
-    toggleModal('delete', false)
-  }
-
   const handleSaveCuotas = async () => {
     if (!activeItem) return
     try {
@@ -181,32 +165,41 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                       </RoleGuard>
 
                       {
-                        (actuacion.id === sentencia?.id && validateStatus && !actuacion?.planPago) &&
-                        (
-                          !actuacion?.estado_pago
-                            ? (
+                        (actuacion.id === sentencia?.id &&
+                          validateStatus &&
+                          !actuacion?.planPago &&
+                          actuacion.estado_pago !== true) && (
+                          <>
+                            {actuacion.caja === false ? (
                               <Tooltip content='Enviar a bandeja'>
                                 <Button
                                   color='purple'
-                                  onClick={() => toggleModal('comprobante', true, actuacion)}
+                                  onClick={() => {
+                                    setSelectedCuota(null)
+                                    setActiveItem(actuacion)
+                                    toggleModal('comprobante', true, actuacion)
+                                  }}
                                   className='w-8 h-8 flex items-center justify-center'
                                 >
                                   <icons.ReportMoney />
                                 </Button>
                               </Tooltip>
-                            )
-                            : (
-                              !validateFinalizado && (
-                                <Tooltip content='Eliminar de bandeja'>
-                                  <Button
-                                    onClick={() => toggleModal('comprobante', true, actuacion)}
-                                    className='w-8 h-8 flex items-center justify-center bg-slate-600'
-                                  >
-                                    <icons.ReportMoney />
-                                  </Button>
-                                </Tooltip>
-                              )
-                            )
+                            ) : (
+                              <Tooltip content='Retirar de bandeja'>
+                                <Button
+                                  color='info'
+                                  onClick={() => {
+                                    setSelectedCuota(null)
+                                    setActiveItem(actuacion)
+                                    toggleModal('comprobante', true, actuacion)
+                                  }}
+                                  className='w-8 h-8 flex items-center justify-center'
+                                >
+                                  <icons.ReportMoney />
+                                </Button>
+                              </Tooltip>
+                            )}
+                          </>
                         )
                       }
 
@@ -284,55 +277,76 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
 
       {activeItem &&
         <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
-          <Modal.Header>Enviar a bandeja de cobro</Modal.Header>
+          <Modal.Header>Bandeja de Cobro</Modal.Header>
           <Modal.Body>
             <div className="text-center">
               <icons.Warning />
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                {selectedCuota
-                  ? `Confirma para enviar la cuota N°${selectedCuota.cuota} a caja`
-                  : !activeItem.estado_pago
-                    ? 'Confirma para enviar a bandeja de cobro'
-                    : '¿Desea eliminar de la bandeja de cobro?'}
+                {selectedCuota ? (
+                  selectedCuota.caja
+                    ? `Confirma para retirar la cuota N°${selectedCuota.cuota} de caja`
+                    : `Confirma para enviar la cuota N°${selectedCuota.cuota} a caja`
+                ) : activeItem.caja
+                  ? '¿Confirma retirar de la bandeja de cobro?'
+                  : '¿Confirma enviar a la bandeja de cobro?'}
               </h3>
 
               <div className="flex justify-center gap-4">
-                <Button color="gray" onClick={() => {
-                  setSelectedCuota(null)
-                  toggleModal('comprobante', false)
-                }}>Cancelar</Button>
+                <Button
+                  color="gray"
+                  onClick={() => {
+                    setSelectedCuota(null)
+                    toggleModal('comprobante', false)
+                  }}
+                >
+                  Cancelar
+                </Button>
 
                 {selectedCuota ? (
                   <Button
-                    color="success"
                     onClick={async () => {
-                      await generateComprobante.mutateAsync(activeItem.id)
+                      if (!selectedCuota || !activeItem) return
+
+                      if (selectedCuota.caja) {
+                        await deleteComprobante.mutateAsync(activeItem.id)
+                      } else {
+                        await generateComprobante.mutateAsync(activeItem.id)
+                      }
+
                       setSelectedCuota(null)
                       toggleModal('comprobante', false)
                     }}
-                    isProcessing={generateComprobante.isPending}
-                    disabled={generateComprobante.isPending}
+                    isProcessing={generateComprobante.isPending || deleteComprobante.isPending}
+                    color={selectedCuota?.caja ? 'failure' : 'success'}
                   >
-                    Sí, enviar
-                  </Button>
-                ) : !activeItem.estado_pago ? (
-                  <Button
-                    onClick={handleGenerateComprobante}
-                    isProcessing={generateComprobante.isPending}
-                    disabled={generateComprobante.isPending}
-                    color='success'
-                  >
-                    Sí, enviar
+                    {selectedCuota?.caja ? 'Sí, retirar' : 'Sí, enviar'}
                   </Button>
                 ) : (
-                  <Button
-                    onClick={handleDeleteComprobante}
-                    isProcessing={deleteComprobante.isPending}
-                    disabled={deleteComprobante.isPending}
-                    color='failure'
-                  >
-                    Sí, eliminar
-                  </Button>
+                  <>
+                    {activeItem.caja === false ? (
+                      <Button
+                        onClick={async () => {
+                          await generateComprobante.mutateAsync(activeItem.id)
+                          toggleModal('comprobante', false)
+                        }}
+                        isProcessing={generateComprobante.isPending}
+                        color='success'
+                      >
+                        Sí, enviar
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={async () => {
+                          await deleteComprobante.mutateAsync(activeItem.id)
+                          toggleModal('comprobante', false)
+                        }}
+                        isProcessing={deleteComprobante.isPending}
+                        color='failure'
+                      >
+                        Sí, retirar
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -432,8 +446,8 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                                 )
                               }
                             >
-                              <icons.ReportMoney />
-                              <span className='mt-1 ml-1'>{cuota.caja ? 'Retirar de caja' : 'Enviar a caja'}</span>
+                              <icons.ReportMoney />{' '}
+                              <span className='mt-1'>{cuota.caja ? 'Retirar de caja' : 'Enviar a caja'}</span>
                             </Button>
                           </div>
                         )}

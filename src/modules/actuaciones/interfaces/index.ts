@@ -47,6 +47,7 @@ export interface ActasInfractorePivot {
 }
 
 export interface Actuacion {
+  caja: boolean;
   id: number;
   tipo: string;
   observaciones: null;
@@ -72,6 +73,7 @@ export interface PlanPago {
     importe?: string
     cuota?: string
     entrega?: string
+    caja?: boolean
     fecha_vencimiento?: string
     pagado?: string
     fecha_pago?: string
