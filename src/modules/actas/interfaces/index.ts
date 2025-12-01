@@ -14,8 +14,8 @@ export interface ActaFilterForm {
     prioridad_id?: string
     vehiculo_id?: string
     articulo_id?: string
+    juzgado?: string
     page: number
-    juzgado?: number
 }
 
 export interface EstadoActa {

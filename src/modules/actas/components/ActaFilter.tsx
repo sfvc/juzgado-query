@@ -22,8 +22,8 @@ export const ActaFilter = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const [skipNavigate, setSkipNavigate] = useState<boolean>(false) 
-  const [resetForm, setResetForm] = useState<boolean>(false) 
+  const [skipNavigate, setSkipNavigate] = useState<boolean>(false)
+  const [resetForm, setResetForm] = useState<boolean>(false)
 
   const { user } = useContext<UserContext>(AuthContext)
   const { clearSelectedActas } = useContext(ActuacionContext)
@@ -35,25 +35,24 @@ export const ActaFilter = () => {
     staleTime: 1000 * 60 * 5
   })
 
-  const { 
-    register, 
+  const {
+    register,
     reset,
     setValue,
-    handleSubmit 
+    handleSubmit
   } = useForm<ActaFilterForm>()
 
   const clearFilters = () => {
-    reset() // Resetear formulario
-    resetFilter({ page: 1, juzgado: user!.juzgado.id }) // Resetear filtros internos
-    setSkipNavigate(true) // Prevenir navegación en el useEffect
-    navigate({ pathname, search: '',  }) // Limpiar la URL
-    clearSelectedActas() // Borrar actas seleccionadas
-
+    reset()
+    resetFilter({ page: 1 })
+    setSkipNavigate(true)
+    navigate({ pathname, search: '' })
+    clearSelectedActas()
     setResetForm(true)
   }
 
   const submit: SubmitHandler<ActaFilterForm> = async (data: ActaFilterForm) =>  {
-    formFilter({...data, page: 1, juzgado: user!.juzgado.id})
+    formFilter({ ...data, page: 1 })
     setResetForm(false)
   }
 
@@ -61,12 +60,12 @@ export const ActaFilter = () => {
     if (filterParams && !skipNavigate) {
       // Crear una copia limpia de searchParams
       const updatedSearchParams = new URLSearchParams()
-  
+
       // Filtrar los parámetros no vacíos y actualizarlos
       Object.entries(filterParams).forEach(([key, value]) => {
         if (value) updatedSearchParams.set(key, value.toString())
       })
-  
+
       // Actualizar la URL con los nuevos parámetros
       navigate({ pathname, search: updatedSearchParams.toString() })
     }
@@ -79,7 +78,7 @@ export const ActaFilter = () => {
     if (skipNavigate) { setSkipNavigate(false) }
 
   }, [filterParams])
-  
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center'>
@@ -94,7 +93,7 @@ export const ActaFilter = () => {
             <div>
               {/* Filtros */}
               <FormFilter register={register} setValue={setValue} data={data} resetForm={resetForm} />
-            
+
               {/* Filtros avanzados */}
               <AdvanceFilter register={register} data={data} setValue={setValue} resetForm={resetForm} />
             </div>
@@ -120,11 +119,11 @@ export const ActaFilter = () => {
       {pathname === PATH.ACUMULADAS && <GenerateActuacionMultiple />}
 
       {/* Tabla de actas filtradas */}
-      <ActaTable 
-        actas={actas} 
+      <ActaTable
+        actas={actas}
         isFetching={isFetching}
-        pagination={pagination} 
-        formFilter={formFilter} 
+        pagination={pagination}
+        formFilter={formFilter}
         filterParams={filterParams}
       />
     </React.Fragment>

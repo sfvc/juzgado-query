@@ -20,6 +20,7 @@ export const defaultValues: ActaFilterForm = {
   prioridad_id: '',
   vehiculo_id: '',
   articulo_id: '',
+  juzgado: '',
   page: 1
 }
 
