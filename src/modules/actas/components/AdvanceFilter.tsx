@@ -32,7 +32,7 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
 
   useEffect(() => {
     if(!resetForm) return
-      
+
     onFocusInfraccionInput()
   }, [resetForm])
 
@@ -72,7 +72,7 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
                 }
               </Select>
             </div>
-            
+
             <div className='mb-4 relative'>
               <div className='mb-2 block'>
                 <Label htmlFor='numero_causa'value='Número de Causa' />
@@ -86,8 +86,8 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
 
             {/* Buscar por codigo de articulo  */}
             {
-              infraccionStorage 
-                ? 
+              infraccionStorage
+                ?
                 <div className='mb-4'>
                   <div className='mb-2 block'>
                     <Label htmlFor='infraccion' value='Articulo' />
@@ -98,8 +98,8 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
                     readOnly
                     onFocus={onFocusInfraccionInput}
                   />
-                </div> 
-                : 
+                </div>
+                :
                 <SearchInput<IArticulo>
                   label="Articulo"
                   placeholder="Buscar articulo"
@@ -135,6 +135,17 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
                 placeholder='Ingrese la fecha de acta'
                 type='date'
               />
+            </div>
+
+            <div className='mb-4'>
+              <div className='mb-2 block'>
+                <Label htmlFor='juzgado' value='Juzgado' />
+              </div>
+              <Select {...register('juzgado')}>
+                <option value='' hidden>Filtrar por juzgado</option>
+                <option value='1'>Juzgado 1</option>
+                <option value='2'>Juzgado 2</option>
+              </Select>
             </div>
           </div>
         </Accordion.Content>

@@ -34,7 +34,7 @@ export const ActaColums: Column[] = [
   { key: 'numero_documento', label: 'Nro. Documento' },
   { key: 'acciones', label: 'Acciones' },
 ]
-  
+
 export const NotificacionColums: Column[] = [
   { key: 'selected', label: ' ' },
   { key: 'numero_acta', label: 'Nro. Acta' },
