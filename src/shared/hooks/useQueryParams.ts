@@ -1,11 +1,27 @@
 import { useSearchParams } from 'react-router-dom'
 import { ActaFilterForm } from '../../modules/actas/interfaces'
+import { useContext } from 'react'
+import { AuthContext, UserContext } from '../../context/Auth/AuthContext'
 
 export const useQueryParams = () => {
-  const [searchParams] = useSearchParams()
+  const [paramsObj] = useSearchParams()
+  const { user } = useContext<UserContext>(AuthContext)
 
-  const params = Object.fromEntries(searchParams.entries())
-  const filters: ActaFilterForm = { ...params, page: +params?.page || 1 }
+  const params = Object.fromEntries(paramsObj.entries())
 
-  return {filters}
+  // ¿Es la primera vez que entro?
+  const firstLoad = Object.keys(params).length === 0
+
+  // Si hay juzgado en la URL → respetarlo
+  const hasJuzgadoInParams = 'juzgado' in params && params.juzgado !== ''
+
+  const filters: ActaFilterForm = {
+    ...params,
+    page: +params.page || 1,
+    juzgado: firstLoad
+      ? user!.juzgado.id
+      : (hasJuzgadoInParams ? params.juzgado : '')
+  }
+
+  return { filters, firstLoad }
 }
