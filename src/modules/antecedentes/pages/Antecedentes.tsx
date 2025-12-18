@@ -9,6 +9,7 @@ import { IActa } from '../../actas/interfaces'
 import { personaActions } from '../../personas'
 import { useQuery } from '@tanstack/react-query'
 import { AuthContext } from '../../../context/Auth/AuthContext'
+import { getAntecedentesByPersonaPrint } from '../../personas/services/personas-actions'
 
 const colums: Column[] = [
   { label: 'Nro. Acta', key: 'numero_acta' },
@@ -28,33 +29,54 @@ interface Props {
 export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
   const useAction = useLoading()
   const { user } = useContext(AuthContext)
-  const { data: antecedentes, isLoading } = useQuery<IActa[]>({
-    queryKey: ['antecedentes', { id }],
-    queryFn: () => personaActions.getAntecedentesByPersona(id!),
+  const [currentPage, setCurrentPage] = useState(1)
+  const [tipoFiltro, setTipoFiltro] = useState<string>('')
+
+  const { data: response, isLoading } = useQuery({
+    queryKey: ['antecedentes', { id, page: currentPage }],
+    queryFn: () => personaActions.getAntecedentesByPersona(id!, currentPage),
     staleTime: 1000 * 60 * 5,
     enabled: !!id
   })
 
-  const [tipoFiltro, setTipoFiltro] = useState<string>('')
+  const antecedentes = response?.data ?? []
+  const meta = response?.meta
+
   const ANTECEDENTE_TEMPLATE: string = 'antecedentes.docx'
   const ANTECEDENTE_TEMPLATE_AREA: string = 'antecedentesAreas.docx'
 
-  const tiposDisponibles = [...new Set(antecedentes?.map(a => a.tipo_acta) ?? [])]
+  // Tipar correctamente el array
+  const tiposDisponibles: string[] = [...new Set(
+    (antecedentes as IActa[])?.map(a => a.tipo_acta) ?? []
+  )]
 
   const antecedentesFiltrados = tipoFiltro
-    ? antecedentes?.filter(a => a.tipo_acta === tipoFiltro)
-    : antecedentes
+    ? (antecedentes as IActa[])?.filter(a => a.tipo_acta === tipoFiltro)
+    : (antecedentes as IActa[])
 
   const renderAntecedente = async () => {
     useAction.actionFn(async () => {
-      const form = formatReport(antecedentesFiltrados)
-      const persona = formatPersona(antecedentesFiltrados, user)
+      const allAntecedentes = await getAntecedentesByPersonaPrint(id!)
+
+      const antecedentesParaImprimir = tipoFiltro
+        ? allAntecedentes.filter(
+          (a: IActa) => a.tipo_acta === tipoFiltro
+        )
+        : allAntecedentes
+
+      if (!antecedentesParaImprimir.length) return
+
+      const form = formatReport(antecedentesParaImprimir)
+      const persona = formatPersona(antecedentesParaImprimir, user)
+
       const nombre = clearNames(
-        antecedentesFiltrados?.[0]?.infractores?.[0]?.apellido,
-        antecedentesFiltrados?.[0]?.infractores?.[0]?.nombre
+        antecedentesParaImprimir[0]?.infractores?.[0]?.apellido,
+        antecedentesParaImprimir[0]?.infractores?.[0]?.nombre
       )
 
-      const template = antecedentesFiltrados?.some(a => a.tipo_acta === 'TRANSITO')
+      const template = antecedentesParaImprimir.some(
+        (a: IActa) => a.tipo_acta === 'TRANSITO'
+      )
         ? ANTECEDENTE_TEMPLATE
         : ANTECEDENTE_TEMPLATE_AREA
 
@@ -63,13 +85,18 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
         reportName: `ANTECEDENTES ${nombre}.pdf`,
         data: {
           data: form,
-          persona: persona
+          persona
         },
         template
       }
 
       await carboneActions.showFilePDF(data)
     })
+  }
+
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
   }
 
   return (
@@ -147,6 +174,45 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
                 )}
               </Table.Body>
             </Table>
+
+            {/* Controles de paginación */}
+            {meta && meta.last_page > 1 && (
+              <div className='flex items-center justify-between mt-4'>
+                <div className='text-sm text-gray-700 dark:text-gray-300'>
+                  Mostrando {meta.from} a {meta.to} de {meta.total} registros
+                </div>
+                <div className='flex gap-2'>
+                  <Button
+                    size='sm'
+                    color='gray'
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    Anterior
+                  </Button>
+                  <div className='flex items-center gap-1'>
+                    {Array.from({ length: meta.last_page }, (_, i) => i + 1).map(page => (
+                      <Button
+                        key={page}
+                        size='sm'
+                        color={currentPage === page ? 'info' : 'gray'}
+                        onClick={() => handlePageChange(page)}
+                      >
+                        {page}
+                      </Button>
+                    ))}
+                  </div>
+                  <Button
+                    size='sm'
+                    color='gray'
+                    disabled={currentPage === meta.last_page}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </div>
+            )}
           </>
         )}
 

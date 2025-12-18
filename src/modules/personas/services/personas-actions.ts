@@ -47,16 +47,30 @@ export const getDataPersona = async () => {
   return response.data
 }
 
-export const getAntecedentesByPersona = async (id: number) => {
+export const getAntecedentesByPersona = async (id: number, page: number = 1) => {
+  if (!id) return { data: [], meta: null }
+
+  const response = await apiJuzgado.get('actas/filtrar', {
+    params: {
+      persona_id: id,
+      per_page: 50,
+      page
+    }
+  })
+
+  return response.data
+}
+
+export const getAntecedentesByPersonaPrint = async (id: number) => {
   if (!id) return []
 
   const response = await apiJuzgado.get('actas/filtrar', {
     params: {
       persona_id: id,
-      per_page: 50
+      per_page: 9999,
+      page: 1
     }
   })
 
-  const { data: antecedentes } = response.data
-  return antecedentes
+  return response.data.data
 }

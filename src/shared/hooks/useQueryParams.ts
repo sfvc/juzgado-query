@@ -8,11 +8,7 @@ export const useQueryParams = () => {
   const { user } = useContext<UserContext>(AuthContext)
 
   const params = Object.fromEntries(paramsObj.entries())
-
-  // ¿Es la primera vez que entro?
   const firstLoad = Object.keys(params).length === 0
-
-  // Si hay juzgado en la URL → respetarlo
   const hasJuzgadoInParams = 'juzgado' in params && params.juzgado !== ''
 
   const filters: ActaFilterForm = {
