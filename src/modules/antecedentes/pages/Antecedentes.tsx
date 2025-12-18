@@ -217,6 +217,7 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
         )}
 
         <div className='flex justify-end mt-4 gap-2'>
+          <h3 className='mt-2 gap-4'>(Se van a imprimir los antecedentes de hasta 18 meses atras)</h3>
           <Button
             color='warning'
             onClick={renderAntecedente}

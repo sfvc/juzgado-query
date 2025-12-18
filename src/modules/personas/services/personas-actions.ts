@@ -53,7 +53,7 @@ export const getAntecedentesByPersona = async (id: number, page: number = 1) => 
   const response = await apiJuzgado.get('actas/filtrar', {
     params: {
       persona_id: id,
-      per_page: 50,
+      per_page: 30,
       page
     }
   })
