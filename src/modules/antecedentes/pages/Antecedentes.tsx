@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Button, Modal, Spinner, Table, Select } from 'flowbite-react'
+import { Button, Modal, Spinner, Table, Select, Pagination } from 'flowbite-react'
 import type { Column } from '../../../shared/interfaces'
 import { clearNames, useLoading, icons } from '../../../shared'
 import { carboneActions } from '../../carbone'
@@ -94,11 +94,6 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
     })
   }
 
-
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage)
-  }
-
   return (
     <Modal size='5xl' show={isOpen} onClose={() => toggleModal()}>
       <Modal.Header>Antecedentes de la Persona</Modal.Header>
@@ -175,41 +170,21 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
               </Table.Body>
             </Table>
 
-            {/* Controles de paginación */}
             {meta && meta.last_page > 1 && (
-              <div className='flex items-center justify-between mt-4'>
+              <div className='flex flex-col gap-2 mt-4'>
                 <div className='text-sm text-gray-700 dark:text-gray-300'>
                   Mostrando {meta.from} a {meta.to} de {meta.total} registros
                 </div>
-                <div className='flex gap-2'>
-                  <Button
-                    size='sm'
-                    color='gray'
-                    disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}
-                  >
-                    Anterior
-                  </Button>
-                  <div className='flex items-center gap-1'>
-                    {Array.from({ length: meta.last_page }, (_, i) => i + 1).map(page => (
-                      <Button
-                        key={page}
-                        size='sm'
-                        color={currentPage === page ? 'info' : 'gray'}
-                        onClick={() => handlePageChange(page)}
-                      >
-                        {page}
-                      </Button>
-                    ))}
-                  </div>
-                  <Button
-                    size='sm'
-                    color='gray'
-                    disabled={currentPage === meta.last_page}
-                    onClick={() => handlePageChange(currentPage + 1)}
-                  >
-                    Siguiente
-                  </Button>
+
+                <div className='flex overflow-x-auto sm:justify-center'>
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={meta.last_page}
+                    onPageChange={(page: number) => setCurrentPage(page)}
+                    previousLabel='Anterior'
+                    nextLabel='Siguiente'
+                    showIcons
+                  />
                 </div>
               </div>
             )}
