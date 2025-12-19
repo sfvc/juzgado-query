@@ -47,12 +47,17 @@ export const getDataPersona = async () => {
   return response.data
 }
 
-export const getAntecedentesByPersona = async (id: number, page: number = 1) => {
+export const getAntecedentesByPersona = async (
+  id: number,
+  page: number = 1,
+  tipoActa?: string
+) => {
   if (!id) return { data: [], meta: null }
 
   const response = await apiJuzgado.get('actas/filtrar', {
     params: {
       persona_id: id,
+      tipo_acta: tipoActa || undefined,
       per_page: 30,
       page
     }
@@ -61,12 +66,16 @@ export const getAntecedentesByPersona = async (id: number, page: number = 1) => 
   return response.data
 }
 
-export const getAntecedentesByPersonaPrint = async (id: number) => {
+export const getAntecedentesByPersonaPrint = async (
+  id: number,
+  tipoActa?: string
+) => {
   if (!id) return []
 
   const response = await apiJuzgado.get('actas/filtrar', {
     params: {
       persona_id: id,
+      tipo_acta: tipoActa || undefined,
       per_page: 9999,
       page: 1
     }
@@ -74,3 +83,4 @@ export const getAntecedentesByPersonaPrint = async (id: number) => {
 
   return response.data.data
 }
+

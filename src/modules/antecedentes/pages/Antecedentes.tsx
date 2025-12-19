@@ -33,8 +33,13 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
   const [tipoFiltro, setTipoFiltro] = useState<string>('')
 
   const { data: response, isLoading } = useQuery({
-    queryKey: ['antecedentes', { id, page: currentPage }],
-    queryFn: () => personaActions.getAntecedentesByPersona(id!, currentPage),
+    queryKey: ['antecedentes', id, currentPage, tipoFiltro],
+    queryFn: () =>
+      personaActions.getAntecedentesByPersona(
+        id!,
+        currentPage,
+        tipoFiltro || undefined
+      ),
     staleTime: 1000 * 60 * 5,
     enabled: !!id
   })
@@ -45,18 +50,12 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
   const ANTECEDENTE_TEMPLATE: string = 'antecedentes.docx'
   const ANTECEDENTE_TEMPLATE_AREA: string = 'antecedentesAreas.docx'
 
-  // Tipar correctamente el array
-  const tiposDisponibles: string[] = [...new Set(
-    (antecedentes as IActa[])?.map(a => a.tipo_acta) ?? []
-  )]
-
-  const antecedentesFiltrados = tipoFiltro
-    ? (antecedentes as IActa[])?.filter(a => a.tipo_acta === tipoFiltro)
-    : (antecedentes as IActa[])
-
   const renderAntecedente = async () => {
     useAction.actionFn(async () => {
-      const allAntecedentes = await getAntecedentesByPersonaPrint(id!)
+      const allAntecedentes = await getAntecedentesByPersonaPrint(
+        id!,
+        tipoFiltro || undefined
+      )
 
       const antecedentesParaImprimir = tipoFiltro
         ? allAntecedentes.filter(
@@ -107,15 +106,16 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
             <div className='mb-4'>
               <Select
                 value={tipoFiltro}
-                onChange={(e) => setTipoFiltro(e.target.value)}
-                className="w-full"
+                onChange={(e) => {
+                  setCurrentPage(1)
+                  setTipoFiltro(e.target.value)
+                }}
               >
                 <option value=''>Todos los tipos</option>
-                {tiposDisponibles.map(tipo => (
-                  <option key={tipo} value={tipo} className="w-full">
-                    {tipo}
-                  </option>
-                ))}
+                <option value='TRANSITO'>TRANSITO</option>
+                <option value='BROMATOLOGIA'>BROMATOLOGIA</option>
+                <option value='INSPECCION'>INSPECCION</option>
+                <option value='OBRAS PARTICULARES'>OBRAS PARTICULARES</option>
               </Select>
             </div>
 
@@ -128,8 +128,8 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
                 ))}
               </Table.Head>
               <Table.Body className='divide-y'>
-                {antecedentesFiltrados?.length ? (
-                  antecedentesFiltrados.map((antecedente: IActa) => (
+                {antecedentes.length ? (
+                  antecedentes.map((antecedente: IActa) => (
                     <Table.Row
                       key={antecedente.id}
                       className='bg-white dark:border-gray-700 dark:bg-gray-800'
