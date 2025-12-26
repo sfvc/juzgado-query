@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Label, Table, TextInput, Tooltip, Checkbox } from 'flowbite-react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { SearchInput } from '../../../../shared'
 import { articuloActions } from '../../../parametros/actas'
 import { CreateArticulo } from '../integrations/CreateArticulo'
 import { icons } from '../../../../shared'
+import { ART_ALCOHOLEMIA_ID } from '../../../../shared/constants'
 import type { InfraccionActa } from '../../interfaces'
 import type { IArticulo } from '../../../parametros/actas/interfaces'
 import type { IActaForm } from '../../interfaces/form-interfaces'
@@ -13,12 +14,14 @@ interface Props {
   data: InfraccionActa[] | undefined
 }
 
-const ART_ALCOHOLEMIA_ID = 214
-
 export const ArticuloData = ({ data }: Props) => {
-  const { setValue, register, getValues, formState: { errors } } = useFormContext<IActaForm>() 
+  const { setValue, register, getValues, formState: { errors }, control } = useFormContext<IActaForm>() 
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
-  const [seNego, setSeNego] = useState(false)
+
+  const seNego = useWatch({
+    name: 'se_nego', 
+    control
+  })
 
   const addArticulo = (articulo: IArticulo) => {
     if(!articulo) return
@@ -34,7 +37,7 @@ export const ArticuloData = ({ data }: Props) => {
     setValue('infracciones_cometidas', [...getValues('infracciones_cometidas') || [], newArticulo])
   }
 
-  const handleAlcoholemiaChange = (e) => {
+  const handleAlcoholemiaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const cleanedValue = value.replace(/[^\d]/g, '')
   
@@ -49,18 +52,25 @@ export const ArticuloData = ({ data }: Props) => {
     }
   
     setValue('grado_alcohol', formattedAlcoholemia)
-  
-    if (formattedAlcoholemia === '0,00' || formattedAlcoholemia === '0.00') {
-      setSeNego(true)
-    } else {
-      setSeNego(false)
-    }
   }
   
   const removeArticulo = (id: number) => {
     const updateInfracciones = infracciones.filter((infraccion: InfraccionActa) => infraccion.id !== id)
     setInfracciones(updateInfracciones)
     setValue('infracciones_cometidas', updateInfracciones)
+
+    // Si se elimina el artículo de alcoholemia, limpiar los campos relacionados
+    if (id === ART_ALCOHOLEMIA_ID) {
+      setValue('grado_alcohol', '')
+      setValue('se_nego', false)
+    }
+  }
+
+  const handleSeNegoChange = (checked: boolean) => {
+    setValue('se_nego', checked)
+    if (checked) {
+      setValue('grado_alcohol', '')
+    }
   }
 
   const handleSearch = async (query: string) => articuloActions.getArticulosByFilter(query)
@@ -97,8 +107,9 @@ export const ArticuloData = ({ data }: Props) => {
             <div className='mb-6 flex items-center gap-2'>
               <Checkbox
                 id='se_nego'
+                {...register('se_nego')}
                 checked={seNego}
-                onChange={() => setSeNego(!seNego)}
+                onChange={(e) => handleSeNegoChange(e.target.checked)}
               />
               <Label htmlFor='se_nego' className='dark:text-white'>
                 Se negó al control de alcoholemia

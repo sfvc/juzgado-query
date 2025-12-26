@@ -4,7 +4,7 @@ import { Button } from 'flowbite-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { transitoSchema } from './validations/validationSchema'
 import { ActaData, ArticuloData, InfraccionData, InfractorData, VehiculoData } from './components'
-import { ACTAS } from '../../../shared/constants'
+import { ACTAS, ART_ALCOHOLEMIA_ID } from '../../../shared/constants'
 import { useMutationActa } from '../hooks/useMutationActa'
 import { formatVehiculo } from '../helpers/formatVehiculo'
 import { useNavigateActa } from '../../../shared'
@@ -18,6 +18,19 @@ interface Props {
 export const TransitoForm = ({ acta }: Props) => {
   const { createActa, updateActa } = useMutationActa()
   const { goBack } = useNavigateActa()
+
+  // Si se encuentra el artículo de alcoholemia en las infracciones cometidas y el valor es mayor a 0, se considera válido
+  // Sino, se debe ingresar un valor válido o marcar que se negó a realizar la prueba
+  const validateAlcoholemia = () => {
+    console.log('primera')
+    if (!acta || !acta?.infracciones_cometidas) return false
+    const alcoholemiaInfraccion = acta.infracciones_cometidas.find((infraccion) => infraccion.id === ART_ALCOHOLEMIA_ID)
+
+    console.log('segunda')
+    if (!alcoholemiaInfraccion) return false
+    const gradoAlcohol = acta?.grado_alcohol
+    return gradoAlcohol === '0.00'
+  }
 
   const methods = useForm<IActaForm>({
     defaultValues: {
@@ -36,14 +49,15 @@ export const TransitoForm = ({ acta }: Props) => {
       tipo_acta: ACTAS.TRANSITO,
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
-      vehiculo_id: acta?.vehiculo?.id
+      vehiculo_id: acta?.vehiculo?.id,
+      se_nego: validateAlcoholemia()
     },
-    resolver: yupResolver(transitoSchema),
+    resolver: yupResolver(transitoSchema)
   })
 
   const onSubmit: SubmitHandler<IActaForm> = async (form: IActaForm) => {
     if (form.grado_alcohol) {
-      form.grado_alcohol = parseFloat(form.grado_alcohol.replace(',', '.'))
+      form.grado_alcohol = form.grado_alcohol.replace(',', '.')
     }
   
     if (acta) {

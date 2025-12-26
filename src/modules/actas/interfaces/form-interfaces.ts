@@ -9,7 +9,6 @@ export interface IActaForm {
     fecha: string
     fecha_prescripcion: string
     hora: string
-    grado_alcohol?: string
     retencion_vehiculo: number
     retencion_licencia: number
     notificado: number
@@ -17,6 +16,9 @@ export interface IActaForm {
     preventiva?: string
     nombre_fantasia?: string
     tipo_acta: string
+
+    grado_alcohol?: string
+    se_nego?: boolean
 
     // Secciones del acta
     infractores: InfractorActa[]

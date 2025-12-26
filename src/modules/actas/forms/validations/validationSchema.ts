@@ -1,4 +1,7 @@
+/* eslint-disable camelcase */
 import * as yup from 'yup'
+import { ART_ALCOHOLEMIA_ID } from '../../../../shared/constants'
+import type { InfraccionActa } from '../../interfaces'
 
 export const transitoSchema = yup.object().shape({
   // Acta data
@@ -35,6 +38,21 @@ export const transitoSchema = yup.object().shape({
     })
   ).required('Debe haber al menos un artículo cargado')
     .min(1, 'Debe haber al menos un artículo cargado'),
+
+  // Alcoholemia debe ser requerido pero puede ser cadena vacía si se negó a realizarla
+  // y a la vez permitir que el campo sea una cadena vacía si se negó a realizar la prueba.
+  grado_alcohol: yup.string().when(['infracciones_cometidas', 'se_nego'], {
+    is: (infracciones_cometidas: InfraccionActa[], se_nego: boolean) => {
+    // Solo validar si existe la infracción de alcoholemia
+      const tieneInfraccionAlcoholemia = infracciones_cometidas?.some(
+        infraccion => infraccion.id === ART_ALCOHOLEMIA_ID
+      )
+      // Es requerido si tiene la infracción Y NO se negó
+      return tieneInfraccionAlcoholemia && !se_nego
+    },
+    then: (schema) => schema.required('El grado de alcohol es requerido'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
 
   // Infractor data
 

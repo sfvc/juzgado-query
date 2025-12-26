@@ -53,7 +53,8 @@ export interface IActa {
     calle:                  string
     observaciones:          string
     infracciones_cometidas: InfraccionActa[]
-    grado_alcohol?:          string
+    grado_alcohol?:         string
+    se_nego?:               boolean  
     prioridad?:             Prioridad
     prioridad_id:           number
     vehiculo:               IVehiculo

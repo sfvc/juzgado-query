@@ -34,3 +34,6 @@ export const OBRAS_PREVENTIVAS = [
 ]
 
 export const DEFAULT_COLOR = '#808080'
+
+// ID del artículo de alcoholemia
+export const ART_ALCOHOLEMIA_ID = 214
