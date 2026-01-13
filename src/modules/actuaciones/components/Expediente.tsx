@@ -475,8 +475,8 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                     {Number(entrega || 0) > Number(activeItem.total) && (
                       <p className="text-red-600 font-medium">La entrega no puede superar el monto total</p>
                     )}
-                    {Number(entrega || 0) < 100000 && (
-                      <p className="text-red-600 font-medium">La entrega mínima es de $100.000</p>
+                    {Number(entrega || 0) < 50000 && (
+                      <p className="text-red-600 font-medium">La entrega mínima es de $50.000</p>
                     )}
                     <p className="text-gray-700 dark:text-gray-200">
                       <span className="font-medium">Saldo:</span>{' '}
@@ -536,7 +536,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                     disabled={
                       createCuota.isPending ||
                       Number(entrega || 0) > Number(activeItem.total) ||
-                      Number(entrega || 0) < 100000
+                      Number(entrega || 0) < 50000
                     }
                   >
                     Guardar
