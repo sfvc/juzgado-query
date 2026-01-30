@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button} from 'flowbite-react'
-import { AuthContext, UserContext } from '../../../context/Auth/AuthContext'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { AdvanceFilter } from './AdvanceFilter'
 import { ActaTable } from './ActaTable'
@@ -25,7 +24,6 @@ export const ActaFilter = () => {
   const [skipNavigate, setSkipNavigate] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
 
-  const { user } = useContext<UserContext>(AuthContext)
   const { clearSelectedActas } = useContext(ActuacionContext)
   const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa(filters)
 
@@ -51,32 +49,47 @@ export const ActaFilter = () => {
     setResetForm(true)
   }
 
-  const submit: SubmitHandler<ActaFilterForm> = async (data: ActaFilterForm) =>  {
-    formFilter({ ...data, page: 1 })
+  const submit: SubmitHandler<ActaFilterForm> = async (data) => {
+    const { page, ...restOfFilters } = data
+
+    const params = { ...restOfFilters, page: 1 }
+
+    if (!params.juzgado || params.juzgado === '') {
+      delete params.juzgado
+    }
+
+    setSkipNavigate(true)
+    formFilter(params)
+    const search = new URLSearchParams()
+    Object.entries(params).forEach(([k, v]) => {
+      if (v) search.set(k, v.toString())
+    })
+    navigate({ pathname, search: search.toString() })
     setResetForm(false)
   }
 
   useEffect(() => {
     if (filterParams && !skipNavigate) {
-      // Crear una copia limpia de searchParams
       const updatedSearchParams = new URLSearchParams()
 
-      // Filtrar los parámetros no vacíos y actualizarlos
       Object.entries(filterParams).forEach(([key, value]) => {
+        if (key === 'juzgado' && Object.keys(filterParams).length > 2) {
+          return
+        }
         if (value) updatedSearchParams.set(key, value.toString())
       })
 
-      // Actualizar la URL con los nuevos parámetros
       navigate({ pathname, search: updatedSearchParams.toString() })
     }
 
-    Object.entries(filterParams).forEach(([key,value]) => {
+    Object.entries(filterParams).forEach(([key, value]) => {
+      if (key === 'juzgado') return
       setValue(key as keyof ActaFilterForm, value)
     })
 
-    // Volver a habilitar la navegación
-    if (skipNavigate) { setSkipNavigate(false) }
-
+    if (skipNavigate) {
+      setSkipNavigate(false)
+    }
   }, [filterParams])
 
   return (

@@ -5,22 +5,20 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { notificacionActions } from '..'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
-import { useQueryParams } from '../../../shared'
 
 export const useNotification = () => {
   const queryClient = useQueryClient()
   const { resetProvider } = useContext(ActuacionContext)
-  const { filters } = useQueryParams()
   const { id } = useParams()
 
   /* Mutations */
   const createNotification = useMutation({
-    mutationFn: ({ selectedActas, plantillaId, userId }: { selectedActas: number[], plantillaId: number | null, userId: number }) => 
+    mutationFn: ({ selectedActas, plantillaId, userId }: { selectedActas: number[], plantillaId: number | null, userId: number }) =>
       notificacionActions.createNotification(selectedActas, plantillaId, userId),
     onSuccess: () => {
       toast.success('Notificación creada exitosamente')
       resetProvider()
-      queryClient.invalidateQueries({ queryKey: ['actas',{...filters}] })
+      queryClient.invalidateQueries({ queryKey: ['actas'] })
     },
     onError: (error) => {
       toast.error('Error al crear la notificación')
@@ -46,7 +44,7 @@ export const useNotification = () => {
     mutationFn: ({ id }: {id: number, queryKey?: any[]}) => notificacionActions.deleteNotificationHistory(id),
     onSuccess: (_, __, context: any) => {
       toast.success('Notificación eliminada exitosamente')
-      
+
       queryClient.invalidateQueries({ queryKey: context?.queryKey })
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
@@ -54,7 +52,7 @@ export const useNotification = () => {
       toast.error('Error al eliminar la notificación')
       console.log(error)
     }
-  }) 
-  
+  })
+
   return { createNotification, deleteNotification, deleteNotificationHistory }
 }
