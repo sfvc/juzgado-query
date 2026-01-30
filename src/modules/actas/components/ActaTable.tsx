@@ -41,13 +41,8 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
   }
 
   const verifyActiveFilters = () => {
-    const filters = Object.keys(filterParams)
-    const existe = filters.find((element) => element === 'persona_id')
-    if (filters.length > 2 && existe) {
-      setActiveFilter(true)
-    } else {
-      setActiveFilter(false)
-    }
+    const hasPersona = !!filterParams.persona_id
+    setActiveFilter(hasPersona)
   }
 
   useEffect(() => {

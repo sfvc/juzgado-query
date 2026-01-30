@@ -58,25 +58,22 @@ export const ActaFilter = () => {
 
   useEffect(() => {
     if (filterParams && !skipNavigate) {
-      // Crear una copia limpia de searchParams
       const updatedSearchParams = new URLSearchParams()
 
-      // Filtrar los parámetros no vacíos y actualizarlos
       Object.entries(filterParams).forEach(([key, value]) => {
+        if (key === 'juzgado') return // 👈 lo excluimos
         if (value) updatedSearchParams.set(key, value.toString())
       })
 
-      // Actualizar la URL con los nuevos parámetros
       navigate({ pathname, search: updatedSearchParams.toString() })
     }
 
-    Object.entries(filterParams).forEach(([key,value]) => {
+    Object.entries(filterParams).forEach(([key, value]) => {
+      if (key === 'juzgado') return
       setValue(key as keyof ActaFilterForm, value)
     })
 
-    // Volver a habilitar la navegación
-    if (skipNavigate) { setSkipNavigate(false) }
-
+    if (skipNavigate) setSkipNavigate(false)
   }, [filterParams])
 
   return (

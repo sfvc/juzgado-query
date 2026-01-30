@@ -9,14 +9,11 @@ export const useQueryParams = () => {
 
   const params = Object.fromEntries(paramsObj.entries())
   const firstLoad = Object.keys(params).length === 0
-  const hasJuzgadoInParams = 'juzgado' in params && params.juzgado !== ''
 
   const filters: ActaFilterForm = {
     ...params,
     page: +params.page || 1,
-    juzgado: firstLoad
-      ? user!.juzgado.id
-      : (hasJuzgadoInParams ? params.juzgado : '')
+    juzgado: user!.juzgado.id
   }
 
   return { filters, firstLoad }
