@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, DataFilters, Prioridad, EstadoActa } from '../interfaces'
@@ -16,7 +16,6 @@ interface Props {
 
 export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) => {
   const { infraccionStorage, setInfraccionStorage } = useStorageFilter()
-  const [juzgadoValue, setJuzgadoValue] = useState<string>('')
 
   const onFocusInfraccionInput = () => {
     localStorage.removeItem('infraccion')
@@ -31,17 +30,10 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
     localStorage.setItem('infraccion', `${articulo.numero}`)
   }
 
-  const handleJuzgadoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    setJuzgadoValue(value)
-    setValue('juzgado', value)
-  }
-
   useEffect(() => {
     if(!resetForm) return
 
     onFocusInfraccionInput()
-    setJuzgadoValue('') // Resetear también el juzgado
   }, [resetForm])
 
   return (
@@ -149,12 +141,8 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
               <div className='mb-2 block'>
                 <Label htmlFor='juzgado' value='Juzgado' />
               </div>
-              <Select
-                id='juzgado'
-                value={juzgadoValue}
-                onChange={handleJuzgadoChange}
-              >
-                <option value=''>Filtrar por juzgado</option>
+              <Select {...register('juzgado')}>
+                <option value='' hidden>Filtrar por juzgado</option>
                 <option value='1'>Juzgado 1</option>
                 <option value='2'>Juzgado 2</option>
               </Select>
