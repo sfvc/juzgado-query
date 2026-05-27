@@ -13,7 +13,6 @@ interface Props {
 
 export const TitularInput = ({vehiculo, editTitular, setEditTitular, setValue}: Props) => {
 
-  // Buscardor de titulares
   const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
   const handleSelect = (titular: Titular) => setValue('titular_id', titular.id)
 

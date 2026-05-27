@@ -4,25 +4,24 @@ import { apiJuzgado } from '../../../api/config'
 import { departamentoActions, paisActions, provinciaActions } from '../../parametros/localizacion'
 import type { IBarrio, IDepartamento, ILocalidad, IProvincia } from '../../parametros/localizacion/interfaces/localizacion'
 
-
 export const useDomicilio = () => {
   const [provincias, setProvincias] = useState<IProvincia[]>([])
   const [departamentos, setDepartamentos] = useState<IDepartamento[]>([])
 
   const { data: paises } = useQuery({
-    queryKey: ['paises', 'all'], 
-    queryFn: paisActions.getAllPaises,  
-    staleTime: 1000 * 60 * 5, 
+    queryKey: ['paises', 'all'],
+    queryFn: paisActions.getAllPaises,
+    staleTime: 1000 * 60 * 5,
   })
 
   const getProvinciasByPais = async (id: number | null) => {
-    if (!id) return 
+    if (!id) return
     const data: IProvincia[] = await provinciaActions.getProvinciasByPais(id)
     setProvincias(data)
   }
 
   const getDepartamentosByProvincia = async (id: number | null) => {
-    if (!id) return 
+    if (!id) return
     const data: IDepartamento[] = await departamentoActions.getDepartamentosByProvincia(id)
     setDepartamentos(data)
   }

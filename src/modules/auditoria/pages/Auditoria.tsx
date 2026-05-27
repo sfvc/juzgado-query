@@ -103,9 +103,8 @@ export const Auditoria = () => {
         <div className='flex items-center gap-2'>
           <Select
             id='userSelect'
-            className=''
             onChange={(e) => {
-              const value = e.target.value || null
+              const value = e.target.value || ''
               updateFilter('user_id', value)
               updateFilter('page', 1)
             }}

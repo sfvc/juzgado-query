@@ -11,17 +11,17 @@ export const useUploadFile = () => {
 
   /* Descargar archivo word desde carbone */
   const downloadWord = useMutation({
-    mutationFn: ({ item, acta, tipo }: { item: any, acta: any, tipo: string }) => 
+    mutationFn: ({ item, acta, tipo }: { item: any, acta: any, tipo: string }) =>
       carboneActions.downloadWordFile(item, acta, tipo),
     onError: (error) => {
       toast.error('Error al descargar el archivo')
       console.log(error)
     }
   })
-    
+
   /* Subir archivo a s3 con gotenberg */
   const uploadFile = useMutation({
-    mutationFn: ({ file, item, property }: { file: File, item: any, property: string, queryKey?: any[] }) => 
+    mutationFn: ({ file, item, property }: { file: File, item: any, property: string, queryKey?: any[] }) =>
       carboneActions.uploadFilePDF(file, item, property, user!.id),
     onSuccess: (_, __, context: any) => {
       toast.success('Archivo subido exitosamente')
@@ -33,7 +33,7 @@ export const useUploadFile = () => {
       console.log(error)
     }
   })
-  
+
   return {
     downloadWord,
     uploadFile

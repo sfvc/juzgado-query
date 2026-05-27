@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback } from 'react'
 import { TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
@@ -14,7 +15,7 @@ export function InputTable({ onSearch, debounceTime = 400 }: Props) {
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
       try {
-        await onSearch(query)
+        onSearch(query)
       } catch (error) {
         console.error('Error searching:', error)
       } finally {
@@ -26,7 +27,7 @@ export function InputTable({ onSearch, debounceTime = 400 }: Props) {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-    
+
     setSearch(value)
     setIsLoading(true)
     debouncedSearch(value)
@@ -61,6 +62,6 @@ function debounce<T extends (query: string) => void>(
 
   return (query: string) => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => func(query), wait)
+    timeout = window.setTimeout(() => func(query), wait)
   }
 }

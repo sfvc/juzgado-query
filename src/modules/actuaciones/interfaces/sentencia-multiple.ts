@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { InfraccionesCometida } from '.'
 
 export interface AcumuladasResponse {
@@ -10,7 +10,7 @@ export interface Data {
     actas:               Acta[]
     infractores:         Infractor[]
     vehiculos:           Vehiculo[]
-    comercios:           any[]
+    comercios:           Comercio[]
     unidad_multa_actual: string
 }
 
@@ -73,4 +73,9 @@ export interface Color {
     created_at: Date | null
     updated_at: Date | null
     deleted_at: null
+}
+
+export interface Comercio {
+    id:         number
+    nombre:     string
 }

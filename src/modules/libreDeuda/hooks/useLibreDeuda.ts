@@ -35,7 +35,9 @@ export const useLibreDeuda = () => {
   }) => libreDeudaActions.confirmLibreDeuda(data),
     onSuccess: () => {
       toast.success('Titular confirmada con éxito')
-      queryClient.clear()
+
+      queryClient.invalidateQueries({ queryKey: ['libreDeuda'] })
+      queryClient.invalidateQueries({ queryKey: ['libreDeudaPendientes'] })
     },
     onError: (error) => {
       toast.error('Error al confirmar al titular')

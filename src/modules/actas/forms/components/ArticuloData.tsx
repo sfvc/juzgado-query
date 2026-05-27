@@ -15,51 +15,51 @@ interface Props {
 }
 
 export const ArticuloData = ({ data }: Props) => {
-  const { setValue, register, getValues, formState: { errors }, control } = useFormContext<IActaForm>() 
+  const { setValue, register, getValues, formState: { errors }, control } = useFormContext<IActaForm>()
   const [infracciones, setInfracciones] = useState<InfraccionActa[]>(data || [])
 
   const seNego = useWatch({
-    name: 'se_nego', 
+    name: 'se_nego',
     control
   })
 
   const addArticulo = (articulo: IArticulo) => {
     if(!articulo) return
 
-    const newArticulo = {
+    const newArticulo: InfraccionActa = {
       id: articulo.id,
       detalle: articulo.detalle,
-      numero: articulo.numero,
+      numero: String(articulo.numero),
       valor_desde: articulo.valor_desde
     }
 
     setInfracciones((prev) => [...prev, newArticulo])
-    setValue('infracciones_cometidas', [...getValues('infracciones_cometidas') || [], newArticulo])
+    const currentInfracciones = getValues('infracciones_cometidas') || []
+    setValue('infracciones_cometidas', [...currentInfracciones, newArticulo])
   }
 
   const handleAlcoholemiaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const cleanedValue = value.replace(/[^\d]/g, '')
-  
+
     const maxLength = 3
     if (cleanedValue.length > maxLength) return
-  
+
     let formattedAlcoholemia = cleanedValue
     if (cleanedValue.length === 2) {
       formattedAlcoholemia = `${cleanedValue[0]},${cleanedValue[1]}`
     } else if (cleanedValue.length === 3) {
       formattedAlcoholemia = `${cleanedValue[0]},${cleanedValue.slice(1)}`
     }
-  
+
     setValue('grado_alcohol', formattedAlcoholemia)
   }
-  
+
   const removeArticulo = (id: number) => {
     const updateInfracciones = infracciones.filter((infraccion: InfraccionActa) => infraccion.id !== id)
     setInfracciones(updateInfracciones)
     setValue('infracciones_cometidas', updateInfracciones)
 
-    // Si se elimina el artículo de alcoholemia, limpiar los campos relacionados
     if (id === ART_ALCOHOLEMIA_ID) {
       setValue('grado_alcohol', '')
       setValue('se_nego', false)
@@ -85,18 +85,24 @@ export const ArticuloData = ({ data }: Props) => {
       </div>
 
       <div className='grid md:grid-cols-2 gap-4 grid-cols-1'>
-        <SearchInput<IArticulo>
-          label={<><span>Infracciones</span> <strong className='obligatorio'>(*)</strong></>}
-          placeholder="Código de la infracción"
-          onSearch={handleSearch}
-          onSelect={handleSelect}
-          helperText={errors?.infracciones_cometidas?.message}
-          color={errors?.infracciones_cometidas && 'failure'}
-          renderItem={(item) => (
-            <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
-          )}
-          renderInput={(item) => { return `${item.numero}`} }
-        />
+        <div>
+          <div className='mb-2 block dark:text-white'>
+            <Label value='Infracciones' />
+            <strong className='obligatorio'>(*)</strong>
+          </div>
+          <SearchInput<IArticulo>
+            label=""
+            placeholder="Código de la infracción"
+            onSearch={handleSearch}
+            onSelect={handleSelect}
+            helperText={errors?.infracciones_cometidas?.message}
+            color={errors?.infracciones_cometidas && 'failure'}
+            renderItem={(item) => (
+              <div><strong>{item.numero}</strong> - {item.detalle || 'SIN DETALLE'}</div>
+            )}
+            renderInput={(item) => { return `${item.numero}`} }
+          />
+        </div>
 
         <div className='mt-8'>
           <CreateArticulo />
@@ -137,7 +143,6 @@ export const ArticuloData = ({ data }: Props) => {
         )}
       </div>
 
-      {/* Tabla de infracciones */}
       {(infracciones?.length > 0) && (
         <div className='overflow-x-auto'>
           <Table hoverable>

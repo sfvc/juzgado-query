@@ -13,7 +13,7 @@ export const useQueryParams = () => {
   const filters: ActaFilterForm = {
     ...params,
     page: +params.page || 1,
-    juzgado: user!.juzgado.id
+    juzgado: String(user!.juzgado.id)
   }
 
   return { filters, firstLoad }

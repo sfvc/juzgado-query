@@ -22,14 +22,14 @@ export const validateErrors = (error: any, message?: string) => {
   const { errores, mensaje } = response
 
   if (errores) {
-    const [name, messages] = Object.entries(errores)[0]
-  
+    const [messages] = Object.entries(errores)[0]
+
     toast.error(
       <>
         <strong>Error!</strong> {mensaje}
-        <br /> 
+        <br />
         {messages[0]}
-      </>, 
+      </>,
       options
     )
   } else if( mensaje ) {

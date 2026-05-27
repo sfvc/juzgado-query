@@ -14,6 +14,7 @@ import { ActuacionHistory } from './ActuacionHistory'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
 import { soloNumeros } from '../../../shared/helpers/formatNumber'
 import { formatDate } from '../../../shared/helpers/formatDate'
+import { generarComprobanteDigital } from '../../../shared/helpers/generarComprobanteDigital'
 
 const colums: Column[] = [
   { key: 'id', label: 'id' },
@@ -25,6 +26,10 @@ const colums: Column[] = [
   { key: 'usuario', label: 'Usuario' },
   { key: 'acciones', label: 'Acciones' },
 ]
+
+interface ActaActuacionResponse {
+  actuaciones: Actuacion[]
+}
 
 const ESTADO_RESOLUCION_PENDIENTE = 7
 const ESTADO_RESOLUCION_PAGADA = 5
@@ -93,7 +98,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
         cuotas: cantidadCuotas
       })
 
-      const updated = await queryClient.fetchQuery({
+      const updated = await queryClient.fetchQuery<ActaActuacionResponse>({
         queryKey: ['acta-actuacion', { id: String(acta.id) }]
       })
 
@@ -214,6 +219,21 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                           </Button>
                         </Tooltip>
                       )}
+
+                      <Tooltip content='Comprobante Digital'>
+                        <Button
+                          color='dark'
+                          onClick={() =>
+                            generarComprobanteDigital({
+                              acta,
+                              actuacion
+                            })
+                          }
+                          className='w-8 h-8 flex items-center justify-center'
+                        >
+                          <icons.Show />
+                        </Button>
+                      </Tooltip>
 
                       {
                         (actuacion.id === sentencia?.id && validateStatus) &&
@@ -430,8 +450,8 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                                 setSelectedCuota(cuota)
 
                                 if (cuota.caja) {
-                                  await handleDeleteComprobante()
-                                  const updated = await queryClient.fetchQuery({
+                                  // await handleDeleteComprobante()
+                                  const updated = await queryClient.fetchQuery<ActaActuacionResponse>({
                                     queryKey: ['acta-actuacion', { id: String(acta.id) }]
                                   })
                                   const refreshed = updated?.actuaciones?.find((a: Actuacion) => a.id === activeItem.id)

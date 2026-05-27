@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button} from 'flowbite-react'
-import { AuthContext, UserContext } from '../../../context/Auth/AuthContext'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 import { AdvanceFilter } from './AdvanceFilter'
 import { ActaTable } from './ActaTable'
@@ -24,8 +23,6 @@ export const ActaFilter = () => {
 
   const [skipNavigate, setSkipNavigate] = useState<boolean>(false)
   const [resetForm, setResetForm] = useState<boolean>(false)
-
-  const { user } = useContext<UserContext>(AuthContext)
   const { clearSelectedActas } = useContext(ActuacionContext)
   const { actas, pagination, isFetching, filterParams, formFilter, resetFilter } = useActa(filters)
 
@@ -74,7 +71,7 @@ export const ActaFilter = () => {
     })
 
     if (skipNavigate) setSkipNavigate(false)
-  }, [filterParams])
+  }, [filterParams, navigate, pathname, setValue, skipNavigate])
 
   return (
     <React.Fragment>

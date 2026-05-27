@@ -1,3 +1,4 @@
+
 import type { Titular } from '../../vehiculos/interfaces'
 
 export interface ActuacionResponse {
@@ -18,8 +19,8 @@ export interface ActuacionResponse {
     actas: Acta[]
     infractores: Infractor[]
     vehiculos: Vehiculo[]
-    comercios: any[]
-    notificaciones: any[]
+    comercios: Comercio[]
+    notificaciones: Notificacion[]
 }
 
 export interface Acta {
@@ -180,4 +181,16 @@ export interface Estadisticas {
         monto_total_abonado?: string;
         monto_juzgado?: string;
     }
+}
+
+export interface Comercio {
+    id: number;
+    nombre: string;
+}
+
+export interface Notificacion {
+    [x: string]: string | number | boolean | null;
+    id: number;
+    mensaje: string;
+    fecha: string;
 }

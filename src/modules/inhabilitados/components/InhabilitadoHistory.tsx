@@ -16,7 +16,7 @@ const colums: Column[] = [
   { key: 'organismo', label: 'organismo' }
 ]
 interface Props {
-  dni: number | undefined
+  dni: string | undefined
   isOpen: boolean
   closeModal: () => void
 }
@@ -24,19 +24,19 @@ interface Props {
 const INHABILITADO_TEMPLATE: string = 'reporte-inhabilitados.docx'
 
 export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
-  const { inhabilitaciones, isLoading } = useHistoryInhabilitado(dni)
+  const { inhabilitaciones, isLoading } = useHistoryInhabilitado(dni ? Number(dni) : undefined)
   const useAction = useLoading()
 
   const renderHistoryPDF = async () => {
     useAction.actionFn(async () => {
       const form = formatReport(inhabilitaciones)
-  
+
       const data = {
         convertTo: 'pdf',
         data: form,
         template: INHABILITADO_TEMPLATE
       }
-  
+
       await carboneActions.showFilePDF(data)
     })
   }
@@ -50,7 +50,7 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
         {
           isLoading
             ? <div className='flex justify-center items-center'><Spinner size='xl' /></div>
-            : 
+            :
             <Table hoverable className='text-center'>
               <Table.Head>
                 {colums.map((column: Column) => (
@@ -73,7 +73,7 @@ export const InhabilitadoHistory = ({dni, isOpen, closeModal}: Props) => {
                     : <tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>
                 }
               </Table.Body>
-            </Table> 
+            </Table>
         }
 
         <div className='flex justify-end gap-4 mt-4'>

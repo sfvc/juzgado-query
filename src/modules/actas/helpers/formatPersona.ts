@@ -11,7 +11,10 @@ export const formatPersona = (persona: IPersona, responsable: number): Infractor
     apellido: persona.apellido,
     telefono: persona.telefono,
     email: persona.email,
-    antecedentes: 0, // TODO: Definir que hacer con antecedentes
-    responsable: responsable
+    antecedentes: 0,
+    responsable: responsable,
+    cuota_alimentaria: persona.cuota_alimentaria,
+    razon_social: persona.razon_social || '',
+    tipo_persona: persona.tipo_persona
   }
 }

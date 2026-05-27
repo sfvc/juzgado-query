@@ -2,7 +2,6 @@ import { IPropiedad, IRubro } from '../../parametros/actas/interfaces'
 import { IPlantilla } from '../../plantillas/interfaces'
 import { IVehiculo, Titular } from '../../vehiculos/interfaces'
 
-//** Interfaces de filtro */
 export interface ActaFilterForm {
     persona_id?: string
     numero_acta?: string
@@ -35,7 +34,6 @@ export interface DataFilters {
     tiposActa: string[]
 }
 
-//** Interfaces de acta */
 export interface IActa {
     id:                     number
     numero_acta:            string
@@ -54,7 +52,7 @@ export interface IActa {
     observaciones:          string
     infracciones_cometidas: InfraccionActa[]
     grado_alcohol?:         string
-    se_nego?:               boolean  
+    se_nego?:               boolean
     prioridad?:             Prioridad
     prioridad_id:           number
     vehiculo:               IVehiculo
@@ -100,7 +98,7 @@ export interface EstadoPivot {
 
 export interface InfraccionActa {
     id:              number
-    numero:          number
+    numero:          string
     detalle:         string
     inciso?:          null
     norma_legal?:     string

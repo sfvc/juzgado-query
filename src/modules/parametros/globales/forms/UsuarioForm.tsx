@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -6,6 +6,16 @@ import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import { useUsuario } from '../hooks/useUsuario'
 import { useUsuarioParams } from '../hooks/useUsuarioParams'
 import type { FormUsuario, IUsuario } from '../interfaces'
+
+interface Juzgado {
+  id: string | number
+  nombre: string
+}
+
+interface Rol {
+  id: number
+  nombre: string
+}
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('El nombre es requerido'),
@@ -28,7 +38,7 @@ interface Props {
   usuario: IUsuario | null
   onSucces: () => void
 }
-  
+
 const UsuarioForm = ({ usuario, onSucces }: Props) => {
   const { createUsuario, updateUsuario } = useUsuario()
   const { data, isLoading } = useUsuarioParams()
@@ -38,7 +48,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { 
+    defaultValues: {
       nombre: usuario?.nombre || '',
       dni: usuario?.dni || '',
       username: usuario?.username || '',
@@ -49,17 +59,17 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
     resolver: yupResolver(validationSchema),
     context: { usuario: usuario ? true: false }
   })
-  
+
 
   const onSubmit: SubmitHandler<FormUsuario> = async (data: FormUsuario) => {
     if (usuario) await updateUsuario.mutateAsync({id: usuario.id, usuario: data})
     else await createUsuario.mutateAsync(data)
-  
+
     onSucces()
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='grid grid-cols-2 gap-4'>
@@ -70,7 +80,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           <TextInput
             {...register('nombre')}
             placeholder='Nombre'
-            helperText={errors?.nombre && errors?.nombre?.message} 
+            helperText={errors?.nombre && errors?.nombre?.message}
             color={errors?.nombre && 'failure'}
           />
         </div>
@@ -82,7 +92,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           <TextInput
             {...register('dni')}
             placeholder='DNI'
-            helperText={errors?.dni && errors?.dni?.message} 
+            helperText={errors?.dni && errors?.dni?.message}
             color={errors?.dni && 'failure'}
           />
         </div>
@@ -94,7 +104,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
           <TextInput
             {...register('username')}
             placeholder='Usuario'
-            helperText={errors?.username && errors?.username?.message} 
+            helperText={errors?.username && errors?.username?.message}
             color={errors?.username && 'failure'}
           />
         </div>
@@ -108,7 +118,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             <TextInput
               {...register('password')}
               placeholder='Contraseña'
-              helperText={errors?.password && errors?.password?.message} 
+              helperText={errors?.password && errors?.password?.message}
               color={errors?.password && 'failure'}
             />
           </div>
@@ -124,7 +134,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             color={errors?.juzgado_id && 'failure'}
           >
             <option value='' hidden>Seleccione el juzgado</option>
-            {data?.juzgados.map((juzgado: any) => (
+            {data?.juzgados.map((juzgado: Juzgado) => (
               <option key={juzgado.id} value={juzgado.id}>
                 {juzgado.nombre}
               </option>
@@ -142,7 +152,7 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
             color={errors?.role && 'failure'}
           >
             <option value='' hidden>Seleccione el rol</option>
-            {data?.roles.map((rol: any) => (
+            {data?.roles.map((rol: Rol) => (
               <option key={rol.id} value={rol.id}>{rol.nombre}</option>
             ))}
           </Select>
@@ -151,9 +161,9 @@ const UsuarioForm = ({ usuario, onSucces }: Props) => {
 
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

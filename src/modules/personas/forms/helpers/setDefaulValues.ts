@@ -1,4 +1,3 @@
-// helpers/setDefaulValues.ts
 import { IPersona } from '../../interfaces'
 import { TipoPersona } from './personaEnum'
 

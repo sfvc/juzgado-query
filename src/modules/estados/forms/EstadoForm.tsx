@@ -12,7 +12,7 @@ const validationSchema = yup.object().shape({
     .transform((value) => isNaN(value) ? '' : value)
     .required('El estado es requerido'),
 })
-  
+
 interface Props {
   actaId: number
   estado: IEstadoActa | null
@@ -43,12 +43,12 @@ const EstadoForm = ({ actaId, estado, onSucces }: Props) => {
   const onSubmit: SubmitHandler<EstadoActaForm> = async (form: EstadoActaForm) => {
     if (estado) await updateEstado.mutateAsync({ id: actaId, estadoActaId: estado.pivot.id, form })
     else await createEstado.mutateAsync({ id: actaId, form })
-    
+
     onSucces()
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} >
       <div className='mb-4'>
@@ -81,20 +81,19 @@ const EstadoForm = ({ actaId, estado, onSucces }: Props) => {
         />
       </div>
 
-      {/* Buttons */}
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
 
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >
           {isSubmitting ? 'Guardando...' : 'Guardar'}
         </Button>
       </div>
-      
+
     </form>
   )
 }

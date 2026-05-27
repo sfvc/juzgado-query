@@ -55,6 +55,14 @@ export const transitoSchema = yup.object().shape({
   }),
 
   // Infractor data
+  infractores: yup.array().default([]),
+  propiedades: yup.array().default([]),
+  tipo_rubros: yup.array().default([]),
+  nombre_fantasia: yup.string().optional(),
+  numero_causa: yup.string().optional(),
+  preventiva: yup.string().optional(),
+  vehiculo_id: yup.number().nullable().optional(),
+  se_nego: yup.boolean().optional(),
 
   // Vehículo data (definido sin validación)
 

@@ -4,7 +4,6 @@ import { setKeyParams } from '../helpers/setKeyParams'
 export const useFilter =  <T>(initialValues: T) => {
   const [filterParams, setFilterParams] = useState<T>(initialValues)
 
-  // Filtro para inputs
   const updateFilter = (key: string, value: string | number) => {
     setFilterParams(prev => {
       if (key === 'page') {
@@ -18,16 +17,15 @@ export const useFilter =  <T>(initialValues: T) => {
           ...prev,
           [key]: value,
           page: 1
-        } 
+        }
       }
     })
   }
 
-  // Filtro para formularios
-  const formFilter =  <T>(form: T) => {
-    const data = setKeyParams<T>(form)
+  const formFilter = (form: T) => {
+    const data = setKeyParams(form)
 
-    setFilterParams(data)
+    setFilterParams(data as T)
   }
 
   const resetFilter = (params: T) => {

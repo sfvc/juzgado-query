@@ -19,8 +19,10 @@ import {
   ActaBromatologia,
   ActaInspeccion,
   ActaObrasParticulares,
-  ActaTransito
+  ActaTransito,
+  ActaPoliciaAmbiental
 } from '../modules/actas'
+import { Descargo } from '../modules/descargo'
 
 export const PrivateRoute = [
   {
@@ -163,6 +165,16 @@ export const PrivateRoute = [
       },
 
       {
+        path: '/acta/policiaambiental/crear',
+        element: <ActaPoliciaAmbiental />
+      },
+
+      {
+        path: '/acta/policiaambiental/editar/:id',
+        element: <ActaPoliciaAmbiental />
+      },
+
+      {
         path: '/acta/:id/estados',
         element: <EstadoActa />
       },
@@ -220,6 +232,11 @@ export const PrivateRoute = [
       {
         path: '/libre-deuda',
         element: <LibreDeuda />
+      },
+
+      {
+        path: '/descargo',
+        element: <Descargo />
       },
 
       {

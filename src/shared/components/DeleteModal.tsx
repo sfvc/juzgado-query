@@ -3,9 +3,9 @@ import { icons } from '../index'
 
 interface DeleteModalProps {
   openModal: boolean;
-  item: number; // El elemento a eliminar
-  onDelete: (id: number) => Promise<void>; // Función de eliminación que recibe el ID
-  onClose: () => void; // Función para cerrar el modal
+  item: number;
+  onDelete: (id: number) => Promise<void>;
+  onClose: () => void;
   isLoading: boolean;
 }
 
@@ -15,7 +15,7 @@ export const DeleteModal = ({
   onDelete,
   onClose,
   isLoading
-}: DeleteModalProps ) => {    
+}: DeleteModalProps ) => {
 
   const handleDelete = async () => {
     await onDelete(item)
@@ -28,15 +28,15 @@ export const DeleteModal = ({
       <Modal.Body>
         <div className="text-center">
           <icons.Warning />
-          
+
           <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
             ¿Estás seguro de que deseas eliminar el registro?
           </h3>
-          
+
           <div className="flex justify-center gap-4">
             <Button color="gray" onClick={onClose}>Cancelar</Button>
-            <Button 
-              color="failure" 
+            <Button
+              color="failure"
               onClick={handleDelete}
               disabled={isLoading}
               isProcessing={isLoading}

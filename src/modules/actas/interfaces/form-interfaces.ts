@@ -22,10 +22,10 @@ export interface IActaForm {
 
     // Secciones del acta
     infractores: InfractorActa[]
-    infracciones_cometidas?: InfraccionActa[]
     vehiculo_id?: number | null
-    propiedades?: IPropiedad[]
-    tipo_rubros?: IRubro[]
+    infracciones_cometidas: InfraccionActa[]
+    propiedades: IPropiedad[]
+    tipo_rubros: IRubro[]
 
     // Infracción Data
     calle: string

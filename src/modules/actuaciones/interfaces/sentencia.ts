@@ -13,7 +13,7 @@ export interface ITotal {
     observaciones: string
     observacion: string,
 }
-  
+
 export interface ISentenciaForm extends ITotal{
     actas: number[],
     plantilla_id: number,

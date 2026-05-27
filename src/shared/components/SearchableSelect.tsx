@@ -39,21 +39,24 @@ export function SearchableSelect<T extends SearchItem>({
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const debouncedSearch = useCallback(
-    debounce(async (query: string) => {
-      setIsLoading(true)
-      try {
-        const results = await onSearch(query)
-        setData(results)
-      } catch (error) {
-        console.error('Error searching:', error)
-        setData([])
-      } finally {
-        setIsLoading(false)
-      }
-    }, debounceTime),
-    [onSearch, debounceTime]
-  )
+  const debouncedSearch = useCallback(() => {
+    const debounceFunc = debounce<(query: string) => Promise<void>>(
+      async (query: string) => {
+        setIsLoading(true)
+        try {
+          const results = await onSearch(query)
+          setData(results)
+        } catch (error) {
+          console.error('Error searching:', error)
+          setData([])
+        } finally {
+          setIsLoading(false)
+        }
+      },
+    debounceTime
+    )
+    return debounceFunc
+  }, [onSearch, debounceTime])()
 
   const handleSearch = (value: string) => {
     setSearch(value)
@@ -113,8 +116,8 @@ export function SearchableSelect<T extends SearchItem>({
       { showResults && (
         <ul className="w-full overflow-y-auto max-h-32 absolute z-10 bg-white dark:bg-gray-700 dark:text-white shadow-md rounded-md mt-1">
           {
-            data.length > 0 
-              ? 
+            data.length > 0
+              ?
               (data.map((item) => (
                 <li key={item.id} className="hover:bg-gray-100 dark:hover:bg-gray-600 border-b last:border-b-0">
                   <button
@@ -125,7 +128,7 @@ export function SearchableSelect<T extends SearchItem>({
                     {renderItem ? renderItem(item) : item?.nombre}
                   </button>
                 </li>
-              ))) 
+              )))
               : <li className="py-2 px-4">{ isLoading ? 'Cargando...' : 'No se encontraron resultados.' }</li>
           }
         </ul>
@@ -143,6 +146,6 @@ function debounce<T extends (query: string) => void>(
 
   return (query: string) => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => func(query), wait)
+    timeout = window.setTimeout(() => func(query), wait)
   }
 }

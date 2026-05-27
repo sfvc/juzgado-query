@@ -4,8 +4,19 @@ import { FormInhabilitado } from '../interfaces'
 
 export const getInhabilitados = async (filters: object) => {
   const params = setUrlParams(filters)
-
   const response = await apiJuzgado.get('/inhabilitados', { params })
+
+  if (response.data && response.data.inhabilitado === false) {
+    return {
+      data: [],
+      meta: { current_page: 1, from: 1, last_page: 1, to: 0, total: 0 },
+      personaNoInhabilitada: {
+        nombre_completo: response.data.nombre_completo,
+        dni: response.data.dni
+      }
+    }
+  }
+
   const { data, meta } = response.data
   return { data, meta }
 }

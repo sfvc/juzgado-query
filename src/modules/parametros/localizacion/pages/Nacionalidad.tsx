@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Modal, Pagination, Table, TextInput, Tooltip } from 'flowbite-react'
+import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, icons } from '../../../../shared'
 import { Column } from '../../../../shared/interfaces'
 import { TableSkeleton } from '../../../../shared/components/TableSkeleton'
@@ -18,7 +18,7 @@ export const Nacionalidad = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<INacionalidad | null>(null)
 
-  const { nacionalidades, pagination,isFetching, filterParams, updateFilter, deleteNacionalidad } = useNacionalidad()
+  const { nacionalidades, pagination,isFetching, updateFilter, deleteNacionalidad } = useNacionalidad()
 
   /* Modal crear/editar */
   const onOpenModal = (nacionalidad: INacionalidad) => {
@@ -102,20 +102,20 @@ export const Nacionalidad = () => {
         />
       </div>
 
-      {/* Modal crear/editar */} 
+      {/* Modal crear/editar */}
       <Modal show={openModal} onClose={onCloseModal}>
         <Modal.Header>{!activeItem ? 'Agregar Nacionalidad' : 'Editar Nacionalidad'}</Modal.Header>
         <Modal.Body>
-          <NacionalidadForm 
-            nacionalidad={activeItem} 
+          <NacionalidadForm
+            nacionalidad={activeItem}
             onSucces={onCloseModal}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
+      {/* Modal eliminar */}
       {
-        activeItem && 
+        activeItem &&
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useFilter, usePagination, validateErrors } from '../../../shared'
@@ -18,9 +19,15 @@ export const useInhabilitado = () => {
   const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
+  const [personaNoInhabilitada, setPersonaNoInhabilitada] = useState<{ nombre_completo: string, dni: number } | null>(null)
+
   const { data: inhabilitados, pagination, isFetching } = usePagination<IInhabilitado, FilterParams>({
     queryKey: ['inhabilitados', filterParams],
-    fetchData: () => inhabilitadoActions.getInhabilitados(filterParams),
+    fetchData: async () => {
+      const res = await inhabilitadoActions.getInhabilitados(filterParams)
+      setPersonaNoInhabilitada((res as { personaNoInhabilitada?: { nombre_completo: string, dni: number } })?.personaNoInhabilitada || null)
+      return res
+    },
     filterParams
   })
 
@@ -28,7 +35,7 @@ export const useInhabilitado = () => {
   const createInhabilitado = useMutation({
     mutationFn: inhabilitadoActions.createInhabilitado,
     onSuccess: () => {
-      toast.success('Inhabilitado creado con exito')
+      toast.success('Inhabilitado creado con éxito')
       queryClient.clear()
     },
     onError: (error) => {
@@ -40,7 +47,7 @@ export const useInhabilitado = () => {
   const updateInhabilitado = useMutation({
     mutationFn: ({ id, inhabilitado }: { id: number, inhabilitado: FormInhabilitado }) => inhabilitadoActions.updateInhabilitado(id, inhabilitado),
     onSuccess: () => {
-      toast.success('Inhabilitado actualizado con exito')
+      toast.success('Inhabilitado actualizado con éxito')
       queryClient.clear()
     },
     onError: (error) => {
@@ -52,7 +59,7 @@ export const useInhabilitado = () => {
   const deleteInhabilitado = useMutation({
     mutationFn: (id: number) => inhabilitadoActions.deleteInhabilitado(id),
     onSuccess: () => {
-      toast.success('Inhabilitado eliminado con exito')
+      toast.success('Inhabilitado eliminado con éxito')
       queryClient.clear()
     },
     onError: (error) => {
@@ -67,6 +74,7 @@ export const useInhabilitado = () => {
     isFetching,
     filterParams,
     updateFilter,
+    personaNoInhabilitada,
 
     // Mutations
     createInhabilitado,

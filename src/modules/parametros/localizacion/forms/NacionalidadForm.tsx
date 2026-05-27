@@ -2,8 +2,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Label, TextInput } from 'flowbite-react'
-import { useNacionalidad } from '../hooks/useNacionalidad';
-import { FormNacionalidad, INacionalidad } from '../interfaces/localizacion';
+import { useNacionalidad } from '../hooks/useNacionalidad'
+import { FormNacionalidad, INacionalidad } from '../interfaces/localizacion'
 
 const validationSchema = yup.object().shape({
   nombre: yup.string().required('La nacionalidad es requerida')
@@ -13,7 +13,7 @@ interface Props {
     nacionalidad: INacionalidad | null
     onSucces: () => void
   }
-  
+
 const NacionalidadForm = ({ nacionalidad, onSucces }: Props) => {
   const { createNacionalidad, updateNacionalidad, } = useNacionalidad()
 
@@ -29,10 +29,10 @@ const NacionalidadForm = ({ nacionalidad, onSucces }: Props) => {
   const onSubmit: SubmitHandler<FormNacionalidad> = async (data: FormNacionalidad) => {
     if (nacionalidad) await updateNacionalidad.mutateAsync({id: nacionalidad.id, nacionalidad: data})
     else await createNacionalidad.mutateAsync(data)
-  
+
     onSucces()
   }
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-4'>
@@ -46,14 +46,14 @@ const NacionalidadForm = ({ nacionalidad, onSucces }: Props) => {
         <TextInput
           {...register('nombre')}
           placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
+          helperText={errors?.nombre && errors?.nombre?.message}
           color={errors?.nombre && 'failure'}
         />
       </div>
 
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
-        <Button 
+        <Button
           size='md'
           type='submit'
           disabled={isSubmitting}

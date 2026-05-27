@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useEffect } from 'react'
 import { Label, TextInput, Spinner } from 'flowbite-react'
 import { icons } from '..'
@@ -8,7 +9,7 @@ interface SearchItem {
 }
 
 interface SearchInputProps<T extends SearchItem> {
-  label?: React.ReactNode
+  label?: string
   placeholder?: string
   onSearch: (query: string) => Promise<T[]>
   onSelect: (item: T) => void
@@ -76,30 +77,30 @@ export function SearchInput<T extends SearchItem>({
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target
-  
+
     if (formatInputValue) {
       value = formatInputValue(value)
     }
-    
+
     if (onInputChange) {
       onInputChange(value)
     } else {
       setSearch(value)
     }
-    
+
     setShowResults(true)
     debouncedSearch(value)
   }
 
   const handleSelect = (item: T) => {
     const inputValue = renderInput(item)
-    
+
     if (onInputChange) {
       onInputChange(inputValue)
     } else {
       setSearch(inputValue)
     }
-    
+
     onSelect(item)
     setShowResults(false)
     setData([])
@@ -107,13 +108,13 @@ export function SearchInput<T extends SearchItem>({
 
   const onFocusInput = () => {
     const emptyValue = ''
-    
+
     if (onInputChange) {
       onInputChange(emptyValue)
     } else {
       setSearch(emptyValue)
     }
-    
+
     if (resetInput) resetInput()
   }
 
@@ -173,11 +174,15 @@ export function SearchInput<T extends SearchItem>({
   )
 }
 
-function debounce<T extends (query: string) => void>(func: T, wait: number): (query: string) => void {
+function debounce<T extends (query: string) => void>(
+  func: T,
+  wait: number
+): (query: string) => void {
+
   let timeout: number | undefined
 
   return (query: string) => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => func(query), wait)
+    timeout = window.setTimeout(() => func(query), wait)
   }
 }

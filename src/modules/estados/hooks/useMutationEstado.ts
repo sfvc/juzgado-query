@@ -6,7 +6,6 @@ import { estadoActaActions } from '..'
 export const useMutationEstado = () => {
   const queryClient = useQueryClient()
 
-  /* Mutations */
   const createEstado = useMutation({
     mutationFn: ({ id, form }: { id: number, form: EstadoActaForm }) => estadoActaActions.createEstadoActa(id, form),
     onSuccess: () => {
@@ -30,6 +29,6 @@ export const useMutationEstado = () => {
       console.log(error)
     }
   })
-  
+
   return { createEstado, updateEstado }
 }

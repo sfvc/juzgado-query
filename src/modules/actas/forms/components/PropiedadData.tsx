@@ -22,10 +22,10 @@ interface Props {
 }
 
 export const PropiedadData = ({ data }: Props) => {
-  const { setValue } = useFormContext<IActaForm>() 
+  const { setValue } = useFormContext<IActaForm>()
   const [propiedades, setPropiedades] = useState<IPropiedad[]>(data || [])
   const [matriculaInput, setMatriculaInput] = useState<string>('')
-  
+
   const addPropiedad = (propiedad: IPropiedad) => {
     if(!propiedad) return
     const newPropiedades = [...propiedades, propiedad]
@@ -36,7 +36,7 @@ export const PropiedadData = ({ data }: Props) => {
 
   const removePropiedad = (id: number) => {
     const propiedadesUpdate = propiedades.filter((propiedad: IPropiedad) => propiedad.id !== id)
-    
+
     setPropiedades(propiedadesUpdate)
     setValue('propiedades', propiedadesUpdate)
   }
@@ -44,7 +44,6 @@ export const PropiedadData = ({ data }: Props) => {
   const formatMatriculaSearch = (value: string) => {
     const cleanedValue = value.replace(/[^\d]/g, '')
     if (cleanedValue.length <= 10) {
-      // Formato parcial basado en la longitud
       if (cleanedValue.length > 2 && cleanedValue.length <= 4) {
         return cleanedValue.replace(/^(\d{2})(\d*)$/, '$1-$2')
       } else if (cleanedValue.length > 4 && cleanedValue.length <= 6) {
@@ -60,14 +59,14 @@ export const PropiedadData = ({ data }: Props) => {
   const handleInputChange = (value: string) => {
     setMatriculaInput(value)
   }
-  
+
   const cleanMatricula = (value: string) => value.replace(/[^\d]/g, '')
   const handleSearch = async (query: string) => {
     const cleanQuery = cleanMatricula(query)
     return propiedadActions.getPropiedadByFilter(cleanQuery)
   }
   const handleSelect = (propiedad: IPropiedad) => addPropiedad(propiedad)
-  
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center'>
@@ -86,15 +85,14 @@ export const PropiedadData = ({ data }: Props) => {
           renderItem={(item) => (
             <div><strong>{formatMatricula(item.matricula_catastral)}</strong> - {item.propietario || 'SIN PROPIETARIO'}</div>
           )}
-          renderInput={(item) => { 
-            return `${formatMatricula(item.matricula_catastral)} - ${item.propietario || 'SIN PROPIETARIO'}` 
+          renderInput={(item) => {
+            return `${formatMatricula(item.matricula_catastral)} - ${item.propietario || 'SIN PROPIETARIO'}`
           }}
         />
 
         <div className='flex items-end mb-4'><CreatePropiedad /></div>
       </div>
 
-      {/* Tabla de propiedades */}
       {(propiedades?.length > 0) &&
         <Table hoverable>
           <Table.Head>
@@ -106,9 +104,9 @@ export const PropiedadData = ({ data }: Props) => {
             {
               propiedades.map((propiedad: IPropiedad) => (
                 <Table.Row key={propiedad.id} className='bg-white dark:border-gray-700 dark:bg-gray-800 max-h-5'>
-                  <Table.Cell className='text-center dark:text-white'>{formatMatricula(propiedad.matricula_catastral)}</Table.Cell> 
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell> 
-                  <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell> 
+                  <Table.Cell className='text-center dark:text-white'>{formatMatricula(propiedad.matricula_catastral)}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{propiedad.domicilio}</Table.Cell>
+                  <Table.Cell className='text-center dark:text-white'>{propiedad.propietario}</Table.Cell>
                   <Table.Cell className='text-center flex items-center justify-center'>
                     <Tooltip content='Eliminar'>
                       <Button color='failure' onClick={() => removePropiedad(propiedad.id)} className='w-8 h-8 flex items-center justify-center'>

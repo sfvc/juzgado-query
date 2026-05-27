@@ -17,15 +17,15 @@ export interface IInhabilitado {
 }
 
 export interface FormInhabilitado {
-    persona_id: number
-    juzgado_id: number
-    entidad: string
-    fecha_desde: string
-    fecha_hasta: string
-    numero_acta: string
-    instrumento?: string
-    causa: string
-    retencion_licencia: boolean
+    persona_id: number;
+    juzgado_id: number;
+    entidad?: string;
+    fecha_desde: string;
+    fecha_hasta: string;
+    numero_acta?: string;
+    instrumento?: string;
+    causa?: string;
+    retencion_licencia: boolean;
 }
 
 interface Acta {

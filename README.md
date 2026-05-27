@@ -8,6 +8,7 @@ Permite el **registro, seguimiento y resolución de infracciones municipales**, 
 - 🍽️ **Bromatología**
 - 🏗️ **Obras públicas**
 - 🔍 **Inspecciones**
+- 👮🏻‍♀️ **Policia Ambiental**
 
 ### ✨ Funcionalidades principales
 - Administración de **actas**

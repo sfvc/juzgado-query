@@ -17,14 +17,14 @@ interface Props {
   localidad: ILocalidad | null
     onSucces: () => void
   }
-  
+
 const LocalidadForm = ({ localidad, onSucces }: Props) => {
   const { createLocalidad, updateLocalidad } = useLocalidad()
 
   const { data: departamentos, isLoading } = useQuery({
-    queryKey: ['departamentos', 'all'], 
-    queryFn: departamentoActions.getAllDepartamentos,  
-    staleTime: 1000 * 60 * 5, 
+    queryKey: ['departamentos', 'all'],
+    queryFn: departamentoActions.getAllDepartamentos,
+    staleTime: 1000 * 60 * 5,
   })
 
   const {
@@ -35,7 +35,7 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
     defaultValues: {
       nombre: localidad?.nombre || '',
       departamento_id: localidad?.departamento?.id?.toString() || '',
-      provincia_id: localidad?.provincia_id?.toString() || '3' // TODO: Eliminar provincia_id por defecto y agragr en DB
+      provincia_id: localidad?.provincia_id?.toString() || '3'
     },
     resolver: yupResolver(validationSchema)
   })
@@ -43,12 +43,12 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
   const onSubmit: SubmitHandler<FormLocalidad> = async (data: FormLocalidad) => {
     if (localidad) await updateLocalidad.mutateAsync({ id: localidad.id, localidad: data })
     else await createLocalidad.mutateAsync(data)
-  
+
     onSucces()
   }
 
   if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-4'>
@@ -59,11 +59,11 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
             value='Localidad'
           />
         </div>
-        
+
         <TextInput
           {...register('nombre')}
           placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
+          helperText={errors?.nombre && errors?.nombre?.message}
           color={errors?.nombre && 'failure'}
         />
       </div>
@@ -77,8 +77,8 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
           <strong className='obligatorio'>(*)</strong>
         </div>
 
-        <Select {...register('departamento_id')} 
-          helperText={errors?.departamento_id && errors?.departamento_id?.message} 
+        <Select {...register('departamento_id')}
+          helperText={errors?.departamento_id && errors?.departamento_id?.message}
           color={errors?.departamento_id && 'failure'}
         >
           <option value='' hidden>Seleccione un departamento</option>
@@ -93,9 +93,9 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
 
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

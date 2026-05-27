@@ -3,5 +3,5 @@ export { ActaTransito } from './pages/ActaTransito'
 export { ActaInspeccion } from './pages/ActaInspeccion'
 export { ActaBromatologia } from './pages/ActaBromatologia'
 export { ActaObrasParticulares } from './pages/ActaObrasParticulares'
-
+export { ActaPoliciaAmbiental } from './pages/ActaPoliciaAmbiental'
 export * as actaActions from './services/acta-actions'

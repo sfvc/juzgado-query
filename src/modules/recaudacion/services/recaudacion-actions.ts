@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
 

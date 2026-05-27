@@ -11,12 +11,10 @@ interface Props {
 }
 
 export const PersonaInput = ({ setValue, persona }: Props) => {
-
-  // Buscardor de titulares
   const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
   const handleSelect = (persona: IPersona) => setValue('persona_id', persona.id)
 
-  return ( 
+  return (
     <SearchInput<IPersona>
       label="Persona"
       placeholder="Buscar Persona"
@@ -25,14 +23,14 @@ export const PersonaInput = ({ setValue, persona }: Props) => {
       renderItem={(item) => (
         <div>
           {
-            (item.tipo_persona === TipoPersona.FISICA) 
+            (item.tipo_persona === TipoPersona.FISICA)
               ? <span><strong>{clearNames(item.apellido, item.nombre)}</strong> - {item.numero_documento || 'SIN DNI'}</span>
               : <span><strong>{item?.razon_social || item?.nombre}</strong> - {item.cuit || 'SIN CUIT'}</span>
           }
         </div>
       )}
-      renderInput={(item) => { 
-        return (item.tipo_persona === TipoPersona.FISICA) 
+      renderInput={(item) => {
+        return (item.tipo_persona === TipoPersona.FISICA)
           ? `${clearNames(item.apellido, item.nombre)} - ${item.numero_documento || 'SIN DOCUMENTO'}`
           : `${item?.razon_social || item?.nombre} - ${item?.cuit|| 'SIN CUIT'}` }
       }

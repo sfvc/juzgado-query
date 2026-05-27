@@ -44,9 +44,9 @@ export interface IPersona {
     cuota_alimentaria: string
     cuit: string
     sexo: string
-    cuil: number
+    cuil: string
     estado_civil: string
-    numero_documento: number
+    numero_documento: string
     domicilio: IDomicilio | null
     nacionalidad: INacionalidad | null
 }
@@ -59,15 +59,14 @@ export interface DataPersona {
     tipoSociedad: ITipoSociedad[]
 }
 
-// types.ts
 export interface PersonaFisica {
     nombre: string
     apellido: string
     tipo_documento: string
-    numero_documento: number
+    numero_documento: string
     estado_civil?: string
     fecha_nacimiento?: string
-    cuil: number
+    cuil: string
     sexo: string
     nacionalidad_id: number | null
     email: string
@@ -81,7 +80,7 @@ export interface PersonaJuridica {
     tipo_documento: string,
     email: string,
     telefono: string,
-    cuit: number
+    cuit: string
     numero_inscripcion?: string
     cuota_alimentaria: string,
     tipo_sociedad_id?: number | null

@@ -40,12 +40,11 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
     setIsOpen(true)
   }
 
-  const verifyActiveFilters = () => {
-    const hasPersona = !!filterParams.persona_id
-    setActiveFilter(hasPersona)
-  }
-
   useEffect(() => {
+    const verifyActiveFilters = () => {
+      const hasPersona = !!filterParams.persona_id
+      setActiveFilter(hasPersona)
+    }
     verifyActiveFilters()
   }, [filterParams])
 

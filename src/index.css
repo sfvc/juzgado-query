@@ -23,6 +23,7 @@
   font-weight: bold;
   text-align: center;
   background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: rainbow 3s infinite linear;
@@ -56,9 +57,6 @@ textarea {
   field-sizing: content;
 }
 
-/* Estilos del Login */
-
-/* Estilos generales para el wrapper y columnas */
 .loginwrapper {
   display: flex;
   width: 100%;
@@ -145,8 +143,8 @@ textarea {
 
 .btn-primary:hover {
   background-color: rgba(59, 130, 246, 0.7);
-  ring-color: #3b82f6;
-  ring-offset: 1px;
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 h4 {

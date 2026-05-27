@@ -23,7 +23,7 @@ interface Props {
   plantilla: IPlantilla | null
   onSucces: () => void
 }
-  
+
 const PlantillaForm = ({ plantilla, onSucces }: Props) => {
   const { createPlantilla } = usePlantilla()
   const { juzgados, isFetching } = useJuzgado()
@@ -37,7 +37,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { 
+    defaultValues: {
       denominacion: plantilla?.denominacion || '',
       juzgado_id: plantilla?.juzgado?.id || 0,
       tipo_actuacion: plantilla?.tipo_actuacion || '',
@@ -48,10 +48,10 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
 
   const onSubmit: SubmitHandler<FormPlantilla> = async (form: FormPlantilla) => {
     if (!file) return setErrorMessage('Debe seleccionar un archivo')
-    
+
     const path = await carboneActions.uploadFilePlantilla(file)
     if (!path) return toast.error('Error al subir el archivo')
-    
+
     setValue('path', path)
     await createPlantilla.mutateAsync(form)
     onSucces()
@@ -68,7 +68,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
   }
 
   if (isFetching) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} >
       <div className='mb-4'>
@@ -79,7 +79,7 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
           {...register('denominacion')}
           type='text'
           placeholder='Denominacion'
-          helperText={errors?.denominacion && errors?.denominacion?.message} 
+          helperText={errors?.denominacion && errors?.denominacion?.message}
           color={errors?.denominacion && 'failure'}
         />
       </div>
@@ -124,29 +124,28 @@ const PlantillaForm = ({ plantilla, onSucces }: Props) => {
         <div className='mb-2 block'>
           <Label htmlFor='file-upload' value='Seleccionar Plantilla' />
         </div>
-        <FileInput 
-          id='file-upload'  
-          onChange={handleFileChange} 
-          accept='.docx' 
+        <FileInput
+          id='file-upload'
+          onChange={handleFileChange}
+          accept='.docx'
           helperText={errorMessage && errorMessage}
           color={errorMessage && 'failure'}
         />
       </div>
 
-      {/* Buttons */}
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
 
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >
           {isSubmitting ? 'Guardando...' : 'Guardar'}
         </Button>
       </div>
-      
+
     </form>
   )
 }

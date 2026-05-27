@@ -5,12 +5,16 @@ import { ThemeContext } from '../context/Theme/ThemeContext'
 import { RoleGuard, UserRole } from '../auth'
 import { ToastContainer } from 'react-toastify'
 import { DropdownHeader, NavItem } from './'
+// import { useLibreDeudaPendientes } from '../modules/libreDeuda/hooks/useLibreDeudaPendientes'
+// import { useDescargoPendientes } from '../modules/descargo/hooks/useDescargoPendientes'
 import logoDark from '../assets/images/logo-capital-dark.webp'
 import logoLight from '../assets/images/logo-capital-light.webp'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
   const { theme } = useContext(ThemeContext)
+  // const { data: pendientesLibreDeuda } = useLibreDeudaPendientes()
+  // const { data: pendientesDescargo } = useDescargoPendientes()
 
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
@@ -19,17 +23,11 @@ export const Layout = () => {
       <Navbar fluid rounded className='w-10/12 m-auto sm:px-0'>
 
         <NavItem to="/">
-          <img src={ theme === 'light' ? logoLight : logoDark}
+          <img src={theme === 'light' ? logoLight : logoDark}
             alt='Logo Juzgado'
             className='w-48 md:w-40 inline-block mx-auto pointer-events-none'
           />
         </NavItem>
-
-        {/* <NavItem to="/">
-          <h1 className="text-xl font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 rounded-2xl shadow-lg transition-transform transform group-hover:scale-105">
-            Sistema de Prueba
-          </h1>
-        </NavItem> */}
 
         <div className='flex md:order-2'>
           <DropdownHeader />
@@ -48,7 +46,37 @@ export const Layout = () => {
 
           <NavItem to="/plantillas">Plantillas</NavItem>
 
-          {/* <NavItem to="/libre-deuda">Libre Deuda</NavItem> */}
+          {/* <NavItem to="/descargo">
+            <span className="flex items-center justify-center gap-2 w-full">
+              Descargo
+
+              {pendientesDescargo && pendientesDescargo > 0 && (
+                <span
+                  className="flex items-center justify-center
+                  bg-red-600 text-white text-xs font-semibold
+                  rounded-full w-5 h-5"
+                >
+                  {pendientesDescargo}
+                </span>
+              )}
+            </span>
+          </NavItem> */}
+
+          {/* <NavItem to="/libre-deuda">
+            <span className="flex items-center justify-center gap-2 w-full">
+              Libre Deuda
+
+              {pendientesLibreDeuda && pendientesLibreDeuda > 0 && (
+                <span
+                  className="flex items-center justify-center
+                  bg-red-600 text-white text-xs font-semibold
+                  rounded-full w-5 h-5"
+                >
+                  {pendientesLibreDeuda}
+                </span>
+              )}
+            </span>
+          </NavItem> */}
 
           <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             <MegaMenu.Dropdown toggle={<>Parámetros</>}>

@@ -13,7 +13,6 @@ export const Acta = () => {
   return (
     <React.Fragment>
       <div>
-        {/* Creacion de Actas */}
         <div className='titulos rounded-md py-2 text-center mb-2'>
           <h3 className='text-xl font-semibold text-white'>Agregar Acta</h3>
         </div>
@@ -28,7 +27,7 @@ export const Acta = () => {
             </div>
 
             <div className='flex justify-between gap-2'>
-              <Select className='flex-1' name='create_acta' 
+              <Select className='flex-1' name='create_acta'
                 onChange={(e) => setTipoActa((e.target.value).toLocaleLowerCase().replace(/\s+/g, ''))}
               >
                 <option value='' hidden>Seleccione el tipo de acta</option>
@@ -47,7 +46,6 @@ export const Acta = () => {
         </div>
       </div>
 
-      {/* Filtro de actas */}
       <ActaFilter />
 
     </React.Fragment>

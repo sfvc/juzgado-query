@@ -32,7 +32,6 @@ export const ObrasParticularesForm = ({ acta }: Props) => {
       calle: acta?.calle || '',
       observaciones: acta?.observaciones || '',
       tipo_acta: ACTAS.OBRAS_PARTICULARES,
-
       infractores: acta?.infractores || [],
       infracciones_cometidas: acta?.infracciones_cometidas || [],
       propiedades: acta?.propiedades || [],
@@ -59,10 +58,10 @@ export const ObrasParticularesForm = ({ acta }: Props) => {
 
           <div className='flex justify-end gap-4'>
             <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
-            <Button 
-              type='submit' 
-              className='px-4' 
-              disabled={methods.formState.isSubmitting} 
+            <Button
+              type='submit'
+              className='px-4'
+              disabled={methods.formState.isSubmitting}
               isProcessing={methods.formState.isSubmitting}
             >
               Finalizar

@@ -54,7 +54,7 @@ export interface IVehiculo {
     deleted_at: null
     titular: Titular | null
     marca: Marca
-    tipo: Tipo 
+    tipo: Tipo
     color: Color
     modelo: string
     numero_taxi_remis: string

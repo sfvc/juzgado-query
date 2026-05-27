@@ -1,5 +1,6 @@
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
+import { IAuditoria } from '../interfaces'
 
 export const getAuditoriaFiltrada = async (filters: object) => {
   try {
@@ -7,10 +8,18 @@ export const getAuditoriaFiltrada = async (filters: object) => {
 
     const response = await apiJuzgado.get('/auditoria/filter', { params })
     const { data, meta } = response.data
+
     return { data, meta }
   } catch (error) {
     console.error('Error fetching auditoria:', error)
-    return []
+    return {
+      data: [] as IAuditoria[],
+      meta: {
+        current_page: 1,
+        last_page: 1,
+        total: 0,
+        per_page: 10
+      }
+    }
   }
 }
-

@@ -17,7 +17,7 @@ export const formatPersona = (
       nombreApellido: clearNames(infractor?.apellido, infractor?.nombre),
       documento: infractor?.documento || infractor?.cuit || '',
       tipoActa: antecedente?.tipo_acta || '',
-      dominio: antecedente.vehiculo?.dominio || '',
+      dominio: antecedente.vehiculo?.[0]?.dominio || '',
       juzgadoUsuarioNumero: user?.juzgado?.id || '',
       juzgadoUsuario: user?.nombre || '',
       juzgadoFecha: fechaFormateada || ''

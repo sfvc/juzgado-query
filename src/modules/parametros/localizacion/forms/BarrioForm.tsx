@@ -16,13 +16,11 @@ interface Props {
     barrio: IBarrio | null
     onSucces: () => void
   }
-  
+
 const BarrioForm = ({ barrio, onSucces }: Props) => {
   const { createBarrio, updateBarrio } = useBarrio()
-
-  // Buscardor de localidades
+  
   const handleSearch = async (query: string) => localidadActions.getLocalidadesByFilter(query)
-
   const handleSelect = (localidad: ILocalidad) => setValue('localidad_id', localidad.id.toString())
 
   const {
@@ -41,10 +39,10 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
   const onSubmit: SubmitHandler<FormBarrio> = async (data: FormBarrio) => {
     if (barrio) await updateBarrio.mutateAsync({ id: barrio.id, barrio: data })
     else await createBarrio.mutateAsync(data)
-  
+
     onSucces()
   }
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-4'>
@@ -55,11 +53,11 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
             value='Barrio'
           />
         </div>
-        
+
         <TextInput
           {...register('nombre')}
           placeholder='Nombre'
-          helperText={errors?.nombre && errors?.nombre?.message} 
+          helperText={errors?.nombre && errors?.nombre?.message}
           color={errors?.nombre && 'failure'}
         />
       </div>
@@ -77,9 +75,9 @@ const BarrioForm = ({ barrio, onSucces }: Props) => {
 
       <div className='flex justify-end gap-2'>
         <Button color="failure" onClick={onSucces}>Cancelar</Button>
-        <Button 
+        <Button
           size='md'
-          type='submit' 
+          type='submit'
           disabled={isSubmitting}
           isProcessing={isSubmitting}
         >

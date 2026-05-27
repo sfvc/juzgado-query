@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Accordion, Label, Select, TextInput } from 'flowbite-react'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { ActaFilterForm, DataFilters, Prioridad, EstadoActa } from '../interfaces'
@@ -17,13 +17,12 @@ interface Props {
 export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) => {
   const { infraccionStorage, setInfraccionStorage } = useStorageFilter()
 
-  const onFocusInfraccionInput = () => {
+  const onFocusInfraccionInput = useCallback(() => {
     localStorage.removeItem('infraccion')
     setInfraccionStorage('')
     setValue('articulo_id', '')
-  }
+  }, [setInfraccionStorage, setValue])
 
-  // Buscardor de Articulos
   const searchArticulo = async (query: string) => articuloActions.getArticulosByFilter(query)
   const selectArticulo = (articulo: IArticulo) => {
     setValue('articulo_id', articulo.id.toString())
@@ -34,7 +33,7 @@ export const AdvanceFilter = ({ register, setValue, resetForm, data }: Props) =>
     if(!resetForm) return
 
     onFocusInfraccionInput()
-  }, [resetForm])
+  }, [resetForm, onFocusInfraccionInput])
 
   return (
     <Accordion className='my-4' collapseAll>

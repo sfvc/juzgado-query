@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useQuery, useQueryClient, QueryKey } from '@tanstack/react-query'
 import { Pagination } from '../interfaces'
 
-// TODO: Crear interfaces globales
 interface Meta {
   current_page: number
   last_page: number
@@ -12,7 +11,7 @@ interface Meta {
 interface Response<T> {
   data: T[]
   meta?: Meta
-  estadisticas?: any
+  estadisticas?: Record<string, unknown>
 }
 
 interface Page {

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -39,8 +39,8 @@ export const useActuacion= () => {
 
   // Elimnar notificación del historial de notificaciones
   const deleteActuacionHistory = useMutation({
-    mutationFn: ({ id }: {id: number, queryKey?: any[]}) => actuacionActions.deleteActuacionHistory(id),
-    onSuccess: (_, __, context: any) => {
+    mutationFn: ({ id }: {id: number, queryKey?: (string | number | object)[]}) => actuacionActions.deleteActuacionHistory(id),
+    onSuccess: (_, __, context: { queryKey?: (string | number | object)[] } | undefined) => {
       toast.success('Registro eliminado del historial')
 
       queryClient.invalidateQueries({ queryKey: context?.queryKey })

@@ -143,7 +143,7 @@ export const InfractorData = ({ data }: Props) => {
       )
       setShowWarning(hayPersonaFisicaSinCuil)
 
-      const hayCuotaAlimentaria = data.some((p) => p.cuota_alimentaria === true)
+      const hayCuotaAlimentaria = data.some((p) => !!p.cuota_alimentaria)
       setShowCuotaWarning(hayCuotaAlimentaria)
     }
   }, [data])

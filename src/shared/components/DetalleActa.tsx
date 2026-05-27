@@ -11,7 +11,6 @@ interface Props {
 }
 export const DetalleActa = ({ acta, title }: Props) => {
 
-  // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<number | null>(null)
   const [showCuotaWarning, setShowCuotaWarning] = useState(false)

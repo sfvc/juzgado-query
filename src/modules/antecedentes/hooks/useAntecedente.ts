@@ -12,14 +12,14 @@ const initialValues: FilterParams = {
   page: 1
 }
 
-export const useAntecedente = () => {
+export const useAntecedente = (personaId: number) => {
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: antecedente, isFetching, isLoading } =
     usePagination<IAntecedente, FilterParams>({
-      queryKey: ['antecedente', filterParams],
+      queryKey: ['antecedente', personaId, filterParams],
       fetchData: () =>
-        antecedenteActions.getAntecedentes(filterParams),
+        antecedenteActions.getAntecedentes(personaId),
       filterParams: filterParams
     })
 

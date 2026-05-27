@@ -1,10 +1,26 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from 'react'
 import { Card, Table, Button } from 'flowbite-react'
 import { CambioEstado, IDashboard } from '../interfaces'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardActions } from '..'
 import { Loading } from '../../../shared'
+
+interface Login {
+  username: string
+  nombre: string
+  juzgado: string
+  created_at: string
+}
+
+type UsuarioAgrupado = Login & {
+  horarios: string[]
+}
+
+type SesionesPorJuzgado = Record<
+  string,
+  Record<string, UsuarioAgrupado>
+>
 
 export const Dashboard = () => {
   const { data, isLoading } = useQuery<IDashboard>({
@@ -19,16 +35,23 @@ export const Dashboard = () => {
     setActiveSection(prev => (prev === section ? null : section))
   }
 
-  const sesionesPorJuzgado = data?.sesiones?.users?.reduce((acc, login) => {
+  const sesionesPorJuzgado: SesionesPorJuzgado =
+  data?.sesiones?.users?.reduce<SesionesPorJuzgado>((acc, login) => {
     if (!acc[login.juzgado]) {
       acc[login.juzgado] = {}
     }
+
     if (!acc[login.juzgado][login.username]) {
-      acc[login.juzgado][login.username] = { ...login, horarios: [] }
+      acc[login.juzgado][login.username] = {
+        ...login,
+        horarios: [],
+      }
     }
+
     acc[login.juzgado][login.username].horarios.push(login.created_at)
+
     return acc
-  }, {})
+  }, {} as SesionesPorJuzgado) ?? {}
 
   if (isLoading) return <Loading />
 
@@ -105,12 +128,12 @@ export const Dashboard = () => {
                       <Table.HeadCell>Horarios</Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y dark:bg-gray-800">
-                      {Object.values(usuarios).map((usuario: any) => (
+                      {Object.values(usuarios).map((usuario: UsuarioAgrupado) => (
                         <Table.Row key={usuario.username}>
                           <Table.Cell>{usuario.username}</Table.Cell>
                           <Table.Cell>{usuario.nombre}</Table.Cell>
                           <Table.Cell>
-                            {usuario.horarios.map((hora, idx) => (
+                            {usuario.horarios.map((hora: string, idx: number) => (
                               <div key={idx}>{hora}</div>
                             ))}
                           </Table.Cell>
@@ -152,18 +175,6 @@ export const Dashboard = () => {
           </Table>
         </section>
       )}
-
-      {/* Sección de Recaudación */}
-      {/* {activeSection === 'Recaudación' && (
-        <section className="mt-6 flex justify-center">
-          <iframe
-            src="https://dashboard.apps.cc.gob.ar/proyectos/juzgado-de-faltas"
-            width="1600"
-            height="2200"
-            title="Recaudación"
-          ></iframe>
-        </section>
-      )} */}
     </div>
   )
 }

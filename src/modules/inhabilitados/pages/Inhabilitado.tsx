@@ -11,15 +11,13 @@ import { RoleGuard, UserRole } from '../../../auth'
 import { useModals } from '../../../shared/hooks/useModals'
 import type { Column } from '../../../shared/interfaces'
 import type { IInhabilitado } from '../interfaces'
-// import { carboneActions } from '../../carbone'
-// import { formatReport } from '../helpers/formatReport'
-// import { useRecaudacion } from '../../recaudacion/hooks/useRecaudacion'
 
 const colums: Column[] = [
   { key: 'nombre', label: 'Nombre' },
   { key: 'documento', label: 'Dni' },
   { key: 'numero_acta', label: 'Número de Acta' },
   { key: 'retencion_licencia', label: '¿Se retuvo licencia?' },
+  { key: 'fecha_desde', label: 'Fecha de Inhabilitación' },
   { key: 'periodo_inhabilitacion', label: 'Periodo de inhabilitación' },
   { key: 'tiempo_tanscurrido', label: 'Tiempo transcurrido' },
   { key: 'estado', label: 'Estado' },
@@ -34,33 +32,14 @@ export const Inhabilitado = () => {
     closeModal
   } = useModals()
   const [activeItem, setActiveItem] = useState<IInhabilitado | null>(null)
-  // const useAction = useLoading()
-  // const { recaudacionFiltrada } = useRecaudacion()
-  // const INHABILITADO_TEMPLATE: string = 'inhabilitado.xlsx'
-
-  // const renderInhabilitados = async () => {
-  //   useAction.actionFn(async () => {
-  //     const form = formatReport(recaudacionFiltrada)
-
-  //     const data = {
-  //       convertTo: 'pdf',
-  //       reportName: 'INHABILITADO.pdf',
-  //       data: {
-  //         lista: form
-  //       },
-  //       template: INHABILITADO_TEMPLATE
-  //     }
-
-  //     await carboneActions.showFilePDF(data)
-  //   })
-  // }
 
   const {
     inhabilitados,
     pagination,
     isFetching,
     updateFilter,
-    deleteInhabilitado
+    deleteInhabilitado,
+    personaNoInhabilitada
   } = useInhabilitado()
 
   /* Modal crear/editar */
@@ -107,14 +86,68 @@ export const Inhabilitado = () => {
     closeModal('history')
   }
 
+  const formatDateToDDMMYYYY = (dateString?: string | null): string => {
+    if (!dateString) return '-'
+
+    const [year, month, day] = dateString.split('T')[0].split('-')
+    return `${day}/${month}/${year}`
+  }
+
+  const calcularTiempoTranscurrido = (fechaDesde?: string | null) => {
+    if (!fechaDesde) return '-'
+
+    const inicio = new Date(fechaDesde)
+    const hoy = new Date()
+
+    if (hoy < inicio) return '0 días'
+
+    let años = hoy.getFullYear() - inicio.getFullYear()
+    let meses = hoy.getMonth() - inicio.getMonth()
+    let dias = hoy.getDate() - inicio.getDate()
+
+    if (dias < 0) {
+      meses--
+      const ultimoMes = new Date(hoy.getFullYear(), hoy.getMonth(), 0)
+      dias += ultimoMes.getDate()
+    }
+
+    if (meses < 0) {
+      años--
+      meses += 12
+    }
+
+    let texto = ''
+
+    if (años > 0) {
+      texto += `${años} año${años > 1 ? 's ' : ' '}`
+    }
+
+    if (meses > 0) {
+      texto += `${meses} mes${meses > 1 ? 'es ' : ' '}`
+    }
+
+    if (dias > 0) {
+      texto += `${texto ? 'y ' : ''}${dias} día${dias > 1 ? 's' : ''}`
+    }
+
+    return texto || '0 días'
+  }
+
+  const corregirPlural = (texto?: number | null) => {
+    if (!texto) return '-'
+
+    return texto
+      .toString()
+      .replace(/^1 meses$/, '1 mes')
+      .replace(/^1 días$/, '1 día')
+      .replace(' 1 meses', ' 1 mes')
+      .replace(' 1 días', ' 1 día')
+  }
+
   return (
     <React.Fragment>
       <div className='md:flex md:justify-between mb-4'>
         <h1 className='text-2xl font-semibold items-center dark:text-white mb-4 md:mb-0'>Listado de Inhabilitados</h1>
-
-        {/* <Button color='warning' onClick={renderInhabilitados} isProcessing={useAction.loading} disabled={useAction.loading}>
-          <icons.Print />&#160; Imprimir
-        </Button> */}
 
         <div className='flex flex-col justify-start'>
           <div className='flex md:justify-end gap-4'>
@@ -148,13 +181,14 @@ export const Inhabilitado = () => {
                       <Table.Cell className='text-center dark:text-white'>
                         {inhabilitado?.acta?.retencion_licencia === 1 ? 'Sí' : 'No'}
                       </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{inhabilitado?.periodo_inhabilitacion_dias || '-'}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
-                        {
-                          inhabilitado?.tiempo_transcurrido_dias
-                            ? `${inhabilitado?.tiempo_transcurrido_dias}`
-                            : '-'
-                        }
+                        {formatDateToDDMMYYYY(inhabilitado?.fecha_desde)}
+                      </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        {corregirPlural(inhabilitado?.periodo_inhabilitacion_dias)}
+                      </Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>
+                        {calcularTiempoTranscurrido(inhabilitado?.fecha_desde)}
                       </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>
                         <span
@@ -188,7 +222,7 @@ export const Inhabilitado = () => {
                           </Button>
                         </Tooltip>
 
-                        <RoleGuard roles={[UserRole.ADMIN]}>
+                        <RoleGuard roles={[UserRole.ADMIN, UserRole.SECRETARIO, UserRole.JUEZ, UserRole.JEFE]}>
                           <Tooltip content='Eliminar'>
                             <Button color='failure' onClick={() => onOpenDeleteModal(inhabilitado)} className='w-8 h-8 flex items-center justify-center'>
                               <icons.Trash />
@@ -198,7 +232,27 @@ export const Inhabilitado = () => {
                       </Table.Cell>
                     </Table.Row>
                   )))
-                  : (<tr><td colSpan={colums.length} className='text-center py-4 dark:bg-gray-800'>No se encontraron resultados</td></tr>)
+                  : personaNoInhabilitada
+                    ? (
+                      <Table.Row className='bg-green-50 dark:bg-green-950/30'>
+                        <Table.Cell colSpan={colums.length} className='text-center py-6 text-green-800 dark:text-green-300 font-medium'>
+                          <div className='flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-6 text-base'>
+                            <span><strong>Nombre Completo:</strong> {clearNames(personaNoInhabilitada.nombre_completo)}</span>
+                            <span><strong>DNI:</strong> {personaNoInhabilitada.dni}</span>
+                            <span className='px-3 py-1 bg-green-600 text-white font-semibold rounded-full text-xs uppercase shadow-sm'>
+                              No se encuentra inhabilitado
+                            </span>
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                    : (
+                      <Table.Row>
+                        <Table.Cell colSpan={colums.length} className='text-center py-4 dark:bg-gray-800 dark:text-white'>
+                          No se encontraron resultados
+                        </Table.Cell>
+                      </Table.Row>
+                    )
             }
           </Table.Body>
         </Table>

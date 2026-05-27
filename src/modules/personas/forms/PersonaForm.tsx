@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { Button, Label, Select, Spinner } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
@@ -34,7 +35,7 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
 
   const methods = useForm<FormValues>({
     defaultValues: setDefaulValues(persona, tipoPersona),
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema as any)
   })
 
   const changeTypePersona = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -87,15 +88,17 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
 
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {
+          {data ? (
             tipoPersona === TipoPersona.FISICA
-              ? <FisicaForm data={ data } />
-              : <JuridicaForm data={ data } />
-          }
+              ? <FisicaForm data={data} />
+              : <JuridicaForm data={data} />
+          ) : (
+            <Spinner />
+          )}
 
           {
             <DomicilioForm
-              domicilio={persona?.domicilio}
+              domicilio={persona?.domicilio ?? null}
             />
           }
 

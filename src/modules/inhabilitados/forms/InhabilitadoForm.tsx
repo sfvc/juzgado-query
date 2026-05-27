@@ -18,29 +18,28 @@ const validationSchema = yup.object().shape({
     .transform(value => (isNaN(value) || !value) ? null : value)
     .required('La persona es requerida.'),
 
-  juzgado_id: yup.mixed().required('El juzgado es requerido'),
+  // Cambiado a number para coincidir con FormInhabilitado
+  juzgado_id: yup.number().required('El juzgado es requerido'),
 
   entidad: yup.string().when('juzgado_id', {
-    is: '3',
+    is: 3, // Comparación numérica
     then: (schema) => schema.required('Debe ingresar la entidad'),
     otherwise: (schema) => schema.notRequired()
   }),
 
-  fecha_desde: yup
-    .string()
-    .required('La fecha de inhabilitación es requerida'),
+  fecha_desde: yup.string().required('La fecha de inhabilitación es requerida'),
 
   fecha_hasta: yup
     .string()
     .required('La fecha de vencimiento requerida')
-    .test('fecha-desde-menor-o-igual', 'La fecha de inhabilitación no puede ser mayor que la fecha de vencimiento', function (fecha_hasta) {
+    .test('fecha-desde-menor-o-igual', 'La fecha de inhabilitación no puede ser mayor...', function (fecha_hasta) {
       const { fecha_desde } = this.parent
       if (!fecha_desde || !fecha_hasta) return true
       return new Date(fecha_desde) <= new Date(fecha_hasta)
     }),
 
   numero_acta: yup.string().when('juzgado_id', {
-    is: (val: string) => val !== '3',
+    is: (val: number) => val !== 3,
     then: (schema) => schema.required('El número del acta es requerido'),
     otherwise: (schema) => schema.notRequired()
   }),
@@ -48,12 +47,13 @@ const validationSchema = yup.object().shape({
   instrumento: yup.string(),
 
   causa: yup.string().when('juzgado_id', {
-    is: (val: string) => val !== '3',
+    is: (val: number) => val !== 3,
     then: (schema) => schema.required('La causa es requerida'),
     otherwise: (schema) => schema.notRequired()
   }),
-})
 
+  retencion_licencia: yup.boolean().required('Este campo es requerido')
+})
 
 interface Props {
   inhabilitado: IInhabilitado | null
@@ -104,7 +104,7 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
 
   useEffect(() => {
     if (inhabilitado?.acta?.retencion_licencia !== undefined) {
-      setValue('retencion_licencia', String(inhabilitado.acta.retencion_licencia))
+      setValue('retencion_licencia', Boolean(inhabilitado.acta.retencion_licencia))
     }
   }, [inhabilitado, setValue])
 
@@ -155,10 +155,10 @@ const InhabilitadoForm = ({ inhabilitado, onSucces }: Props) => {
           <Select
             {...register('juzgado_id')}
             onChange={(e) => {
-              const value = e.target.value
+              const value = Number(e.target.value)
               setValue('juzgado_id', value)
-              setMostrarEntidad(value === '3')
-              setMostrarCausa(value !== '3')
+              setMostrarEntidad(value === 3)
+              setMostrarCausa(value !== 3)
             }}
             helperText={errors?.juzgado_id?.message}
             color={errors?.juzgado_id && 'failure'}

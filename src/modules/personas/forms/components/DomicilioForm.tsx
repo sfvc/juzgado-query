@@ -15,7 +15,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
   const { register, setValue, formState: { errors } } = useFormContext<Domicilio>()
   const { actionFn, loading } = useLoading()
 
-  const { 
+  const {
     paises,
     provincias,
     departamentos,
@@ -25,18 +25,18 @@ export const DomicilioForm = ({ domicilio }: Props) => {
     getDepartamentosByProvincia,
   } = useDomicilio()
 
-  const initLoading = async () => {
-    if (!domicilio) return
-
-    actionFn(async () => {
-      await getProvinciasByPais(domicilio?.pais_id)
-      await getDepartamentosByProvincia(domicilio?.provincia_id)
-    })
-  }
-
   useEffect(() => {
+    const initLoading = async () => {
+      if (!domicilio) return
+
+      actionFn(async () => {
+        await getProvinciasByPais(domicilio?.pais_id)
+        await getDepartamentosByProvincia(domicilio?.provincia_id)
+      })
+    }
+
     initLoading()
-  }, [])
+  }, [domicilio, actionFn, getProvinciasByPais, getDepartamentosByProvincia])
 
   return (
     <div>
@@ -56,9 +56,9 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                   <Label htmlFor='pais_id' value='Pais' />
                 </div>
 
-                <Select 
+                <Select
                   {...register('pais_id', { valueAsNumber: true })}
-                  helperText={errors?.pais_id && errors?.pais_id?.message} 
+                  helperText={errors?.pais_id && errors?.pais_id?.message}
                   color={errors?.pais_id && 'failure'}
                   onChange={(e) => getProvinciasByPais(+e.target.value)}
                 >
@@ -76,9 +76,9 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                   <Label htmlFor='provincia_id' value='Provincia' />
                 </div>
 
-                <Select 
+                <Select
                   {...register('provincia_id', { valueAsNumber: true })}
-                  helperText={errors?.provincia_id && errors?.provincia_id?.message} 
+                  helperText={errors?.provincia_id && errors?.provincia_id?.message}
                   color={errors?.provincia_id && 'failure'}
                   onChange={(e) => getDepartamentosByProvincia(+e.target.value)}
                   disabled={provincias.length === 0}
@@ -97,9 +97,9 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                   <Label htmlFor='departamento_id' value='Departamento' />
                 </div>
 
-                <Select 
+                <Select
                   {...register('departamento_id', { valueAsNumber: true })}
-                  helperText={errors?.departamento_id && errors?.departamento_id?.message} 
+                  helperText={errors?.departamento_id && errors?.departamento_id?.message}
                   color={errors?.departamento_id && 'failure'}
                   disabled={departamentos.length === 0}
                 >
@@ -144,7 +144,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                 </div>
                 <TextInput
                   {...register('calle')}
-                  helperText={errors?.calle && errors?.calle?.message} 
+                  helperText={errors?.calle && errors?.calle?.message}
                   color={errors?.calle && 'failure'}
                   placeholder='Calle'
                 />
@@ -156,7 +156,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                 </div>
                 <TextInput
                   {...register('numero')}
-                  helperText={errors?.numero && errors?.numero?.message} 
+                  helperText={errors?.numero && errors?.numero?.message}
                   color={errors?.numero && 'failure'}
                   type='number'
                   placeholder='Numero'
@@ -169,7 +169,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                 </div>
                 <TextInput
                   {...register('lote_dpto')}
-                  helperText={errors?.lote_dpto && errors?.lote_dpto?.message} 
+                  helperText={errors?.lote_dpto && errors?.lote_dpto?.message}
                   color={errors?.lote_dpto && 'failure'}
                   placeholder='Departamento'
                 />
@@ -181,7 +181,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
                 </div>
                 <TextInput
                   {...register('manzana_piso')}
-                  helperText={errors?.manzana_piso && errors?.manzana_piso?.message} 
+                  helperText={errors?.manzana_piso && errors?.manzana_piso?.message}
                   color={errors?.manzana_piso && 'failure'}
                   placeholder='Manzana'
                 />

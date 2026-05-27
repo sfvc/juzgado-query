@@ -38,8 +38,6 @@ export const deleteNotificacion = async (historyId: number) => {
   await apiJuzgado.delete(`notificacion-detalle/${historyId}`)
 }
 
-// TODO: Agregar esta funcion al crear un plantilla
-// Función para quitar la extensión del archivo y limpiar el nombre
 export const cleanFileName = (fileName: string): string => {
   // Quitar la extensión del archivo
   const lastDotIndex = fileName.lastIndexOf('.')

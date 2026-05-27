@@ -16,7 +16,7 @@ const colums: Column[] = [
   { key: 'observaciones', label: 'observaciones' },
   { key: 'acciones', label: 'Acciones' }
 ]
-  
+
 export const EstadoActa = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -26,7 +26,6 @@ export const EstadoActa = () => {
   const [activeItem, setActiveItem] = useState<IEstadoActa | null>(null)
   const { estados, isFetching, isError } = useEstadoActa(actaId)
 
-  /* Modal cambiar estado */
   const onCloseModal = () => {
     setOpenModal(false)
     if (activeItem) setActiveItem(null)
@@ -88,11 +87,10 @@ export const EstadoActa = () => {
         </Table>
       </div>
 
-      {/* Modal cambiar estado */} 
       <Modal show={openModal} onClose={onCloseModal} size='4xl'>
         <Modal.Header>Modificar estado</Modal.Header>
         <Modal.Body>
-          <EstadoForm 
+          <EstadoForm
             actaId={actaId}
             estado={activeItem}
             onSucces={onCloseModal}

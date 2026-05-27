@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,14 +16,14 @@ import { toast } from 'react-toastify'
 
 const DISCOUNT = 40
 const SURCHARGE = 0
-const SIN_VALOR = 100
+const SIN_VALOR_INITIAL = false
 
-const initialValues = {
+const initialValues: ITotal = {
   sub_total: 0,
   total: 0,
   descuento: 0,
   recargo: 0,
-  sinValor: SIN_VALOR,
+  sinValor: SIN_VALOR_INITIAL,
   observacion: '',
   observaciones: ''
 }
@@ -32,7 +33,7 @@ interface Props {
   actas: number[]
   infracciones: InfraccionesCometida[]
   sinValor?: boolean
-  observacion?: string 
+  observacion?: string
 }
 
 export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }: Props) => {
@@ -91,7 +92,7 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
       descuento: 0,
       recargo: 0
     }))
-  }  
+  }
 
   const calculateTotal = () => {
     const conceptoTotal = entries.reduce((acc, concepto) => acc + (concepto.monto || 0), 0)
@@ -108,10 +109,10 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
         descuento: 0,
       }))
     }
-  
+
     setFormState((prev) => {
       const nuevoSubTotal = infracciones.reduce((acc, infraccion) => acc + (infraccion.importe || 0), 0)
-      const nuevoTotal = 
+      const nuevoTotal =
        action === 'DESCUENTO'
          ? Number((nuevoSubTotal - ((nuevoSubTotal * descuento) / 100)).toFixed(1))
          : action === 'RECARGO'
@@ -128,17 +129,17 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
 
   const onSubmit = async () => {
     const invalidConcepto = entries.some(concepto => !concepto || !concepto.concepto || concepto.monto === null)
-  
+
     if (invalidConcepto) {
       toast.error('Terminá de asignar el concepto.')
       return
     }
-  
+
     if (!user) {
       console.error('No se encontro el usuario.')
       return
     }
-  
+
     const form: ISentenciaForm & { observacion: string, sinValor: boolean } = {
       sub_total,
       total,
@@ -153,19 +154,19 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
       observaciones: action !== ACTIONS.SIN_VALOR ? observaciones.trim() : '',
       observacion: action === ACTIONS.SIN_VALOR ? observaciones.trim() : '',
       ...(actas.length === 1 && { infracciones })
-    }      
-  
+    }
+
     await createSentencia.mutateAsync(form)
   }
 
   useEffect(() => {
     calculateTotal()
   }, [infracciones, entries, action, descuento, recargo])
-    
+
   return (
     <React.Fragment>
       <ConceptoForm entries={entries} setEntries={setEntries} />
-      
+
       <div className='titulos rounded-md py-2 text-center my-6'>
         <h3 className='text-xl font-semibold text-white'>Totales</h3>
       </div>
@@ -226,8 +227,8 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
 
           <div className='relative w-full'>
             <Textarea
-              className='block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 
-                focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 
+              className='block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900
+                focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400
                 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-lg'
               name='observaciones'
               placeholder='Observaciones'
@@ -242,10 +243,10 @@ export const TotalForm = ({ infracciones, plantillaId, actas, observacion = '' }
         <Link to={ -1 as unknown as string }>
           <Button type='button' color='failure' className='w-auto h-auto'>Cancelar</Button>
         </Link>
-        <Button 
-          type='button' 
-          className='w-auto h-auto ml-4' 
-          onClick={onSubmit} 
+        <Button
+          type='button'
+          className='w-auto h-auto ml-4'
+          onClick={onSubmit}
           isProcessing={createSentencia.isPending}
           disabled={createSentencia.isPending}
         >

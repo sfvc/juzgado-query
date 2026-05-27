@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
@@ -7,12 +6,12 @@ import type { IProvincia, FormProvincia } from '../interfaces/localizacion'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 
 interface FilterParams {
-  query: string, 
+  query: string,
   page: number
 }
 
 const initialValues = {
-  query: '', 
+  query: '',
   page: 1
 }
 

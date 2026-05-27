@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Button, Modal, Table, Tooltip } from 'flowbite-react'
@@ -31,7 +32,7 @@ export const SentenciaMultiple = () => {
   const editUnidad = (uuid: string) => {
     const infraccion = infracciones.find((articulo: Articulo) => articulo.uuid === uuid)
     if(!infraccion) return
-  
+
     setActiveItem(infraccion)
     onOpenModal('create', infraccion)
   }
@@ -48,17 +49,17 @@ export const SentenciaMultiple = () => {
         }
         return infraccion
       })
-  
+
       return infracciones
     })
   }
 
   const generateUUID = () => {
     return `uuid-${Date.now()}-${Math.random().toString(16).slice(2)}`
-  }  
-  
+  }
+
   const handleDelete = () => {
-    if(!activeItem) return 
+    if(!activeItem) return
 
     const updateInfracciones = infracciones.filter((articulo) => articulo.uuid !== activeItem.uuid)
     setInfracciones(updateInfracciones)
@@ -69,7 +70,7 @@ export const SentenciaMultiple = () => {
     setOpenModal((prev) => { return {...prev, [action]: false} })
     setActiveItem(null)
   }
-  
+
   const onOpenModal = (action: string, item: Articulo) => {
     setOpenModal((prev) => { return {...prev, [action]: true} })
     setActiveItem(item)
@@ -82,19 +83,19 @@ export const SentenciaMultiple = () => {
         actas: acumuladas.actas,
         tipo_actuacion: acumuladas.tipo_actuacion
       }
-  
+
       const response = await apiJuzgado.post('/actas-acumuladas', form)
       const { data }: AcumuladasResponse = response.data
       setUnidadMulta(+data.unidad_multa_actual)
-  
+
       if (data?.actas) {
         data.actas.forEach((acta: Acta) => {
           acta?.articulos.forEach((articulo: Articulo) => {
             setInfracciones((prev) => {
-              return [ 
-                ...prev, 
+              return [
+                ...prev,
                 {
-                  ...articulo, 
+                  ...articulo,
                   uuid: generateUUID(),
                   numero_acta_articulo: acta.numero_acta,
                   precio_unidad_articulo: +acta?.unidad_multa || unidadMulta, // Coloca la unidad de multa del acta, si no tiene pone la unidad la actual
@@ -108,20 +109,20 @@ export const SentenciaMultiple = () => {
       }
 
     })
-  } 
+  }
 
   useEffect(() => {
     getActasAcumaladas()
   }, [])
 
   if (loading) return <LoadingOverlay />
-  
+
   return (
     <React.Fragment>
       <div className='titulos rounded-md py-2 text-center mb-6'>
         <h3 className='text-xl font-semibold text-white'>Agregar Resolución</h3>
       </div>
-  
+
       <div className='overflow-x-auto'>
         <Table>
           <Table.Head>
@@ -144,14 +145,14 @@ export const SentenciaMultiple = () => {
                     <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                       <Tooltip content='Editar'>
                         <Button
-                          color='success' 
+                          color='success'
                           className='w-8 h-8 flex items-center justify-center'
                           onClick={() => editUnidad(infraccion.uuid)}
                         >
                           <icons.Pencil />
                         </Button>
                       </Tooltip>
-    
+
                       <Tooltip content='Eliminar'>
                         <Button color='failure' className='w-8 h-8 flex items-center justify-center'
                           onClick={() => onOpenModal('delete', infraccion)}
@@ -181,9 +182,9 @@ export const SentenciaMultiple = () => {
           />
         </Modal.Body>
       </Modal>
-      
+
       {/* Modal para eliminar articulo de listado */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={openModal.delete} onClose={() => onCloseModal('delete')}>
           <Modal.Header>Eliminar articulo</Modal.Header>
           <Modal.Body>
@@ -192,7 +193,7 @@ export const SentenciaMultiple = () => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar el articulos del listado?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={() => onCloseModal('delete')}>Cancelar</Button>
                 <Button color="failure" onClick={handleDelete}> Sí, eliminar</Button>
@@ -201,7 +202,7 @@ export const SentenciaMultiple = () => {
           </Modal.Body>
         </Modal>
       }
-    
+
     </React.Fragment>
   )
 }

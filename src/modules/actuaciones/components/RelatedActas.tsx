@@ -21,7 +21,7 @@ export const RelatedActas = ({acta}: {acta: ActuacionActa}) => {
     if (!selectedActas.length) {
       setDefalutSeleted(acta.id)
     }
-  }, [])
+  }, [selectedActas.length, setDefalutSeleted, acta.id])
 
   return (
     <div className='my-8'>

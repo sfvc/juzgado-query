@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { useAuth } from '../../auth'
 import { AuthContext } from './AuthContext'
@@ -15,7 +16,6 @@ export const AuthProvider = ({ children }: Props) => {
     logoutUser
   } = useAuth()
 
-  // Verificar el token al cargar el componente
   useEffect(() => {
     checkToken()
   }, [])

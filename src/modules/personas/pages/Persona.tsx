@@ -27,8 +27,6 @@ export const Persona = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [editPersona, setEditPersona] = useState<IPersona | null>(null)
   const [activeItem, setActiveItem] = useState<number | null>(null)
-
-  // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const toggleModal = (id?: number) => {

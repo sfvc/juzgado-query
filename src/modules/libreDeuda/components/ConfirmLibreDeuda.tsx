@@ -16,7 +16,17 @@ export const ConfirmLibreDeuda = ({ libreDeuda, onCloseModal }: Props) => {
   const onCheckLibreDeuda = async () => {
     if (!libreDeuda) return
 
-    const path = await confirmLibreDeuda.mutateAsync(libreDeuda.id)
+    const dataToMutation = {
+      id: libreDeuda.id,
+      libre_deuda_id: libreDeuda.libre_deuda_id || 0,
+      cuit: libreDeuda.cuit || '',
+      fuente: libreDeuda.fuente || '',
+      persona_id: libreDeuda.persona_id || 0,
+      vehiculo_id: libreDeuda.vehiculo_id || 0,
+    }
+
+    const path = await confirmLibreDeuda.mutateAsync(dataToMutation)
+
     if (path) onCloseModal()
   }
 

@@ -17,27 +17,27 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
     setActiveItem(acta)
     setOpenDeleteModal(true)
   }
-    
+
   const onCloseModal = () => {
     setOpenDeleteModal(false)
     setActiveItem(null)
   }
-    
+
   const handleEditActa = (id: number, tipo: string) => {
     const tipoActa = tipo.toLocaleLowerCase().replace(/\s+/g, '')
     navigate(`/acta/${tipoActa}/editar/${id}`)
   }
-    
+
   const handleDeleteActa = async() => {
     if (!activeItem) return
     await deleteActa.mutateAsync(activeItem.id)
     onCloseModal()
   }
-    
+
   const handleChangeStatus = (id: number) => navigate(`/acta/${id}/estados`)
-    
+
   const handleNotification = (id: number) => navigate(`/acta/${id}/notificaciones`)
-    
+
   const handleActuacion = (id: number) => navigate(`/acta/${id}/actuaciones`)
 
   return (
@@ -76,13 +76,12 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
               <Button color='failure' onClick={() => onOpenModal(acta)} className='w-8 h-8 flex items-center justify-center'>
                 <icons.Trash />
               </Button>
-            </Tooltip> 
+            </Tooltip>
           </RoleGuard>
         </div>
       </Dropdown>
 
-      {/* Modal para eliminar acta de listado */}
-      { activeItem && 
+      { activeItem &&
         <Modal show={openDeleteModal} onClose={onCloseModal}>
           <Modal.Header>Eliminar acta</Modal.Header>
           <Modal.Body>
@@ -91,15 +90,15 @@ export const ActionButtons = ({acta}: {acta: IActa}) => {
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 ¿Estás seguro de que deseas eliminar el acta del listado?
               </h3>
-          
+
               <div className="flex justify-center gap-4">
                 <Button color="gray" onClick={onCloseModal}>Cancelar</Button>
-                <Button 
-                  color="failure" 
-                  onClick={handleDeleteActa} 
+                <Button
+                  color="failure"
+                  onClick={handleDeleteActa}
                   isProcessing={deleteActa.isPending}
                   disabled={deleteActa.isPending}
-                > 
+                >
                   Sí, eliminar
                 </Button>
               </div>

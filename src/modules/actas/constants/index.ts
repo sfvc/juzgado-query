@@ -7,8 +7,6 @@ export enum PATH {
   ACUMULADAS = '/acumuladas',
 }
 
-// export const initialValues = { page: 1 }
-
 export const defaultValues: ActaFilterForm = {
   persona_id: '',
   numero_acta: '',
