@@ -36,7 +36,7 @@ export const DomicilioForm = ({ domicilio }: Props) => {
     }
 
     initLoading()
-  }, [domicilio, actionFn, getProvinciasByPais, getDepartamentosByProvincia])
+  }, [])
 
   return (
     <div>
