@@ -1,24 +1,26 @@
 export interface IDescargo {
+  id: number
+  numero_descargo: string
+  texto: string
+  fecha_registro: string
+  estado: string
+
+  infractor: {
+    dni: number
+    cuit: string
+    apellido: string
+    nombre: string
+    email: string
+    telefono: string | null
+  }
+
+  archivos: string[]
+
+  acta: {
     id: number
-    descargo: number
-    persona_nombre?: string
-    persona_apellido?: string
-    persona_numero_documento?: string
-    vehiculo_dominio?: string
-    vehiculo_cedula_frente?: string
-    vehiculo_cedula_dorso?: string
-    vehiculo_marbete?: string
-    fecha?: string,
-    verificado?: boolean
-    titular?: string
-    numero_libre_deuda?: string
-    libre_deuda_id?: number
-    persona_id?: number
-    cuit?: string
-    fuente?: string
-    vehiculo_id?: number
-    path_file?: string
-    vehiculo?: IVehiculo
+    numero_acta: string
+    estado: string
+  }
 }
 
 export interface IVehiculo {

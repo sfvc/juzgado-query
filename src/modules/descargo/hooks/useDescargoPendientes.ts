@@ -2,19 +2,17 @@ import { useQuery } from '@tanstack/react-query'
 import { apiJuzgado } from '../../../api/config'
 
 type DescargoItem = {
-  verificado: number
+  verificado: boolean
 }
 
 export const useDescargoPendientes = () => {
   return useQuery({
-    queryKey: ['libreDeudaPendientes'],
-    // queryKey: ['descargoPendiente'],
+    queryKey: ['descargoPendiente'],
     queryFn: async () => {
-      const { data } = await apiJuzgado.get('/libre-deuda')
-      // const { data } = await apiJuzgado.get('/descargo')
+      const { data } = await apiJuzgado.get('/descargos')
 
       const pendientes = data.data.filter(
-        (item: DescargoItem) => item.verificado === 0
+        (item: DescargoItem) => item.verificado === false
       ).length
 
       return pendientes

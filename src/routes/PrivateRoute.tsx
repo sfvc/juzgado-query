@@ -14,6 +14,7 @@ import { Inhabilitado } from '../modules/inhabilitados'
 import { Dashboard } from '../modules/dashboard'
 import { Auditoria } from '../modules/auditoria'
 import { Recaudacion } from '../modules/recaudacion'
+import { Descargo } from '../modules/descargo'
 import {
   Acta,
   ActaBromatologia,
@@ -22,7 +23,6 @@ import {
   ActaTransito,
   ActaPoliciaAmbiental
 } from '../modules/actas'
-import { Descargo } from '../modules/descargo'
 
 export const PrivateRoute = [
   {

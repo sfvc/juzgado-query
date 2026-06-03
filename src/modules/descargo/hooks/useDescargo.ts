@@ -25,40 +25,26 @@ export const useDescargo = () => {
   })
 
   const confirmDescargo = useMutation({
-    mutationFn: (data: {
-    libre_deuda_id: number
-    id: number,
-    cuit: string
-    fuente: string,
-    persona_id: number
-    vehiculo_id: number
-  }) => descargoActions.confirmDescargo(data),
+    mutationFn: (id: number) =>
+      descargoActions.confirmDescargo(id),
     onSuccess: () => {
-      toast.success('Descargo confirmada con éxito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al confirmar el descargo')
-      console.log(error)
+      toast.success('Descargo aprobado con éxito')
+
+      queryClient.invalidateQueries({
+        queryKey: ['descargo']
+      })
     }
   })
 
   const rechazarDescargo = useMutation({
-    mutationFn: (data: {
-    libre_deuda_id: number
-    id: number
-    cuit: string
-    fuente: string
-    persona_id: number
-    vehiculo_id: number
-  }) => descargoActions.rechazarDescargo(data),
+    mutationFn: (id: number) =>
+      descargoActions.rechazarDescargo(id),
     onSuccess: () => {
       toast.success('Descargo rechazado correctamente')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al rechazar el descargo')
-      console.log(error)
+
+      queryClient.invalidateQueries({
+        queryKey: ['descargo']
+      })
     }
   })
 

@@ -10,12 +10,12 @@ import { IDescargo } from '../interfaces'
 import { ShowDescargo } from '../components/ShowDescargo'
 
 const colums: Column[] = [
-  { key: 'id', label: 'ID Descargo' },
+  { key: 'id', label: 'Número de Descargo' },
   { key: 'nombre', label: 'Apellido y Nombre' },
   { key: 'dni', label: 'DNI' },
-  { key: 'dominio', label: 'Patente' },
+  { key: 'numero_acta', label: 'Número de Acta' },
   { key: 'fecha', label: 'Fecha' },
-  { key: 'verificado', label: 'Estado' },
+  { key: 'estado', label: 'Estado' },
   { key: 'acciones', label: 'Acciones' },
 ]
 
@@ -46,21 +46,16 @@ export const Descargo = () => {
     closeModal('show')
   }
 
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-      return date.toLocaleString('es-AR', {
-        timeZone: 'America/Argentina/Buenos_Aires',
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      return dateString
+  const getEstadoClass = (estado: string) => {
+    switch (estado) {
+    case 'APROBADO':
+      return 'bg-green-500 text-white'
+    case 'RECHAZADO':
+      return 'bg-red-500 text-white'
+    case 'PENDIENTE':
+      return 'bg-yellow-500 text-white'
+    default:
+      return 'bg-gray-500 text-white'
     }
   }
 
@@ -89,43 +84,52 @@ export const Descargo = () => {
                 ? <TableSkeleton colums={colums.length} />
                 : (descargo.length > 0)
                   ? (descargo.map((descargo: IDescargo) => (
-                    <Table.Row key={descargo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                      <Table.Cell className='text-center dark:text-white'>{descargo?.numero_libre_deuda || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{clearNames(descargo?.persona_apellido, descargo?.persona_nombre) || '-'}</Table.Cell>
+                    <Table.Row
+                      key={descargo.id}
+                      className='bg-white dark:border-gray-700 dark:bg-gray-800'
+                    >
                       <Table.Cell className='text-center dark:text-white'>
-                        {descargo?.persona_numero_documento || '-'}
+                        {descargo.numero_descargo}
                       </Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{descargo?.vehiculo_dominio || '-'}</Table.Cell>
-                      <Table.Cell className='text-center dark:text-white'>{formatDate(descargo?.fecha || '-')}</Table.Cell>
+
+                      <Table.Cell className='text-center dark:text-white'>
+                        {clearNames(
+                          descargo.infractor?.apellido,
+                          descargo.infractor?.nombre
+                        )}
+                      </Table.Cell>
+
+                      <Table.Cell className='text-center dark:text-white'>
+                        {descargo.infractor?.dni}
+                      </Table.Cell>
+
+                      <Table.Cell className='text-center dark:text-white'>
+                        {descargo.acta?.numero_acta}
+                      </Table.Cell>
+
+                      <Table.Cell className='text-center dark:text-white'>
+                        {descargo.fecha_registro}
+                      </Table.Cell>
+
                       <Table.Cell className='text-center dark:text-white'>
                         <span
-                          className={`max-w-40 truncate px-2 py-1 border-none rounded-lg inline-block text-white
-                          ${descargo.verificado ? 'bg-green-500' : 'bg-red-500'}
-                        `}
+                          className={`px-3 py-1 rounded-lg inline-block font-medium ${getEstadoClass(
+                            descargo.estado
+                          )}`}
                         >
-                          {descargo.verificado ? 'VALIDADO' : 'SIN VALIDAR'}
+                          {descargo.estado}
                         </span>
                       </Table.Cell>
+
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
-
-                        {descargo.vehiculo_dominio && (
-                          <Tooltip content='Ver Documentación'>
-                            <Button onClick={() => onOpenShowModal(descargo)} className='w-8 h-8 flex items-center justify-center'>
-                              <icons.Show />
-                            </Button>
-                          </Tooltip>
-                        )}
-
                         <Tooltip content='Ver Descargo'>
                           <Button
-                            onClick={() => descargo.path_file && window.open(descargo.path_file, '_blank')}
+                            onClick={() => onOpenShowModal(descargo)}
                             className='w-8 h-8 flex items-center justify-center'
-                            color='warning'
                           >
-                            <icons.World />
+                            <icons.Show />
                           </Button>
                         </Tooltip>
-
                       </Table.Cell>
                     </Table.Row>
                   )))
@@ -153,26 +157,8 @@ export const Descargo = () => {
             <ShowDescargo
               descargo={activeItem}
               closeModal={onCloseShowModal}
-              onConfirm={() =>
-                confirmDescargo.mutateAsync({
-                  libre_deuda_id: activeItem.id,
-                  persona_id: activeItem.persona_id!,
-                  id: activeItem.id,
-                  cuit: activeItem.cuit!,
-                  fuente: activeItem.fuente!,
-                  vehiculo_id: activeItem.vehiculo_id!
-                })
-              }
-              onReject={() =>
-                rechazarDescargo.mutateAsync({
-                  libre_deuda_id: activeItem.id,
-                  persona_id: activeItem.persona_id!,
-                  id: activeItem.id,
-                  cuit: activeItem.cuit!,
-                  fuente: activeItem.fuente!,
-                  vehiculo_id: activeItem.vehiculo_id!
-                })
-              }
+              onConfirm={() => confirmDescargo.mutate(activeItem.id)}
+              onReject={() => rechazarDescargo.mutate(activeItem.id)}
             />
           </Modal.Body>
         </Modal>

@@ -4,43 +4,35 @@ import { setUrlParams } from '../../../shared/helpers/setUrlParams'
 export const getDescargo = async (filters: object) => {
   const params = setUrlParams(filters)
 
-  const response = await apiJuzgado.get('/libre-deuda', { params })
+  const response = await apiJuzgado.get('/descargos', { params })
   const { data, meta } = response.data
   return { data, meta }
 }
 
 export const getDescargoById = async (id: number) => {
-  const response = await apiJuzgado.get(`/libre-deuda/${id}`)
+  const response = await apiJuzgado.get(`/descargos/${id}`)
   const { data } = response.data
   return data
 }
 
-export const confirmDescargo = async (data: {
-    libre_deuda_id: number
-    id: number
-    fuente: string
-    cuit: string
-    persona_id: number
-    vehiculo_id: number
-}) => {
-  const response = await apiJuzgado.post('/libre-deuda/verificar', {
-    ...data,
-    verificado: true,
-  })
-  return response.data.data
+export const confirmDescargo = async (id: number) => {
+  const response = await apiJuzgado.put(
+    `/descargos/${id}/estado`,
+    {
+      estado: 'APROBADO'
+    }
+  )
+
+  return response.data
 }
 
-export const rechazarDescargo = async (data: {
-  libre_deuda_id: number
-  id: number
-  fuente: string
-  cuit: string
-  persona_id: number
-  vehiculo_id: number
-}) => {
-  const response = await apiJuzgado.post('/libre-deuda/verificar', {
-    ...data,
-    verificado: false,
-  })
-  return response.data.data
+export const rechazarDescargo = async (id: number) => {
+  const response = await apiJuzgado.put(
+    `/descargos/${id}/estado`,
+    {
+      estado: 'RECHAZADO'
+    }
+  )
+
+  return response.data
 }

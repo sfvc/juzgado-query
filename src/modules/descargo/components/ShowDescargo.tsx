@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button } from 'flowbite-react'
-import { IDescargo } from '../interfaces'
-import { clearNames } from '../../../shared'
+import { Button, Modal } from 'flowbite-react'
 import { useState } from 'react'
+import { IDescargo } from '../interfaces'
 
 interface Props {
   descargo: IDescargo
@@ -18,28 +16,16 @@ export const ShowDescargo = ({
   onReject
 }: Props) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-
-      return date.toLocaleString('es-AR', {
-        timeZone: 'America/Argentina/Buenos_Aires',
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    } catch (e) {
-      return dateString
-    }
-  }
+  const [confirmModal, setConfirmModal] = useState(false)
+  const [actionType, setActionType] = useState<
+    'approve' | 'reject' | null
+  >(null)
 
   const renderImage = (src: string, alt: string, label: string) => (
     <div>
-      <p className="text-sm text-gray-600 dark:text-white mb-2">{label}</p>
+      <p className="text-sm text-gray-600 dark:text-white mb-2">
+        {label}
+      </p>
 
       <img
         src={src}
@@ -50,130 +36,142 @@ export const ShowDescargo = ({
     </div>
   )
 
+  const handleAction = async () => {
+    if (actionType === 'approve') {
+      await onConfirm()
+    }
+
+    if (actionType === 'reject') {
+      await onReject()
+    }
+
+    setConfirmModal(false)
+    setActionType(null)
+    closeModal()
+  }
+
   return (
     <>
-      <div className="space-y-6 p-4">
+      <div>
         <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">
-            Datos del Vehículo
+            Información del Descargo
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
             <p>
-              <span className="font-medium">Nombre:</span>{' '}
-              {clearNames(descargo?.persona_apellido, descargo?.persona_nombre) || '-'}
-            </p>
-
-            <p>
-              <span className="font-medium">DNI:</span>{' '}
-              {descargo?.persona_numero_documento || '-'}
+              <span className="font-medium">N° Descargo:</span>{' '}
+              {descargo.numero_descargo || '-'}
             </p>
 
             <p>
               <span className="font-medium">Fecha:</span>{' '}
-              {formatDate(descargo?.fecha || '-')}
+              {descargo.fecha_registro || '-'}
             </p>
 
             <p>
-              <span className="font-medium">Número Descargo:</span>{' '}
-              {descargo?.numero_libre_deuda || '-'}
+              <span className="font-medium">N° Acta:</span>{' '}
+              {descargo.acta?.numero_acta || '-'}
             </p>
 
             <p>
-              <span className="font-medium">Dominio:</span>{' '}
-              {descargo?.vehiculo_dominio || '-'}
+              <span className="font-medium">Estado:</span>{' '}
+              {descargo.estado || '-'}
             </p>
-
-            <p>
-              <span className="font-medium">Tipo de Vehículo:</span>{' '}
-              {descargo?.vehiculo?.tipo?.nombre || '-'}
-            </p>
-
-            <p>
-              <span className="font-medium">Marca:</span>{' '}
-              {descargo?.vehiculo?.marca?.nombre || '-'}
-            </p>
-
-            <p>
-              <span className="font-medium">Modelo:</span>{' '}
-              {descargo?.vehiculo?.modelo || '-'}
-            </p>
-
-            <p>
-              <span className="font-medium">Número de Chasis:</span>{' '}
-              {descargo?.vehiculo?.numero_chasis || '-'}
-            </p>
-
-            <p>
-              <span className="font-medium">Número de Motor:</span>{' '}
-              {descargo?.vehiculo?.numero_motor || '-'}
-            </p>
-
-            {descargo?.vehiculo?.tipo?.id === 50067 && (
-              <p>
-                <span className="font-medium">Número de Taxi o Remis:</span>{' '}
-                {descargo?.vehiculo?.numero_taxi_remis || '-'}
-              </p>
-            )}
           </div>
         </section>
 
-        {(descargo?.vehiculo_cedula_frente ||
-          descargo?.vehiculo_cedula_dorso ||
-          descargo?.vehiculo_marbete) && (
+        <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">
+            Datos del Infractor
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-gray-700 dark:text-white">
+            <p>
+              <span className="font-medium">Apellido:</span>{' '}
+              {descargo.infractor?.apellido || '-'}
+            </p>
+
+            <p>
+              <span className="font-medium">Nombre:</span>{' '}
+              {descargo.infractor?.nombre || '-'}
+            </p>
+
+            <p>
+              <span className="font-medium">DNI:</span>{' '}
+              {descargo.infractor?.dni || '-'}
+            </p>
+
+            <p>
+              <span className="font-medium">CUIT:</span>{' '}
+              {descargo.infractor?.cuit || '-'}
+            </p>
+
+            <p>
+              <span className="font-medium">Email:</span>{' '}
+              {descargo.infractor?.email || '-'}
+            </p>
+
+            <p>
+              <span className="font-medium">Teléfono:</span>{' '}
+              {descargo.infractor?.telefono || '-'}
+            </p>
+          </div>
+        </section>
+
+        <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">
+            Texto del Descargo
+          </h2>
+
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border whitespace-pre-wrap text-gray-700 dark:text-white">
+            {descargo.texto || 'Sin descripción'}
+          </div>
+        </section>
+
+        {descargo.archivos?.length > 0 && (
           <section className="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 dark:text-white">
-              Imágenes
+              Archivos Adjuntos
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {descargo?.vehiculo_cedula_frente &&
-                renderImage(
-                  descargo?.vehiculo_cedula_frente,
-                  'Cédula Frente',
-                  'Cédula Frente'
-                )}
-
-              {descargo?.vehiculo_cedula_dorso &&
-                renderImage(
-                  descargo?.vehiculo_cedula_dorso,
-                  'Cédula Dorso',
-                  'Cédula Dorso'
-                )}
-
-              {descargo?.vehiculo_marbete &&
-                renderImage(
-                  descargo?.vehiculo_marbete,
-                  'Marbete',
-                  'Marbete'
-                )}
+              {descargo.archivos.map((archivo: string, index: number) => (
+                <div key={`${archivo}-${index}`}>
+                  {renderImage(
+                    archivo,
+                    `Archivo ${index + 1}`,
+                    `Archivo ${index + 1}`
+                  )}
+                </div>
+              ))}
             </div>
           </section>
         )}
 
-        <div className="flex justify-end gap-4">
-          {!descargo?.verificado && (
-            <Button
-              color="success"
-              onClick={() => {
-                onConfirm()
-                closeModal()
-              }}
-            >
-              Aceptar Descargo
-            </Button>
-          )}
+        <div className="flex justify-end gap-4 mt-6">
+          {descargo.estado === 'PENDIENTE' && (
+            <>
+              <Button
+                color="failure"
+                onClick={() => {
+                  setActionType('reject')
+                  setConfirmModal(true)
+                }}
+              >
+                Rechazar Descargo
+              </Button>
 
-          {!descargo?.verificado && (
-            <Button
-              color="failure"
-              onClick={() => {
-                onReject()
-                closeModal()
-              }}
-            >
-              Rechazar Descargo
-            </Button>
+              <Button
+                color="success"
+                onClick={() => {
+                  setActionType('approve')
+                  setConfirmModal(true)
+                }}
+              >
+                Aprobar Descargo
+              </Button>
+            </>
           )}
 
           <Button color="gray" onClick={closeModal}>
@@ -182,7 +180,51 @@ export const ShowDescargo = ({
         </div>
       </div>
 
-      {/* MODAL DE IMAGEN */}
+      <Modal
+        show={confirmModal}
+        size="md"
+        popup
+        onClose={() => {
+          setConfirmModal(false)
+          setActionType(null)
+        }}
+      >
+        <Modal.Header />
+
+        <Modal.Body>
+          <div className="text-center">
+            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+              ¿Estás seguro?
+            </h3>
+
+            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+              {actionType === 'approve'
+                ? 'Se aprobará el descargo. Esta acción es irreversible.'
+                : 'Se rechazará el descargo. Esta acción es irreversible.'}
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <Button
+                color={actionType === 'reject' ? 'failure' : 'success'}
+                onClick={handleAction}
+              >
+                Sí, continuar
+              </Button>
+
+              <Button
+                color="gray"
+                onClick={() => {
+                  setConfirmModal(false)
+                  setActionType(null)
+                }}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
       {selectedImage && (
         <div
           onClick={() => setSelectedImage(null)}
