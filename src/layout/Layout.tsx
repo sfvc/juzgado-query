@@ -5,16 +5,16 @@ import { ThemeContext } from '../context/Theme/ThemeContext'
 import { RoleGuard, UserRole } from '../auth'
 import { ToastContainer } from 'react-toastify'
 import { DropdownHeader, NavItem } from './'
-// import { useLibreDeudaPendientes } from '../modules/libreDeuda/hooks/useLibreDeudaPendientes'
-// import { useDescargoPendientes } from '../modules/descargo/hooks/useDescargoPendientes'
+import { useLibreDeudaPendientes } from '../modules/libreDeuda/hooks/useLibreDeudaPendientes'
+import { useDescargoPendientes } from '../modules/descargo/hooks/useDescargoPendientes'
 import logoDark from '../assets/images/logo-capital-dark.webp'
 import logoLight from '../assets/images/logo-capital-light.webp'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const Layout = () => {
   const { theme } = useContext(ThemeContext)
-  // const { data: pendientesLibreDeuda } = useLibreDeudaPendientes()
-  // const { data: pendientesDescargo } = useDescargoPendientes()
+  const { data: pendientesLibreDeuda } = useLibreDeudaPendientes()
+  const { data: pendientesDescargo } = useDescargoPendientes()
 
   return (
     <div className='flex flex-col min-h-screen dark:bg-dark'>
@@ -46,35 +46,39 @@ export const Layout = () => {
 
           <NavItem to="/plantillas">Plantillas</NavItem>
 
-          {/* <NavItem to="/descargo">
-            <span className="flex items-center justify-center gap-2 w-full">
-              Descargo
+          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+            <NavItem to="/descargo">
+              <span className="flex items-center justify-center gap-2 w-full">
+                Descargo
 
-              <span
-                className={`flex items-center justify-center
-                text-white text-xs font-semibold rounded-full w-5 h-5
+                <span
+                  className={`flex items-center justify-center
+                  text-white text-xs font-semibold rounded-full w-5 h-5
                 ${pendientesDescargo > 0 ? 'bg-red-600' : 'bg-green-600'}
               `}
-              >
-                {pendientesDescargo ?? 0}
+                >
+                  {pendientesDescargo ?? 0}
+                </span>
               </span>
-            </span>
-          </NavItem> */}
+            </NavItem>
+          </RoleGuard>
 
-          {/* <NavItem to="/libre-deuda">
-            <span className="flex items-center justify-center gap-2 w-full">
-              Libre Deuda
+          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+            <NavItem to="/libre-deuda">
+              <span className="flex items-center justify-center gap-2 w-full">
+                Libre Deuda
 
-              <span
-                className={`flex items-center justify-center
+                <span
+                  className={`flex items-center justify-center
                 text-white text-xs font-semibold rounded-full w-5 h-5
                 ${pendientesLibreDeuda > 0 ? 'bg-red-600' : 'bg-green-600'}
               `}
-              >
-                {pendientesLibreDeuda ?? 0}
+                >
+                  {pendientesLibreDeuda ?? 0}
+                </span>
               </span>
-            </span>
-          </NavItem> */}
+            </NavItem>
+          </RoleGuard>
 
           <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             <MegaMenu.Dropdown toggle={<>Parámetros</>}>
