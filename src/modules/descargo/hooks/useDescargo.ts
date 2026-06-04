@@ -27,11 +27,16 @@ export const useDescargo = () => {
   const confirmDescargo = useMutation({
     mutationFn: (id: number) =>
       descargoActions.confirmDescargo(id),
+
     onSuccess: () => {
       toast.success('Descargo aprobado con éxito')
 
       queryClient.invalidateQueries({
         queryKey: ['descargo']
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: ['descargoPendientes']
       })
     }
   })
@@ -39,11 +44,16 @@ export const useDescargo = () => {
   const rechazarDescargo = useMutation({
     mutationFn: (id: number) =>
       descargoActions.rechazarDescargo(id),
+
     onSuccess: () => {
       toast.success('Descargo rechazado correctamente')
 
       queryClient.invalidateQueries({
         queryKey: ['descargo']
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: ['descargoPendientes']
       })
     }
   })
