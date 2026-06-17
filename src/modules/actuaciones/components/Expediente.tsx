@@ -14,7 +14,7 @@ import { ActuacionHistory } from './ActuacionHistory'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
 import { soloNumeros } from '../../../shared/helpers/formatNumber'
 import { formatDate } from '../../../shared/helpers/formatDate'
-import { generarComprobanteDigital } from '../../../shared/helpers/generarComprobanteDigital'
+// import { generarComprobanteDigital } from '../../../shared/helpers/generarComprobanteDigital'
 
 const colums: Column[] = [
   { key: 'id', label: 'id' },
@@ -220,7 +220,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         </Tooltip>
                       )}
 
-                      <Tooltip content='Comprobante Digital'>
+                      {/* <Tooltip content='Comprobante Digital'>
                         <Button
                           color='dark'
                           onClick={() =>
@@ -233,7 +233,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                         >
                           <icons.Show />
                         </Button>
-                      </Tooltip>
+                      </Tooltip> */}
 
                       {
                         (actuacion.id === sentencia?.id && validateStatus) &&
