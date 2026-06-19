@@ -22,11 +22,8 @@ export const TransitoForm = ({ acta }: Props) => {
   // Si se encuentra el artículo de alcoholemia en las infracciones cometidas y el valor es mayor a 0, se considera válido
   // Sino, se debe ingresar un valor válido o marcar que se negó a realizar la prueba
   const validateAlcoholemia = () => {
-    console.log('primera')
     if (!acta || !acta?.infracciones_cometidas) return false
     const alcoholemiaInfraccion = acta.infracciones_cometidas.find((infraccion) => infraccion.id === ART_ALCOHOLEMIA_ID)
-
-    console.log('segunda')
     if (!alcoholemiaInfraccion) return false
     const gradoAlcohol = acta?.grado_alcohol
     return gradoAlcohol === '0.00'
@@ -59,7 +56,7 @@ export const TransitoForm = ({ acta }: Props) => {
     if (form.grado_alcohol) {
       form.grado_alcohol = form.grado_alcohol.replace(',', '.')
     }
-  
+
     if (acta) {
       await updateActa.mutateAsync({ id: acta.id, acta: form })
     } else {
@@ -81,10 +78,10 @@ export const TransitoForm = ({ acta }: Props) => {
 
           <div className='flex justify-end gap-4'>
             <Button type='button' color='failure' className='px-4' onClick={goBack}>Cancelar</Button>
-            <Button 
-              type='submit' 
-              className='px-4' 
-              disabled={methods.formState.isSubmitting} 
+            <Button
+              type='submit'
+              className='px-4'
+              disabled={methods.formState.isSubmitting}
               isProcessing={methods.formState.isSubmitting}
             >
               Finalizar
