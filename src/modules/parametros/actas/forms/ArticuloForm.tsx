@@ -11,6 +11,7 @@ import type { FormArticulo, IArticulo } from '../interfaces'
 const validationSchema = yup.object().shape({
   numero: yup.string(),
   detalle: yup.string().required('El detalle es requerido'),
+  conducta: yup.string().required('La conducta es requerida'),
   inciso: yup.string(),
   tipo_acta: yup.string(),
   tipo_infraccion: yup.string(),
@@ -21,17 +22,17 @@ const validationSchema = yup.object().shape({
 })
 
 interface Props {
-    articulo: IArticulo | null
-    onSucces: () => void
+  articulo: IArticulo | null
+  onSucces: () => void
 }
-  
+
 const ArticuloForm = ({ articulo, onSucces }: Props) => {
   const { createArticulo, updateArticulo } = useArticulo()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['articulos-data'], 
-    queryFn: actaActions.getAllTipoInfracciones,  
-    staleTime: 1000 * 60 * 5, 
+    queryKey: ['articulos-data'],
+    queryFn: actaActions.getAllTipoInfracciones,
+    staleTime: 1000 * 60 * 5,
   })
 
   const {
@@ -42,6 +43,7 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     defaultValues: {
       numero: articulo?.numero.toString() || '',
       detalle: articulo?.detalle || '',
+      conducta: articulo?.conducta || '',
       inciso: articulo?.inciso || '',
       tipo_acta: articulo?.tipo_acta || '',
       tipo_infraccion: articulo?.tipo_infraccion || '',
@@ -56,12 +58,12 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
   const onSubmit: SubmitHandler<FormArticulo> = async (form: FormArticulo) => {
     if (articulo) await updateArticulo.mutateAsync({ id: articulo.id, articulo: form })
     else await createArticulo.mutateAsync(form)
-  
+
     onSucces()
   }
-  
-  if (isLoading) return <div className='flex justify-center'><Spinner size='lg'/></div>
-  
+
+  if (isLoading) return <div className='flex justify-center'><Spinner size='lg' /></div>
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-4'>
@@ -91,7 +93,23 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
         />
       </div>
 
+
+
       <div className='grid grid-cols-2 gap-4'>
+        <div className='mb-4'>
+          <div className='mb-2 block'>
+            <Label htmlFor='conducta' value='Conducta' /><strong className='obligatorio'>(*)</strong>
+          </div>
+          <Textarea
+            {...register('conducta')}
+            placeholder='Conducta del articulo...'
+            rows={3}
+            helperText={errors?.conducta && errors.conducta.message}
+            color={errors?.conducta && 'failure'}
+            className='p-2.5'
+          />
+        </div>
+
         <div className='mb-4'>
           <div className='mb-2 block'>
             <Label htmlFor='tipo_acta' value='Tipo de Acta' />

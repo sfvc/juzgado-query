@@ -12,6 +12,7 @@ const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },
   { key: 'inciso', label: 'Inciso' },
   { key: 'detalle', label: 'Detalle' },
+  { key: 'conducta', label: 'Conducta' },
   { key: 'tipo', label: 'Tipo' },
   { key: 'tipo_falta', label: 'Tipo Falta' },
   { key: 'valor_desde', label: 'Valor Desde' },
@@ -27,13 +28,13 @@ export const Articulo = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<IArticulo | null>(null)
 
-  const { 
+  const {
     articulos,
     pagination,
     isFetching,
     filterParams,
     updateFilter,
-    deleteArticulo 
+    deleteArticulo
   } = useArticulo()
 
   /* Modal crear/editar */
@@ -99,6 +100,10 @@ export const Articulo = () => {
                       <Tooltip content={articulo.detalle || 'Sin datos'} className='max-w-lg'>
                         <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.detalle}</Table.Cell>
                       </Tooltip>
+                      {/* <Tooltip content={articulo.conducta || 'Sin datos'} className='max-w-lg'>
+                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.conducta}</Table.Cell>
+                      </Tooltip> */}
+                      <Table.Cell className='text-center dark:text-white'>{articulo.conducta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_acta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_infraccion}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.valor_desde}</Table.Cell>
@@ -106,7 +111,7 @@ export const Articulo = () => {
                       <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
                         <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo?.norma_legal || '-'}</Table.Cell>
                       </Tooltip>
-                      <Table.Cell className='text-center dark:text-white'>{ articulo.descuento ? 'Si' : 'No' }</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white'>{articulo.descuento ? 'Si' : 'No'}</Table.Cell>
                       <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{articulo.id}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
                         <Tooltip content='Editar'>
@@ -140,20 +145,20 @@ export const Articulo = () => {
         />
       </div>
 
-      {/* Modal crear/editar */} 
+      {/* Modal crear/editar */}
       <Modal show={openModal} onClose={onCloseModal} size='4xl'>
         <Modal.Header>{!activeItem ? 'Agregar Articulo' : 'Editar Articulo'}</Modal.Header>
         <Modal.Body>
-          <ArticuloForm 
-            articulo={activeItem} 
+          <ArticuloForm
+            articulo={activeItem}
             onSucces={onCloseModal}
           />
         </Modal.Body>
       </Modal>
 
-      {/* Modal eliminar */} 
+      {/* Modal eliminar */}
       {
-        activeItem && 
+        activeItem &&
         <DeleteModal
           item={activeItem.id}
           openModal={openDeleteModal}

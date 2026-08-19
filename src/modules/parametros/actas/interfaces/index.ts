@@ -2,6 +2,7 @@ export interface IArticulo {
     id: number
     numero: number
     detalle: string
+    conducta: string
     inciso: string | null
     tipo_acta: string
     tipo_infraccion: string
