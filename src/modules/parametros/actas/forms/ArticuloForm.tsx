@@ -11,7 +11,7 @@ import type { FormArticulo, IArticulo } from '../interfaces'
 const validationSchema = yup.object().shape({
   numero: yup.string(),
   detalle: yup.string().required('El detalle es requerido'),
-  conducta: yup.string().required('La conducta es requerida'),
+  conducta: yup.string(),
   inciso: yup.string(),
   tipo_acta: yup.string(),
   tipo_infraccion: yup.string(),
@@ -93,12 +93,10 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
         />
       </div>
 
-
-
       <div className='grid grid-cols-2 gap-4'>
         <div className='mb-4'>
           <div className='mb-2 block'>
-            <Label htmlFor='conducta' value='Conducta' /><strong className='obligatorio'>(*)</strong>
+            <Label htmlFor='conducta' value='Conducta' />
           </div>
           <Textarea
             {...register('conducta')}
