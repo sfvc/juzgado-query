@@ -97,20 +97,32 @@ export const Articulo = () => {
                     <Table.Row key={articulo.id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                       <Table.Cell className='text-center dark:text-white'>{articulo.numero}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo?.inciso || '-'}</Table.Cell>
-                      <Tooltip content={articulo.detalle || 'Sin datos'} className='max-w-lg'>
-                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.detalle}</Table.Cell>
-                      </Tooltip>
-                      {/* <Tooltip content={articulo.conducta || 'Sin datos'} className='max-w-lg'>
-                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo.conducta}</Table.Cell>
-                      </Tooltip> */}
-                      <Table.Cell className='text-center dark:text-white'>{articulo.conducta}</Table.Cell>
+                      <Table.Cell className='text-center dark:text-white max-w-40 px-4'>
+                        <Tooltip content={articulo.detalle || 'Sin datos'} className='max-w-lg'>
+                          <div className='max-w-40 truncate mx-auto'>
+                            {articulo.detalle || '-'}
+                          </div>
+                        </Tooltip>
+                      </Table.Cell>
+
+                      <Table.Cell className='text-center dark:text-white max-w-40 '>
+                        <Tooltip content={articulo.conducta || 'Sin datos'} className='max-w-lg'>
+                          <div className='max-w-40 truncate mx-auto'>
+                            {articulo.conducta}
+                          </div>
+                        </Tooltip>
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_acta}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.tipo_infraccion}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.valor_desde}</Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.valor_hasta}</Table.Cell>
-                      <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
-                        <Table.Cell className='text-center dark:text-white max-w-40 truncate'>{articulo?.norma_legal || '-'}</Table.Cell>
-                      </Tooltip>
+                      <Table.Cell className='text-center dark:text-white max-w-40'>
+                        <Tooltip content={articulo?.norma_legal || 'Sin datos'} className='max-w-lg'>
+                          <div className='max-w-40 truncate mx-auto'>
+                            {articulo?.norma_legal || '-'}
+                          </div>
+                        </Tooltip>
+                      </Table.Cell>
                       <Table.Cell className='text-center dark:text-white'>{articulo.descuento ? 'Si' : 'No'}</Table.Cell>
                       <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white text-center'>{articulo.id}</Table.Cell>
                       <Table.Cell className='flex gap-2 text-center items-center justify-center'>
