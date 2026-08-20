@@ -46,7 +46,7 @@ export const Layout = () => {
 
           <NavItem to="/plantillas">Plantillas</NavItem>
 
-          <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
+          {/* <RoleGuard roles={[UserRole.ADMIN, UserRole.JEFE, UserRole.JUEZ, UserRole.SECRETARIO]}>
             <NavItem to="/descargo">
               <span className="flex items-center justify-center gap-2 w-full">
                 Descargo
@@ -78,7 +78,7 @@ export const Layout = () => {
                 </span>
               </span>
             </NavItem>
-          </RoleGuard>
+          </RoleGuard> */}
 
           <MegaMenu className='dark:text-white p-2 hover:text-blue-700 dark:hover:text-blue-400'>
             <MegaMenu.Dropdown toggle={<>Parámetros</>}>
