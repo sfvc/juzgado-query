@@ -6,14 +6,12 @@ import { useMutationActa } from '../hooks/useMutationActa'
 import { icons } from '../../../shared'
 import type { IActa } from '../interfaces'
 
-type ActaArchivo = {
-  id?: number | string
-  url: string
+type ActaConArchivos = IActa & {
+  adjuntos?: string[]
 }
 
-type ActaConArchivos = IActa & {
-  adjuntos?: ActaArchivo[]
-}
+const VIDEO_EXT = /\.(mp4|webm|ogg|mov)$/i
+const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif)$/i
 
 export const ActionButtons = ({ acta }: { acta: IActa }) => {
   const navigate = useNavigate()
@@ -113,17 +111,16 @@ export const ActionButtons = ({ acta }: { acta: IActa }) => {
             </Button>
           </Tooltip>
 
-          {/* {acta?.adjuntos && !!acta.adjuntos.length && ( */}
-          <Tooltip content='Archivos' placement='left'>
-            <Button
-              color='cyan'
-              onClick={() => handleArchivos(acta)}
-              className='w-8 h-8 flex items-center justify-center'
-            >
-              <icons.Pdf />
-            </Button>
-          </Tooltip>
-          {/* )} */}
+          {acta?.adjuntos && !!acta.adjuntos.length && (
+            <Tooltip content='Archivos' placement='left'>
+              <Button
+                onClick={() => handleArchivos(acta)}
+                className='w-8 h-8 flex items-center justify-center !bg-cyan-500 hover:!bg-cyan-600 !text-white !border-cyan-500'
+              >
+                <icons.Pdf />
+              </Button>
+            </Tooltip>
+          )}
 
           <RoleGuard
             roles={[
@@ -147,7 +144,6 @@ export const ActionButtons = ({ acta }: { acta: IActa }) => {
         </div>
       </Dropdown>
 
-      {/* MODAL ELIMINAR */}
       {activeItem && (
         <Modal
           show={openDeleteModal}
@@ -187,7 +183,6 @@ export const ActionButtons = ({ acta }: { acta: IActa }) => {
         </Modal>
       )}
 
-      {/* MODAL ARCHIVOS */}
       <Modal
         show={openArchivosModal}
         onClose={handleCloseArchivosModal}
@@ -207,33 +202,44 @@ export const ActionButtons = ({ acta }: { acta: IActa }) => {
               </p>
             </div>
           ) : (
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              {activeItem.adjuntos.map((archivo, index) => (
-                <div
-                  key={archivo.id ?? index}
-                  className='border rounded-lg p-4 dark:border-gray-700'
-                >
-                  <div className='flex items-center justify-between gap-4'>
-                    <div className='flex items-center gap-3 min-w-0'>
-                      <icons.Pdf />
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+              {activeItem.adjuntos.map((url, index) => {
+                const isVideo = VIDEO_EXT.test(url)
+                const isImage = IMAGE_EXT.test(url)
 
-                      <div className='min-w-0'>
-                        <p className='font-medium truncate'>
-                          {`Archivo ${index + 1}`}
-                        </p>
-                      </div>
-                    </div>
-
-                    <Button
-                      color='blue'
-                      size='sm'
-                      onClick={() => window.open(archivo.url, '_blank')}
-                    >
-                      Ver
-                    </Button>
+                return (
+                  <div
+                    key={index}
+                    className='border rounded-lg overflow-hidden dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                  >
+                    {isVideo ? (
+                      <video
+                        src={url}
+                        controls
+                        className='w-full h-48 object-cover bg-black'
+                      />
+                    ) : isImage ? (
+                      <a href={url} target='_blank' rel='noreferrer'>
+                        <img
+                          src={url}
+                          alt={`Archivo ${index + 1}`}
+                          className='w-full h-48 object-cover'
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        href={url}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='flex flex-col items-center justify-center gap-2 h-48 text-gray-500 dark:text-gray-400'
+                      >
+                        <icons.Pdf />
+                        <span className='text-sm truncate px-2'>{`Archivo ${index + 1}`}</span>
+                      </a>
+                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </Modal.Body>

@@ -61,6 +61,7 @@ export interface IActa {
     preventiva:             string
     estados:                Estado[]
     acumulable:             boolean
+    adjuntos:               string[]
 }
 
 export interface Comercio {
