@@ -1,17 +1,17 @@
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Label, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
+import { Button, Label, Modal, Select, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { useQuery } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useArticulo } from '../hooks/useArticulo'
 import { TIPO_ACTAS } from '../../../../shared/constants'
 import { actaActions } from '../../../actas'
-import type { FormArticulo, IArticulo } from '../interfaces'
+import type { FormArticulo, IArticulo, IConducta } from '../interfaces'
 
 const validationSchema = yup.object().shape({
   numero: yup.string(),
   detalle: yup.string().required('El detalle es requerido'),
-  conducta: yup.string(),
   inciso: yup.string(),
   tipo_acta: yup.string(),
   tipo_infraccion: yup.string(),
@@ -43,7 +43,6 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     defaultValues: {
       numero: articulo?.numero.toString() || '',
       detalle: articulo?.detalle || '',
-      conducta: articulo?.conducta || '',
       inciso: articulo?.inciso || '',
       tipo_acta: articulo?.tipo_acta || '',
       tipo_infraccion: articulo?.tipo_infraccion || '',
@@ -55,7 +54,50 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     resolver: yupResolver(validationSchema)
   })
 
-  const onSubmit: SubmitHandler<FormArticulo> = async (form: FormArticulo) => {
+  const [conductas, setConductas] = useState<IConducta[]>(
+    articulo?.conductas?.length
+      ? articulo.conductas
+      : articulo?.conducta
+        ? [{ conducta: articulo.conducta, valor_desde: 0, valor_hasta: 0 }]
+        : []
+  )
+  const [openConducta, setOpenConducta] = useState<boolean>(false)
+  const [editIndex, setEditIndex] = useState<number | null>(null)
+  const [conductaForm, setConductaForm] = useState({ conducta: '', valor_desde: '', valor_hasta: '' })
+  const [conductaError, setConductaError] = useState<string>('')
+
+  const onOpenConducta = (index: number | null = null) => {
+    const actual = index !== null ? conductas[index] : null
+    setEditIndex(index)
+    setConductaForm({
+      conducta: actual?.conducta || '',
+      valor_desde: actual ? String(actual.valor_desde) : '',
+      valor_hasta: actual ? String(actual.valor_hasta) : ''
+    })
+    setConductaError('')
+    setOpenConducta(true)
+  }
+
+  const onSaveConducta = () => {
+    const desde = Number(conductaForm.valor_desde || 0)
+    const hasta = Number(conductaForm.valor_hasta || 0)
+
+    if (!conductaForm.conducta.trim()) return setConductaError('La conducta es requerida')
+    if (hasta < desde) return setConductaError('El valor hasta no puede ser menor al valor desde')
+
+    const item: IConducta = {
+      ...(editIndex !== null ? conductas[editIndex] : {}),
+      conducta: conductaForm.conducta.trim(),
+      valor_desde: desde,
+      valor_hasta: hasta
+    }
+
+    setConductas(prev => editIndex !== null ? prev.map((c, i) => i === editIndex ? item : c) : [...prev, item])
+    setOpenConducta(false)
+  }
+
+  const onSubmit: SubmitHandler<FormArticulo> = async (formData: FormArticulo) => {
+    const form = { ...formData, conductas }
     if (articulo) await updateArticulo.mutateAsync({ id: articulo.id, articulo: form })
     else await createArticulo.mutateAsync(form)
 
@@ -93,21 +135,73 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
         />
       </div>
 
-      <div className='grid grid-cols-2 gap-4'>
-        <div className='mb-4'>
-          <div className='mb-2 block'>
-            <Label htmlFor='conducta' value='Conducta' />
-          </div>
-          <Textarea
-            {...register('conducta')}
-            placeholder='Conducta del articulo...'
-            rows={3}
-            helperText={errors?.conducta && errors.conducta.message}
-            color={errors?.conducta && 'failure'}
-            className='p-2.5'
-          />
+      <div className='mb-4'>
+        <div className='mb-2 flex items-center justify-between'>
+          <Label value='Conductas' />
+          <Button type='button' size='xs' onClick={() => onOpenConducta()}>Agregar conducta</Button>
         </div>
+        <div className='border rounded-lg divide-y dark:border-gray-600 dark:divide-gray-600'>
+          {conductas.length > 0
+            ? conductas.map((c, i) => (
+              <div key={i} className='flex items-center justify-between gap-4 p-2.5 text-sm dark:text-white'>
+                <div className='flex-1'>
+                  <p>{c.conducta}</p>
+                  <p className='text-gray-500 dark:text-gray-400'>Multa de {c.valor_desde} a {c.valor_hasta} UM</p>
+                </div>
+                <div className='flex gap-2'>
+                  <Button type='button' size='xs' color='success' onClick={() => onOpenConducta(i)}>Editar</Button>
+                  <Button type='button' size='xs' color='failure' onClick={() => setConductas(prev => prev.filter((_, idx) => idx !== i))}>Quitar</Button>
+                </div>
+              </div>
+            ))
+            : <p className='p-2.5 text-sm text-gray-500 dark:text-gray-400'>Sin conductas agregadas</p>}
+        </div>
+      </div>
 
+      <Modal show={openConducta} onClose={() => setOpenConducta(false)} size='lg'>
+        <Modal.Header>{editIndex === null ? 'Agregar Conducta' : 'Editar Conducta'}</Modal.Header>
+        <Modal.Body>
+          <div className='mb-4'>
+            <div className='mb-2 block'>
+              <Label htmlFor='conducta_nueva' value='Conducta' /><strong className='obligatorio'>(*)</strong>
+            </div>
+            <Textarea
+              id='conducta_nueva'
+              rows={3}
+              placeholder='Conducta del articulo...'
+              value={conductaForm.conducta}
+              onChange={(e) => setConductaForm({ ...conductaForm, conducta: e.target.value })}
+              className='p-2.5'
+            />
+          </div>
+          <div className='grid grid-cols-2 gap-4 mb-4'>
+            <div>
+              <div className='mb-2 block'><Label htmlFor='conducta_desde' value='Valor Desde (UM)' /></div>
+              <TextInput
+                id='conducta_desde'
+                type='number'
+                value={conductaForm.valor_desde}
+                onChange={(e) => setConductaForm({ ...conductaForm, valor_desde: e.target.value })}
+              />
+            </div>
+            <div>
+              <div className='mb-2 block'><Label htmlFor='conducta_hasta' value='Valor Hasta (UM)' /></div>
+              <TextInput
+                id='conducta_hasta'
+                type='number'
+                value={conductaForm.valor_hasta}
+                onChange={(e) => setConductaForm({ ...conductaForm, valor_hasta: e.target.value })}
+              />
+            </div>
+          </div>
+          {conductaError && <p className='text-sm text-red-600 mb-4'>{conductaError}</p>}
+          <div className='flex justify-end'>
+            <Button type='button' onClick={onSaveConducta}>Aceptar</Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <div className='grid grid-cols-2 gap-4'>
         <div className='mb-4'>
           <div className='mb-2 block'>
             <Label htmlFor='tipo_acta' value='Tipo de Acta' />

@@ -1,8 +1,16 @@
+export interface IConducta {
+    id?: number
+    conducta: string
+    valor_desde: number
+    valor_hasta: number
+}
+
 export interface IArticulo {
     id: number
     numero: number
     detalle: string
     conducta: string
+    conductas?: IConducta[]
     inciso: string | null
     tipo_acta: string
     tipo_infraccion: string
@@ -15,6 +23,7 @@ export interface IArticulo {
 export interface FormArticulo {
     numero?: string
     detalle: string
+    conductas?: IConducta[]
     inciso?: string
     tipo_acta?: string
     tipo_infraccion?: string

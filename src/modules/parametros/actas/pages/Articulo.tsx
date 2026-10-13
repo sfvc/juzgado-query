@@ -12,7 +12,7 @@ const colums: Column[] = [
   { key: 'articulo', label: 'Articulo' },
   { key: 'inciso', label: 'Inciso' },
   { key: 'detalle', label: 'Detalle' },
-  { key: 'conducta', label: 'Conducta' },
+  { key: 'conducta', label: 'Conductas' },
   { key: 'tipo', label: 'Tipo' },
   { key: 'tipo_falta', label: 'Tipo Falta' },
   { key: 'valor_desde', label: 'Valor Desde' },
@@ -106,9 +106,14 @@ export const Articulo = () => {
                       </Table.Cell>
 
                       <Table.Cell className='text-center dark:text-white max-w-40 '>
-                        <Tooltip content={articulo.conducta || 'Sin datos'} className='max-w-lg'>
+                        <Tooltip
+                          content={articulo.conductas?.length
+                            ? <div>{articulo.conductas.map((c, i) => <p key={i}>{c.conducta} (UM {c.valor_desde} a {c.valor_hasta})</p>)}</div>
+                            : articulo.conducta || 'Sin datos'}
+                          className='max-w-lg'
+                        >
                           <div className='max-w-40 truncate mx-auto'>
-                            {articulo.conducta}
+                            {articulo.conductas?.length ? `${articulo.conductas.length} conducta(s)` : (articulo.conducta || '-')}
                           </div>
                         </Tooltip>
                       </Table.Cell>
