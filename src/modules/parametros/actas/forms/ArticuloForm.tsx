@@ -21,6 +21,15 @@ const validationSchema = yup.object().shape({
   valor_hasta: yup.number()
 })
 
+const CONDUCTA_VACIA: IConducta = {
+  denominacion: '',
+  sujeto_activo: '',
+  conducta_tipica: '',
+  sancion: '',
+  valor_desde: '',
+  valor_hasta: ''
+}
+
 interface Props {
   articulo: IArticulo | null
   onSucces: () => void
@@ -54,26 +63,15 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     resolver: yupResolver(validationSchema)
   })
 
-  const [conductas, setConductas] = useState<IConducta[]>(
-    articulo?.conductas?.length
-      ? articulo.conductas
-      : articulo?.conducta
-        ? [{ conducta: articulo.conducta, valor_desde: 0, valor_hasta: 0 }]
-        : []
-  )
+  const [conductas, setConductas] = useState<IConducta[]>(articulo?.conductas || [])
   const [openConducta, setOpenConducta] = useState<boolean>(false)
   const [editIndex, setEditIndex] = useState<number | null>(null)
-  const [conductaForm, setConductaForm] = useState({ conducta: '', valor_desde: '', valor_hasta: '' })
+  const [conductaForm, setConductaForm] = useState<IConducta>(CONDUCTA_VACIA)
   const [conductaError, setConductaError] = useState<string>('')
 
   const onOpenConducta = (index: number | null = null) => {
-    const actual = index !== null ? conductas[index] : null
     setEditIndex(index)
-    setConductaForm({
-      conducta: actual?.conducta || '',
-      valor_desde: actual ? String(actual.valor_desde) : '',
-      valor_hasta: actual ? String(actual.valor_hasta) : ''
-    })
+    setConductaForm(index !== null ? conductas[index] : CONDUCTA_VACIA)
     setConductaError('')
     setOpenConducta(true)
   }
@@ -82,12 +80,14 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
     const desde = Number(conductaForm.valor_desde || 0)
     const hasta = Number(conductaForm.valor_hasta || 0)
 
-    if (!conductaForm.conducta.trim()) return setConductaError('La conducta es requerida')
+    if (!conductaForm.denominacion.trim()) return setConductaError('La denominacion es requerida')
+    if (!conductaForm.conducta_tipica.trim()) return setConductaError('La conducta tipica es requerida')
     if (hasta < desde) return setConductaError('El valor hasta no puede ser menor al valor desde')
 
     const item: IConducta = {
-      ...(editIndex !== null ? conductas[editIndex] : {}),
-      conducta: conductaForm.conducta.trim(),
+      ...conductaForm,
+      denominacion: conductaForm.denominacion.trim(),
+      conducta_tipica: conductaForm.conducta_tipica.trim(),
       valor_desde: desde,
       valor_hasta: hasta
     }
@@ -145,8 +145,9 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
             ? conductas.map((c, i) => (
               <div key={i} className='flex items-center justify-between gap-4 p-2.5 text-sm dark:text-white'>
                 <div className='flex-1'>
-                  <p>{c.conducta}</p>
-                  <p className='text-gray-500 dark:text-gray-400'>Multa de {c.valor_desde} a {c.valor_hasta} UM</p>
+                  <p className='font-medium'>{c.denominacion}{c.sujeto_activo && ` (${c.sujeto_activo})`}</p>
+                  <p>{c.conducta_tipica}</p>
+                  <p className='text-gray-500 dark:text-gray-400'>{c.sancion || `Multa de ${Number(c.valor_desde)} a ${Number(c.valor_hasta)} UM`}</p>
                 </div>
                 <div className='flex gap-2'>
                   <Button type='button' size='xs' color='success' onClick={() => onOpenConducta(i)}>Editar</Button>
@@ -163,15 +164,48 @@ const ArticuloForm = ({ articulo, onSucces }: Props) => {
         <Modal.Body>
           <div className='mb-4'>
             <div className='mb-2 block'>
-              <Label htmlFor='conducta_nueva' value='Conducta' /><strong className='obligatorio'>(*)</strong>
+              <Label htmlFor='conducta_denominacion' value='Denominacion' /><strong className='obligatorio'>(*)</strong>
+            </div>
+            <TextInput
+              id='conducta_denominacion'
+              placeholder='Denominacion'
+              value={conductaForm.denominacion}
+              onChange={(e) => setConductaForm({ ...conductaForm, denominacion: e.target.value })}
+            />
+          </div>
+          <div className='mb-4'>
+            <div className='mb-2 block'>
+              <Label htmlFor='conducta_sujeto' value='Sujeto activo' />
+            </div>
+            <TextInput
+              id='conducta_sujeto'
+              placeholder='Conductor, Titular...'
+              value={conductaForm.sujeto_activo}
+              onChange={(e) => setConductaForm({ ...conductaForm, sujeto_activo: e.target.value })}
+            />
+          </div>
+          <div className='mb-4'>
+            <div className='mb-2 block'>
+              <Label htmlFor='conducta_tipica' value='Conducta tipica' /><strong className='obligatorio'>(*)</strong>
             </div>
             <Textarea
-              id='conducta_nueva'
+              id='conducta_tipica'
               rows={3}
-              placeholder='Conducta del articulo...'
-              value={conductaForm.conducta}
-              onChange={(e) => setConductaForm({ ...conductaForm, conducta: e.target.value })}
+              placeholder='Conducta tipica...'
+              value={conductaForm.conducta_tipica}
+              onChange={(e) => setConductaForm({ ...conductaForm, conducta_tipica: e.target.value })}
               className='p-2.5'
+            />
+          </div>
+          <div className='mb-4'>
+            <div className='mb-2 block'>
+              <Label htmlFor='conducta_sancion' value='Sancion' />
+            </div>
+            <TextInput
+              id='conducta_sancion'
+              placeholder='Multa de 10 a 50 UM'
+              value={conductaForm.sancion}
+              onChange={(e) => setConductaForm({ ...conductaForm, sancion: e.target.value })}
             />
           </div>
           <div className='grid grid-cols-2 gap-4 mb-4'>

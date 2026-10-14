@@ -1,15 +1,18 @@
 export interface IConducta {
     id?: number
-    conducta: string
-    valor_desde: number
-    valor_hasta: number
+    articulo_id?: number
+    denominacion: string
+    sujeto_activo: string
+    conducta_tipica: string
+    sancion: string
+    valor_desde: number | string
+    valor_hasta: number | string
 }
 
 export interface IArticulo {
     id: number
     numero: number
     detalle: string
-    conducta: string
     conductas?: IConducta[]
     inciso: string | null
     tipo_acta: string

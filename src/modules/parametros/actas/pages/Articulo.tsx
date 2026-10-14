@@ -108,12 +108,12 @@ export const Articulo = () => {
                       <Table.Cell className='text-center dark:text-white max-w-40 '>
                         <Tooltip
                           content={articulo.conductas?.length
-                            ? <div>{articulo.conductas.map((c, i) => <p key={i}>{c.conducta} (UM {c.valor_desde} a {c.valor_hasta})</p>)}</div>
-                            : articulo.conducta || 'Sin datos'}
+                            ? <div>{articulo.conductas.map((c, i) => <p key={i}>{c.denominacion}: {c.sancion || `Multa de ${Number(c.valor_desde)} a ${Number(c.valor_hasta)} UM`}</p>)}</div>
+                            : 'Sin datos'}
                           className='max-w-lg'
                         >
                           <div className='max-w-40 truncate mx-auto'>
-                            {articulo.conductas?.length ? `${articulo.conductas.length} conducta(s)` : (articulo.conducta || '-')}
+                            {articulo.conductas?.length ? `${articulo.conductas.length} conducta(s)` : '-'}
                           </div>
                         </Tooltip>
                       </Table.Cell>
