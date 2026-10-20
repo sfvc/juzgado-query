@@ -32,18 +32,14 @@ interface Props {
 
 export const InfractorData = ({ data }: Props) => {
   const { setValue, getValues } = useFormContext<IActaForm>()
-  const [showCuotaWarning, setShowCuotaWarning] = useState(false)
-
   const [infractores, setInfractores] = useState<InfractorActa[]>([])
   const [responsable, setResponsable] = useState<number>(RESPONSABLE.SI)
-  const [persona, setPersonaSelected] = useState<IPersona | null>(null) // Item seleccionado de la busqueda
+  const [persona, setPersonaSelected] = useState<IPersona | null>(null)
   const [showWarning, setShowWarning] = useState(false)
-
-  // Modal de persona
+  const [showCuotaWarning, setShowCuotaWarning] = useState(false)
+  const [showInhabilitado, setShowInhabilitado] = useState(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [editPersona, setEditPersona] = useState<IPersona | null>(null)
-
-  // Modal de antecedentes
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [activeItem, setActiveItem] = useState<number | null>(null)
 
@@ -74,6 +70,12 @@ export const InfractorData = ({ data }: Props) => {
     } else {
       setShowCuotaWarning(false)
     }
+
+    if (persona.inhabilitado) {
+      setShowInhabilitado(true)
+    } else {
+      setShowInhabilitado(false)
+    }
   }
 
   const removeInfractor = (id: number) => {
@@ -101,6 +103,12 @@ export const InfractorData = ({ data }: Props) => {
           setShowCuotaWarning(false)
         }
 
+        if (personaUpdate.inhabilitado) {
+          setShowInhabilitado(true)
+        } else {
+          setShowInhabilitado(false)
+        }
+
         return personaUpdate
       } else {
         return infractor
@@ -110,14 +118,9 @@ export const InfractorData = ({ data }: Props) => {
     setInfractores(infractoresUpdate)
   }
 
-  // Seleccionar infractor del listado
   const itemSelected = (persona: IPersona) => setPersonaSelected(persona)
-
-  // Buscardor de personas
   const handleSearch = async (query: string) => personaActions.getPersonasByFilter(query)
   const handleSelect = (persona: IPersona) => itemSelected(persona)
-
-  /* Modal crear/editar Persona */
   const onOpenModal = async (personaId: number) => {
     try {
       const persona: IPersona = await personaActions.getPersonaById(personaId)
@@ -145,6 +148,9 @@ export const InfractorData = ({ data }: Props) => {
 
       const hayCuotaAlimentaria = data.some((p) => !!p.cuota_alimentaria)
       setShowCuotaWarning(hayCuotaAlimentaria)
+
+      const hayInhabilitado = data.some((p) => !!p.inhabilitado)
+      setShowInhabilitado(hayInhabilitado)
     }
   }, [data])
 
@@ -209,6 +215,12 @@ export const InfractorData = ({ data }: Props) => {
         </div>
       )}
 
+      {showInhabilitado && (
+        <div className="bg-red-100 text-red-700 text-lg font-semibold text-center p-4 rounded-lg shadow-md mt-2">
+          Esta persona está inhabilitada.
+        </div>
+      )}
+
       {(infractores?.length > 0) && (
         <div className='overflow-x-auto'>
           <Table hoverable>
@@ -269,7 +281,6 @@ export const InfractorData = ({ data }: Props) => {
         toggleModal={toggleModal}
       />
 
-      {/* Modal crear/editar */}
       {
         editPersona &&
         <Modal show={openModal} onClose={onCloseModal} size='5xl'>

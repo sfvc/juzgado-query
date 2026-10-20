@@ -537,7 +537,7 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
                     onChange={(e) => setCantidadCuotas(Number(e.target.value))}
                     className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
                   >
-                    {[2, 3, 4].map((cuotas) => (
+                    {[1, 2, 3, 4].map((cuotas) => (
                       <option key={cuotas} value={cuotas}>
                         {cuotas}
                       </option>

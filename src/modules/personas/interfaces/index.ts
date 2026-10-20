@@ -42,6 +42,7 @@ export interface IPersona {
     fecha_nacimiento: string | null
     numero_inscripcion: string
     cuota_alimentaria: string
+    inhabilitado: string
     cuit: string
     sexo: string
     cuil: string

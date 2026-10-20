@@ -144,7 +144,7 @@ export const ActaTable = ({ actas, isFetching, pagination, formFilter, filterPar
                               }
                             </div>
                             : (
-                              <JuzgadoGuard fechaActa={acta.fecha}>
+                              <JuzgadoGuard fechaActa={acta.fecha} actaId={acta.id}>
                                 <ActionButtons acta={acta} />
                               </JuzgadoGuard>
                             )
