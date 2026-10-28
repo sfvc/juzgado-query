@@ -8,11 +8,6 @@ import type {
 } from '../../actuaciones/interfaces/actuacion'
 import { formatDate } from '../../../shared/helpers/formatDate'
 
-const f = new Date()
-const añoActual = f.getFullYear()
-const fechaActual = f.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-const horaActual = f.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false })
-
 const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   if (!vehiculo) return ''
 
@@ -27,6 +22,12 @@ const formatAddress = (domicilio: Domicilio) => {
 }
 
 export const formatData = async (data: ActuacionResponse) => {
+  // Se calcula en cada llamada para no quedar congelada al cargar el modulo
+  const f = new Date()
+  const añoActual = f.getFullYear()
+  const fechaActual = f.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const horaActual = f.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false })
+
   const {
     actas,
     notificaciones,

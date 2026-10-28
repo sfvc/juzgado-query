@@ -2,6 +2,7 @@ export const dictionary = () => {
   return {
     // Fecha actual
     añoActual: '{d.añoActual}',
+    fechaActual: '{d.fechaActual}',
     fecha: '{d.fechaActual}',
     horaActual: '{d.horaActual}',
 
