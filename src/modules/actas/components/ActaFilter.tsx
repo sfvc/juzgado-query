@@ -29,7 +29,6 @@ export const ActaFilter = () => {
   const { data, isSuccess }  = useQuery<DataFilters>({
     queryKey: ['actas-data'],
     queryFn: actaActions.getDataFilter,
-    staleTime: 1000 * 60 * 5
   })
 
   const {

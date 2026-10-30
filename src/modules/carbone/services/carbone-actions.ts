@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
 import { dictionary } from '../helpers/dictionary'
 import { apiJuzgado } from '../../../api/config'
 import { formatData } from '../helpers/formatData'
 import { cleanFileName } from '../helpers/cleanFileName'
 import { getFileExtension } from '../helpers/getFileExtension'
-import type { Notificacion, NotificationActa } from '../../notificaciones/interfaces'
+import type { ActaRef, CarboneRequest, PlantillaItem } from '../interfaces'
 import { ActuacionResponse } from '../../actuaciones/interfaces/actuacion'
 
 const TEMPLATE_URL = `${import.meta.env.VITE_TEMPLATE_URL}`
@@ -92,7 +91,7 @@ export const showPlantilla = async (path: string): Promise<void> => {
 }
 
 // Renderiza el pdf en el navegador con los datos enviados a carbone para inhabilitados
-export const showFilePDF = async (data: any) => {
+export const showFilePDF = async (data: CarboneRequest) => {
   try {
     const { reportName = 'documento.pdf', ...body } = data
 
@@ -115,13 +114,13 @@ export const showFilePDF = async (data: any) => {
     // Limpiar el objeto URL
     URL.revokeObjectURL(fileURL)
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
 
 // Descarga el word con los datos inyectados
-export const downloadWordFile = async (item: Notificacion, acta: NotificationActa, tipo: string) => {
+export const downloadWordFile = async (item: PlantillaItem, acta: ActaRef, tipo: string) => {
   const path = item?.plantilla?.path
   const itemId = item?.id
 
@@ -168,11 +167,11 @@ export const downloadWordFile = async (item: Notificacion, acta: NotificationAct
 
 // Subir nuevo archivo editado (word) para que el back lo convierta en PDF y almacene en la DB
 // Se utiliza el mismo endpoint para subir la notificacion y la actuacion. Por lo tanto pasar la property correspondiente
-export const uploadFilePDF = async (file: File, item: any, property: string, userId: number) => { // property: notificacion_id | actuacion_id
+export const uploadFilePDF = async (file: File, item: PlantillaItem & ActaRef, property: string, userId: number) => { // property: notificacion_id | actuacion_id
   const url = property === 'notificacion_id' ? NOTIFICACION_URL : ACTUACION_URL
   const date = new Date().getTime().toString().split('').slice(4, 12).join('')
 
-  const name =  `${ item.numero_acta }-${ cleanFileName(item?.plantilla?.path) }`
+  const name =  `${ item.numero_acta }-${ cleanFileName(item?.plantilla?.path ?? '') }`
 
   const data = {
     file,
@@ -189,7 +188,7 @@ export const uploadFilePDF = async (file: File, item: any, property: string, use
 }
 
 // Convertir la primera vez el word al pdf y subirlo a s3
-export const showFileWord = async (data: any): Promise<File | undefined> => {
+export const showFileWord = async (data: CarboneRequest): Promise<File | undefined> => {
   try {
     const response = await axios.post(CARBONE_URL, data, {
       responseType: 'blob'
@@ -200,6 +199,6 @@ export const showFileWord = async (data: any): Promise<File | undefined> => {
     return file
 
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

@@ -1,7 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
-import { ILocalidad, FormLocalidad } from '../interfaces/localizacion'
+import { ILocalidad } from '../interfaces/localizacion'
 import { localidadActions } from '..'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const useLocalidad = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: localidades, pagination, isFetching } = usePagination<ILocalidad, FilterParams>({
@@ -26,40 +24,16 @@ export const useLocalidad = () => {
   })
 
   /* Mutations */
-  const createLocalidad = useMutation({
-    mutationFn: localidadActions.createLocalidad,
-    onSuccess: () => {
-      toast.success('Localidad creada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear la localidad')
-      console.log(error)
-    }
-  })
-
-  const updateLocalidad = useMutation({
-    mutationFn: ({ id, localidad }: { id: number, localidad: FormLocalidad }) => localidadActions.updateLocalidad(id, localidad),
-    onSuccess: () => {
-      toast.success('Localidad actualizada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar la localidad')
-      console.log(error)
-    }
-  })
-
-  const deleteLocalidad = useMutation({
-    mutationFn: (id: number) => localidadActions.deleteLocalidad(id),
-    onSuccess: () => {
-      toast.success('Localidad eliminada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar localidad')
-      console.log(error)
-    }
+  const {
+    create: createLocalidad,
+    update: updateLocalidad,
+    remove: deleteLocalidad
+  } = useCrudMutations({
+    actions: { create: localidadActions.createLocalidad, update: localidadActions.updateLocalidad, remove: localidadActions.deleteLocalidad },
+    group: 'localizacion',
+    entity: 'localidad',
+    label: 'Localidad',
+    feminine: true
   })
 
   return {

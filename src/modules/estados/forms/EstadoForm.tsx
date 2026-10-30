@@ -25,7 +25,6 @@ const EstadoForm = ({ actaId, estado, onSucces }: Props) => {
   const { data: estados, isLoading } = useQuery<IEstadoActa[]>({
     queryKey: ['estados-actas'],
     queryFn: estadoActions.getAllEstadosActa,
-    staleTime: 1000 * 60 * 5
   })
 
   const {

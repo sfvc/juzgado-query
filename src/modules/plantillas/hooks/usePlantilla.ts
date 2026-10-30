@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import { toast } from 'react-toastify'
 import { useFilter, usePagination } from '../../../shared'
 import { IPlantilla, FormPlantilla } from '../interfaces'
@@ -16,7 +17,7 @@ const initialValues = {
 }
 
 export const usePlantilla = () => {
-  const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: plantillas, pagination, isFetching } = usePagination<IPlantilla, FilterParams>({
@@ -30,11 +31,10 @@ export const usePlantilla = () => {
     mutationFn: plantillaActions.createPlantilla,
     onSuccess: () => {
       toast.success('Plantilla creada con exito')
-      queryClient.clear()
+      invalidate('plantillas')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al crear la plantilla')
-      console.log(error)
     }
   })
 
@@ -42,11 +42,10 @@ export const usePlantilla = () => {
     mutationFn: ({ id, plantilla }: { id: number, plantilla: FormPlantilla }) => plantillaActions.updatePlantilla(id, plantilla),
     onSuccess: () => {
       toast.success('Plantilla actualizada con exito')
-      queryClient.clear()
+      invalidate('plantillas')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al actualizar la plantilla')
-      console.log(error)
     }
   })
 
@@ -54,11 +53,10 @@ export const usePlantilla = () => {
     mutationFn: (id: number) => plantillaActions.deletePlantilla(id),
     onSuccess: () => {
       toast.success('Plantilla eliminada con exito')
-      queryClient.clear()
+      invalidate('plantillas')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar la plantilla')
-      console.log(error)
     }
   })
 
@@ -66,11 +64,10 @@ export const usePlantilla = () => {
     mutationFn: ({file, path}: {file: File, path?: string}) => carboneActions.uploadFilePlantilla(file, path),
     onSuccess: () => {
       toast.success('Plantilla editada con exito')
-      queryClient.clear()
+      invalidate('plantillas')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al editar plantilla')
-      console.log(error)
     }
   })
 

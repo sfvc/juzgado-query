@@ -7,6 +7,7 @@ export const useActaById = (id: string | undefined) => {
     queryKey: ['acta', id],
     queryFn: () => actaActions.getActaById(id!),
     enabled: !!id,
+    staleTime: 0,
   })
 
   return {

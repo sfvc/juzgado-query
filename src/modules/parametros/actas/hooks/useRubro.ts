@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { useFilter } from '../../../../shared/hooks/useFilter'
-import { FormRubro, IRubro } from '../interfaces'
+import { IRubro } from '../interfaces'
 import { rubroActions } from '..'
 
 interface FilterParams {
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const useRubro = () => {
-  const queryClient = useQueryClient()
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
@@ -27,40 +25,15 @@ export const useRubro = () => {
   })
 
   /* Mutations */
-  const createRubro = useMutation({
-    mutationFn: rubroActions.createRubro,
-    onSuccess: () => {
-      toast.success('Rubro creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el rubro')
-      console.log(error)
-    }
-  })
-
-  const updateRubro = useMutation({
-    mutationFn: ({ id, rubro }: { id: number, rubro: FormRubro }) => rubroActions.updateRubro(id, rubro),
-    onSuccess: () => {
-      toast.success('Rubro actualizado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar el rubro')
-      console.log(error)
-    }
-  })
-
-  const deleteRubro = useMutation({
-    mutationFn: (id: number) => rubroActions.deleteRubro(id),
-    onSuccess: () => {
-      toast.success('Rubro eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar el rubro')
-      console.log(error)
-    }
+  const {
+    create: createRubro,
+    update: updateRubro,
+    remove: deleteRubro
+  } = useCrudMutations({
+    actions: { create: rubroActions.createRubro, update: rubroActions.updateRubro, remove: rubroActions.deleteRubro },
+    group: 'rubros',
+    entity: 'rubro',
+    label: 'Rubro'
   })
 
   return {

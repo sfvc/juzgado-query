@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { actuacionActions } from '..'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import { useContext } from 'react'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 
 export const useActuacion= () => {
   const { resetProvider } = useContext(ActuacionContext)
   const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { id } = useParams() // Id de acta
 
   /* Mutations */
@@ -19,9 +21,8 @@ export const useActuacion= () => {
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
       resetProvider()
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al crear actuación')
-      console.log(error)
     }
   })
 
@@ -31,24 +32,20 @@ export const useActuacion= () => {
       toast.success('Actuación eliminada exitosamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar la actuación')
-      console.log(error)
     }
   })
 
   // Elimnar notificación del historial de notificaciones
   const deleteActuacionHistory = useMutation({
-    mutationFn: ({ id }: {id: number, queryKey?: (string | number | object)[]}) => actuacionActions.deleteActuacionHistory(id),
-    onSuccess: (_, __, context: { queryKey?: (string | number | object)[] } | undefined) => {
+    mutationFn: ({ id }: { id: number }) => actuacionActions.deleteActuacionHistory(id),
+    onSuccess: () => {
       toast.success('Registro eliminado del historial')
-
-      queryClient.invalidateQueries({ queryKey: context?.queryKey })
-      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
+      invalidate('all')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar registro')
-      console.log(error)
     }
   })
 
@@ -59,9 +56,8 @@ export const useActuacion= () => {
       toast.success('Enviado a bandeja correctamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al enviar')
-      console.log(error)
     }
   })
 
@@ -72,9 +68,8 @@ export const useActuacion= () => {
       toast.success('Eliminado de la bandeja correctamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar')
-      console.log(error)
     }
   })
 
@@ -86,9 +81,8 @@ export const useActuacion= () => {
       toast.success('Cuotas generadas correctamente')
       queryClient.invalidateQueries({ queryKey: ['acta-actuacion', { id }] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al generar cuotas')
-      console.log(error)
     }
   })
 

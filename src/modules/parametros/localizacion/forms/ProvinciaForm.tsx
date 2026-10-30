@@ -23,7 +23,6 @@ const ProvinciaForm = ({ provincia, onSucces }: Props) => {
   const { data: paises, isLoading } = useQuery({
     queryKey: ['paises', 'all'], 
     queryFn: paisActions.getAllPaises,  
-    staleTime: 1000 * 60 * 5, 
   })
 
   const {

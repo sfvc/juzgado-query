@@ -40,7 +40,6 @@ export const Antecedentes = ({ id, isOpen, toggleModal }: Props) => {
         currentPage,
         tipoFiltro || undefined
       ),
-    staleTime: 1000 * 60 * 5,
     enabled: !!id
   })
 

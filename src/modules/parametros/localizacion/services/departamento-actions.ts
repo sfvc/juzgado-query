@@ -46,6 +46,6 @@ export const getDepartamentosByProvincia = async (id: number) => {
     const { data: { departamentos } } = response.data
     return departamentos
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

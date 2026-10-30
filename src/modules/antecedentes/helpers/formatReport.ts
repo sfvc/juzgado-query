@@ -1,3 +1,4 @@
+import { formatDateDMY } from '../../../shared/helpers/formatDate'
 import { IAntecedente } from '../interfaces'
 
 export const formatReport = (
@@ -24,7 +25,7 @@ export const formatReport = (
       numeroActa: antecedente?.numero_acta || '',
       nroComprobanteRentas: antecedente?.nro_comprobante || '',
       numeroCausa: antecedente?.numero_causa || '',
-      fecha: antecedente?.fecha || '',
+      fecha: formatDateDMY(antecedente?.fecha),
       estados: antecedente?.estados?.[0]?.nombre || '',
       juzgado: antecedente?.juzgado_id || ''
     }))

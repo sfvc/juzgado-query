@@ -77,9 +77,12 @@ export interface PlanPago {
     fecha_vencimiento?: string
     pagado?: string
     fecha_pago?: string
+    path_comprobante?: string
     observaciones?: string
   }[];
 }
+
+export type Cuota = NonNullable<PlanPago['detalle_cuotas']>[number]
 
 export interface Plantilla {
   id: number;

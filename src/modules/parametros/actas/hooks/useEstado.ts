@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { useFilter } from '../../../../shared/hooks/useFilter'
-import { FormEstado, IEstado } from '../interfaces'
+import { IEstado } from '../interfaces'
 import { estadoActions } from '..'
 
 interface FilterParams {
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const useEstado = () => {
-  const queryClient = useQueryClient()
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
@@ -27,40 +25,15 @@ export const useEstado = () => {
   })
 
   /* Mutations */
-  const createEstado = useMutation({
-    mutationFn: estadoActions.createEstado,
-    onSuccess: () => {
-      toast.success('Estado creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el estado')
-      console.log(error)
-    }
-  })
-
-  const updateEstado = useMutation({
-    mutationFn: ({ id, estado }: { id: number, estado: FormEstado }) => estadoActions.updateEstado(id, estado),
-    onSuccess: () => {
-      toast.success('Estado actualizado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar el estado')
-      console.log(error)
-    }
-  })
-
-  const deleteEstado = useMutation({
-    mutationFn: (id: number) => estadoActions.deleteEstado(id),
-    onSuccess: () => {
-      toast.success('Estado eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar el estado')
-      console.log(error)
-    }
+  const {
+    create: createEstado,
+    update: updateEstado,
+    remove: deleteEstado
+  } = useCrudMutations({
+    actions: { create: estadoActions.createEstado, update: estadoActions.updateEstado, remove: estadoActions.deleteEstado },
+    group: 'estados',
+    entity: 'estado',
+    label: 'Estado'
   })
 
   return {

@@ -1,5 +1,8 @@
 import axios from 'axios'
 
+// Datos del localStorage que dependen de la sesion y se limpian al vencer el token
+const SESSION_KEYS = ['token', 'infraccion', 'infractor', 'vehiculo']
+
 const apiJuzgado = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`
 })
@@ -27,7 +30,9 @@ apiJuzgado.interceptors.response.use(
     const { response } = error
 
     if (response?.status === 401 || response?.status === 403) {
-      localStorage.clear()
+      // Solo se descarta la sesion y los filtros guardados. No se usa localStorage.clear()
+      // porque tambien borraba preferencias del usuario, como el tema oscuro o claro.
+      SESSION_KEYS.forEach((key) => localStorage.removeItem(key))
       window.location.href = '/login'
     }
 

@@ -1,22 +1,22 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { actuacionActions } from '..'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 
 export const useSentencia = () => {
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
 
   const createSentencia = useMutation({
     mutationFn: actuacionActions.createSentencia,
     onSuccess: () => {
       toast.success('Sentencia creada con exito')
-      queryClient.clear()
+      invalidate('all')
       navigate(-1)
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al crear la sentencia')
-      console.log(error)
     }
   })
 

@@ -65,7 +65,7 @@ export const VehiculoData = ({ data }: Props) => {
       SetEditVehiculo(vehiculo)
       setOpenModal(true)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

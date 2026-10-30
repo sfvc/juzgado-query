@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Column } from '../../../shared/interfaces'
-import type { Actuacion, ActuacionActa } from '../interfaces'
+import type { Actuacion, ActuacionActa, Cuota } from '../interfaces'
 import { useContext, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { AuthContext } from '../../../context/Auth/AuthContext'
@@ -11,9 +10,9 @@ import { RoleGuard, UserRole } from '../../../auth'
 import { carboneActions, usePdf } from '../../carbone'
 import { LoadingOverlay } from '../../../layout'
 import { ActuacionHistory } from './ActuacionHistory'
+import { ComprobanteModal } from './ComprobanteModal'
+import { PlanPagoModal } from './PlanPagoModal'
 import { ultimaSentencia } from '../helpers/ultimaSentencia'
-import { soloNumeros } from '../../../shared/helpers/formatNumber'
-import { formatDate } from '../../../shared/helpers/formatDate'
 // import { generarComprobanteDigital } from '../../../shared/helpers/generarComprobanteDigital'
 
 const colums: Column[] = [
@@ -27,10 +26,6 @@ const colums: Column[] = [
   { key: 'acciones', label: 'Acciones' },
 ]
 
-interface ActaActuacionResponse {
-  actuaciones: Actuacion[]
-}
-
 const ESTADO_RESOLUCION_PENDIENTE = 7
 const ESTADO_RESOLUCION_PAGADA = 5
 
@@ -43,14 +38,12 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
   const validateFinalizado = acta?.estados?.find((estado) => estado.id === ESTADO_RESOLUCION_PAGADA)
 
   const { useAction, generarPDFGotenberg, convertToPDF } = usePdf()
-  const { deleteActuacion, generateComprobante, deleteComprobante, createCuota } = useActuacion()
+  const { deleteActuacion } = useActuacion()
 
   const [modal, setModal] = useState({ delete: false, history: false, comprobante: false, cuotas: false })
   const [activeItem, setActiveItem] = useState<Actuacion | null>(null)
 
-  const [entrega, setEntrega] = useState('')
-  const [cantidadCuotas, setCantidadCuotas] = useState(2)
-  const [selectedCuota, setSelectedCuota] = useState<any | null>(null)
+  const [selectedCuota, setSelectedCuota] = useState<Cuota | null>(null)
 
   const toggleModal = (action: string, value: boolean, actuacion?: Actuacion) => {
     if (actuacion) {
@@ -87,31 +80,6 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
     useAction.actionFn(async () => {
       await convertToPDF(url)
     })
-  }
-
-  const handleSaveCuotas = async () => {
-    if (!activeItem) return
-    try {
-      await createCuota.mutateAsync({
-        actuacionId: activeItem.id,
-        entrega,
-        cuotas: cantidadCuotas
-      })
-
-      const updated = await queryClient.fetchQuery<ActaActuacionResponse>({
-        queryKey: ['acta-actuacion', { id: String(acta.id) }]
-      })
-
-      const refreshed = updated?.actuaciones?.find((a: Actuacion) => a.id === activeItem.id)
-      if (refreshed) setActiveItem(refreshed)
-
-      setEntrega('')
-      setCantidadCuotas(2)
-
-      toggleModal('cuotas', true, refreshed)
-    } catch (error) {
-      console.error('Error al guardar cuotas:', error)
-    }
   }
 
   return (
@@ -296,277 +264,28 @@ export const Expediente = ({ acta, actuaciones }: { acta: ActuacionActa, actuaci
       }
 
       {activeItem &&
-        <Modal show={modal.comprobante} onClose={() => toggleModal('comprobante', false)}>
-          <Modal.Header>Bandeja de Cobro</Modal.Header>
-          <Modal.Body>
-            <div className="text-center">
-              <icons.Warning />
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                {selectedCuota ? (
-                  selectedCuota.caja
-                    ? `Confirma para retirar la cuota N°${selectedCuota.cuota} de caja`
-                    : `Confirma para enviar la cuota N°${selectedCuota.cuota} a caja`
-                ) : activeItem.caja
-                  ? '¿Confirma retirar de la bandeja de cobro?'
-                  : '¿Confirma enviar a la bandeja de cobro?'}
-              </h3>
-
-              <div className="flex justify-center gap-4">
-                <Button
-                  color="gray"
-                  onClick={() => {
-                    setSelectedCuota(null)
-                    toggleModal('comprobante', false)
-                  }}
-                >
-                  Cancelar
-                </Button>
-
-                {selectedCuota ? (
-                  <Button
-                    onClick={async () => {
-                      if (!selectedCuota || !activeItem) return
-
-                      if (selectedCuota.caja) {
-                        await deleteComprobante.mutateAsync(activeItem.id)
-                      } else {
-                        await generateComprobante.mutateAsync(activeItem.id)
-                      }
-
-                      setSelectedCuota(null)
-                      toggleModal('comprobante', false)
-                    }}
-                    isProcessing={generateComprobante.isPending || deleteComprobante.isPending}
-                    color={selectedCuota?.caja ? 'failure' : 'success'}
-                  >
-                    {selectedCuota?.caja ? 'Sí, retirar' : 'Sí, enviar'}
-                  </Button>
-                ) : (
-                  <>
-                    {activeItem.caja === false ? (
-                      <Button
-                        onClick={async () => {
-                          await generateComprobante.mutateAsync(activeItem.id)
-                          toggleModal('comprobante', false)
-                        }}
-                        isProcessing={generateComprobante.isPending}
-                        color='success'
-                      >
-                        Sí, enviar
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={async () => {
-                          await deleteComprobante.mutateAsync(activeItem.id)
-                          toggleModal('comprobante', false)
-                        }}
-                        isProcessing={deleteComprobante.isPending}
-                        color='failure'
-                      >
-                        Sí, retirar
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-          </Modal.Body>
-        </Modal>
+        <ComprobanteModal
+          show={modal.comprobante}
+          onClose={() => {
+            setSelectedCuota(null)
+            toggleModal('comprobante', false)
+          }}
+          actuacion={activeItem}
+          cuota={selectedCuota}
+        />
       }
 
-      {activeItem && (
-        <Modal show={modal.cuotas} onClose={() => toggleModal('cuotas', false)} size="xl">
-          <Modal.Header>Plan de Pago</Modal.Header>
-          <Modal.Body>
-            {activeItem?.planPago ? (
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-100 dark:bg-gray-800 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                    Resumen
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-medium">Total:</span> ${activeItem.planPago.total}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-medium">Entrega:</span> ${activeItem.planPago.entrega}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-medium">Restante:</span>{' '}
-                      ${Number(activeItem.planPago.total) - Number(activeItem.planPago.entrega)}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-300">
-                      <span className="font-medium">Cuotas:</span> {activeItem.planPago.cuotas}
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
-                    Detalle de Cuotas
-                  </h3>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {activeItem?.planPago?.detalle_cuotas?.map((cuota: any, index: number) => (
-                      <div
-                        key={cuota.id}
-                        className={`p-3 rounded-xl shadow-sm border text-sm ${cuota.pagado
-                          ? 'bg-green-100 border-green-300 dark:bg-green-800/40 dark:border-green-600'
-                          : 'bg-yellow-100 border-yellow-300 dark:bg-yellow-800/40 dark:border-yellow-600'
-                        }`}
-                      >
-                        <p className="font-medium text-gray-800 dark:text-gray-100">
-                          Cuota {index + 1}: ${cuota.importe}
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-300">
-                          Vencimiento:{' '}
-                          <span className="font-medium">{formatDate(cuota.fecha_vencimiento)}</span>
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-300">
-                          Estado:{' '}
-                          <span className={cuota.pagado ? 'text-green-600 dark:text-green-400' : 'text-yellow-700 dark:text-yellow-300'}>
-                            {cuota.pagado ? 'Pagado' : 'Pendiente'}
-                          </span>
-                        </p>
-
-                        {cuota?.path_comprobante && (
-                          <div className="mt-3 flex justify-end">
-                            <Button
-                              color="blue"
-                              size="xs"
-                              onClick={() => window.open(cuota.path_comprobante, '_blank')}
-                            >
-                              <icons.World /> <span className='mt-1 ml-1'>Comprobante</span>
-                            </Button>
-                          </div>
-                        )}
-
-                        {!cuota.pagado && (
-                          <div className="mt-3 flex justify-end">
-                            <Button
-                              color={cuota.caja ? 'failure' : 'purple'}
-                              size="xs"
-                              onClick={async () => {
-                                setActiveItem({ ...activeItem })
-                                setSelectedCuota(cuota)
-
-                                if (cuota.caja) {
-                                  // await handleDeleteComprobante()
-                                  const updated = await queryClient.fetchQuery<ActaActuacionResponse>({
-                                    queryKey: ['acta-actuacion', { id: String(acta.id) }]
-                                  })
-                                  const refreshed = updated?.actuaciones?.find((a: Actuacion) => a.id === activeItem.id)
-                                  if (refreshed) setActiveItem(refreshed)
-                                } else {
-                                  toggleModal('comprobante', true, activeItem)
-                                }
-                              }}
-                              disabled={
-                                activeItem?.planPago?.detalle_cuotas?.some(
-                                  (c: any) => !c.pagado && c.id < cuota.id
-                                )
-                              }
-                            >
-                              <icons.ReportMoney />{' '}
-                              <span className='mt-1'>{cuota.caja ? 'Retirar de caja' : 'Enviar a caja'}</span>
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <form
-                className="flex flex-col gap-4"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  handleSaveCuotas()
-                }}
-              >
-                {activeItem?.total && (
-                  <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm shadow-sm">
-                    <p className="text-gray-700 dark:text-gray-200">
-                      <span className="font-medium">Monto total:</span> ${activeItem.total}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-200">
-                      <span className="font-medium">Entrega:</span> ${entrega || 0}
-                    </p>
-                    {Number(entrega || 0) > Number(activeItem.total) && (
-                      <p className="text-red-600 font-medium">La entrega no puede superar el monto total</p>
-                    )}
-                    {Number(entrega || 0) < 50000 && (
-                      <p className="text-red-600 font-medium">La entrega mínima es de $50.000</p>
-                    )}
-                    <p className="text-gray-700 dark:text-gray-200">
-                      <span className="font-medium">Saldo:</span>{' '}
-                      ${Math.max(Number(activeItem.total) - Number(entrega || 0), 0)}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-200">
-                      <span className="font-medium">Valor de cada cuota:</span>{' '}
-                      {cantidadCuotas > 0
-                        ? (
-                          Math.max(Number(activeItem.total) - Number(entrega || 0), 0) /
-                          cantidadCuotas
-                        ).toFixed(2)
-                        : 0}
-                    </p>
-                  </div>
-                )}
-
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Entrega
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ingrese entrega"
-                    value={entrega}
-                    onChange={(e) => setEntrega(e.target.value)}
-                    onInput={soloNumeros}
-                    className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Cantidad de Cuotas
-                  </label>
-                  <select
-                    value={cantidadCuotas}
-                    onChange={(e) => setCantidadCuotas(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 p-2 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
-                  >
-                    {[1, 2, 3, 4].map((cuotas) => (
-                      <option key={cuotas} value={cuotas}>
-                        {cuotas}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="flex justify-end gap-4 mt-4">
-                  <Button color="gray" onClick={() => toggleModal('cuotas', false)}>
-                    Cancelar
-                  </Button>
-                  <Button
-                    color="success"
-                    type="submit"
-                    isProcessing={createCuota.isPending}
-                    disabled={
-                      createCuota.isPending ||
-                      Number(entrega || 0) > Number(activeItem.total) ||
-                      Number(entrega || 0) < 50000
-                    }
-                  >
-                    Guardar
-                  </Button>
-                </div>
-              </form>
-            )}
-          </Modal.Body>
-        </Modal>
-      )}
+      {activeItem &&
+        <PlanPagoModal
+          show={modal.cuotas}
+          onClose={() => toggleModal('cuotas', false)}
+          actaId={acta.id}
+          actuacion={activeItem}
+          onActuacionChange={setActiveItem}
+          onSelectCuota={setSelectedCuota}
+          onOpenComprobante={() => toggleModal('comprobante', true, activeItem)}
+        />
+      }
     </>
   )
 }

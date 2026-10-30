@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { provinciaActions } from '..'
-import type { IProvincia, FormProvincia } from '../interfaces/localizacion'
+import type { IProvincia } from '../interfaces/localizacion'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 
 interface FilterParams {
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const useProvincia = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: provincias, pagination, isFetching } = usePagination<IProvincia, FilterParams>({
@@ -26,40 +24,16 @@ export const useProvincia = () => {
   })
 
   /* Mutations */
-  const createProvincia = useMutation({
-    mutationFn: provinciaActions.createProvincia,
-    onSuccess: () => {
-      toast.success('Provincia creada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear la provincia')
-      console.log(error)
-    }
-  })
-
-  const updateProvincia = useMutation({
-    mutationFn: ({ id, provincia }: { id: number, provincia: FormProvincia }) => provinciaActions.updateProvincia(id, provincia),
-    onSuccess: () => {
-      toast.success('Provincia actualizada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar la provincia')
-      console.log(error)
-    }
-  })
-
-  const deleteProvincia = useMutation({
-    mutationFn: (id: number) => provinciaActions.deleteProvincia(id),
-    onSuccess: () => {
-      toast.success('Provincia eliminada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar la provincia')
-      console.log(error)
-    }
+  const {
+    create: createProvincia,
+    update: updateProvincia,
+    remove: deleteProvincia
+  } = useCrudMutations({
+    actions: { create: provinciaActions.createProvincia, update: provinciaActions.updateProvincia, remove: provinciaActions.deleteProvincia },
+    group: 'localizacion',
+    entity: 'provincia',
+    label: 'Provincia',
+    feminine: true
   })
 
   return {

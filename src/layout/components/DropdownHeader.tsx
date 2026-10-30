@@ -1,20 +1,31 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Dropdown } from 'flowbite-react'
 import { AuthContext } from '../../context/Auth/AuthContext'
 import { icons } from '../../shared'
 import { useNavigate } from 'react-router-dom'
 import { ThemeContext } from '../../context/Theme/ThemeContext'
 import { ThemeButton } from './ThemeButton'
+import { NovedadesModal } from './NovedadesModal'
 import { RoleGuard, UserRole } from '../../auth'
 
 export const DropdownHeader = () => {
   const { user, logoutUser } = useContext(AuthContext)
   const { theme, toggleTheme } = useContext(ThemeContext)
   const navigate = useNavigate()
+  const [showNovedades, setShowNovedades] = useState<boolean>(false)
 
   return (
     <div className='flex justify-between md:justify-normal gap-2'>
       <ThemeButton theme={theme} toggleTheme={toggleTheme} />
+
+      <button
+        onClick={() => setShowNovedades(true)}
+        className='p-2 rounded-full dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300'
+        aria-label='Novedades del sistema'
+        title='Novedades del sistema'
+      >
+        <icons.Sparkles />
+      </button>
 
       <Dropdown
         label='Label'
@@ -60,6 +71,8 @@ export const DropdownHeader = () => {
           Cerrar Sesión
         </Dropdown.Item>
       </Dropdown>
+
+      <NovedadesModal show={showNovedades} onClose={() => setShowNovedades(false)} />
     </div>
   )
 }

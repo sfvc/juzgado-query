@@ -1,7 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
-import { usePagination, useFilter, validateErrors } from '../../../shared'
-import { IPersona, PersonaFisica, PersonaJuridica } from '../interfaces'
+import { useCrudMutations } from '../../../shared/hooks/useCrudMutations'
+import { usePagination, useFilter } from '../../../shared'
+import { IPersona } from '../interfaces'
 import { personaActions } from '..'
 
 interface FilterParams {
@@ -15,7 +14,6 @@ const initialValues = {
 }
 
 export const usePersona = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: personas, pagination, isFetching } = usePagination<IPersona, FilterParams>({
@@ -25,40 +23,17 @@ export const usePersona = () => {
   })
 
   /* Mutations */
-  const createPersona = useMutation({
-    mutationFn: personaActions.createPersona,
-    onSuccess: () => {
-      toast.success('Persona creada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      validateErrors(error, 'Error al crear la persona')
-      console.log(error)
-    }
-  })
-
-  const updatePersona = useMutation({
-    mutationFn: ({ id, persona }: { id: number, persona: PersonaFisica | PersonaJuridica }) => personaActions.updatePersona(id, persona),
-    onSuccess: () => {
-      toast.success('Persona actualizada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      validateErrors(error, 'Error al actualizar la persona')
-      console.log(error)
-    }
-  })
-
-  const deletePersona = useMutation({
-    mutationFn: (id: number) => personaActions.deletePersona(id),
-    onSuccess: () => {
-      toast.success('Persona eliminada con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar la persona')
-      console.log(error)
-    }
+  const {
+    create: createPersona,
+    update: updatePersona,
+    remove: deletePersona
+  } = useCrudMutations({
+    actions: { create: personaActions.createPersona, update: personaActions.updatePersona, remove: personaActions.deletePersona },
+    group: 'personas',
+    entity: 'persona',
+    label: 'Persona',
+    feminine: true,
+    validate: true
   })
 
   return {

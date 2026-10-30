@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { paisActions } from '..'
-import type { IPais, FormPais } from '../interfaces/localizacion'
+import type { IPais } from '../interfaces/localizacion'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 
 interface FilterParams {
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const usePaises = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: paises, pagination, isFetching } = usePagination<IPais, FilterParams>({
@@ -26,40 +24,15 @@ export const usePaises = () => {
   })
 
   /* Mutations */
-  const createPais = useMutation({
-    mutationFn: paisActions.createPais,
-    onSuccess: () => {
-      toast.success('Pais creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el pais')
-      console.log(error)
-    }
-  })
-
-  const updatePais = useMutation({
-    mutationFn: ({ id, pais }: { id: number, pais: FormPais }) => paisActions.updatePais(id, pais),
-    onSuccess: () => {
-      toast.success('Pais editado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al editar el pais')
-      console.log(error)
-    }
-  })
-
-  const deletePais = useMutation({
-    mutationFn: (id: number) => paisActions.deletePais(id),
-    onSuccess: () => {
-      toast.success('Pais eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al elimar el pais')
-      console.log(error)
-    }
+  const {
+    create: createPais,
+    update: updatePais,
+    remove: deletePais
+  } = useCrudMutations({
+    actions: { create: paisActions.createPais, update: paisActions.updatePais, remove: paisActions.deletePais },
+    group: 'localizacion',
+    entity: 'pais',
+    label: 'Pais'
   })
 
   return {

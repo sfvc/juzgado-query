@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useCrudModals } from '../../../../shared/hooks/useCrudModals'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, icons } from '../../../../shared'
 import { Column } from '../../../../shared/interfaces'
@@ -14,33 +15,18 @@ const colums: Column[] = [
 ]
 
 export const Nacionalidad = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [activeItem, setActiveItem] = useState<INacionalidad | null>(null)
+  const {
+    openModal,
+    setOpenModal,
+    openDeleteModal,
+    activeItem,
+    onOpenModal,
+    onCloseModal,
+    onOpenDeleteModal,
+    closeDeleteModal
+  } = useCrudModals<INacionalidad>()
 
   const { nacionalidades, pagination,isFetching, updateFilter, deleteNacionalidad } = useNacionalidad()
-
-  /* Modal crear/editar */
-  const onOpenModal = (nacionalidad: INacionalidad) => {
-    setActiveItem(nacionalidad)
-    setOpenModal(true)
-  }
-
-  const onCloseModal = async () => {
-    setActiveItem(null)
-    setOpenModal(false)
-  }
-
-  /* Modal eliminar */
-  const openDelteModal = (nacionalidad: INacionalidad) => {
-    setActiveItem(nacionalidad)
-    setOpenDeleteModal(true)
-  }
-
-  const closeDeleteModal = () => {
-    setActiveItem(null)
-    setOpenDeleteModal(false)
-  }
 
   return (
     <React.Fragment>
@@ -79,7 +65,7 @@ export const Nacionalidad = () => {
                       </Tooltip>
 
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(nacionalidad)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => onOpenDeleteModal(nacionalidad)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>

@@ -11,7 +11,7 @@ export const formatPersona = (
   const persona = antecedentes.map((antecedente) => {
     const infractor = antecedente.infractores?.[0]
     const fecha = new Date()
-    const fechaFormateada = `${String(fecha.getDate()).padStart(2, '0')}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${fecha.getFullYear()}`
+    const fechaFormateada = `${String(fecha.getDate()).padStart(2, '0')}/${String(fecha.getMonth() + 1).padStart(2, '0')}/${fecha.getFullYear()}`
 
     return {
       nombreApellido: clearNames(infractor?.apellido, infractor?.nombre),

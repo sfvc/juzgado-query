@@ -16,7 +16,6 @@ export const Actuacion = () => {
   const { data: acta, isLoading, isError } = useQuery<ActuacionActa>({
     queryKey: ['acta-actuacion', {id}],
     queryFn: () => actuacionActions.getActuacionesByActa(actaId),
-    staleTime: 1000 * 60 * 5
   })
 
   if (isLoading) return <Loading />

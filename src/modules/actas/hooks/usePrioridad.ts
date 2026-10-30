@@ -5,7 +5,6 @@ export const usePrioridad = () => {
   const { data: prioridades , isLoading } = useQuery({
     queryKey: ['prioridades'],
     queryFn: actaActions.getPrioridades,
-    staleTime: 1000 * 60 * 5
   })
       
   return {

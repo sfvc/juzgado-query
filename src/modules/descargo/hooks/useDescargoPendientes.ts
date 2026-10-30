@@ -8,6 +8,7 @@ type DescargoItem = {
 export const useDescargoPendientes = () => {
   return useQuery({
     queryKey: ['descargoPendientes'],
+    staleTime: 0,
     queryFn: async () => {
       const { data } = await apiJuzgado.get('/descargos')
 

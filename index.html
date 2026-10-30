@@ -6,11 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Front -->
   <meta name="author" content="Nahuel Soria Parodi">
-  <meta name="author" content="Luciano Reguera">
-  <meta name="author" content="Agustin Jalil">
-  <!-- Back -->
   <meta name="author" content="Esteban Robert">
-  <meta name="author" content="Martin Barrios">
+  <!-- Back -->
+  <meta name="author" content="Luciano Reguera">
   <meta name="description"
     content="Juzgado de Faltas - Portal oficial de información y gestión de trámites en Catamarca Capital." />
   <meta name="keywords" content="juzgado de faltas, trámites, catamarca, capital, municipalidad, gobierno, gestión" />
@@ -22,6 +20,12 @@
   <meta property="og:url" content="https://www.catamarcaciudad.gob.ar/juzgado-de-faltas" />
   <link rel="shortcut icon" type="./image/png" href="./src/assets/images/favicon.png">
   <title>Juzgado Municipal de Faltas - Catamarca Capital</title>
+
+  <script>
+    try {
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark')
+    } catch (e) {}
+  </script>
 </head>
 
 <body>

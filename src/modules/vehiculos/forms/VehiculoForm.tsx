@@ -38,7 +38,6 @@ const VehiculoForm = ({ vehiculo, onSuccess, updateVehiculos }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: ['vehiculos-data'],
     queryFn: vehiculoActions.getDataVehiculo,
-    staleTime: 1000 * 60 * 5
   })
 
   const {

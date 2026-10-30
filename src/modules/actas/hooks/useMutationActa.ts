@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { actaActions } from '..'
 import { useQueryParams, validateErrors } from '../../../shared'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import type { IActaForm } from '../interfaces/form-interfaces'
 import type { IActa } from '../interfaces'
 
@@ -10,6 +11,7 @@ import type { IActa } from '../interfaces'
 export const useMutationActa = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { filters } = useQueryParams()
 
   const createActa = useMutation({
@@ -17,11 +19,10 @@ export const useMutationActa = () => {
     onSuccess: (data: IActa) => {
       navigate(`/actas?numero_acta=${data.numero_acta}`)
       toast.success('Acta creada con éxito')
-      queryClient.clear()
+      invalidate('all')
     },
     onError: (error) => {
       validateErrors(error, 'Error al crear acta')
-      console.log(error)
     }
   })
 
@@ -31,11 +32,10 @@ export const useMutationActa = () => {
     onSuccess: (data: IActa) => {
       navigate(`/actas?numero_acta=${data.numero_acta}`)
       toast.success('Acta actualizada con éxito')
-      queryClient.clear()
+      invalidate('all')
     },
     onError: (error) => {
       validateErrors(error, 'Error al actualizar acta')
-      console.log(error)
     }
   })
 
@@ -45,9 +45,8 @@ export const useMutationActa = () => {
       toast.success('Acta eliminada con éxito')
       queryClient.invalidateQueries({ queryKey: ['actas', { ...filters }] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar el acta')
-      console.log(error)
     }
   })
 

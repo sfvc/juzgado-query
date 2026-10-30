@@ -62,6 +62,17 @@ export interface IActa {
     estados:                Estado[]
     acumulable:             boolean
     adjuntos:               string[]
+    juzgado_id?:            number
+    destino_vehiculo?:      string | null
+    inspector?:             string | { nombre?: string, apellido?: string } | null
+    testigos?:              ITestigo[]
+}
+
+export interface ITestigo {
+    id?:        number
+    nombre?:    string
+    apellido?:  string
+    documento?: string | number
 }
 
 export interface Comercio {
@@ -88,11 +99,12 @@ export interface Estado {
 }
 
 export interface EstadoPivot {
+    id?:             number
     acta_id:         number
     estado_actas_id: number
-    fecha_desde:     Date
-    fecha_hasta:     Date
-    observaciones:   null
+    fecha_desde:     string
+    fecha_hasta:     string | null
+    observaciones:   string | null
     user_id:         number
     created_at:      null
 }
@@ -118,10 +130,11 @@ export interface InfraccionActa {
 export interface InfraccionesCometidaPivot {
     acta_id:     number
     articulo_id: number
+    monto?:      string
 }
 
 export interface InfractorActa {
-    cuota_alimentaria: string
+    cuota_alimentaria: string | boolean
     inhabilitado:      string
     id:           number
     nombre:       string

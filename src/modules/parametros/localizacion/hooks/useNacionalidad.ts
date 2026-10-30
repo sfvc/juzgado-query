@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { nacionalidadActions } from '..'
 import { useFilter } from '../../../../shared/hooks/useFilter'
-import type { FormNacionalidad, INacionalidad } from '../interfaces/localizacion'
+import type { INacionalidad } from '../interfaces/localizacion'
 
 interface FilterParams {
   query: string, 
@@ -16,7 +15,6 @@ const initialValues = {
 }
 
 export const useNacionalidad = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: nacionalidades, pagination, isFetching } = usePagination<INacionalidad, FilterParams>({
@@ -26,40 +24,16 @@ export const useNacionalidad = () => {
   })
 
   /* Mutations */
-  const createNacionalidad = useMutation({
-    mutationFn: nacionalidadActions.createNacionalidad,
-    onSuccess: () => {
-      toast.success('Pais creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el pais')
-      console.log(error)
-    }
-  })
-
-  const updateNacionalidad = useMutation({
-    mutationFn: ({ id, nacionalidad }: { id: number, nacionalidad: FormNacionalidad }) => nacionalidadActions.updateNacionalidad(id, nacionalidad),
-    onSuccess: () => {
-      toast.success('Pais editado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al editar el pais')
-      console.log(error)
-    }
-  })
-
-  const deleteNacionalidad = useMutation({
-    mutationFn: (id: number) => nacionalidadActions.deleteNacionalidad(id),
-    onSuccess: () => {
-      toast.success('Pais eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al elimar el pais')
-      console.log(error)
-    }
+  const {
+    create: createNacionalidad,
+    update: updateNacionalidad,
+    remove: deleteNacionalidad
+  } = useCrudMutations({
+    actions: { create: nacionalidadActions.createNacionalidad, update: nacionalidadActions.updateNacionalidad, remove: nacionalidadActions.deleteNacionalidad },
+    group: 'localizacion',
+    entity: 'nacionalidad',
+    label: 'Nacionalidad',
+    feminine: true
   })
 
   return {

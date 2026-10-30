@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
-import { usePagination, useFilter, validateErrors } from '../../../shared'
+import { useCrudMutations } from '../../../shared/hooks/useCrudMutations'
+import { usePagination, useFilter } from '../../../shared'
 import { vehiculoActions } from '..'
-import type { FormVehiculo, IVehiculo } from '../interfaces'
+import type { IVehiculo } from '../interfaces'
 
 interface FilterParams {
   query: string
@@ -15,7 +14,6 @@ const initialValues = {
 }
 
 export const useVehiculo = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: vehiculos, pagination, isFetching } = usePagination<IVehiculo, FilterParams>({
@@ -25,40 +23,16 @@ export const useVehiculo = () => {
   })
 
   /* Mutations */
-  const createVehiculo = useMutation({
-    mutationFn: vehiculoActions.createVehiculo,
-    onSuccess: () => {
-      toast.success('Vehiculo creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      validateErrors(error, 'Error al crear el vehiculo')
-      console.log(error)
-    }
-  })
-
-  const updateVehiculo = useMutation({
-    mutationFn: ({ id, vehiculo }: { id: number, vehiculo: FormVehiculo }) => vehiculoActions.updateVehiculo(id, vehiculo),
-    onSuccess: () => {
-      toast.success('Vehiculo actualizado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      validateErrors(error, 'Error al actualizar el vehiculo')
-      console.log(error)
-    }
-  })
-
-  const deleteVehiculo = useMutation({
-    mutationFn: (id: number) => vehiculoActions.deleteVehiculo(id),
-    onSuccess: () => {
-      toast.success('Vehiculo eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar el vehiculo')
-      console.log(error)
-    }
+  const {
+    create: createVehiculo,
+    update: updateVehiculo,
+    remove: deleteVehiculo
+  } = useCrudMutations({
+    actions: { create: vehiculoActions.createVehiculo, update: vehiculoActions.updateVehiculo, remove: vehiculoActions.deleteVehiculo },
+    group: 'vehiculos',
+    entity: 'vehiculo',
+    label: 'Vehiculo',
+    validate: true
   })
 
   return {

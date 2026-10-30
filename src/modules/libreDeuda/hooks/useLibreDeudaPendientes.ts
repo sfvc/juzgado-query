@@ -8,6 +8,7 @@ type LibreDeudaItem = {
 export const useLibreDeudaPendientes = () => {
   return useQuery({
     queryKey: ['libreDeudaPendientes'],
+    staleTime: 0,
     queryFn: async () => {
       const { data } = await apiJuzgado.get('/libre-deuda')
 

@@ -55,7 +55,7 @@ export const NotificacionTable = ({ acta }: { acta: NotificationActa }) => {
   const deleteNotificacion = async () => {
     if (!activeItem) return
 
-    const response = await deleteNotification.mutateAsync({id: activeItem.id, queryKey: ['acta-notificacion', {id: activeItem.id}]})
+    const response = await deleteNotification.mutateAsync({ id: activeItem.id })
     if (response.status === 200) onDeleteModal()
   }
 

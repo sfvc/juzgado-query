@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import { toast } from 'react-toastify'
 import { useFilter, usePagination, validateErrors } from '../../../shared'
 import { inhabilitadoActions } from '..'
@@ -16,7 +17,7 @@ const initialValues = {
 }
 
 export const useInhabilitado = () => {
-  const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const [personaNoInhabilitada, setPersonaNoInhabilitada] = useState<{ nombre_completo: string, dni: number } | null>(null)
@@ -36,11 +37,10 @@ export const useInhabilitado = () => {
     mutationFn: inhabilitadoActions.createInhabilitado,
     onSuccess: () => {
       toast.success('Inhabilitado creado con éxito')
-      queryClient.clear()
+      invalidate('inhabilitados')
     },
     onError: (error) => {
       validateErrors(error, 'Error al crear el registro')
-      console.log(error)
     }
   })
 
@@ -48,11 +48,10 @@ export const useInhabilitado = () => {
     mutationFn: ({ id, inhabilitado }: { id: number, inhabilitado: FormInhabilitado }) => inhabilitadoActions.updateInhabilitado(id, inhabilitado),
     onSuccess: () => {
       toast.success('Inhabilitado actualizado con éxito')
-      queryClient.clear()
+      invalidate('inhabilitados')
     },
     onError: (error) => {
       validateErrors(error, 'Error al actualizar registro')
-      console.log(error)
     }
   })
 
@@ -60,11 +59,10 @@ export const useInhabilitado = () => {
     mutationFn: (id: number) => inhabilitadoActions.deleteInhabilitado(id),
     onSuccess: () => {
       toast.success('Inhabilitado eliminado con éxito')
-      queryClient.clear()
+      invalidate('inhabilitados')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar registro')
-      console.log(error)
     }
   })
 

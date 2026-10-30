@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { articuloActions } from '..'
-import { FormArticulo, IArticulo } from '../interfaces'
+import { IArticulo } from '../interfaces'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 
 interface FilterParams {
@@ -18,7 +17,6 @@ const initialValues = {
 }
 
 export const useArticulo = () => {
-  const queryClient = useQueryClient()
 
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
@@ -29,40 +27,15 @@ export const useArticulo = () => {
   })
 
   /* Mutations */
-  const createArticulo = useMutation({
-    mutationFn: articuloActions.createArticulo,
-    onSuccess: () => {
-      toast.success('Articulo creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el articulo')
-      console.log(error)
-    }
-  })
-
-  const updateArticulo = useMutation({
-    mutationFn: ({ id, articulo }: { id: number, articulo: FormArticulo }) => articuloActions.updateArticulo(id, articulo),
-    onSuccess: () => {
-      toast.success('Articulo actualizado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar el articulo')
-      console.log(error)
-    }
-  })
-
-  const deleteArticulo = useMutation({
-    mutationFn: (id: number) => articuloActions.deleteArticulo(id),
-    onSuccess: () => {
-      toast.success('Articulo eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar el articulo')
-      console.log(error)
-    }
+  const {
+    create: createArticulo,
+    update: updateArticulo,
+    remove: deleteArticulo
+  } = useCrudMutations({
+    actions: { create: articuloActions.createArticulo, update: articuloActions.updateArticulo, remove: articuloActions.deleteArticulo },
+    group: 'articulos',
+    entity: 'articulo',
+    label: 'Articulo'
   })
 
   return {

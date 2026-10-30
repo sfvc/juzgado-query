@@ -6,7 +6,8 @@ import type {
   Vehiculo,
   Domicilio
 } from '../../actuaciones/interfaces/actuacion'
-import { formatDate } from '../../../shared/helpers/formatDate'
+import type { Titular } from '../../vehiculos/interfaces'
+import { formatDateDMY } from '../../../shared/helpers/formatDate'
 
 const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   if (!vehiculo) return ''
@@ -14,6 +15,11 @@ const matchMakeAndModel = (vehiculo: Vehiculo): string => {
   const marca = vehiculo?.marca?.nombre || ''
   const modelo = vehiculo?.modelo || ''
   return `${marca} ${modelo}`.trim()
+}
+
+const formatTitular = (titular: Titular | undefined): string => {
+  if (!titular) return ''
+  return titular.razon_social || clearNames(titular.apellido, titular.nombre, true)
 }
 
 const formatAddress = (domicilio: Domicilio) => {
@@ -38,7 +44,7 @@ export const formatData = async (data: ActuacionResponse) => {
     descuento,
     recargo,
     conceptos,
-    fecha: fechaSentencia,
+    fecha: fechaSentenciaRaw,
     sub_total: subTotal,
     usuario,
     recaudacion,
@@ -47,9 +53,11 @@ export const formatData = async (data: ActuacionResponse) => {
 
   const pagos = estadisticas?.comprobantes_pagados || {}
 
+  const fechaSentencia = formatDateDMY(fechaSentenciaRaw)
+
   const numeroJuzgado = recaudacion?.numero_juzgado || ''
   const numeroActaRecaudacion = recaudacion?.numero_acta || ''
-  const fechaComprobante = recaudacion?.fecha_pago || ''
+  const fechaComprobante = formatDateDMY(recaudacion?.fecha_pago)
   const nroComprobanteRentas = recaudacion?.nro_comprobante_rentas || ''
   const montoMulta = recaudacion?.monto_multa_original || ''
   const montoMultaTotal = pagos?.monto_multas?.toString() || '0'
@@ -68,7 +76,7 @@ export const formatData = async (data: ActuacionResponse) => {
 
   const numeroActa = actas.map(acta => acta?.numero_acta).join(', ')
   const numeroCausa = actas.map(acta => acta?.numero_causa).join(', ')
-  const fechaActa = actas.map(acta => formatDate(acta?.fecha || '-')).join(', ')
+  const fechaActa = actas.map(acta => formatDateDMY(acta?.fecha) || '-').join(', ')
   const actaHs = actas.map(acta => acta?.hora).join(', ')
   const actaObservaciones = actas.map(acta => acta?.observaciones).join(', ')
   const lugar = actas.map(acta => acta?.lugar).join(', ')
@@ -83,6 +91,10 @@ export const formatData = async (data: ActuacionResponse) => {
   const patente = vehiculos?.map(vehiculo => vehiculo?.dominio).join(', ')
   const numeroTaxiRemis = vehiculos?.map(vehiculo => vehiculo?.numero_taxi_remis).join(', ')
   const vehiculoFormatted = vehiculos?.map(vehiculo => matchMakeAndModel(vehiculo)).join(', ')
+  const modelo = vehiculos?.map(vehiculo => vehiculo?.modelo || '').join(', ')
+  const tipo = vehiculos?.map(vehiculo => vehiculo?.tipo?.nombre || '').join(', ')
+  const chasis = vehiculos?.map(vehiculo => vehiculo?.numero_chasis || '').join(', ')
+  const titular = vehiculos?.map(vehiculo => formatTitular(vehiculo?.titular)).join(', ')
 
   const numeroArticulo = articulos.map(articulo => articulo?.numero).join(', ')
   const detalleArticulos = articulos.map(articulo => articulo?.detalle).join(' ')
@@ -91,7 +103,7 @@ export const formatData = async (data: ActuacionResponse) => {
   const conceptosActuacion = conceptos?.map(item => `${item?.concepto} de $${item?.monto}`).join(', ')
   const totalConceptos = conceptos?.reduce((sum, item) => sum + +item.monto, 0)
 
-  const fechaNotificacion = notificaciones?.map(notificacion => notificacion?.created_at).join(', ')
+  const fechaNotificacion = notificaciones?.map(notificacion => formatDateDMY(String(notificacion?.created_at ?? ''))).join(', ')
 
   const totalSinConceptos = +total - totalConceptos
 
@@ -104,6 +116,7 @@ export const formatData = async (data: ActuacionResponse) => {
     // Fecha actual
     añoActual,
     fechaActual,
+    fecha: fechaActual,                         //** Alias de fechaActual */
     horaActual,
 
     // Juzgado
@@ -120,6 +133,7 @@ export const formatData = async (data: ActuacionResponse) => {
     nroComprobanteRentas,
     montoMulta,
     montoMultaTotal,
+    montoMultasTotal: montoMultaTotal,          //** Mismo valor que montoMultaTotal (nombre usado en la planilla de recaudacion) */
     montoConceptos,
     montoConceptosTotal,
     montoAbonado,
@@ -145,6 +159,10 @@ export const formatData = async (data: ActuacionResponse) => {
 
     patente,
     numeroTaxiRemis,
+    modelo,
+    tipo,
+    chasis,
+    titular,                                    //** Titular del vehiculo [Apellido Nombre | Razon social] */
     vehiculo: vehiculoFormatted,                //** Formato de vehiculo [Marca - Modelo] */
 
     // Infracciones
@@ -171,9 +189,6 @@ export const formatData = async (data: ActuacionResponse) => {
     // Notificaciones
     fechaNotificacion
 
-    // TODO: Agregar las variables
-    // fechaSentencia,
-    // titular
   }
 
   return sanitizeData(dataFormatted)

@@ -1,8 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiJuzgado } from '../../../api/config'
 import { setUrlParams } from '../../../shared'
 
-export const getRecaudacionDiaria = async (filters: any) => {
+interface RecaudacionFilters {
+  fecha?: string
+  [key: string]: unknown
+}
+
+export const getRecaudacionDiaria = async (filters: RecaudacionFilters) => {
   try {
     const fecha = filters?.fecha || new Date().toISOString().split('T')[0]
     const params = setUrlParams(filters)
@@ -17,7 +21,7 @@ export const getRecaudacionDiaria = async (filters: any) => {
   }
 }
 
-export const getRecaudacionFiltrada = async (filters: any) => {
+export const getRecaudacionFiltrada = async (filters: RecaudacionFilters) => {
   try {
     const fecha = filters?.fecha || new Date().toISOString().split('T')[0]
     const params = setUrlParams(filters)

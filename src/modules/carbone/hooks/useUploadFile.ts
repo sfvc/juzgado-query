@@ -1,36 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import { carboneActions } from '..'
+import type { ActaRef, PlantillaItem } from '../interfaces'
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AuthContext } from '../../../context/Auth/AuthContext'
 
 export const useUploadFile = () => {
   const { user } = useContext(AuthContext)
-  const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
 
   /* Descargar archivo word desde carbone */
   const downloadWord = useMutation({
-    mutationFn: ({ item, acta, tipo }: { item: any, acta: any, tipo: string }) =>
+    mutationFn: ({ item, acta, tipo }: { item: PlantillaItem, acta: ActaRef, tipo: string }) =>
       carboneActions.downloadWordFile(item, acta, tipo),
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al descargar el archivo')
-      console.log(error)
     }
   })
 
   /* Subir archivo a s3 con gotenberg */
   const uploadFile = useMutation({
-    mutationFn: ({ file, item, property }: { file: File, item: any, property: string, queryKey?: any[] }) =>
+    mutationFn: ({ file, item, property }: { file: File, item: PlantillaItem & ActaRef, property: string }) =>
       carboneActions.uploadFilePDF(file, item, property, user!.id),
-    onSuccess: (_, __, context: any) => {
+    onSuccess: () => {
       toast.success('Archivo subido exitosamente')
-
-      queryClient.invalidateQueries({ queryKey: context?.queryKey })
+      invalidate('all')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al subir el archivo')
-      console.log(error)
     }
   })
 

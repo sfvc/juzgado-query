@@ -1,8 +1,9 @@
-import { useContext } from 'react'
+import { Suspense, useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Footer, Navbar, MegaMenu } from 'flowbite-react'
 import { ThemeContext } from '../context/Theme/ThemeContext'
 import { RoleGuard, UserRole } from '../auth'
+import { Loading } from '../shared'
 import { ToastContainer } from 'react-toastify'
 import { DropdownHeader, NavItem } from './'
 // import { useLibreDeudaPendientes } from '../modules/libreDeuda/hooks/useLibreDeudaPendientes'
@@ -169,7 +170,9 @@ export const Layout = () => {
       </Navbar>
 
       <main className='flex-grow w-10/12 m-auto dark:bg-dark'>
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       <Footer container className='rounded-none shadow-none w-10/12 m-auto sm:px-0'>

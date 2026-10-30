@@ -39,7 +39,6 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
   const { data: history = [], isLoading } = useQuery<INotificationHistory[]>({
     queryKey: ['history', {id: notificacion.id}],
     queryFn: () => notificacionActions.getHistoryByNotificacion(notificacion.id),
-    staleTime: 1000 * 60 * 5
   })
 
 
@@ -57,7 +56,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
     const file = e.target.files![0]
     if (!file) return
 
-    uploadFile.mutate({ file, item: { ...notificacion, numero_acta: acta.numero_acta }, property: 'notificacion_id', queryKey: ['acta-actuacion',{id: acta.id}] })
+    uploadFile.mutate({ file, item: { ...notificacion, numero_acta: acta.numero_acta }, property: 'notificacion_id' })
   }
 
   // const onDownloadWord = async () => {
@@ -71,7 +70,7 @@ export const NotificationHistory = ({ acta, notificacion, onCloseModal }: Props)
   const onDeleteNotificacion = async () => {
     if (!activeItem) return
 
-    const response = await deleteNotificationHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: notificacion.id}]})
+    const response = await deleteNotificationHistory.mutateAsync({ id: activeItem.id })
     if (response.status === 200) onCloseModalHistory()
   }
 

@@ -24,7 +24,6 @@ const LocalidadForm = ({ localidad, onSucces }: Props) => {
   const { data: departamentos, isLoading } = useQuery({
     queryKey: ['departamentos', 'all'],
     queryFn: departamentoActions.getAllDepartamentos,
-    staleTime: 1000 * 60 * 5,
   })
 
   const {

@@ -25,7 +25,6 @@ export const PersonaForm = ({ persona, onSucces, updateInfractores }: Props) => 
   const { data, isLoading } = useQuery<DataPersona>({
     queryKey: ['personas-data'],
     queryFn: personaActions.getDataPersona,
-    staleTime: 1000 * 60 * 5
   })
 
   const validationSchema =

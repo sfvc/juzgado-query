@@ -14,6 +14,7 @@ export const NotificacionActa = () => {
   const { data: acta, isLoading, isError } = useQuery<NotificationActa>({
     queryKey: ['acta-notificacion', {id}],
     queryFn: () => notificacionActions.getNotificationsByActa(actaId),
+    staleTime: 0,
   })
 
   if (isLoading) return <Loading />

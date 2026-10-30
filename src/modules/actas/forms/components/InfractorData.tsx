@@ -128,7 +128,7 @@ export const InfractorData = ({ data }: Props) => {
       setEditPersona(persona)
       setOpenModal(true)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

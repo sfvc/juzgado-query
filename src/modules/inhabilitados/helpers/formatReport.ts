@@ -1,4 +1,5 @@
 import { clearNames } from '../../../shared'
+import { formatDateDMY } from '../../../shared/helpers/formatDate'
 import { IInhabilitado } from '../interfaces'
 
 export const formatReport = (inhabilitaciones: IInhabilitado[] | undefined) => {
@@ -7,8 +8,8 @@ export const formatReport = (inhabilitaciones: IInhabilitado[] | undefined) => {
 
   const data = inhabilitaciones?.map((inhabilitacion: IInhabilitado) => {
     return {
-      fecha_desde: inhabilitacion.fecha_desde,
-      fecha_hasta: inhabilitacion.fecha_hasta,
+      fecha_desde: formatDateDMY(inhabilitacion.fecha_desde),
+      fecha_hasta: formatDateDMY(inhabilitacion.fecha_hasta),
       causa: inhabilitacion.causa,
       instrumento: inhabilitacion.instrumento,
       juzgado: inhabilitacion.juzgado.nombre,

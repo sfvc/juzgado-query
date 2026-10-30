@@ -23,7 +23,6 @@ const DepartamentoForm = ({ departamento, onSucces }: Props) => {
   const { data: provincias, isLoading } = useQuery({
     queryKey: ['provincias', 'all'], 
     queryFn: provinciaActions.getAllProvincias,  
-    staleTime: 1000 * 60 * 5, 
   })
 
   const {

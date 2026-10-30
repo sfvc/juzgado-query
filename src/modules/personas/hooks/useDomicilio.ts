@@ -11,7 +11,6 @@ export const useDomicilio = () => {
   const { data: paises } = useQuery({
     queryKey: ['paises', 'all'],
     queryFn: paisActions.getAllPaises,
-    staleTime: 1000 * 60 * 5,
   })
 
   const getProvinciasByPais = async (id: number | null) => {

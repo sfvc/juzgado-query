@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react'
-import { useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { notificacionActions } from '..'
+import { useInvalidate } from '../../../shared/hooks/useInvalidate'
 import { ActuacionContext } from '../../../context/Actuacion/ActuacionContext'
 
 export const useNotification = () => {
   const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { resetProvider } = useContext(ActuacionContext)
-  const { id } = useParams()
 
   /* Mutations */
   const createNotification = useMutation({
@@ -20,37 +19,32 @@ export const useNotification = () => {
       resetProvider()
       queryClient.invalidateQueries({ queryKey: ['actas'] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al crear la notificación')
-      console.log(error)
     }
   })
 
   // Elimnar notificación relacionada al acta
   const deleteNotification = useMutation({
-    mutationFn: ({ id }: {id: number, queryKey?: any[]}) => notificacionActions.deleteNotification(id),
-    onSuccess: (_, __, context: any) => {
+    mutationFn: ({ id }: { id: number }) => notificacionActions.deleteNotification(id),
+    onSuccess: () => {
       toast.success('Notificación eliminada exitosamente')
-      queryClient.invalidateQueries({ queryKey: context?.queryKey })
+      invalidate('all')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar la notificación')
-      console.log(error)
     }
   })
 
   // Elimnar notificación del historial de notificaciones
   const deleteNotificationHistory = useMutation({
-    mutationFn: ({ id }: {id: number, queryKey?: any[]}) => notificacionActions.deleteNotificationHistory(id),
-    onSuccess: (_, __, context: any) => {
+    mutationFn: ({ id }: { id: number }) => notificacionActions.deleteNotificationHistory(id),
+    onSuccess: () => {
       toast.success('Notificación eliminada exitosamente')
-
-      queryClient.invalidateQueries({ queryKey: context?.queryKey })
-      queryClient.invalidateQueries({ queryKey: ['acta-actuacion', {id}] })
+      invalidate('all')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar la notificación')
-      console.log(error)
     }
   })
 

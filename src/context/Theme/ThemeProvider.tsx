@@ -5,21 +5,35 @@ interface Props {
   children: JSX.Element | JSX.Element[]
 }
 
+const THEME_KEY = 'theme'
+
+// Lee el tema guardado. Si el almacenamiento no esta disponible usa el claro.
+const getSavedTheme = (): string => {
+  try {
+    return localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light'
+  } catch {
+    return 'light'
+  }
+}
+
 export const ThemeProvider = ({ children }: Props) => {
-  const [theme, setTheme] = useState<string>('light')
+  // Se lee al crear el estado para que no arranque en claro y despues cambie
+  const [theme, setTheme] = useState<string>(getSavedTheme)
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
-    localStorage.setItem('theme', newTheme)
-    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+
+    try {
+      localStorage.setItem(THEME_KEY, newTheme)
+    } catch {
+      // Sin almacenamiento el cambio vale solo para esta sesion
+    }
   }
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light'
-    setTheme(savedTheme)
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark')
-  }, [])
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+  }, [theme])
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useCrudModals } from '../../../../shared/hooks/useCrudModals'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { usePaises } from '../index'
 import PaisForm from '../forms/PaisForm'
@@ -14,33 +15,18 @@ const colums: Column[] = [
 ]
 
 export const Pais = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [activeItem, setActiveItem] = useState<IPais | null>(null)
+  const {
+    openModal,
+    setOpenModal,
+    openDeleteModal,
+    activeItem,
+    onOpenModal,
+    onCloseModal,
+    onOpenDeleteModal,
+    closeDeleteModal
+  } = useCrudModals<IPais>()
 
   const { paises, pagination, isFetching, updateFilter, deletePais } = usePaises()
-
-  /* Modal crear/editar */
-  const onOpenModal = (pais: IPais) => {
-    setActiveItem(pais)
-    setOpenModal(true)
-  }
-
-  const onCloseModal = async () => {
-    setActiveItem(null)
-    setOpenModal(false)
-  }
-
-  /* Modal eliminar */
-  const openDelteModal = (pais: IPais) => {
-    setActiveItem(pais)
-    setOpenDeleteModal(true)
-  }
-
-  const closeDeleteModal = () => {
-    setActiveItem(null)
-    setOpenDeleteModal(false)
-  }
 
   return (
     <React.Fragment>
@@ -81,7 +67,7 @@ export const Pais = () => {
                       </Tooltip>
 
                       <Tooltip content='Eliminar'>
-                        <Button color='failure' onClick={() => openDelteModal(pais)} className='w-8 h-8 flex items-center justify-center'>
+                        <Button color='failure' onClick={() => onOpenDeleteModal(pais)} className='w-8 h-8 flex items-center justify-center'>
                           <icons.Trash />
                         </Button>
                       </Tooltip>

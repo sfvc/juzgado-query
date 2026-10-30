@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useCrudModals } from '../../../../shared/hooks/useCrudModals'
 import { Button, Modal, Pagination, Table, Tooltip } from 'flowbite-react'
 import { DeleteModal, icons, InputTable } from '../../../../shared'
 import { usePropiedad } from '../hooks/usePropiedad'
@@ -17,9 +18,16 @@ const colums: Column[] = [
 ]
 
 export const Propiedad = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [activeItem, setActiveItem] = useState<IPropiedad | null>(null)
+  const {
+    openModal,
+    setOpenModal,
+    openDeleteModal,
+    activeItem,
+    onOpenModal,
+    onCloseModal,
+    onOpenDeleteModal,
+    closeDeleteModal
+  } = useCrudModals<IPropiedad>()
 
   const { 
     propiedades,
@@ -28,28 +36,6 @@ export const Propiedad = () => {
     updateFilter,
     deletePropiedad 
   } = usePropiedad()
-
-  /* Modal crear/editar */
-  const onOpenModal = (propiedad: IPropiedad) => {
-    setActiveItem(propiedad)
-    setOpenModal(true)
-  }
-
-  const onCloseModal = async () => {
-    setActiveItem(null)
-    setOpenModal(false)
-  }
-
-  /* Modal eliminar */
-  const openDelteModal = (propiedad: IPropiedad) => {
-    setActiveItem(propiedad)
-    setOpenDeleteModal(true)
-  }
-
-  const closeDeleteModal = () => {
-    setActiveItem(null)
-    setOpenDeleteModal(false)
-  }
 
   return (
     <React.Fragment>
@@ -93,7 +79,7 @@ export const Propiedad = () => {
                         </Tooltip>
 
                         <Tooltip content='Eliminar'>
-                          <Button color='failure' onClick={() => openDelteModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
+                          <Button color='failure' onClick={() => onOpenDeleteModal(propiedad)} className='w-8 h-8 flex items-center justify-center'>
                             <icons.Trash />
                           </Button>
                         </Tooltip>

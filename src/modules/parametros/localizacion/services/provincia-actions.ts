@@ -46,6 +46,6 @@ export const getProvinciasByPais = async (id: number) => {
     const { data: { provincias } } = response.data
     return provincias
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

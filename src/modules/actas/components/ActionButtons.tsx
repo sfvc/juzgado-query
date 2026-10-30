@@ -3,15 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Dropdown, Modal, Tooltip } from 'flowbite-react'
 import { RoleGuard, UserRole } from '../../../auth'
 import { useMutationActa } from '../hooks/useMutationActa'
+import { ArchivosModal } from './ArchivosModal'
 import { icons } from '../../../shared'
 import type { IActa } from '../interfaces'
 
 type ActaConArchivos = IActa & {
   adjuntos?: string[]
 }
-
-const VIDEO_EXT = /\.(mp4|webm|ogg|mov)$/i
-const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif)$/i
 
 export const ActionButtons = ({ acta }: { acta: IActa }) => {
   const navigate = useNavigate()
@@ -183,76 +181,11 @@ export const ActionButtons = ({ acta }: { acta: IActa }) => {
         </Modal>
       )}
 
-      <Modal
+      <ArchivosModal
         show={openArchivosModal}
         onClose={handleCloseArchivosModal}
-        size='4xl'
-      >
-        <Modal.Header>
-          Archivos del acta
-        </Modal.Header>
-
-        <Modal.Body>
-          {!activeItem?.adjuntos?.length ? (
-            <div className='flex flex-col items-center justify-center py-10 text-gray-500 dark:text-gray-400'>
-              <icons.Pdf />
-
-              <p className='mt-3 text-lg'>
-                No hay archivos asociados a esta acta.
-              </p>
-            </div>
-          ) : (
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-              {activeItem.adjuntos.map((url, index) => {
-                const isVideo = VIDEO_EXT.test(url)
-                const isImage = IMAGE_EXT.test(url)
-
-                return (
-                  <div
-                    key={index}
-                    className='border rounded-lg overflow-hidden dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
-                  >
-                    {isVideo ? (
-                      <video
-                        src={url}
-                        controls
-                        className='w-full h-48 object-cover bg-black'
-                      />
-                    ) : isImage ? (
-                      <a href={url} target='_blank' rel='noreferrer'>
-                        <img
-                          src={url}
-                          alt={`Archivo ${index + 1}`}
-                          className='w-full h-48 object-cover'
-                        />
-                      </a>
-                    ) : (
-                      <a
-                        href={url}
-                        target='_blank'
-                        rel='noreferrer'
-                        className='flex flex-col items-center justify-center gap-2 h-48 text-gray-500 dark:text-gray-400'
-                      >
-                        <icons.Pdf />
-                        <span className='text-sm truncate px-2'>{`Archivo ${index + 1}`}</span>
-                      </a>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button
-            color='gray'
-            onClick={handleCloseArchivosModal}
-          >
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        adjuntos={activeItem?.adjuntos}
+      />
     </React.Fragment>
   )
 }

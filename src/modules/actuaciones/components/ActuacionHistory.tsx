@@ -39,7 +39,6 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   const { data: history = [], isLoading } = useQuery<IActuacionHistory[]>({
     queryKey: ['history', {id: actuacion.id}],
     queryFn: () => actuacionActions.getHistoryByActuacion(actuacion.id),
-    staleTime: 1000 * 60 * 5
   })
 
   const onOpenModalHistory = (actuacion: IActuacionHistory) => {
@@ -59,8 +58,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
     await uploadFile.mutateAsync({
       file,
       item: { ...actuacion, numero_acta: acta.numero_acta },
-      property: 'actuacion_id',
-      queryKey: ['acta-actuacion',{id: acta.id}]
+      property: 'actuacion_id'
     })
   }
 
@@ -71,7 +69,7 @@ export const ActuacionHistory = ({ acta, actuacion, onCloseModal }: Props) => {
   const onDeleteActuacion = async () => {
     if (!activeItem) return
 
-    const response = await deleteActuacionHistory.mutateAsync({id: activeItem.id, queryKey: ['history', {id: actuacion.id}]})
+    const response = await deleteActuacionHistory.mutateAsync({ id: activeItem.id })
     if (response.status === 200) onCloseModalHistory()
   }
 

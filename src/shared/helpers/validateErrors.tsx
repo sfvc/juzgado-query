@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast, ToastOptions } from 'react-toastify'
 
 interface Errors {
@@ -17,9 +16,10 @@ const options: ToastOptions = {
   className: 'custom-toast'
 }
 
-export const validateErrors = (error: any, message?: string) => {
-  const response: Errors = error?.response?.data
-  const { errores, mensaje } = response
+export const validateErrors = (error: unknown, message?: string) => {
+  // Sin respuesta del servidor (por ejemplo, sin conexion) se muestra el mensaje generico
+  const response = (error as { response?: { data?: Errors } } | null)?.response?.data
+  const { errores, mensaje } = response ?? {}
 
   if (errores) {
     const [messages] = Object.entries(errores)[0]

@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { useCrudMutations } from '../../../../shared/hooks/useCrudMutations'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { useFilter } from '../../../../shared/hooks/useFilter'
 import { juzgadoActions } from '..'
-import { FormJuzgado, IJuzgado } from '../interfaces'
+import { IJuzgado } from '../interfaces'
 
 interface FilterParams {
   page: number
@@ -14,7 +13,6 @@ const initialValues = {
 }
 
 export const useJuzgado = () => {
-  const queryClient = useQueryClient()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: juzgados, pagination, isFetching } = usePagination<IJuzgado, FilterParams>({
@@ -24,40 +22,15 @@ export const useJuzgado = () => {
   })
 
   /* Mutations */
-  const createJuzgado = useMutation({
-    mutationFn: juzgadoActions.createJuzgado,
-    onSuccess: () => {
-      toast.success('Juzgado creado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al crear el juzgado')
-      console.log(error)
-    }
-  })
-
-  const updateJuzgado = useMutation({
-    mutationFn: ({ id, juzgado }: { id: number, juzgado: FormJuzgado }) => juzgadoActions.updateJuzgado(id, juzgado),
-    onSuccess: () => {
-      toast.success('Juzgado actualizado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al actualizar el juzgado')
-      console.log(error)
-    }
-  })
-
-  const deleteJuzgado = useMutation({
-    mutationFn: (id: number) => juzgadoActions.deleteJuzgado(id),
-    onSuccess: () => {
-      toast.success('Juzgado eliminado con exito')
-      queryClient.clear()
-    },
-    onError: (error) => {
-      toast.error('Error al eliminar el juzgado')
-      console.log(error)
-    }
+  const {
+    create: createJuzgado,
+    update: updateJuzgado,
+    remove: deleteJuzgado
+  } = useCrudMutations({
+    actions: { create: juzgadoActions.createJuzgado, update: juzgadoActions.updateJuzgado, remove: juzgadoActions.deleteJuzgado },
+    group: 'juzgados',
+    entity: 'juzgado',
+    label: 'Juzgado'
   })
 
   return {

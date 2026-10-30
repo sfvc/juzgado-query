@@ -12,6 +12,7 @@ export const formatPersona = (persona: IPersona, responsable: number): Infractor
     telefono: persona.telefono,
     email: persona.email,
     antecedentes: 0,
+    inhabilitado: persona.inhabilitado || '',
     responsable: responsable,
     cuota_alimentaria: persona.cuota_alimentaria,
     razon_social: persona.razon_social || '',

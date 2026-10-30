@@ -19,6 +19,7 @@ export const dictionary = () => {
     fechaComprobante: '{d.fechaComprobante}',
     nroComprobanteRentas: '{d.nroComprobanteRentas}',
     montoMulta: '{d.montoMulta}',
+    montoMultaTotal: '{d.montoMultaTotal}',
     montoMultasTotal: '{d.montoMultasTotal}',
     montoConceptos: '{d.montoConceptos}',
     montoConceptosTotal: '{d.montoConceptosTotal}',
@@ -76,6 +77,7 @@ export const dictionary = () => {
     fechaNotificacion: '{d.fechaNotificacion}',
 
     // Variables adicionales
+    totalConceptos: '{d.totalConceptos}',
     totalSinConceptos: '{d.totalSinConceptos}',
     totalLetrasSinConceptos: '{d.totalLetrasSinConceptos}'
   }

@@ -30,7 +30,6 @@ export const usePagination = <T, K extends Page>({ queryKey, fetchData, filterPa
   const { data: response, isLoading, isFetching } = useQuery({
     queryKey: [...queryKey],
     queryFn: () => fetchData(filterParams),
-    staleTime: 1000 * 60 * 5,
     placeholderData: (previousData) => {
       if (!previousData || !previousData.meta) return previousData
 

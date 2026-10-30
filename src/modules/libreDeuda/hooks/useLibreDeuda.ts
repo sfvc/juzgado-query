@@ -39,9 +39,8 @@ export const useLibreDeuda = () => {
       queryClient.invalidateQueries({ queryKey: ['libreDeuda'] })
       queryClient.invalidateQueries({ queryKey: ['libreDeudaPendientes'] })
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al confirmar al titular')
-      console.log(error)
     }
   })
 

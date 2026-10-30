@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import { useInvalidate } from '../../../../shared/hooks/useInvalidate'
 import { toast } from 'react-toastify'
 import { usePagination } from '../../../../shared/hooks/usePagination'
 import { useFilter } from '../../../../shared/hooks/useFilter'
@@ -16,7 +17,7 @@ const initialValues = {
 }
 
 export const useUsuario = () => {
-  const queryClient = useQueryClient()
+  const invalidate = useInvalidate()
   const { filterParams, updateFilter } = useFilter<FilterParams>(initialValues)
 
   const { data: usuarios, pagination, isFetching } = usePagination<IUsuario, FilterParams>({
@@ -30,11 +31,10 @@ export const useUsuario = () => {
     mutationFn: usuarioActions.createUsuario,
     onSuccess: () => {
       toast.success('Usuario creado con exito')
-      queryClient.clear()
+      invalidate('usuarios')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al crear el usuario')
-      console.log(error)
     }
   })
 
@@ -42,11 +42,10 @@ export const useUsuario = () => {
     mutationFn: ({ id, usuario }: { id: number, usuario: FormUsuario }) => usuarioActions.updateUsuario(id, usuario),
     onSuccess: () => {
       toast.success('Usuario actualizado con exito')
-      queryClient.clear()
+      invalidate('usuarios')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al actualizar el usuario')
-      console.log(error)
     }
   })
 
@@ -54,11 +53,10 @@ export const useUsuario = () => {
     mutationFn: (id: number) => usuarioActions.deleteUsuario(id),
     onSuccess: () => {
       toast.success('Usuario eliminado con exito')
-      queryClient.clear()
+      invalidate('usuarios')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al eliminar el usuario')
-      console.log(error)
     }
   })
 
@@ -66,11 +64,10 @@ export const useUsuario = () => {
     mutationFn: (id: number) => usuarioActions.resetPassword(id),
     onSuccess: () => {
       toast.success('Contraseña reseteada con exito. la contraseña es 123456')
-      queryClient.clear()
+      invalidate('usuarios')
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Error al resetear la contraseña')
-      console.log(error)
     }
   })
 

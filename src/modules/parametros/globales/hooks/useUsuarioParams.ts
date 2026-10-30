@@ -18,7 +18,6 @@ export const useUsuarioParams = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['usuarios-data'],
     queryFn: fetchRolesAndJuzgados,
-    staleTime: 1000 * 60 * 5
   })
 
   return {
